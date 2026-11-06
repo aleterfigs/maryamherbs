@@ -382,6 +382,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .ract{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
 .rbtn{font:inherit;font-size:.85rem;font-weight:600;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid var(--leaf);background:var(--sheet);color:var(--leaf);cursor:pointer}
 .rbtn svg{width:16px;height:16px}
+.panel .ract{margin-top:-4px}
 .rbtn:hover{background:var(--leaf-soft)}
 .rbtn.done{background:var(--leaf);color:var(--sheet)}
 #wres,#wform{scroll-margin-top:12px}
@@ -4435,12 +4436,19 @@ function recipeText(r){
   const st=r.steps.map((x,i)=>(i+1)+". "+x).join("\n");
   return ["*"+r.name+"*", r.for, "", "*Ingredients* ("+(r.yield||"For one cup")+"):", ing, "", "*Method:*", st, "", "*How much and how long:* "+doseOf(r), "*Caution:* "+r.note, "", "From the «Maryam» herbal guide:", recipeLink(r)].join("\n");
 }
+const herbLink=h=>SITE_URL+"#h="+h.id;
+function herbText(h){
+  const L=(a)=>a.map(x=>"• "+x).join("\n");
+  return ["*"+h.ar+"* ("+h.lat+")", h.use, "", "*"+"Common uses"+":*", L(h.uses), "", "*"+"Usual preparation"+":*", h.prep, "", "*"+"Cautions"+":*", L(h.warn), "", "*"+"Possible drug interactions"+":*", L(h.inter), "", "From the «Maryam» herbal guide:", herbLink(h)].join("\n");
+}
 function flashBtn(b,txt){ const sp=b.querySelector("span"), old=sp.textContent; sp.textContent=txt; b.classList.add("done"); setTimeout(()=>{sp.textContent=old; b.classList.remove("done");},2000); }
 async function copyText(t){ try{ await navigator.clipboard.writeText(t); return true; }catch(e){ try{ const ta=document.createElement("textarea"); ta.value=t; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.opacity="0"; document.body.append(ta); ta.select(); const ok=document.execCommand("copy"); ta.remove(); return ok; }catch(_){ return false; } } }
 document.addEventListener("click",async e=>{
-  const c=e.target.closest("[data-rcopy]"), sh=e.target.closest("[data-rshare]"); if(!c&&!sh) return;
-  const r=RECIPES.find(x=>x.name===(c||sh).dataset[c?"rcopy":"rshare"]); if(!r) return;
-  const t=recipeText(r);
+  const c=e.target.closest("[data-rcopy],[data-hcopy]"), sh=e.target.closest("[data-rshare],[data-hshare]"); if(!c&&!sh) return;
+  const el=c||sh, hid=el.dataset.hcopy||el.dataset.hshare;
+  let t, r;
+  if(hid){ const h=byId[hid]; if(!h) return; t=herbText(h); r={name:h.ar}; }
+  else { r=RECIPES.find(x=>x.name===(el.dataset.rcopy||el.dataset.rshare)); if(!r) return; t=recipeText(r); }
   if(c){ flashBtn(c, (await copyText(t))?"Copied ✓":"Couldn't copy"); return; }
   if(navigator.share){ try{ await navigator.share({title:r.name, text:t}); }catch(_){} return; }
   window.open("https://wa.me/?text="+encodeURIComponent(t),"_blank","noopener");
@@ -4706,6 +4714,7 @@ function openPanel(h){
   p.innerHTML=`<div class="panel-top"><div style="display:flex;gap:14px;align-items:center">${herbIcon(h,"hicon big")}<div><h2 id="pTitle">${h.ar}</h2><div class="lat">${h.lat}</div></div></div>
     <div style="display:flex;gap:6px"><button class="icon-btn" id="favIt">${fav?"★ Remove":"☆ Save"}</button><button class="icon-btn" id="closeIt">Close</button></div></div>
     <a class="photos" href="https://commons.wikimedia.org/w/index.php?search=${latinQ(h)}&title=Special:MediaSearch&type=image" target="_blank" rel="noopener">${h.sea?"See real photos":"See real photos of the plant"} ↗</a>
+    <div class="ract"><button type="button" class="rbtn" data-hcopy="${h.id}">${IC_COPY}<span>Copy info</span></button><button type="button" class="rbtn" data-hshare="${h.id}">${IC_SHARE}<span>Share</span></button></div>
     <dl class="facts">${ALIAS[h.id]?`<dt>Other names</dt><dd>${ALIAS[h.id].alt.join(", ")} · <span dir="ltr">${ALIAS[h.id].en}</span></dd>`:""}<dt>Part used</dt><dd>${h.part}</dd><dt>Strength of evidence</dt><dd><span class="ev ${h.ev}">${EV[h.ev]}</span></dd>
     <dt>For children</dt><dd>${KIDS[h.id]||"Not recommended for children except as prescribed by a doctor."}</dd></dl>
     <div class="tags">${h.c.map(c=>`<span class="tag">${CONDS[c]}</span>`).join("")}</div>
@@ -4734,7 +4743,7 @@ $("#tabHerbs").onclick=()=>setView("herbs");
 $("#tabRecipes").onclick=()=>setView("recipes");
 $("#tabMom").onclick=()=>setView("mom");
 $("#tabKit").onclick=()=>setView("kit");
-function openFromHash(){ const m=location.hash.match(/^#r=(.+)$/); if(m){ try{ goRecipe(decodeURIComponent(m[1])); }catch(_){} } }
+function openFromHash(){ const m=location.hash.match(/^#r=(.+)$/); if(m){ try{ goRecipe(decodeURIComponent(m[1])); }catch(_){} } const mh=location.hash.match(/^#h=([a-z0-9]+)$/); if(mh&&byId[mh[1]]){ setView("herbs"); openPanel(byId[mh[1]]); } }
 window.addEventListener("load",openFromHash); window.addEventListener("hashchange",openFromHash);
 $("#tabWomen").onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); };
 $("#tabAid").onclick=()=>setView("aid");
