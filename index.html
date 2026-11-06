@@ -4716,6 +4716,48 @@ setView("home");
 initShared();
 </script>
 
+<style>
+#ib{position:fixed;inset-inline:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:30;background:var(--sheet,#fbfcf6);color:var(--ink,#1f2a1c);border:1px solid var(--leaf,#3f6b3a);border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.22);padding:12px 14px;display:flex;gap:12px;align-items:flex-start;font-family:var(--f-body,system-ui);max-width:520px;margin-inline:auto;transform:translateY(140%);transition:transform .35s ease}
+#ib.on{transform:none}
+#ib img{width:46px;height:46px;border-radius:12px;flex:none}
+#ib .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+#ib b.h{font-size:1rem}
+#ib small{color:var(--muted,#5d6a57);font-size:.82rem;line-height:1.5}
+#ib .how{font-size:.85rem;line-height:1.6;background:var(--leaf-soft,#e2ead8);border-radius:8px;padding:6px 9px;margin-top:4px}
+#ib .act{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+#ib button{font:inherit;font-weight:600;border-radius:999px;padding:7px 16px;cursor:pointer;border:1px solid var(--leaf,#3f6b3a)}
+#ib .go{background:var(--leaf,#3f6b3a);color:var(--sheet,#fff)}
+#ib .no{background:transparent;color:var(--leaf,#3f6b3a)}
+#ib .x{position:absolute;inset-block-start:4px;inset-inline-end:6px;border:0;background:none;color:var(--muted,#5d6a57);font-size:1.2rem;padding:2px 8px}
+@media (prefers-reduced-motion:reduce){#ib{transition:none}}
+</style>
+<div id="ib" role="dialog" aria-label="ثبّت «مريم» على شاشتك" hidden>
+ <button class="x" type="button" aria-label="إغلاق">×</button>
+ <img src="icon-192.png" alt="">
+ <div class="tx"><b class="h">ثبّت «مريم» على شاشتك</b><small>يفتح كتطبيق بضغطة، ويعمل حتى دون إنترنت</small><div class="how" hidden></div>
+  <div class="act"><button class="go" type="button" hidden>تثبيت</button><button class="no" type="button">لاحقًا</button></div></div>
+</div>
+<script>
+(function(){
+ var KEY="maryam-install-later", el=document.getElementById("ib"); if(!el) return;
+ var standalone=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+ var phone=(window.matchMedia&&matchMedia("(pointer:coarse)").matches)&&Math.min(screen.width,screen.height)<900;
+ function snoozed(){ try{var t=+localStorage.getItem(KEY)||0; return t&&Date.now()-t<10*864e5;}catch(e){return false;} }
+ function snooze(){ try{localStorage.setItem(KEY,String(Date.now()));}catch(e){} hide(); }
+ function hide(){ el.classList.remove("on"); setTimeout(function(){el.hidden=true;},400); }
+ if(standalone||!phone||snoozed()) return;
+ var ua=navigator.userAgent, ios=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+ var iosSafari=ios&&/Safari/.test(ua)&&!/CriOS|FxiOS|EdgiOS|FBAN|FBAV|Instagram|Line[/]/.test(ua);
+ var how=el.querySelector(".how"), go=el.querySelector(".go"), deferred=null;
+ function show(){ el.hidden=false; requestAnimationFrame(function(){el.classList.add("on");}); }
+ window.addEventListener("beforeinstallprompt",function(e){ e.preventDefault(); deferred=e; go.hidden=false; how.hidden=true; show(); });
+ window.addEventListener("appinstalled",function(){ snooze(); });
+ go.onclick=function(){ if(!deferred) return; deferred.prompt(); deferred.userChoice.then(function(c){ if(c&&c.outcome==="accepted") snooze(); deferred=null; go.hidden=true; }); };
+ el.querySelector(".no").onclick=snooze; el.querySelector(".x").onclick=snooze;
+ setTimeout(function(){ if(deferred) return; how.innerHTML= ios ? (iosSafari?"اضغط زر المشاركة <b>⬆︎</b> أسفل المتصفح، ثم «إضافة إلى الشاشة الرئيسية».":"افتح الموقع في Safari، ثم اضغط زر المشاركة <b>⬆︎</b> واختر «إضافة إلى الشاشة الرئيسية».") : "من قائمة المتصفح <b>⋮</b> اختر «إضافة إلى الشاشة الرئيسية» أو «تثبيت التطبيق»."; how.hidden=false; show(); },4000);
+})();
+</script>
+
 <script data-goatcounter="https://maryamherbs.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>
 if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{});});}
