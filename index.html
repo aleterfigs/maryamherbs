@@ -293,9 +293,10 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(2.2rem,6vw,3.2re
 .growtips{grid-column:1/-1;background:var(--sheet);border:1px solid var(--leaf);border-radius:8px;padding:14px 18px}
 .growtips h3{margin:0 0 6px;color:var(--leaf);font-family:var(--f-display);font-size:1.3rem}
 .growtips ul{margin:0;padding-inline-start:20px;font-size:.9rem}.growtips li{margin-bottom:5px}
-.langsw{position:absolute;inset-block-start:0;inset-inline-end:0;font-size:.85rem;font-weight:600;color:var(--leaf);border:1px solid var(--leaf);border-radius:999px;padding:3px 14px;text-decoration:none;background:var(--sheet)}
+.langs{position:absolute;inset-block-start:0;inset-inline-end:0;display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.langsw{text-align:center;font-size:.85rem;font-weight:600;color:var(--leaf);border:1px solid var(--leaf);border-radius:999px;padding:3px 14px;text-decoration:none;background:var(--sheet)}
 .langsw:hover{background:var(--leaf-soft)}
-.mast{position:relative;padding-inline-end:90px}
+.mast{position:relative;padding-inline-end:100px}
 footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padding-top:14px}
 @media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
 /* ===== redesign: header, nav, home ===== */
@@ -409,7 +410,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
       <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="M12 13c-3-.5-5-2.5-5.5-6 3.5.3 5.3 2.3 5.5 6z"/><path d="M12 10c2.5-.6 4.3-2.4 4.8-5.5-3 .3-4.6 2-4.8 5.5z"/><path d="M12 17c2.3-.3 3.8-1.6 4.4-4-2.4.1-3.9 1.4-4.4 4z"/></svg></span>
       <span class="brand-text"><h1>مريم</h1><span class="brand-sub">دليل الأعشاب والتداوي الطبيعي</span></span>
     </button>
-    <a class="langsw" href="en.html" lang="en" dir="ltr">English</a>
+    <nav class="langs" aria-label="Language"><a class="langsw" href="en.html" lang="en" dir="ltr">English</a><a class="langsw" href="fr.html" lang="fr" dir="ltr">Français</a></nav>
     <p class="dedic">صدقة جارية عن روح والدتي مريم، رحمها الله وغفر لها.</p>
   </header>
 
