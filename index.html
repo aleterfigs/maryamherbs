@@ -378,6 +378,14 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .tile[data-go="mom"]{border-color:var(--clay)}
 .tile[data-go="mom"] .ticon{background:color-mix(in srgb,var(--clay) 18%,var(--sheet));color:var(--clay)}
 .mombtn.wabtn{background:#1f7a4d}
+.ract{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.rbtn{font:inherit;font-size:.85rem;font-weight:600;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid var(--leaf);background:var(--sheet);color:var(--leaf);cursor:pointer}
+.rbtn svg{width:16px;height:16px}
+.rbtn:hover{background:var(--leaf-soft)}
+.rbtn.done{background:var(--leaf);color:var(--sheet)}
+#wres,#wform{scroll-margin-top:12px}
+.wback{display:none;align-self:flex-start;font:inherit;font-size:.85rem;background:none;border:0;color:var(--leaf);text-decoration:underline;cursor:pointer;padding:0}
+@media (max-width:780px){.wback{display:inline}}
 .momform{background:var(--sheet);border:1px solid var(--clay);border-radius:8px;padding:18px;display:flex;flex-direction:column;gap:6px;max-width:720px}
 .momform h3{font-family:var(--f-display);color:var(--clay);font-size:1.5rem;margin:0 0 4px}
 .momform label{font-size:.85rem;font-weight:600;color:var(--ink);margin-top:6px}
@@ -3310,7 +3318,7 @@ function renderRecipes(){
     d.innerHTML=`${badge(r)}<h3>${r.name}</h3><p class="for">${r.for}</p>${relBox(r)}${refBox(r)}
       <h4>المكوّنات (${r.yield||"لكوب واحد"})</h4><ul>${r.ing.map(([id,t])=>`<li>${id?`<button class="herb-link" data-h="${id}">${byId[id].ar}</button>: `:""}${t}</li>`).join("")}</ul>
       <h4>الطريقة</h4><ol>${r.steps.map(s=>`<li>${s}</li>`).join("")}</ol>
-      ${doseBox(r)}<div class="caution">${r.note}</div>`;
+      ${doseBox(r)}<div class="caution">${r.note}</div>${ractBox(r)}`;
     d.querySelectorAll(".herb-link[data-h]").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
     el.append(d);
   }
@@ -3711,11 +3719,11 @@ function renderWRes(){
   for(const r of cands){ const e=evalRecipe(r); (e.ex.length?bad:ok).push([r,e]); }
   ok.sort((a,b)=>((b[0].top?1:0)-(a[0].top?1:0))||(relOf(b[0]).score-relOf(a[0]).score)||(b[1].c.length?0:1)-(a[1].c.length?0:1));
   const n=ok.length, cnt = n===1?"خلطة واحدة مناسبة":n===2?"خلطتان مناسبتان":n<=10?`${n.toLocaleString("ar-EG")} خلطات مناسبة`:`${n.toLocaleString("ar-EG")} خلطة مناسبة`;
-  let h=`${PROBNOTE[w.prob]?`<div class="refq">${PROBNOTE[w.prob]}</div>`:""}${PROBGUIDE[w.prob]?`<div class="guide pguide">${PROBGUIDE[w.prob].map((s,i)=>`<details ${i===0?"open":""}><summary>${s.t}</summary><div>${s.h}</div></details>`).join("")}</div>`:""}<h2 class="res-head">${n?cnt:"لا توجد خلطة مناسبة"}</h2>`;
+  let h=`<button type="button" class="wback" data-wback="1">↑ عدّل الحالة أو الأدوية أو الحساسية</button>${PROBNOTE[w.prob]?`<div class="refq">${PROBNOTE[w.prob]}</div>`:""}${PROBGUIDE[w.prob]?`<div class="guide pguide">${PROBGUIDE[w.prob].map((s,i)=>`<details ${i===0?"open":""}><summary>${s.t}</summary><div>${s.h}</div></details>`).join("")}</div>`:""}<h2 class="res-head">${n?cnt:"لا توجد خلطة مناسبة"}</h2>`;
   if(!ok.length) h+=`<div class="empty-res">${cands.length?"كل الخلطات المتاحة لهذه المشكلة لا تناسب حالتك. الأفضل استشارة الطبيب أو الصيدلي.":kidSmall?"لا توجد خلطة مناسبة لهذا العمر وهذه المشكلة. استشر طبيب الأطفال.":"لا توجد خلطات لهذه المشكلة بعد."}</div>`;
   for(const [r,e] of ok){
     h+=`<article class="rcard">${badge(r)}<h4 class="t">${r.name}</h4><p class="for">${r.for}</p>${relBox(r)}${refBox(r)}
-      ${doseBox(r)}${e.c.length?`<div class="caution"><ul>${e.c.map(x=>`<li>${x}</li>`).join("")}</ul></div>`:""}${recipeDetails(r)}</article>`;
+      ${doseBox(r)}${e.c.length?`<div class="caution"><ul>${e.c.map(x=>`<li>${x}</li>`).join("")}</ul></div>`:""}${recipeDetails(r)}${ractBox(r)}</article>`;
   }
   if(bad.length) h+=`<details class="exl"><summary>خلطات مستبعدة لحالتك (${bad.length.toLocaleString("ar-EG")})</summary><ul>${bad.map(([r,e])=>`<li><b>${r.name}</b><br><span>${e.ex.join("، ")}</span></li>`).join("")}</ul></details>`;
   h+=`<div class="red"><h4>اذهب إلى الطبيب بدل الأعشاب إذا ظهر:</h4><ul>${RED[w.prob].map(x=>`<li>${x}</li>`).join("")}${w.who==="kid"?"<li>عند الأطفال: خمول شديد، أو رفض الأكل والشرب، أو صعوبة تنفّس.</li>":""}</ul></div>`;
@@ -3723,7 +3731,7 @@ function renderWRes(){
   el.innerHTML=h;
   el.querySelectorAll(".herb-link[data-h]").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
 }
-function renderWizard(){ renderWForm(); renderWRes(); }
+function renderWizard(){ renderWForm(); renderWRes(); const wb=$("#wres [data-wback]"); if(wb) wb.onclick=()=>$("#wform").scrollIntoView({behavior:"smooth",block:"start"}); }
 $("#wform").addEventListener("click",e=>{
   const b=e.target.closest("[data-k]"); if(!b) return; const k=b.dataset.k, [t,v]=k.split(":");
   if(k==="reset"){ Object.assign(w,{who:"woman",age:4,preg:false,lact:false,prob:null}); w.conds.clear(); w.meds.clear(); w.alg.clear(); w.orig.clear(); }
@@ -3731,7 +3739,8 @@ $("#wform").addEventListener("click",e=>{
   else if(t==="prob") w.prob=v;
   else { const s={cond:w.conds,med:w.meds,alg:w.alg,orig:w.orig}[t]; s.has(v)?s.delete(v):s.add(v); }
   renderWizard();
-  const again=$("#wform").querySelector(`[data-k="${CSS.escape(k)}"]`); again&&again.focus();
+  const again=$("#wform").querySelector(`[data-k="${CSS.escape(k)}"]`); again&&again.focus({preventScroll:true});
+  if(t==="prob" && window.matchMedia("(max-width:780px)").matches){ const hd=$("#wres"); hd.scrollIntoView({behavior:"smooth",block:"start"}); }
 });
 /* ---------- وصفات أمي (مشتركة) ---------- */
 const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -4414,6 +4423,26 @@ const NUTR = [
 ];
 const NSYM = [["التعب والإرهاق",["iron","b12","vitd","folate","mg"]],["الشحوب وضيق النفس",["iron","b12","folate"]],["تساقط الشعر",["iron","zinc","vitd"]],["خدر ووخز الأطراف",["b12"]],["ألم العظام والعضلات",["vitd","calcium"]],["تقلّصات العضلات",["mg","calcium"]],["تقرّحات الفم وتشقّق الزوايا",["b12","iron","folate"]],["نزف اللثة وبطء التئام الجروح",["vitc","zinc"]],["ضعف الرؤية في الظلام",["vita"]],["كثرة الالتهابات",["vitd","zinc","vitc","vita"]],["أظافر هشّة",["iron"]]];
 const nst={sym:null};
+const SITE_URL="https://maryamherbs.com/";
+const IC_COPY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>';
+const IC_SHARE='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>';
+const ractBox=r=>`<div class="ract"><button type="button" class="rbtn" data-rcopy="${esc(r.name)}">${IC_COPY}<span>نسخ الوصفة</span></button><button type="button" class="rbtn" data-rshare="${esc(r.name)}">${IC_SHARE}<span>مشاركة</span></button></div>`;
+const recipeLink=r=>SITE_URL+"#r="+encodeURIComponent(r.name);
+function recipeText(r){
+  const ing=r.ing.map(([id,t])=>"• "+(id?byId[id].ar.split(" (")[0]+": ":"")+t).join("\n");
+  const st=r.steps.map((x,i)=>(i+1)+". "+x).join("\n");
+  return ["*"+r.name+"*", r.for, "", "*المكوّنات* ("+(r.yield||"لكوب واحد")+"):", ing, "", "*الطريقة:*", st, "", "*الكمية والمدة:* "+doseOf(r), "*تنبيه:* "+r.note, "", "من دليل «مريم» للأعشاب:", recipeLink(r)].join("\n");
+}
+function flashBtn(b,txt){ const sp=b.querySelector("span"), old=sp.textContent; sp.textContent=txt; b.classList.add("done"); setTimeout(()=>{sp.textContent=old; b.classList.remove("done");},2000); }
+async function copyText(t){ try{ await navigator.clipboard.writeText(t); return true; }catch(e){ try{ const ta=document.createElement("textarea"); ta.value=t; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.opacity="0"; document.body.append(ta); ta.select(); const ok=document.execCommand("copy"); ta.remove(); return ok; }catch(_){ return false; } } }
+document.addEventListener("click",async e=>{
+  const c=e.target.closest("[data-rcopy]"), sh=e.target.closest("[data-rshare]"); if(!c&&!sh) return;
+  const r=RECIPES.find(x=>x.name===(c||sh).dataset[c?"rcopy":"rshare"]); if(!r) return;
+  const t=recipeText(r);
+  if(c){ flashBtn(c, (await copyText(t))?"تم النسخ ✓":"تعذّر النسخ"); return; }
+  if(navigator.share){ try{ await navigator.share({title:r.name, text:t}); }catch(_){} return; }
+  window.open("https://wa.me/?text="+encodeURIComponent(t),"_blank","noopener");
+});
 function goRecipe(name){ state.q=name; state.origin="all"; state.aud="all"; $("#q").value=name; setView("recipes"); window.scrollTo({top:0}); }
 function renderNutri(){
   const el=$("#nutri"), hl=nst.sym?NSYM.find(x=>x[0]===nst.sym)[1]:[];
@@ -4703,6 +4732,8 @@ $("#tabHerbs").onclick=()=>setView("herbs");
 $("#tabRecipes").onclick=()=>setView("recipes");
 $("#tabMom").onclick=()=>setView("mom");
 $("#tabKit").onclick=()=>setView("kit");
+function openFromHash(){ const m=location.hash.match(/^#r=(.+)$/); if(m){ try{ goRecipe(decodeURIComponent(m[1])); }catch(_){} } }
+window.addEventListener("load",openFromHash); window.addEventListener("hashchange",openFromHash);
 $("#tabWomen").onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); };
 $("#tabAid").onclick=()=>setView("aid");
 $("#tabNutri").onclick=()=>setView("nutri");
