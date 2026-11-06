@@ -500,7 +500,7 @@ const KIDS = {
   quince:"The strained gel of whole seeds from age 4.",
   rose:"A few drops of food-grade rose water in food.", amla:"As fruit or jam in small amounts.", coriander:"As a spice in food only.", jujube:"As cooked or dried fruit with the stones removed.", miswak:"From age 6 with adult supervision.",
   calendula:"Ready-made creams are usually suitable after testing on a small patch of skin.",
-  cumin:"As a spice in food only.", cardamom:"As a spice in food only.", cinnamon:"As a spice in food only.", pumpkin:"The seeds are a healthy food for older children (a choking risk for little ones)."
+  cumin:"As a spice in food only.", cardamom:"As a spice in food only.", cinnamon:"As a spice in food only.", truffle:"Only well cooked in food.", milk:"Full-fat milk from age one; before that, breast milk or formula.", zamzam:"Suitable for all ages in moderate amounts.", pumpkin:"The seeds are a healthy food for older children (a choking risk for little ones)."
 };
 const NCCIH = {aloe:"aloe-vera",frankincense:"boswellia",chamomile:"chamomile",cinnamon:"cinnamon",fenugreek:"fenugreek",garlic:"garlic",ginger:"ginger",
   lavender:"lavender",licorice:"licorice-root",mint:"peppermint-oil",sage:"sage",sawpalmetto:"saw-palmetto",turmeric:"turmeric",valerian:"valerian",ashwagandha:"ashwagandha",greentea:"green-tea",flaxseed:"flaxseed-and-flaxseed-oil",cranberry:"cranberry",dandelion:"dandelion",milkthistle:"milk-thistle",
@@ -1278,7 +1278,38 @@ HERBS.push(
   {t:"Important warnings",h:`<ul><li><b>Completely forbidden under one year of age</b> in any form, even on a dummy, because of the risk of botulism.</li><li>Diabetics count it as part of their sugars.</li><li>«Mad honey» from rhododendron flowers in Turkey and Nepal is poisonous and causes a fall in blood pressure and pulse.</li><li>People allergic to bees or pollen should be careful with raw honey and propolis.</li><li>Kitchen honey must not be put on open wounds; only sterile medical honey.</li></ul>`}
  ];
 })();
-const HREF = {seasalt:"The Prophet ﷺ was asked about making ablution with sea water and said: “Its water is pure and its dead are lawful” (Abu Dawud, Tirmidhi, Nasa'i and Ibn Majah; Tirmidhi said: good and authentic).", fishoil:"God says: “Lawful to you is the game of the sea and its food, as provision for you” [Quran 5:96], and: “From each you eat tender meat” [Quran 35:12].", pearlcoral:"God says: “From both of them come pearls and coral” [Quran 55:22]. Muslim physicians mentioned them in their books of simples, but today eating them is not recommended.", ambergris:"Ibn Sina mentioned it in «The Canon» and Ibn al-Baytar in his «Compendium of Simple Medicines and Foods» as strengthening the heart and brain, and it was among the most precious perfumes of the Arabs.", 
+/* Herbs and substances from Prophetic medicine (addition) */
+HERBS.push(
+ {id:"truffle", ar:"Desert truffle (faqaa)", lat:"Terfezia / Tirmania spp.", part:"Underground fruiting body", ev:"l", c:["fatigue"],
+  use:"A desert fungus that appears after winter rains in Arabia, the Levant and North Africa; a nourishing food rich in protein and fibre.",
+  uses:["A nourishing food in season (protein and minerals)","Lab studies suggest antioxidant and antimicrobial properties, without enough human trials"],
+  prep:"Wash well to remove sand, peel, and cook with onion or rice, or grill.",
+  warn:["Never drip its juice into the eye: it can carry serious infections. Many scholars understood the hadith to mean it goes into eye medicines prepared by experts","Cook well and buy from a trusted source, as it can be mixed up with poisonous fungi","People allergic to mushrooms may react to it"],
+  inter:["No known interactions in food amounts"],
+  ref:"The Prophet ﷺ said: “Truffles are a kind of manna, and their water is a cure for the eye” (Bukhari and Muslim). Scholars differed: some said its water is mixed into medicines, others that it is used alone, and the matter is referred to physicians."},
+ {id:"ithmid", ar:"Ithmid (kohl)", lat:"Stibnite (Sb₂S₃)", part:"Ground mineral stone", ev:"x", c:[],
+  use:"Ithmid stone is ground into kohl for the eyes, and applying kohl is a Sunnah. But much of the «ithmid» and traditional kohl sold today is actually lead ore (galena), which is poisonous.",
+  uses:["Adornment and following the Sunnah with a licensed kohl that lists its ingredients"],
+  prep:"Use a kohl or eyeliner licensed by a regulator, with a clean applicator or pencil for each person.",
+  warn:["Most unlicensed traditional kohl contains lead, which is absorbed through the eyes and hands","Never apply it to babies and children, and do not use kohl of unknown origin in pregnancy and breastfeeding","Do not share the applicator, to avoid eye infections"],
+  inter:["No drug interactions; the danger is lead poisoning"],
+  ref:"The Prophet ﷺ said: “The best of your kohl is ithmid: it clears the sight and makes the lashes grow” (Abu Dawud, Tirmidhi and Ibn Majah; graded good by Tirmidhi). True ithmid is antimony stone, but much of what is sold in markets is lead galena."},
+ {id:"milk", ar:"Milk", lat:"Lac", part:"Milk of livestock", ev:"m", c:["fatigue"],
+  use:"An almost complete food and drink: protein, calcium and vitamins, and among the drinks most loved in the Sunnah.",
+  uses:["A source of calcium and protein for bones and growth","An easy food for the sick and convalescent","The base of talbina, aseeda and warm drinks"],
+  prep:"Drink it pasteurised or boiled, warm or cold.",
+  warn:["Unpasteurised milk (including fresh camel milk) can transmit brucellosis and other diseases","People with lactose intolerance can choose yoghurt or lactose-free milk","Cow's milk should not be the main drink before age one"],
+  inter:["Keep it two to four hours apart from some antibiotics (doxycycline and ciprofloxacin), iron and thyroid medicine"],
+  ref:"The Prophet ﷺ said: “When one of you is given milk to drink, let him say: O God, bless it for us and give us more of it, for nothing suffices as both food and drink except milk” (Abu Dawud and Tirmidhi, who graded it good)."},
+ {id:"zamzam", ar:"Zamzam water", lat:"Aqua Zamzam", part:"Well water", ev:"l", c:["fatigue"],
+  use:"The water of the blessed well in the Sacred Mosque in Makkah, drunk by Muslims for blessing and with prayer. Clean water rich in some minerals.",
+  uses:["Drinking it for blessing, with prayer","Brought back by pilgrims for their families"],
+  prep:"Drink it as it is; it is recommended to pray when drinking it.",
+  warn:["Buy it from official bottled channels; unregulated commercially bottled water may be fake or contaminated","Drinking it for blessing does not replace taking the means: a sick person's treatment must not be abandoned for it"],
+  inter:["No known interactions"],
+  ref:"The Prophet ﷺ said of Zamzam: “It is blessed; it is food that nourishes” (Muslim), and another narration adds: “and a cure for illness”. It is also narrated: “Zamzam water is for whatever it is drunk for” (Ibn Majah and Ahmad; scholars differ on its authenticity, and a number graded it good)."}
+);
+const HREF = {basil:"The Prophet ﷺ said: “Whoever is offered rayhan should not refuse it, for it is light to carry and sweet-smelling” (Muslim). In Arabic, rayhan covers every fragrant plant.", seasalt:"The Prophet ﷺ was asked about making ablution with sea water and said: “Its water is pure and its dead are lawful” (Abu Dawud, Tirmidhi, Nasa'i and Ibn Majah; Tirmidhi said: good and authentic).", fishoil:"God says: “Lawful to you is the game of the sea and its food, as provision for you” [Quran 5:96], and: “From each you eat tender meat” [Quran 35:12].", pearlcoral:"God says: “From both of them come pearls and coral” [Quran 55:22]. Muslim physicians mentioned them in their books of simples, but today eating them is not recommended.", ambergris:"Ibn Sina mentioned it in «The Canon» and Ibn al-Baytar in his «Compendium of Simple Medicines and Foods» as strengthening the heart and brain, and it was among the most precious perfumes of the Arabs.", 
   nigella:"The Prophet ﷺ said: “In the black seed is healing for every disease except death” (Bukhari and Muslim).",
   senna:"The Prophet ﷺ said: “Use senna and sanut, for in them is healing for every disease except death” (Ibn Majah; graded authentic by some scholars). The meaning of sanut is disputed: some said honey, some cumin, some dill.",
   ginger:"Mentioned in the Quran among the drinks of the people of Paradise: “And they will be given to drink a cup whose mixture is ginger” [Quran 76:17].",
@@ -2710,6 +2741,45 @@ RECIPES.push(
   [[null,"1 cup white sugar"],[null,"¼ cup lemon juice"],[null,"¼ cup water"]],
   ["Put the ingredients in a pan over medium heat without stirring much.","Let it boil until it turns a golden honey colour (about 10–15 minutes).","Take it off the heat and let it cool until warm, not hot; test the temperature on the inside of your wrist.","Spread a piece on the skin against the direction of hair growth, then pull it off quickly in the direction of growth while holding the skin taut.","Apply aloe gel or a cold compress afterwards."],"Hot sugar paste causes serious burns; always test the temperature. Don't use on broken or inflamed skin or with retinoid creams. Wash lemon off the skin before going into the sun.",{o:"arab"})
 );
+/* Prophetic medicine: additions */
+RECIPES.push(
+ X("Truffles with onion","The winter and spring dish of Najd, the Levant and Iraq when desert truffles appear.",["adults","kids"],["fatigue"],
+  [["truffle","Half a kilo of desert truffles, peeled and cut"],[null,"A chopped onion"],["olive","Two tablespoons of olive oil or ghee"],[null,"Salt, black pepper and cumin"]],
+  ["Scrub the truffles well with a brush to remove the sand, then peel and cut them.","Fry the onion in the oil until golden.","Add the truffles and spices and stir over a medium heat for 10–15 minutes until fully cooked."],
+  "Never drip truffle juice into the eye. Cook well, from a trusted source.",K(NB,{minAge:2,yield:"For one dish",ref:"«Truffles are a kind of manna, and their water is a cure for the eye” (Bukhari and Muslim)."})),
+ X("Tharid","Bread broken into meat and vegetable broth — a warm, easy food for the sick, the weak and older people.",["adults","kids"],["fatigue"],
+  [[null,"Two loaves of bread (brown or thin flatbread preferred)"],[null,"Two cups of meat or chicken broth with vegetable pieces"],[null,"Pieces of cooked meat or chicken"]],
+  ["Break the bread into a deep dish.","Pour the hot broth over it until it soaks in.","Top with the meat and vegetables and serve warm."],
+  "People with high blood pressure should use less salt in the broth.",K(NB,{minAge:1,yield:"For two people",ref:"The Prophet ﷺ said: “The superiority of Aisha over other women is like the superiority of tharid over all other food” (Bukhari and Muslim)."})),
+ X("Dates with butter","A food the Prophet ﷺ loved, combining the energy of dates with the richness of butter.",["adults","kids"],["fatigue","wgain"],
+  [["dates","3 dates, stones removed"],[null,"One teaspoon of butter or natural cream"]],
+  ["Open the date and put a little butter inside.","Eat as a snack."],
+  "For young children, cut them up to avoid choking. People with diabetes or high cholesterol should eat less.",K(NB,{minAge:1,ref:"The Prophet ﷺ visited the two sons of Busr, who offered him butter and dates, «and he loved butter and dates» (Abu Dawud and Ibn Majah; graded authentic by al-Albani)."})),
+ X("A cup of milk with the supplication","A cup of milk daily for calcium and protein, with the supplication from the Sunnah.",["adults","kids"],["fatigue"],
+  [["milk","A cup of pasteurised milk"]],
+  ["Drink the milk sitting down, in three breaths.","Say: «O God, bless it for us and give us more of it»."],
+  "For lactose intolerance: yoghurt or lactose-free milk. Keep it apart from some antibiotics and iron.",K(NB,{minAge:1,ref:"«When one of you is given milk to drink, let him say: O God, bless it for us and give us more of it, for nothing suffices as both food and drink except milk” (Abu Dawud and Tirmidhi, who graded it good)."})),
+ X("Drinking Zamzam water","The Sunnah of drinking Zamzam with prayer.",["adults","kids"],["fatigue"],
+  [["zamzam","A cup of Zamzam water"]],
+  ["Face the qibla if you can, and say Bismillah.","Drink in three breaths, and pray for whatever you wish."],
+  "From official bottled channels only. A sick person's treatment must not be abandoned for it.",K(NB,{dose:"When wished, with no set limit.",ref:"«It is blessed; it is food that nourishes” (Muslim), and «Zamzam water is for whatever it is drunk for» (Ibn Majah; its authenticity is disputed)."})),
+ X("Cooling fever with water","Water to drink and relieving the body's heat, with rest — this is how many scholars understood the hadith, and it is what medical guidelines recommend today.",["adults","kids"],["cold"],
+  [[null,"Plenty of water and fluids to drink"],[null,"Light clothing and a moderately cool room"],[null,"A small towel dampened with lukewarm water (optional)"],[null,"A fever reducer as per the pack if needed"]],
+  ["Reduce clothing and covers, and keep the room moderately cool.","Drink plenty of water and fluids in small, frequent amounts.","A lukewarm damp towel can be placed on the forehead for comfort if the person likes it; remove it if they shiver.","Give a fever reducer suited to age and weight as per the pack if the person is uncomfortable."],
+  "Do not sponge a child's whole body with water, do not use iced water or alcohol, and do not wrap a feverish person in blankets. See a doctor at once for: any fever in a baby under 3 months, a temperature of 39° or more, fever lasting more than 3 days, or fever with a seizure, marked drowsiness or difficulty breathing.",K(NB,{dose:"Throughout the fever, watching for danger signs.",ref:"The Prophet ﷺ said: “Fever is from the heat of Hell, so cool it with water” (Bukhari and Muslim)."})),
+ X("The rule of thirds in eating","A Prophetic measure for food: a third for food, a third for drink and a third for breath — it prevents overeating and helps with weight control.",["adults"],["digest","wloss"],
+  [[null,"A medium-sized plate"],[null,"A cup of water"]],
+  ["Begin with Bismillah, eat with your right hand from what is near you, and eat slowly.","Serve an amount that fills about a third of the stomach, and sip water calmly.","Stop before you are full, and leave a third for your breath."],
+  "People with diabetes follow their doctor's plan for amounts and meal times.",K(NB,{minAge:12,dose:"At every meal.",ref:"«No human fills a vessel worse than his stomach. A few morsels to keep his back straight are enough for the son of Adam; if he must, then a third for his food, a third for his drink and a third for his breath” (Tirmidhi and Ibn Majah; Tirmidhi said: good and authentic)."})),
+ X("Etiquette of drinking water","Drinking sitting down in three breaths, without breathing into the cup — it reduces choking and is easier on the stomach.",["adults","kids"],["digest"],
+  [[null,"A cup of water"]],
+  ["Sit down and say Bismillah.","Drink in three sips, moving the cup away from your mouth between each.","Do not breathe into the cup, and praise God after drinking."],
+  "Suitable for everyone.",K(NB,{minAge:1,dose:"Every time you drink.",ref:"The Prophet ﷺ used to take three breaths when drinking and say: “It is more thirst-quenching, healthier and more wholesome” (Muslim), and: “When one of you drinks, let him not breathe into the vessel” (Bukhari and Muslim)."})),
+ X("Cupping (hijama): what to know","A well-known Sunnah; small trials suggest benefit for neck and lower-back pain, and what matters most is doing it safely.",["adults"],["pain","headache"],
+  [[null,"A therapist licensed by the health authorities"],[null,"Sterile single-use cups and tools"]],
+  ["Choose a licensed centre, and make sure the tools are opened in front of you and thrown away after use.","Tell the therapist about your medicines and illnesses, especially blood thinners, diabetes and anaemia.","After the session: keep the small cuts clean, drink water, and rest that day."],
+  "Not to be done with blood thinners, anaemia, low platelets, pregnancy, uncontrolled diabetes or weak immunity, nor for children. Do not stop your medicines because of it. The Prophet ﷺ forbade his community from cauterising, so children must never be branded with fire (wasm), as happens in some homes; it causes burns and disfigurement.",K(NB,{minAge:18,evN:1,evWhy:"Small clinical trials on neck and lower-back pain, of limited quality",sup:"Cupping is a procedure that needs a licensed therapist",dose:"At wide intervals, under the therapist's supervision.",ref:"«Healing is in three: a cut of the cupping blade, a drink of honey, or cautery with fire — and I forbid my community from cautery” (Bukhari), and «The best of what you treat yourselves with is cupping and sea costus» (Bukhari and Muslim)."}))
+);
 const ORIG = {nabawi:"Prophetic medicine", islamic:"Arab-Islamic medicine", andalus:"Al-Andalus", gulf:"The Gulf", levant:"The Levant", egypt:"Egypt", iraq:"Iraq", maghreb:"The Maghreb", yemen:"Yemen", sudan:"Sudan", iran:"Iran", turkey:"Turkey", arab:"Arab folk medicine", india:"India (Ayurveda)", china:"China", japan:"Japan", europe:"Europe", seasia:"Southeast Asia", africa:"Africa", latam:"Latin America", home:"Common home recipes"};
 const ORIG_OVR = {"One-night senna infusion":"gulf","Frankincense water":"gulf","Chewing frankincense":"gulf","Cardamom and cinnamon tea after meals":"gulf","Chewing cardamom and clove":"gulf","Linden tea for colds":"levant","Hot hibiscus tea":"egypt","Iced hibiscus with mint":"egypt","Cumin water with lemon":"egypt"};
 const ARAB_R = ["Frankincense water","Chewing frankincense","Cardamom and cinnamon tea after meals","Cumin water with lemon","Marjoram infusion","Fenugreek infusion for cough","Soaked fenugreek water","Linden tea for colds","Chewing cardamom and clove","Anise infusion for cough","Fenugreek water before meals","Yoghurt with black seed","Pumpkin-seed snack","Garlic and olive oil salad"];
@@ -2982,16 +3052,18 @@ function relOf(r){
   let safe="g", why="";
   const exAll=new Set(); for(const [k,o] of Object.entries(RULES)){ if(k.startsWith("a:")) continue; Object.keys(o.ex||{}).forEach(i=>exAll.add(i)); }
   const sup=ids.filter(id=>SUPERVISE.has(id)||byId[id].ev==="x");
-  if(sup.length){ safe="r"; why=sup.map(id=>byId[id].ar.split(" (")[0]).join(", "); }
+  if(r.sup){ safe="r"; why=r.sup; }
+  else if(sup.length){ safe="r"; why=sup.map(id=>byId[id].ar.split(" (")[0]).join(", "); }
   else if(!r.topical && ids.some(id=>exAll.has(id))){ safe="y"; why=ids.filter(id=>exAll.has(id)).map(id=>byId[id].ar.split(" (")[0]).join(", "); }
   const src = r.o==="nabawi" ? (r.ref?"Hadith or report":"Prophetic medicine") : (r.o==="islamic"||r.o==="andalus") ? "Classical medical books" : r.o==="home" ? "Modern home recipe" : "Inherited folk custom";
+  if(r.evN!=null){ best=r.evN; by=null; }
   return r._rel={ev:best, by, safe, why, src, score:best*10+({g:3,y:2,r:0})[safe]};
 }
 const EVTXT=["Traditional, no studies","Limited evidence","Moderate evidence","Relatively strong evidence"];
 const SAFETXT={g:"Safe for most people",y:"Needs caution for some groups",r:"Short-term or supervised use"};
 function relBox(r){
   const x=relOf(r), dots=[1,2,3].map(i=>`<i class="${i<=x.ev?"on":""}"></i>`).join("");
-  const evWhy = x.by ? `Strongest ingredient for this problem: ${x.by.ar.split(" (")[0]} (${EV[x.by.ev]})` : "There are no studies on its ingredients for this problem; it relies on traditional use";
+  const evWhy = x.by ? `Strongest ingredient for this problem: ${x.by.ar.split(" (")[0]} (${EV[x.by.ev]})` : r.evWhy ? r.evWhy : "There are no studies on its ingredients for this problem; it relies on traditional use";
   const sWhy = x.safe==="g" ? "No common contraindications are known for its ingredients at the stated amounts" : x.safe==="y" ? `${x.why}: not suitable for some situations (pregnancy, breastfeeding, illnesses or medicines). Use «Suggest a blend» to find out whether it suits you` : `${x.why}: not for long-term use; best under medical supervision`;
   return `<details class="rel"><summary><span class="rel-ev ev-${x.ev}" title="${EVTXT[x.ev]}"><span class="dots">${dots}</span>${EVTXT[x.ev]}</span><span class="rel-s s-${x.safe}"><i></i>${SAFETXT[x.safe]}</span><span class="rel-src">${x.src}</span></summary>
    <ul><li><b>Evidence:</b> ${evWhy}.</li><li><b>Safety:</b> ${sWhy}.</li><li><b>Source:</b> ${x.src}.</li><li class="rel-n">An estimated rating based on the blend's ingredients, since the blend itself has usually not been tested as a combination. <button type="button" class="herb-link rel-more">How is it calculated?</button></li></ul></details>`;
@@ -4490,6 +4562,10 @@ bitterorange|Bitter orange extract|النارنج المرّ
 yohimbe|Yohimbe|يوهمبين
 fishoil|Fish oil, Omega-3|أوميغا ٣، أوميغا 3، زيت الأسماك، زيت السمك
 codliver|Cod liver oil|زيت كبد الحوت، زيت كبد السمك، زيت السمك للأطفال
+truffle|Desert truffle|الفقع، الكمأ، الترفاس، الزبيدي، الجمّة
+ithmid|Kohl, antimony|الكحل، الكحل العربي
+milk|Milk|الحليب
+zamzam|Zamzam water|زمزم
 seasalt|Saline, sea salt|الماء والملح، المحلول الملحي، ملح البحر، غرغرة
 deadsea|Dead Sea salt and mud|ملح البحر الميت، طين البحر الميت
 seaweed|Seaweed, kelp, kombu, nori, wakame|الطحالب البحرية، الكلب، عشب البحر، النوري

@@ -500,7 +500,7 @@ const KIDS = {
   quince:"Le gel filtré des graines entières dès 4 ans.",
   rose:"Quelques gouttes d'eau de rose alimentaire dans les plats.", amla:"En fruit ou en confiture, en petites quantités.", coriander:"Comme épice dans les plats uniquement.", jujube:"En fruit cuit ou séché, dénoyauté.", miswak:"Dès 6 ans sous la surveillance d'un adulte.",
   calendula:"Les crèmes prêtes à l'emploi conviennent généralement après un test sur une petite zone de peau.",
-  cumin:"Comme épice dans les plats uniquement.", cardamom:"Comme épice dans les plats uniquement.", cinnamon:"Comme épice dans les plats uniquement.", pumpkin:"Les graines sont un aliment sain pour les plus grands (risque d'étouffement pour les petits)."
+  cumin:"Comme épice dans les plats uniquement.", cardamom:"Comme épice dans les plats uniquement.", cinnamon:"Comme épice dans les plats uniquement.", truffle:"Uniquement bien cuite dans les plats.", milk:"Lait entier dès un an ; avant, lait maternel ou lait infantile.", zamzam:"Convient à tous les âges en quantité modérée.", pumpkin:"Les graines sont un aliment sain pour les plus grands (risque d'étouffement pour les petits)."
 };
 const NCCIH = {aloe:"aloe-vera",frankincense:"boswellia",chamomile:"chamomile",cinnamon:"cinnamon",fenugreek:"fenugreek",garlic:"garlic",ginger:"ginger",
   lavender:"lavender",licorice:"licorice-root",mint:"peppermint-oil",sage:"sage",sawpalmetto:"saw-palmetto",turmeric:"turmeric",valerian:"valerian",ashwagandha:"ashwagandha",greentea:"green-tea",flaxseed:"flaxseed-and-flaxseed-oil",cranberry:"cranberry",dandelion:"dandelion",milkthistle:"milk-thistle",
@@ -1278,7 +1278,38 @@ HERBS.push(
   {t:"Avertissements importants",h:`<ul><li><b>Strictement interdit avant un an</b> sous toute forme, même sur une tétine, à cause du risque de botulisme.</li><li>Les diabétiques le comptent dans leurs sucres.</li><li>«Le «miel fou» des fleurs de rhododendron en Turquie et au Népal est toxique et fait chuter la tension et le pouls.</li><li>Les personnes allergiques aux abeilles ou au pollen doivent être prudentes avec le miel cru et la propolis.</li><li>Le miel de cuisine ne doit pas être mis sur une plaie ouverte ; uniquement du miel médical stérile.</li></ul>`}
  ];
 })();
-const HREF = {seasalt:"On interrogea le Prophète ﷺ sur les ablutions à l'eau de mer, et il dit : « Son eau est pure et ses animaux morts sont licites » (Abu Dawud, Tirmidhi, Nasa'i et Ibn Majah ; Tirmidhi a dit : bon et authentique).", fishoil:"Dieu dit : « Vous est permis le gibier de la mer et sa nourriture, comme provision pour vous » [Coran 5:96], et : « De chacune vous mangez une chair fraîche » [Coran 35:12].", pearlcoral:"Dieu dit : « De toutes deux sortent la perle et le corail » [Coran 55:22]. Les médecins musulmans les ont cités dans leurs traités des simples, mais aujourd'hui il est déconseillé de les manger.", ambergris:"Ibn Sina l'a cité dans le «Canon» et Ibn al-Baytar dans son «Traité des simples» comme fortifiant le cœur et le cerveau, et c'était l'un des parfums les plus précieux des Arabes.", 
+/* Plantes et substances de la médecine prophétique (ajout) */
+HERBS.push(
+ {id:"truffle", ar:"Truffe du désert (faqaa)", lat:"Terfezia / Tirmania spp.", part:"Fructification souterraine", ev:"l", c:["fatigue"],
+  use:"Un champignon du désert qui apparaît après les pluies d'hiver en Arabie, au Levant et en Afrique du Nord ; un aliment nourrissant riche en protéines et en fibres.",
+  uses:["Un aliment nourrissant en saison (protéines et minéraux)","Des études en laboratoire suggèrent des propriétés antioxydantes et antimicrobiennes, sans essais suffisants chez l'humain"],
+  prep:"Bien la laver pour enlever le sable, la peler, et la cuire avec de l'oignon ou du riz, ou la griller.",
+  warn:["Ne jamais verser son jus dans l'œil : il peut transmettre des infections graves. Beaucoup de savants ont compris le hadith comme : elle entre dans des remèdes pour les yeux préparés par des experts","Bien la cuire et l'acheter auprès d'une source fiable, car elle peut être confondue avec des champignons toxiques","Les personnes allergiques aux champignons peuvent y réagir"],
+  inter:["Aucune interaction connue en quantités alimentaires"],
+  ref:"Le Prophète ﷺ a dit : « La truffe fait partie de la manne, et son eau est un remède pour l'œil » (Bukhari et Muslim). Les savants ont divergé : certains ont dit que son eau se mélange aux remèdes, d'autres qu'elle s'utilise seule, et la question revient aux médecins."},
+ {id:"ithmid", ar:"Ithmid (khôl)", lat:"Stibnite (Sb₂S₃)", part:"Pierre minérale broyée", ev:"x", c:[],
+  use:"La pierre d'ithmid est broyée en khôl pour les yeux, et se mettre du khôl est une sunna. Mais une grande partie de l'«ithmid» et du khôl traditionnel vendus aujourd'hui est en réalité du minerai de plomb (galène), qui est toxique.",
+  uses:["La parure et le suivi de la Sunna avec un khôl autorisé, liste d'ingrédients à l'appui"],
+  prep:"Utilisez un khôl ou un eye-liner autorisé par une autorité de contrôle, avec un applicateur ou un crayon propre pour chaque personne.",
+  warn:["La plupart des khôls traditionnels non autorisés contiennent du plomb, absorbé par les yeux et les mains","Ne jamais en mettre aux bébés et aux enfants, et ne pas utiliser de khôl d'origine inconnue pendant la grossesse et l'allaitement","Ne partagez pas l'applicateur, pour éviter les infections des yeux"],
+  inter:["Pas d'interaction médicamenteuse ; le danger est l'intoxication au plomb"],
+  ref:"Le Prophète ﷺ a dit : « Le meilleur de vos khôls est l'ithmid : il éclaircit la vue et fait pousser les cils » (Abu Dawud, Tirmidhi et Ibn Majah ; jugé bon par Tirmidhi). Le véritable ithmid est la pierre d'antimoine, mais une grande partie de ce qui est vendu sur les marchés est de la galène de plomb."},
+ {id:"milk", ar:"Lait", lat:"Lac", part:"Lait de bétail", ev:"m", c:["fatigue"],
+  use:"Un aliment et une boisson presque complets : protéines, calcium et vitamines, et parmi les boissons les plus aimées dans la Sunna.",
+  uses:["Une source de calcium et de protéines pour les os et la croissance","Un aliment facile pour le malade et le convalescent","La base de la talbina, de l'assida et des boissons chaudes"],
+  prep:"À boire pasteurisé ou bouilli, chaud ou froid.",
+  warn:["Le lait non pasteurisé (dont le lait de chamelle frais) peut transmettre la brucellose et d'autres maladies","Les personnes intolérantes au lactose peuvent choisir le yaourt ou un lait sans lactose","Le lait de vache ne doit pas être la boisson principale avant un an"],
+  inter:["L'espacer de deux à quatre heures de certains antibiotiques (doxycycline et ciprofloxacine), du fer et du médicament de la thyroïde"],
+  ref:"Le Prophète ﷺ a dit : « Quand on donne à boire du lait à l'un de vous, qu'il dise : Ô Dieu, bénis-le pour nous et donne-nous-en davantage, car rien ne suffit à la fois comme nourriture et comme boisson sinon le lait » (Abu Dawud et Tirmidhi, qui l'a jugé bon)."},
+ {id:"zamzam", ar:"Eau de Zamzam", lat:"Aqua Zamzam", part:"Eau de puits", ev:"l", c:["fatigue"],
+  use:"L'eau du puits béni de la Mosquée sacrée de La Mecque, bue par les musulmans pour sa bénédiction et avec des invocations. Une eau propre, riche en certains minéraux.",
+  uses:["La boire pour sa bénédiction, avec des invocations","Rapportée par les pèlerins à leur famille"],
+  prep:"La boire telle quelle ; il est recommandé de faire des invocations en la buvant.",
+  warn:["Achetez-la par les circuits officiels en bouteilles ; l'eau embouteillée commercialement sans contrôle peut être falsifiée ou contaminée","La boire pour la bénédiction ne dispense pas de prendre les moyens : on n'abandonne pas le traitement d'un malade pour elle"],
+  inter:["Aucune interaction connue"],
+  ref:"Le Prophète ﷺ a dit de Zamzam : « Elle est bénie ; c'est une nourriture qui rassasie » (Muslim), et une autre version ajoute : « et une guérison de la maladie ». Il est aussi rapporté : « L'eau de Zamzam sert à ce pour quoi on la boit » (Ibn Majah et Ahmad ; les savants divergent sur son authenticité, et plusieurs l'ont jugé bon)."}
+);
+const HREF = {basil:"Le Prophète ﷺ a dit : « Celui à qui l'on offre du rayhan ne doit pas le refuser, car il est léger à porter et sent bon » (Muslim). En arabe, le rayhan désigne toute plante parfumée.", seasalt:"On interrogea le Prophète ﷺ sur les ablutions à l'eau de mer, et il dit : « Son eau est pure et ses animaux morts sont licites » (Abu Dawud, Tirmidhi, Nasa'i et Ibn Majah ; Tirmidhi a dit : bon et authentique).", fishoil:"Dieu dit : « Vous est permis le gibier de la mer et sa nourriture, comme provision pour vous » [Coran 5:96], et : « De chacune vous mangez une chair fraîche » [Coran 35:12].", pearlcoral:"Dieu dit : « De toutes deux sortent la perle et le corail » [Coran 55:22]. Les médecins musulmans les ont cités dans leurs traités des simples, mais aujourd'hui il est déconseillé de les manger.", ambergris:"Ibn Sina l'a cité dans le «Canon» et Ibn al-Baytar dans son «Traité des simples» comme fortifiant le cœur et le cerveau, et c'était l'un des parfums les plus précieux des Arabes.", 
   nigella:"Le Prophète ﷺ a dit : « Dans la graine noire, il y a une guérison pour toute maladie sauf la mort » (Bukhari et Muslim).",
   senna:"Le Prophète ﷺ a dit : « Utilisez le séné et le sanut, car ils contiennent une guérison pour toute maladie sauf la mort » (Ibn Majah ; jugé authentique par certains savants). Le sens de sanut est discuté : certains disent le miel, d'autres le cumin, d'autres l'aneth.",
   ginger:"Cité dans le Coran parmi les boissons des gens du Paradis : « Et on leur y servira une coupe dont le mélange sera de gingembre » [Coran 76:17].",
@@ -2710,6 +2741,45 @@ RECIPES.push(
   [[null,"1 tasse de sucre blanc"],[null,"¼ de tasse de jus de citron"],[null,"¼ de tasse d'eau"]],
   ["Mettez les ingrédients dans une casserole à feu moyen sans trop remuer.","Laissez bouillir jusqu'à obtenir une couleur miel doré (environ 10 à 15 minutes).","Retirez du feu et laissez tiédir, pas chaud ; testez la température à l'intérieur du poignet.","Étalez un morceau sur la peau à contre-sens de la pousse des poils, puis retirez-le d'un coup dans le sens de la pousse en tendant la peau.","Appliquez ensuite du gel d'aloe vera ou une compresse froide."],"La pâte de sucre chaude provoque des brûlures graves ; testez toujours la température. Pas sur une peau lésée ou irritée, ni avec des crèmes aux rétinoïdes. Rincez le citron de la peau avant de sortir au soleil.",{o:"arab"})
 );
+/* Médecine prophétique : ajouts */
+RECIPES.push(
+ X("Truffes à l'oignon","Le plat d'hiver et de printemps du Najd, du Levant et de l'Irak quand apparaissent les truffes du désert.",["adults","kids"],["fatigue"],
+  [["truffle","Un demi-kilo de truffes du désert, pelées et coupées"],[null,"Un oignon haché"],["olive","Deux cuillères à soupe d'huile d'olive ou de beurre clarifié"],[null,"Sel, poivre noir et cumin"]],
+  ["Brossez bien les truffes pour enlever le sable, puis pelez-les et coupez-les.","Faites dorer l'oignon dans l'huile.","Ajoutez les truffes et les épices et remuez à feu moyen 10 à 15 minutes jusqu'à cuisson complète."],
+  "Ne jamais verser le jus de truffe dans l'œil. Bien cuire, d'une source fiable.",K(NB,{minAge:2,yield:"Pour un plat",ref:"«La truffe fait partie de la manne, et son eau est un remède pour l'œil » (Bukhari et Muslim)."})),
+ X("Tharid","Du pain émietté imbibé de bouillon de viande et de légumes — un aliment chaud et facile pour le malade, le faible et la personne âgée.",["adults","kids"],["fatigue"],
+  [[null,"Deux pains (complets ou galettes fines de préférence)"],[null,"Deux tasses de bouillon de viande ou de poulet avec des morceaux de légumes"],[null,"Morceaux de viande ou de poulet cuits"]],
+  ["Émiettez le pain dans un plat creux.","Versez le bouillon chaud dessus jusqu'à ce qu'il s'en imbibe.","Garnissez de viande et de légumes et servez chaud."],
+  "Les personnes hypertendues mettent moins de sel dans le bouillon.",K(NB,{minAge:1,yield:"Pour deux personnes",ref:"Le Prophète ﷺ a dit : « La supériorité d'Aïcha sur les autres femmes est comme la supériorité du tharid sur tous les autres plats » (Bukhari et Muslim)."})),
+ X("Dattes au beurre","Un aliment que le Prophète ﷺ aimait, qui associe l'énergie des dattes à la richesse du beurre.",["adults","kids"],["fatigue","wgain"],
+  [["dates","3 dattes dénoyautées"],[null,"Une cuillère à café de beurre ou de crème naturelle"]],
+  ["Ouvrez la datte et mettez-y un peu de beurre.","Manger en en-cas."],
+  "Pour les jeunes enfants, coupez-les pour éviter l'étouffement. Les personnes diabétiques ou ayant trop de cholestérol en mangent moins.",K(NB,{minAge:1,ref:"Le Prophète ﷺ rendit visite aux deux fils de Busr, qui lui offrirent du beurre et des dattes, «et il aimait le beurre et les dattes» (Abu Dawud et Ibn Majah ; jugé authentique par al-Albani)."})),
+ X("Un verre de lait avec l'invocation","Un verre de lait par jour pour le calcium et les protéines, avec l'invocation de la Sunna.",["adults","kids"],["fatigue"],
+  [["milk","Un verre de lait pasteurisé"]],
+  ["Buvez le lait assis, en trois respirations.","Dites : «Ô Dieu, bénis-le pour nous et donne-nous-en davantage»."],
+  "En cas d'intolérance au lactose : yaourt ou lait sans lactose. L'espacer de certains antibiotiques et du fer.",K(NB,{minAge:1,ref:"«Quand on donne à boire du lait à l'un de vous, qu'il dise : Ô Dieu, bénis-le pour nous et donne-nous-en davantage, car rien ne suffit à la fois comme nourriture et comme boisson sinon le lait » (Abu Dawud et Tirmidhi, qui l'a jugé bon)."})),
+ X("Boire l'eau de Zamzam","La sunna de boire l'eau de Zamzam avec des invocations.",["adults","kids"],["fatigue"],
+  [["zamzam","Un verre d'eau de Zamzam"]],
+  ["Tournez-vous vers la qibla si possible, et dites Bismillah.","Buvez en trois respirations, et invoquez Dieu pour ce que vous souhaitez."],
+  "Uniquement par les circuits officiels en bouteilles. On n'abandonne pas le traitement d'un malade pour elle.",K(NB,{dose:"Quand on le souhaite, sans limite fixe.",ref:"«Elle est bénie ; c'est une nourriture qui rassasie » (Muslim), et «L'eau de Zamzam sert à ce pour quoi on la boit» (Ibn Majah ; son authenticité est discutée)."})),
+ X("Rafraîchir la fièvre avec de l'eau","L'eau à boire et le soulagement de la chaleur du corps, avec du repos — c'est ainsi que beaucoup de savants ont compris le hadith, et c'est ce que recommandent aujourd'hui les recommandations médicales.",["adults","kids"],["cold"],
+  [[null,"Beaucoup d'eau et de liquides à boire"],[null,"Des vêtements légers et une pièce modérément fraîche"],[null,"Une petite serviette humidifiée à l'eau tiède (facultatif)"],[null,"Un antipyrétique selon l'emballage si besoin"]],
+  ["Allégez les vêtements et les couvertures, et gardez la pièce modérément fraîche.","Buvez beaucoup d'eau et de liquides, par petites quantités fréquentes.","On peut poser une serviette tiède et humide sur le front pour le confort si la personne l'apprécie ; la retirer si elle frissonne.","Donnez un antipyrétique adapté à l'âge et au poids selon l'emballage si la personne est inconfortable."],
+  "Ne passez pas d'eau sur tout le corps d'un enfant, n'utilisez ni eau glacée ni alcool, et n'enveloppez pas une personne fiévreuse dans des couvertures. Consultez immédiatement pour : toute fièvre chez un bébé de moins de 3 mois, une température de 39° ou plus, une fièvre de plus de 3 jours, ou une fièvre avec convulsion, somnolence marquée ou difficulté à respirer.",K(NB,{dose:"Pendant toute la fièvre, en surveillant les signes de danger.",ref:"Le Prophète ﷺ a dit : « La fièvre vient de l'ardeur de l'Enfer, refroidissez-la donc avec de l'eau » (Bukhari et Muslim)."})),
+ X("La règle des tiers pour manger","Une mesure prophétique de la nourriture : un tiers pour la nourriture, un tiers pour la boisson et un tiers pour la respiration — elle prévient l'excès et aide à contrôler le poids.",["adults"],["digest","wloss"],
+  [[null,"Une assiette de taille moyenne"],[null,"Une tasse d'eau"]],
+  ["Commencez par Bismillah, mangez de la main droite ce qui est devant vous, et lentement.","Servez une quantité qui remplit environ un tiers de l'estomac, et buvez l'eau calmement.","Arrêtez-vous avant d'être rassasié, et laissez un tiers pour la respiration."],
+  "Les personnes diabétiques suivent le plan de leur médecin pour les quantités et les horaires des repas.",K(NB,{minAge:12,dose:"À chaque repas.",ref:"«L'homme ne remplit pas de récipient pire que son ventre. Quelques bouchées qui tiennent son dos droit suffisent au fils d'Adam ; s'il le faut absolument, alors un tiers pour sa nourriture, un tiers pour sa boisson et un tiers pour sa respiration » (Tirmidhi et Ibn Majah ; Tirmidhi a dit : bon et authentique)."})),
+ X("Bonnes manières pour boire l'eau","Boire assis en trois respirations, sans respirer dans le récipient — cela réduit les fausses routes et ménage l'estomac.",["adults","kids"],["digest"],
+  [[null,"Une tasse d'eau"]],
+  ["Asseyez-vous et dites Bismillah.","Buvez en trois gorgées, en éloignant le verre de la bouche entre chacune.","Ne respirez pas dans le verre, et louez Dieu après avoir bu."],
+  "Convient à tous.",K(NB,{minAge:1,dose:"À chaque fois que vous buvez.",ref:"Le Prophète ﷺ respirait trois fois en buvant et disait : « C'est plus désaltérant, plus sain et plus agréable » (Muslim), et : « Quand l'un de vous boit, qu'il ne respire pas dans le récipient » (Bukhari et Muslim)."})),
+ X("La hijama (ventouses) : ce qu'il faut savoir","Une sunna bien connue ; de petits essais suggèrent un bénéfice pour les douleurs du cou et du bas du dos, et le plus important est de la pratiquer sans danger.",["adults"],["pain","headache"],
+  [[null,"Un praticien agréé par les autorités sanitaires"],[null,"Des ventouses et des outils stériles à usage unique"]],
+  ["Choisissez un centre agréé, et assurez-vous que les outils sont ouverts devant vous et jetés après usage.","Informez le praticien de vos médicaments et maladies, surtout anticoagulants, diabète et anémie.","Après la séance : gardez les petites incisions propres, buvez de l'eau, et reposez-vous ce jour-là."],
+  "À ne pas faire sous anticoagulants, en cas d'anémie, de plaquettes basses, de grossesse, de diabète non équilibré ou d'immunité faible, ni chez l'enfant. N'arrêtez pas vos médicaments à cause d'elle. Le Prophète ﷺ a interdit à sa communauté la cautérisation, il ne faut donc jamais marquer les enfants au fer (wasm), comme cela se fait dans certains foyers ; cela provoque brûlures et cicatrices.",K(NB,{minAge:18,evN:1,evWhy:"De petits essais cliniques sur les douleurs du cou et du bas du dos, de qualité limitée",sup:"La hijama est un acte qui nécessite un praticien agréé",dose:"À intervalles espacés, sous la supervision du praticien.",ref:"«La guérison est dans trois choses : une incision de ventouse, une gorgée de miel ou une cautérisation par le feu — et j'interdis à ma communauté la cautérisation » (Bukhari), et «Les meilleurs remèdes que vous utilisez sont la hijama et le costus marin» (Bukhari et Muslim)."}))
+);
 const ORIG = {nabawi:"Médecine prophétique", islamic:"Médecine arabo-islamique", andalus:"Al-Andalus", gulf:"Golfe", levant:"Levant", egypt:"Égypte", iraq:"Irak", maghreb:"Maghreb", yemen:"Yémen", sudan:"Soudan", iran:"Iran", turkey:"Turquie", arab:"Médecine populaire arabe", india:"Inde (ayurvéda)", china:"Chine", japan:"Japon", europe:"Europe", seasia:"Asie du Sud-Est", africa:"Afrique", latam:"Amérique latine", home:"Recettes maison courantes"};
 const ORIG_OVR = {"Infusion de séné d'une nuit":"gulf","Eau d'encens":"gulf","Mâcher de l'encens":"gulf","Thé à la cardamome et à la cannelle après les repas":"gulf","Mâcher cardamome et girofle":"gulf","Tisane de tilleul contre le rhume":"levant","Thé d'hibiscus chaud":"egypt","Hibiscus glacé à la menthe":"egypt","Eau de cumin au citron":"egypt"};
 const ARAB_R = ["Eau d'encens","Mâcher de l'encens","Thé à la cardamome et à la cannelle après les repas","Eau de cumin au citron","Infusion de marjolaine","Infusion de fenugrec contre la toux","Eau de fenugrec trempé","Tisane de tilleul contre le rhume","Mâcher cardamome et girofle","Infusion d'anis contre la toux","Eau de fenugrec avant les repas","Yaourt à la nigelle","En-cas de graines de courge","Salade à l'ail et à l'huile d'olive"];
@@ -2982,16 +3052,18 @@ function relOf(r){
   let safe="g", why="";
   const exAll=new Set(); for(const [k,o] of Object.entries(RULES)){ if(k.startsWith("a:")) continue; Object.keys(o.ex||{}).forEach(i=>exAll.add(i)); }
   const sup=ids.filter(id=>SUPERVISE.has(id)||byId[id].ev==="x");
-  if(sup.length){ safe="r"; why=sup.map(id=>byId[id].ar.split(" (")[0]).join(", "); }
+  if(r.sup){ safe="r"; why=r.sup; }
+  else if(sup.length){ safe="r"; why=sup.map(id=>byId[id].ar.split(" (")[0]).join(", "); }
   else if(!r.topical && ids.some(id=>exAll.has(id))){ safe="y"; why=ids.filter(id=>exAll.has(id)).map(id=>byId[id].ar.split(" (")[0]).join(", "); }
   const src = r.o==="nabawi" ? (r.ref?"Hadith ou récit":"Médecine prophétique") : (r.o==="islamic"||r.o==="andalus") ? "Livres de médecine classiques" : r.o==="home" ? "Recette maison moderne" : "Coutume populaire héritée";
+  if(r.evN!=null){ best=r.evN; by=null; }
   return r._rel={ev:best, by, safe, why, src, score:best*10+({g:3,y:2,r:0})[safe]};
 }
 const EVTXT=["Traditionnel, sans études","Preuves limitées","Preuves modérées","Preuves plutôt solides"];
 const SAFETXT={g:"Sûr pour la plupart des gens",y:"Demande de la prudence pour certains groupes",r:"Usage court ou sous surveillance"};
 function relBox(r){
   const x=relOf(r), dots=[1,2,3].map(i=>`<i class="${i<=x.ev?"on":""}"></i>`).join("");
-  const evWhy = x.by ? `Ingrédient le plus solide pour ce problème : ${x.by.ar.split(" (")[0]} (${EV[x.by.ev]})` : "Il n'existe pas d'études sur ses ingrédients pour ce problème ; il repose sur l'usage traditionnel";
+  const evWhy = x.by ? `Ingrédient le plus solide pour ce problème : ${x.by.ar.split(" (")[0]} (${EV[x.by.ev]})` : r.evWhy ? r.evWhy : "Il n'existe pas d'études sur ses ingrédients pour ce problème ; il repose sur l'usage traditionnel";
   const sWhy = x.safe==="g" ? "Aucune contre-indication courante n'est connue pour ses ingrédients aux quantités indiquées" : x.safe==="y" ? `${x.why}: ne convient pas à certaines situations (grossesse, allaitement, maladies ou médicaments). Utilisez «Suggère-moi un mélange» pour savoir s'il vous convient` : `${x.why}: pas pour un usage prolongé ; de préférence sous surveillance médicale`;
   return `<details class="rel"><summary><span class="rel-ev ev-${x.ev}" title="${EVTXT[x.ev]}"><span class="dots">${dots}</span>${EVTXT[x.ev]}</span><span class="rel-s s-${x.safe}"><i></i>${SAFETXT[x.safe]}</span><span class="rel-src">${x.src}</span></summary>
    <ul><li><b>Preuves :</b> ${evWhy}.</li><li><b>Sécurité :</b> ${sWhy}.</li><li><b>Source :</b> ${x.src}.</li><li class="rel-n">Une évaluation estimée à partir des ingrédients du mélange, car le mélange lui-même n'a généralement pas été testé en tant que combinaison. <button type="button" class="herb-link rel-more">Comment est-ce calculé ?</button></li></ul></details>`;
@@ -4490,6 +4562,10 @@ bitterorange|Bitter orange extract|النارنج المرّ
 yohimbe|Yohimbe|يوهمبين
 fishoil|Fish oil, Omega-3|أوميغا ٣، أوميغا 3، زيت الأسماك، زيت السمك
 codliver|Cod liver oil|زيت كبد الحوت، زيت كبد السمك، زيت السمك للأطفال
+truffle|Desert truffle|الفقع، الكمأ، الترفاس، الزبيدي، الجمّة
+ithmid|Kohl, antimony|الكحل، الكحل العربي
+milk|Milk|الحليب
+zamzam|Zamzam water|زمزم
 seasalt|Saline, sea salt|الماء والملح، المحلول الملحي، ملح البحر، غرغرة
 deadsea|Dead Sea salt and mud|ملح البحر الميت، طين البحر الميت
 seaweed|Seaweed, kelp, kombu, nori, wakame|الطحالب البحرية، الكلب، عشب البحر، النوري
