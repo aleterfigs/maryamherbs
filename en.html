@@ -349,6 +349,16 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .tile-main .ticon{background:var(--clay);color:var(--sheet)}
 .tile[data-go="aid"] .ticon{background:var(--warn-soft);color:var(--warn)}
 .feat h3,.quick h3{font-family:var(--f-display);font-size:1.5rem;color:var(--leaf);margin:0 0 10px}
+.wseg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--sheet);margin:0 0 12px}
+.wseg button{font:inherit;border:0;border-inline-start:1px solid var(--line);background:transparent;color:var(--ink);padding:10px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.3}
+.wseg button:first-child{border-inline-start:0}
+.wseg small{font-size:.74rem;color:var(--muted)}
+.wseg button[aria-selected="true"]{background:var(--leaf);color:var(--sheet)}
+.wseg button[aria-selected="true"] small{color:var(--sheet);opacity:.85}
+@media (max-width:480px){.wseg small{display:none}}
+.wintro{margin:0;font-size:.95rem;line-height:1.8}
+.wlinks h4{margin:0 0 6px;font-size:.88rem;color:var(--muted)}
+.aidcard.wcard{border-top-color:var(--leaf)}
 .featrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
 .featcard{display:flex;gap:12px;align-items:center;text-align:start;font:inherit;color:inherit;background:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:12px;cursor:pointer}
 .featcard:hover{border-color:var(--leaf)}
@@ -412,6 +422,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
       <button class="tab" id="tabHerbs" aria-selected="false">Herbs</button>
       <button class="tab" id="tabRecipes" aria-selected="false">Blends</button>
       <button class="tab mom-tab" id="tabMom" aria-selected="false">Mum's recipes</button>
+      <button class="tab" id="tabWomen" aria-selected="false">Women's corner</button>
     </div>
     <div class="ngroup"><span class="nlabel">Home & emergencies</span>
       <button class="tab" id="tabAid" aria-selected="false">First aid</button>
@@ -443,6 +454,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
   <div class="recipes" id="recipes" hidden></div>
   <div class="wiz" id="wizard" hidden><div class="wform" id="wform"></div><div class="res" id="wres" aria-live="polite"></div></div>
   <div class="page" id="mom" hidden></div>
+  <div class="page" id="women" hidden></div>
   <div class="page" id="kit" hidden></div>
   <div class="page" id="aid" hidden></div>
   <div class="page" id="nutri" hidden></div>
@@ -2678,6 +2690,24 @@ RECIPES.push(
   ["Soak the wakame in water for 5 minutes until it expands, then drain.","Heat the water without boiling, and add the tofu and wakame for two minutes.","Take the pot off the heat and dissolve the miso in it.","Garnish with spring onion."],
   "Miso is salty: in moderation for people with high blood pressure. Thyroid patients should ask the doctor about seaweed.",{o:"japan",yield:"For two people"})
 );
+/* Women's corner blends */
+RECIPES.push(
+ X("Spearmint tea for PCOS","Two small trials found that two cups a day for a month lowered excess male hormones and slightly reduced unwanted hair.",["women"],["irregular"],
+  [["mint","1 tsp dried spearmint, or a handful of fresh leaves"]],
+  ["Put the mint in a cup.","Pour over boiling water and cover for 5–10 minutes.","Strain and drink one cup in the morning and one in the evening."],"Spearmint is not peppermint. Avoid with severe reflux, and it does not replace follow-up with your doctor.",{o:"home"}),
+ X("Honey and beeswax lip balm","A simple home balm for lips chapped by air conditioning and sun.",["women","adults"],["skin"],
+  [[null,"1 tbsp grated beeswax"],["olive","2 tbsp olive oil (or argan oil)"],["honey","Half a teaspoon of honey"]],
+  ["Melt the wax with the oil in a water bath over low heat.","Take it off the heat, add the honey and stir well until it cools slightly.","Pour into a small clean tin and let it set.","Apply to the lips several times a day."],"Keeps for about 3 months. Not for anyone allergic to bee products.",{o:"home"}),
+ X("Chamomile facial steam","A gentle weekly session that clears pores and soothes the skin.",["women","adults"],["skin"],
+  [["chamomile","2 tbsp dried chamomile"],[null,"1 litre boiling water"]],
+  ["Put the chamomile in a wide bowl and pour the boiling water over it.","Wait two minutes for the steam to ease a little.","Hold your face 30 cm above it with a towel over your head for 5–8 minutes.","Rinse your face with lukewarm water and apply a moisturiser."],"Don't get too close to the hot water. Not suitable for very sensitive skin, rosacea or ragweed allergy. Once a week is enough.",{o:"europe"}),
+ X("Green tea eye compresses","Temporarily eases morning puffiness around the eyes.",["women","adults"],["skin"],
+  [["greentea","2 green tea bags"]],
+  ["Steep the bags in hot water for 3 minutes.","Take them out and chill in the fridge for 15 minutes.","Place them over closed eyes for 10 minutes."],"The cold does most of the work against puffiness. Don't press on the eyes, and stop if irritation appears.",{o:"home"}),
+ X("Sugaring (halawa) for hair removal","The traditional method in the Gulf, Egypt and the Levant, using only sugar, lemon and water.",["women"],["skin"],
+  [[null,"1 cup white sugar"],[null,"¼ cup lemon juice"],[null,"¼ cup water"]],
+  ["Put the ingredients in a pan over medium heat without stirring much.","Let it boil until it turns a golden honey colour (about 10–15 minutes).","Take it off the heat and let it cool until warm, not hot; test the temperature on the inside of your wrist.","Spread a piece on the skin against the direction of hair growth, then pull it off quickly in the direction of growth while holding the skin taut.","Apply aloe gel or a cold compress afterwards."],"Hot sugar paste causes serious burns; always test the temperature. Don't use on broken or inflamed skin or with retinoid creams. Wash lemon off the skin before going into the sun.",{o:"arab"})
+);
 const ORIG = {nabawi:"Prophetic medicine", islamic:"Arab-Islamic medicine", andalus:"Al-Andalus", gulf:"The Gulf", levant:"The Levant", egypt:"Egypt", iraq:"Iraq", maghreb:"The Maghreb", yemen:"Yemen", sudan:"Sudan", iran:"Iran", turkey:"Turkey", arab:"Arab folk medicine", india:"India (Ayurveda)", china:"China", japan:"Japan", europe:"Europe", seasia:"Southeast Asia", africa:"Africa", latam:"Latin America", home:"Common home recipes"};
 const ORIG_OVR = {"One-night senna infusion":"gulf","Frankincense water":"gulf","Chewing frankincense":"gulf","Cardamom and cinnamon tea after meals":"gulf","Chewing cardamom and clove":"gulf","Linden tea for colds":"levant","Hot hibiscus tea":"egypt","Iced hibiscus with mint":"egypt","Cumin water with lemon":"egypt"};
 const ARAB_R = ["Frankincense water","Chewing frankincense","Cardamom and cinnamon tea after meals","Cumin water with lemon","Marjoram infusion","Fenugreek infusion for cough","Soaked fenugreek water","Linden tea for colds","Chewing cardamom and clove","Anise infusion for cough","Fenugreek water before meals","Yoghurt with black seed","Pumpkin-seed snack","Garlic and olive oil salad"];
@@ -3209,17 +3239,17 @@ function renderRecipes(){
 }
 function setView(v){
   state.view=v;
-  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabKit","kit"],["tabAid","aid"],["tabNutri","nutri"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
+  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabAid","aid"],["tabNutri","nutri"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
   $("#recipes").hidden=v!=="recipes"; $("#wizard").hidden=v!=="wizard";
-  ["home","mom","kit","aid","nutri","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
-  const pageView=["home","mom","wizard","kit","aid","nutri","safety","gloss","about"].includes(v);
+  ["home","mom","women","kit","aid","nutri","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
+  const pageView=["home","mom","women","wizard","kit","aid","nutri","safety","gloss","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
   render();
 }
 function render(){
   renderAud();
-  if(["home","mom","kit","aid","nutri","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,kit:renderKit,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
+  if(["home","mom","women","kit","aid","nutri","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
@@ -3797,11 +3827,12 @@ function renderHome(){
      <p class="hstats">${n(HERBS.length)} herbs · ${n(RECIPES.length)} blends · ${n(Object.keys(ORIG).length)} traditions · ${n(PROBS.length)} health problems</p>
    </section>
    <div class="tiles">${TILES.map(([k,t,d],i)=>`<button type="button" class="tile${i===0?" tile-main":""}" data-go="${k}"><span class="ticon">${tileIcon(k)}</span><span class="ttext"><b>${t}</b><small>${d}</small></span></button>`).join("")}</div>
-   <section class="feat"><h3>Extended sections</h3><div class="featrow">${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>A complete guide: kinds, Sunnah, science and safety</small></span></button>`).join("")}<button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>From the sea</b><small>Fish oil, salt water, seaweed and ambergris: what helps and what to beware of</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>Grow your own pharmacy</b><small>Herbs that are easy to grow in the Gulf, and when and how to plant them</small></span></button></div></section>
+   <section class="feat"><h3>Extended sections</h3><div class="featrow">${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>A complete guide: kinds, Sunnah, science and safety</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>Women's corner</b><small>Periods, pregnancy and postpartum, skin and hair, and cosmetic warnings</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>From the sea</b><small>Fish oil, salt water, seaweed and ambergris: what helps and what to beware of</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>Grow your own pharmacy</b><small>Herbs that are easy to grow in the Gulf, and when and how to plant them</small></span></button></div></section>
    <section class="quick"><h3>In emergencies</h3><div class="opts">${["snake","scorpion","dog","burn","heat","poison"].map(id=>{const a=AID.find(x=>x.id===id);return `<button type="button" class="chip urgent" data-aidgo="${id}"><span class="dot ${SEV[a.sev][1]}"></span>${a.n}</button>`;}).join("")}</div></section>`;
   $("#home").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{ setView(b.dataset.go); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
   $("#home").querySelectorAll("[data-grow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
+  $("#home").querySelectorAll("[data-women]").forEach(b=>b.onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-sea]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="sea"; setView("herbs"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-aidgo]").forEach(b=>b.onclick=()=>{ ast.id=b.dataset.aidgo; setView("aid"); window.scrollTo({top:0}); });
   $("#hsearch").onsubmit=e=>{ e.preventDefault(); const q=$("#hq").value.trim(); state.q=q; $("#q").value=q; state.cond=null; setView("herbs"); window.scrollTo({top:0}); };
@@ -3862,6 +3893,258 @@ function renderKit(){
   el.querySelectorAll("[data-kit]").forEach(c=>c.onchange=()=>{ kitHave[c.dataset.kit]=c.checked; if(!c.checked) delete kitHave[c.dataset.kit]; saveKit(); renderKit(); const n=$("#kit-"+c.dataset.kit); n&&n.focus(); });
   const r=$("#kitReset"); r&&(r.onclick=()=>{ kitHave={}; saveKit(); renderKit(); });
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
+}
+/* ---------- Women's corner ---------- */
+const WSEC={h:["Her health","Periods, pregnancy, postpartum, breastfeeding and menopause"],b:["Beauty and care","Skin, hair, nails and fragrance"],s:["Cosmetic warnings","Traditional products that can harm"]};
+const WG=[
+ /* Health */
+ {id:"cramps",s:"h",n:"Period pain",
+  intro:"One of the most common things women treat with herbs. The strongest evidence is for ginger, heat and exercise; small trials suggest cinnamon and fennel help too.",
+  h:["ginger","fennel","cinnamon","chamomile","marjoram"],
+  r:["Ginger powder on the first days of the period","A warm compress for period pain","Cinnamon tea for periods","Fennel tea for periods","Stretches for period pain"],
+  do:["Start ginger or a painkiller on day one, or the day before your period; it works better than waiting for the pain to build.","Put a warm compress or hot-water bottle on your lower belly for 20 minutes.","Regular walking and light exercise throughout the month reduce pain.","A warm drink can be combined with your usual painkiller, such as ibuprofen, as per the pack."],
+  dont:["Don't take large amounts of Chinese (cassia) cinnamon daily for long periods.","Don't put up with pain that stops you studying or working every month as if it were normal."],
+  dr:["Severe pain not relieved by painkillers, or getting worse year by year.","Pain that started after age 25 when it wasn't there before, or pain during sex.","Bleeding between periods, fever or unusual discharge."]},
+ {id:"pms",s:"h",n:"Premenstrual syndrome (PMS)",
+  intro:"Mood swings, bloating and breast tenderness in the days before a period. The best-studied herb is chasteberry (vitex), followed by saffron in small trials.",
+  h:["chasteberry","saffron","chamomile","eveningprimrose"],
+  r:["Chamomile and mint for period bloating"],
+  do:["Track your symptoms for two months to see the pattern; it helps your doctor too.","Cut down on salt, caffeine and sugar in the week before your period.","Calcium from food (milk, yoghurt, sesame) and exercise both have good evidence.","Regular sleep eases mood swings."],
+  dont:["Don't combine chasteberry with the contraceptive pill, fertility treatment or antipsychotics without a doctor.","Evening primrose oil hasn't been shown to help this condition, so don't spend much on it."],
+  dr:["Deep sadness or thoughts of self-harm before your period; this may be a treatable mood disorder.","Symptoms damage your relationships or work every month."]},
+ {id:"pcos",s:"h",n:"Irregular periods and PCOS",
+  intro:"Polycystic ovary syndrome is very common in the Gulf. The main treatment is losing a little weight (5–10% is often enough) and staying active; herbs only help alongside. Small studies suggest spearmint tea reduces unwanted hair and cinnamon may make cycles more regular.",
+  h:["mint","cinnamon","chasteberry","flaxseed"],
+  r:["Spearmint tea for PCOS","Cinnamon tea for periods"],
+  do:["Cut down on sugar and white bread, and eat more vegetables, pulses and protein.","Walk for 30 minutes on most days of the week.","Have your HbA1c, thyroid and hormones checked by your doctor."],
+  dont:["Don't rely on “hormone balancing” blends of unknown content.","Don't use herbs instead of treatment if you're trying to conceive; see your doctor."],
+  dr:["No period for more than 3 months without pregnancy.","Excess facial and body hair, severe acne, or hair thinning on the scalp.","Difficulty conceiving after a year of trying (or 6 months after age 35)."]},
+ {id:"heavy",s:"h",n:"Heavy periods and anaemia",
+  intro:"Heavy periods are the most common cause of iron deficiency in women. Dates, date syrup and spinach help, but they can't make up for a large iron deficit.",
+  h:["dates","iron","vitc","moringa","nettle"],
+  r:[],
+  do:["Eat iron sources with something rich in vitamin C (lemon, orange, peppers) to boost absorption.","Drink tea and coffee an hour away from meals.","Check your haemoglobin and iron stores (ferritin) once a year."],
+  dont:["Don't take iron tablets for long periods without testing.","Don't take herbs “to stop bleeding” instead of getting a diagnosis."],
+  dr:["Changing your pad every hour or less for several hours, or clots bigger than a coin.","Periods longer than 7 days, or dizziness, palpitations and severe tiredness.","Any bleeding after your periods have stopped for good (menopause)."]},
+ {id:"uti",s:"h",n:"Urinary tract infections",
+  intro:"Recurrent burning when passing urine is common in women. Cranberry may reduce repeat infections for some, but it doesn't treat an active infection; that needs antibiotics.",
+  h:["cranberry","cornsilk","parsley"],
+  r:["Corn-silk tea"],
+  do:["Drink plenty of water and don't hold in urine.","Pass urine after sex, and wipe from front to back.","Cranberry juice or capsules for prevention if infections keep coming back."],
+  dont:["Don't rely on diuretic herbs alone if there is burning and fever.","Don't take large amounts of cranberry with warfarin."],
+  dr:["Fever, shivering, or pain in the side or back (possible kidney infection).","Blood in the urine.","Any urinary symptoms during pregnancy: see your doctor the same day."]},
+ {id:"intimate",s:"h",n:"Intimate hygiene and discharge",
+  intro:"The vagina cleans itself, and most folk remedies here do more harm than good. Itching and smelly discharge need a diagnosis, because thrush is treated differently from bacterial infection.",
+  h:[],
+  r:[],
+  do:["Wash the outer area with water or a gentle unscented wash.","Wear cotton underwear and avoid staying in wet clothes.","Yoghurt in your diet is part of healthy eating, but the evidence for prevention is limited."],
+  dont:["Don't douche; it upsets the natural balance and increases infections.","Don't sit over herbal steam (vaginal steaming); it has caused burns and has no proven benefit.","Don't put garlic, essential oils, vinegar or herbs inside the vagina.","Don't use perfumes or scented sprays on the intimate area."],
+  dr:["Discharge of unusual colour or smell, or itching that doesn't clear within days.","Pelvic pain or fever.","Any symptoms during pregnancy."]},
+ {id:"preg",s:"h",n:"Pregnancy: what helps and what to avoid",
+  intro:"The time to be most careful with herbs. Ginger for pregnancy sickness is well studied, and folic acid is essential before and in early pregnancy. Many common herbs can cause contractions or harm the baby in medicinal amounts.",
+  h:["ginger","folate","dates","iron"],
+  r:["Six dates in the last month of pregnancy"],
+  do:["Folic acid 400 micrograms a day from before pregnancy until the end of the third month, or as your doctor advises.","For nausea: small frequent meals, and ginger in moderate amounts (up to about 1 gram a day).","Herbs used as spices in food are generally safe; be careful with medicinal doses and capsules.","Ask your doctor or pharmacist before any herb or supplement."],
+  dont:["Avoid completely: pennyroyal, harmal (Syrian rue), wormwood and mugwort, senna, and myrrh in large amounts.","Avoid medicinal amounts of: fenugreek, sage, liquorice, concentrated parsley, cassia cinnamon, and swallowing essential oils.","Don't drink “easy labour” blends before your due date without your doctor."],
+  dr:["Severe vomiting where you can't keep food or drink down, or passing little urine.","Bleeding, severe abdominal pain, or a bad headache with blurred vision.","Reduced baby movements in the later months."]},
+ {id:"postpartum",s:"h",n:"Postpartum and after birth",
+  intro:"The Gulf and the Arab world have rich traditions for new mothers: fenugreek, madeed, aseeda, garden cress and dates. These are warm, nourishing foods; what matters alongside them is rest, iron, and watching bleeding and mood.",
+  h:["fenugreek","dates","gardencress","ajwain","mugat"],
+  r:["Fenugreek with dates for new mothers","Fenugreek madeed for new mothers","Garden cress with milk for new mothers","Aseeda with ghee and dates","Sitz bath after childbirth","Egyptian moghat for new mothers"],
+  do:["Eat warm, nourishing food and drink plenty of water, especially when breastfeeding.","Finish the iron and vitamins your doctor prescribed.","A warm sitz bath eases stitch pain.","Accept help at home and sleep when the baby sleeps."],
+  dont:["Don't sit over herbal or charcoal smoke in a closed room, especially with the baby there.","Don't bind your belly so tightly that it restricts breathing or causes pain.","Go easy on sugar and ghee in traditional foods if you had gestational diabetes."],
+  dr:["Bleeding that soaks a pad every hour, large clots, or a foul smell.","Fever, or pain and redness in a breast or leg.","Severe headache, blurred vision or facial swelling (possible postpartum pre-eclampsia).","Deep sadness or anxiety for more than two weeks, or thoughts of harming yourself or the baby: this is postnatal depression and it is treatable."]},
+ {id:"lact",s:"h",n:"Breastfeeding and milk supply",
+  intro:"The most important things for milk supply are frequent feeds and a good latch. Fenugreek, moringa and fennel are used traditionally; the evidence for them is weak to moderate.",
+  h:["fenugreek","moringa","fennel","oats","dates"],
+  r:["Fenugreek drink for nursing mothers","Moringa drink for nursing mothers","Cabbage leaves for breast engorgement"],
+  do:["Feed on demand, 8–12 times a day in the first weeks.","See a lactation consultant if there is pain or cracked nipples.","Drink to thirst and eat enough meals."],
+  dont:["Fenugreek can give the baby a maple-syrup smell and wind; avoid it with chickpea or peanut allergy and with diabetes medicines.","Avoid large amounts of sage, peppermint and parsley, which may reduce milk.","Don't take concentrated herbs for long periods without advice; some reach the baby."],
+  dr:["Few wet nappies or poor weight gain in the baby.","Pain, redness and heat in the breast (mastitis)."]},
+ {id:"meno",s:"h",n:"Menopause",
+  intro:"Hot flushes, night sweats and poor sleep. Sage, soy and flaxseed have limited evidence; black cohosh has mixed results and needs caution for the liver.",
+  h:["sage","blackcohosh","flaxseed","calcium","vitd"],
+  r:["Sage infusion for hot flushes"],
+  do:["Light clothes in layers and a cool bedroom.","Cut down on caffeine, spicy food and very hot drinks in the evening.","Exercise and light weights protect bones and heart.","Check your vitamin D and bone density as appropriate for your age."],
+  dont:["Don't take black cohosh if you have liver disease; stop it if your skin yellows or urine darkens.","Don't use sage in large amounts or for months on end."],
+  dr:["Any bleeding a year or more after your periods stopped.","Severe flushes that stop you sleeping or working; there are effective, safe treatments for many women."]},
+ {id:"bones",s:"h",n:"Bones and joints after forty",
+  intro:"Women lose bone density quickly after menopause. Sunlight, vitamin D, calcium and movement are the foundation; turmeric and ginger ease mild joint pain.",
+  h:["calcium","vitd","turmeric","ginger"],
+  r:[],
+  do:["10–15 minutes of morning sun on the arms most days, unless a skin condition prevents it.","Milk, yoghurt, cheese, sesame, and sardines with their bones.","Walking, climbing stairs and resistance exercise."],
+  dont:["Don't take high doses of vitamin D without testing.","Don't take calcium at the same time as iron or thyroid tablets."],
+  dr:["Sudden back pain after a minor movement, or loss of height.","A fracture from a minor fall."]},
+
+ /* Beauty and care */
+ {id:"acne",s:"b",n:"Spots and acne",
+  intro:"5% tea tree gel has moderate evidence for mild spots, and topical green tea and honey may help. Moderate to severe acne needs a dermatologist early to prevent scarring.",
+  h:["teatree","greentea","honey","aloe","neem"],
+  r:["Tea tree oil for spots","Neem and turmeric skin paste","Honey mask for dry skin"],
+  do:["Wash your face twice a day with a gentle cleanser, and don't scrub hard.","Use a “non-comedogenic” moisturiser and sunscreen.","Change your pillowcase twice a week."],
+  dont:["Don't put toothpaste, lemon, bleach or strong vinegar on spots.","Don't squeeze spots, especially around the nose and lips.","Don't apply tea tree oil undiluted."],
+  dr:["Deep painful lumps or scarring.","Acne with excess hair and irregular periods (possible PCOS)."]},
+ {id:"melasma",s:"b",n:"Melasma, pigmentation and uneven tone",
+  intro:"The sun is the biggest cause of melasma in our region, and daily sunscreen is the most important treatment. Liquorice extract, aloe and niacinamide have modest evidence, and creams of unknown origin may contain mercury or steroids.",
+  h:["licorice","aloe","greentea","rose"],
+  r:["Taif rose water for the skin"],
+  do:["Broad-spectrum sunscreen (SPF 30 or higher) every morning, reapplied every two hours outdoors.","A hat or umbrella at midday.","Patience: pigmentation needs 2–3 months of protection to fade."],
+  dont:["Don't put lemon, orange or cologne on your face and then go into the sun; it can cause burns and dark patches.","Don't use lightening creams of unknown origin or local “mixes”.","Don't scrub your skin hard; inflammation worsens pigmentation."],
+  dr:["A spot that changes in size or colour, or bleeds.","Melasma that appeared with the pill or pregnancy and doesn't fade."]},
+ {id:"dry",s:"b",n:"Dry skin and cracked heels",
+  intro:"Air conditioning and sun dry the skin in the Gulf. Natural oils, honey and oats moisturise well; the best time to apply them is after a shower while the skin is still damp.",
+  h:["olive","argan","honey","oats","aloe","henna"],
+  r:["Oat and honey mask","Argan oil for hair and skin","Henna for cracked feet","Honey and beeswax lip balm"],
+  do:["Shower in lukewarm, not hot, water and keep it short.","Apply moisturiser or oil within 3 minutes of showering.","For heels: soak for 10 minutes, use a gentle pumice stone, then moisturiser and cotton socks overnight."],
+  dont:["Don't overuse harsh or scented soaps.","Don't cut cracked skin with a blade."],
+  dr:["Cracks that bleed or become inflamed, especially if you have diabetes.","Severe itching with redness and scaling (possible eczema or psoriasis)."]},
+ {id:"sensitive",s:"b",n:"Sensitive skin and redness",
+  intro:"Chamomile, oats, aloe and calendula are among the gentlest options for irritated skin. The fewer the ingredients, the less irritation.",
+  h:["chamomile","oats","aloe","calendula"],
+  r:["Oat and honey mask","Chamomile facial steam"],
+  do:["Patch-test any new product on your inner arm for two days before using it on your face.","Choose unscented products, and introduce one new product at a time."],
+  dont:["Avoid chamomile if you're allergic to chrysanthemums or ragweed.","Don't put essential oils on sensitive skin."],
+  dr:["Swelling of the face or lips or difficulty breathing after a product: emergency.","Persistent redness of the cheeks with visible blood vessels (possible rosacea)."]},
+ {id:"eyes",s:"b",n:"Dark circles and puffy eyes",
+  intro:"Most dark circles are hereditary or due to lack of sleep and allergies. Cold compresses and chilled green tea bags ease puffiness temporarily.",
+  h:["greentea","chamomile"],
+  r:["Green tea eye compresses"],
+  do:["Enough sleep, with your head raised slightly on an extra pillow.","Cut down on salt in the evening.","Treat nasal allergies if you have them; they are a common cause of dark circles."],
+  dont:["Don't put turmeric, lemon or onion around the eyes.","Don't rub your eyes."],
+  dr:["Persistent puffy eyelids with swollen feet (possibly kidney-related).","Dark circles with severe tiredness and pallor (check your iron)."]},
+ {id:"stretch",s:"b",n:"Stretch marks (white and red lines)",
+  intro:"Common in pregnancy and with weight changes. Oils and creams moisturise and ease itching, but they don't fully prevent or remove the marks. New red marks respond better than old white ones.",
+  h:["olive","argan","aloe"],
+  r:["Argan oil for hair and skin"],
+  do:["Massage your belly and thighs with oil or cream daily during pregnancy; it eases itching and tightness.","Keep weight gain gradual."],
+  dont:["Don't use creams containing retinoids during pregnancy.","Don't spend much on products that promise to remove marks completely."],
+  dr:["Wide purple marks with rapid weight gain and unexplained muscle weakness (possibly hormonal)."]},
+ {id:"hairloss",s:"b",n:"Hair loss",
+  intro:"A small study compared rosemary oil with minoxidil and found similar results after 6 months. But the key is finding the cause: low iron or vitamin D, thyroid problems, childbirth or crash dieting.",
+  h:["rosemary","nigella","fenugreek","argan","iron","vitd"],
+  r:["Rosemary oil for the scalp","Diluted black-seed oil for the scalp","Sidr hair wash"],
+  do:["Check your ferritin, vitamin D and thyroid.","Massage your scalp with diluted oil 2–3 times a week; results take 3–6 months.","Eat enough protein; crash diets cause hair loss 2–3 months later."],
+  dont:["Don't pull your hair into tight ties or tight styles all the time.","Don't put undiluted essential oils on your scalp."],
+  dr:["Sudden round bald patches.","Hair loss with irregular periods and excess facial hair.","Heavy shedding after childbirth lasting more than 6 months (shedding in the first months after birth is usually normal)."]},
+ {id:"dandruff",s:"b",n:"Dandruff and itchy scalp",
+  intro:"Sidr is a gentle traditional Gulf wash, and 5% tea tree shampoo has a good study for dandruff. If dandruff persists, medicated antifungal shampoo works very well.",
+  h:["sidr","teatree","myrtle","aloe"],
+  r:["Sidr for dandruff","Myrtle water for gums and hair"],
+  do:["Wash your hair regularly; built-up oil makes dandruff worse.","Leave medicated shampoo on the scalp for 5 minutes before rinsing."],
+  dont:["Don't overuse heavy oils on an oily, flaky scalp.","Don't scratch your scalp with your nails."],
+  dr:["Thick silvery scales with redness (possible psoriasis).","Dandruff with hair loss or bald patches."]},
+ {id:"hairdry",s:"b",n:"Dry and split hair",
+  intro:"Sun, straighteners and dyes dry the hair. Argan oil, olive oil and henna add shine and coat the hair shaft.",
+  h:["argan","olive","henna","moringa"],
+  r:["Argan oil for hair and skin","Henna for hair","Sidr and henna hair mix","Ban oil for skin and hair"],
+  do:["Put a few drops of oil on the ends after washing.","Trim split ends every 2–3 months.","Use a low heat setting on the dryer, and a heat protectant before straightening."],
+  dont:["Don't leave oil on your hair and go out in the hot sun.","Don't use henna on recently chemically dyed hair without a strand test."],
+  dr:["Severe breakage with hair loss and tiredness (check your thyroid)."]},
+ {id:"grey",s:"b",n:"Grey hair and natural dye",
+  intro:"Pure henna gives a coppery red; followed by katam or indigo it becomes brown or black. Ready-made “black henna” often contains PPD, which causes severe allergy.",
+  h:["henna","indigo"],
+  r:["Henna and katam to cover grey hair","Henna allergy test","Henna for hair"],
+  do:["Buy pure henna that is green and smells herbal.","Do an allergy test 48 hours beforehand every time.","The two-step method: henna first, then indigo on another day or straight after."],
+  dont:["Don't use ready-made black henna or fast, dark henna for body art.","Don't mix henna with chemical dye at the same time."],
+  dr:["Itching, swelling or blisters after henna or dye: an emergency if it affects the face and eyes."]},
+ {id:"nails",s:"b",n:"Nails and hands",
+  intro:"Brittle nails usually come from too much water and detergent. Oils and henna are traditional care; biotin only helps if you're deficient.",
+  h:["argan","olive","henna"],
+  r:["Argan oil for hair and skin"],
+  do:["Wear gloves for washing up and cleaning.","Massage the nails and surrounding skin with oil at night.","Give your nails breaks between polishes."],
+  dont:["Don't cut the cuticles deeply.","Don't overuse harsh nail polish remover."],
+  dr:["Nail discolouration or a dark line under the nail, or spoon-shaped nails (possible iron deficiency).","Redness, swelling and pus around the nail."]},
+ {id:"lips",s:"b",n:"Lips",
+  intro:"Lips have no oil glands, so they dry quickly in air conditioning and sun. Honey, beeswax and olive oil moisturise them.",
+  h:["honey","olive","argan"],
+  r:["Honey and beeswax lip balm"],
+  do:["A lip balm with sunscreen during the day.","Drink enough water."],
+  dont:["Don't lick your lips; saliva makes them drier.","Don't peel dry skin off with your teeth."],
+  dr:["Cracks at the corners of the mouth that don't heal (possible fungal infection or vitamin deficiency).","A sore on the lip that doesn't heal within 3 weeks."]},
+ {id:"scent",s:"b",n:"Fragrance, incense and body odour",
+  intro:"Bakhoor, oud, dukhoon and musk are a cherished part of how Gulf women care for themselves. A pleasant scent is a Sunnah, but smoke in closed rooms aggravates asthma and allergies, especially in children.",
+  h:["frankincense","myrtle","rose","qaraz"],
+  r:["Qaraz decoction for the feet"],
+  do:["Burn incense in an open room, then close it once the smoke has cleared.","Put perfume on your clothes rather than your skin if your skin is sensitive.","A daily shower and cotton clothes matter more than any deodorant."],
+  dont:["Don't perfume a baby with incense or burn it near them, nor near anyone with asthma.","Don't put alcohol-based perfume on your skin and then go into the sun; it can cause dark patches.","Don't sleep with the incense burner lit."],
+  dr:["A sudden change in body odour or heavy night sweats (possibly thyroid or diabetes)."]},
+ {id:"hairrem",s:"b",n:"Hair removal",
+  intro:"Sugaring (sugar and lemon) and threading are among the oldest hair-removal methods in the region, and they are safe if you watch the temperature of the paste and keep tools clean.",
+  h:[],
+  r:["Sugaring (halawa) for hair removal"],
+  do:["Test the temperature of the sugar paste on the inside of your wrist before applying.","Apply to clean, dry skin, and pull quickly while holding the skin taut.","Apply aloe gel or a cold compress afterwards."],
+  dont:["Don't use it on inflamed or broken skin, over spots, or straight after sun exposure.","Don't use it with retinoid creams or after a facial peel.","Don't share tools or reuse the paste with someone else."],
+  dr:["A burn that blisters.","Repeated folliculitis or inflamed ingrown hairs.","A sudden increase in facial and body hair (needs hormone tests)."]},
+ {id:"teeth",s:"b",n:"Smile and fresh breath",
+  intro:"The miswak is a Sunnah, and studies suggest it removes plaque nearly as well as a toothbrush when used correctly. It doesn't replace fluoride toothpaste.",
+  h:["miswak","clove","sage","myrrh"],
+  r:[],
+  do:["Miswak between meals, and brushing with fluoride toothpaste twice a day.","Trim the used tip of the miswak every day or two.","Cleaning your tongue and flossing reduce bad breath."],
+  dont:["Don't rub your teeth with lemon or baking soda daily to whiten them; it damages the enamel.","Don't keep concentrated clove on your gums for long."],
+  dr:["Persistent bleeding gums or bad breath that won't go away.","Toothache that wakes you at night, or facial swelling."]},
+
+ /* Cosmetic warnings */
+ {id:"kohl",s:"s",n:"Traditional kohl and unlicensed ithmid",
+  intro:"Much traditional kohl made from ithmid stone, or imported without regulation, contains lead (galena). It is toxic, especially for children and pregnant women, and is absorbed through the eyes and hands.",
+  h:[],r:[],
+  do:["Use a kohl or eyeliner licensed by a regulator with the ingredients listed.","Wash your hands after applying kohl."],
+  dont:["Never put traditional kohl in the eyes of babies and children.","Don't use kohl of unknown origin during pregnancy and breastfeeding."],
+  dr:["A child given traditional kohl who has tiredness, colic or delayed development: ask for a blood lead test."]},
+ {id:"blackhenna",s:"s",n:"Black henna and quick body art",
+  intro:"Black designs that dry fast and turn dark within an hour usually contain PPD, which causes burns, ulcers and lifelong allergy to hair dyes.",
+  h:["henna"],r:["Henna allergy test"],
+  do:["Natural henna is orange to reddish-brown and takes hours to develop.","Ask about ingredients before getting a design, especially when travelling."],
+  dont:["Don't accept a quick black design, and never for children.","Don't put “black henna” on your hair."],
+  dr:["Itching, redness or blisters where the design was, within days."]},
+ {id:"whitening",s:"s",n:"Unknown lightening creams",
+  intro:"Some unlicensed lightening creams and local mixes contain mercury, strong steroids or high-strength hydroquinone. Mercury harms the kidneys and nerves, and steroids thin the skin and cause acne and hair growth.",
+  h:[],r:[],
+  do:["Buy lightening products only from a pharmacy, with the ingredients listed.","The most important treatment for pigmentation is sunscreen."],
+  dont:["Don't use a cream that works “miraculously fast” or lists no ingredients.","Don't put steroid creams on your face for weeks."],
+  dr:["Tremor, numbness, or changes in mood or urine after a lightening cream.","Thin skin with visible veins, or sudden acne after a cream."]},
+ {id:"phototox",s:"s",n:"Lemon, perfume and sun",
+  intro:"Lemon, lime and bergamot juice and some perfumes make the skin sensitive to sunlight, causing burns and dark patches that last for months.",
+  h:[],r:[],
+  do:["If lemon touches your skin, wash it off before going into the sun."],
+  dont:["Don't use lemon as a daytime facial lightener or scrub.","Don't put perfume on your neck and face and then sit in the sun."],
+  dr:["Blisters or burns after sun exposure where lemon or perfume was applied."]},
+ {id:"oils",s:"s",n:"Concentrated essential oils",
+  intro:"Essential oils (peppermint, clove, cinnamon, tea tree, camphor) are very concentrated; they can cause burns and allergy when applied undiluted, and poisoning if swallowed.",
+  h:["teatree","eucalyptus","clove"],r:[],
+  do:["Dilute them: 2–3 drops in a tablespoon of olive or coconut oil.","Keep them away from children."],
+  dont:["Don't swallow them, or put them near the eyes or on a child's face.","Don't put cinnamon or clove oil directly on the skin."],
+  dr:["A child has swallowed an essential oil: call emergency services or a poison centre immediately."]},
+ {id:"slimming",s:"s",n:"Unknown slimming, enlargement and weight-gain blends",
+  intro:"Many “natural herbs” for slimming, weight gain, or breast and hip enlargement sold online have been found to contain hidden drugs: sibutramine, steroids, diuretics and hormones.",
+  h:["garcinia","bitterorange","senna"],r:[],
+  do:["The safe way: balanced food and activity, with follow-up from a doctor or dietitian.","Check your country's health ministry warnings about seized products."],
+  dont:["Don't buy a product that promises very fast results without clear ingredients.","Don't use unlicensed “enlargement” injections or creams."],
+  dr:["Palpitations, severe insomnia or raised blood pressure after a slimming blend.","A puffy face and rapid weight gain after a weight-gain blend (possibly steroids)."]}
+];
+const wst={s:"h",id:null};
+function renderWomen(){
+  const el=$("#women"), sec=WG.filter(t=>t.s===wst.s), cur=wst.id&&sec.find(t=>t.id===wst.id), list=cur?[cur]:sec;
+  const NU=id=>typeof NUTR!=="undefined"&&NUTR.find(x=>x.id===id);
+  const hl=ids=>ids.map(id=>byId[id]?`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`:NU(id)?`<button type="button" class="chip" data-nu="${id}">${NU(id).n}</button>`:"").join("");
+  const rl=rs=>rs.filter(n=>RECIPES.some(r=>r.name===n)).map(n=>`<button type="button" class="chip" data-gr="${n}">Recipe: ${n}</button>`).join("");
+  el.innerHTML=`<h2 class="page-h">Women's corner</h2>
+   <p class="sub">Women's health, beauty and self-care in traditional medicine, with what science says and what to watch out for. This is for education and doesn't replace a doctor or pharmacist, especially in pregnancy and breastfeeding.</p>
+   <div class="wseg" role="tablist">${Object.entries(WSEC).map(([k,[t,s]])=>`<button type="button" role="tab" data-ws="${k}" aria-selected="${wst.s===k}"><b>${t}</b><small>${s}</small></button>`).join("")}</div>
+   <div class="sgroups"><div class="opts">${sec.map(t=>`<button type="button" class="chip" data-wt="${t.id}" aria-pressed="${wst.id===t.id}">${t.n}</button>`).join("")}</div></div>
+   <div class="aidgrid${cur?" one":""}">${list.map(t=>`<article class="aidcard ${t.s==="s"?"sev-e":"wcard"}">
+     <div class="aidhead"><h3>${t.n}</h3></div>
+     <p class="wintro">${t.intro}</p>
+     ${t.h.some(id=>byId[id]||NU(id))?`<div class="wlinks"><h4>${t.s==="s"?"Related pages":"Herbs and supplements"}</h4><div class="opts">${hl(t.h)}</div></div>`:""}
+     ${t.r.some(n=>RECIPES.some(r=>r.name===n))?`<div class="wlinks"><h4>Blends in this guide</h4><div class="opts">${rl(t.r)}</div></div>`:""}
+     <div class="aidcols"><div class="ado"><h4>What helps</h4><ul>${t.do.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+     <div class="adont"><h4>Avoid</h4><ul>${t.dont.map(x=>`<li>${x}</li>`).join("")}</ul></div></div>
+     <div class="red"><h4>See a doctor if:</h4><ul>${t.dr.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   </article>`).join("")}</div>`;
+  el.querySelectorAll("[data-ws]").forEach(b=>b.onclick=()=>{ wst.s=b.dataset.ws; wst.id=null; renderWomen(); });
+  el.querySelectorAll("[data-wt]").forEach(b=>b.onclick=()=>{ wst.id = wst.id===b.dataset.wt?null:b.dataset.wt; renderWomen(); });
+  el.querySelectorAll("[data-gr]").forEach(b=>b.onclick=()=>goRecipe(b.dataset.gr));
+  el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
+  el.querySelectorAll("[data-nu]").forEach(b=>b.onclick=()=>{ nst.sym=null; setView("nutri"); const n=$("#n-"+b.dataset.nu); n&&n.scrollIntoView({block:"start"}); });
 }
 /* ---------- First aid ---------- */
 const SEV={e:["Emergency now","sev-e"],d:["Doctor the same day","sev-d"],h:["Usually treated at home","sev-h"]};
@@ -4311,6 +4594,7 @@ $("#tabHerbs").onclick=()=>setView("herbs");
 $("#tabRecipes").onclick=()=>setView("recipes");
 $("#tabMom").onclick=()=>setView("mom");
 $("#tabKit").onclick=()=>setView("kit");
+$("#tabWomen").onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); };
 $("#tabAid").onclick=()=>setView("aid");
 $("#tabNutri").onclick=()=>setView("nutri");
 $("#tabSafety").onclick=()=>setView("safety");
@@ -4323,6 +4607,7 @@ setView("home");
 initShared();
 </script>
 
+<script data-goatcounter="https://maryamherbs.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script>
 if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{});});}
 </script>
