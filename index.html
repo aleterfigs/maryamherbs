@@ -3713,19 +3713,19 @@ async function renderMom(){
   const el=$("#mom");
   const writable = MOM.db && MOM.myId && MOM.canWrite!==false;
   let h=`<section class="momhead"><h2 class="page-h">وصفات أمي</h2>
-   <p class="sub">هنا نجمع الوصفات التي كانت تحضّرها الوالدة <b>مريم</b> رحمها الله، يضيفها كل من يتذكّر منّا وصفة أو ذكرى معها. تمرّ كل وصفة تلقائيًا على فاحص الأعشاب لتظهر محاذيرها.</p></section>`;
+   <p class="sub">هنا وصفات الوالدة <b>مريم</b> رحمها الله، ووصفات تراثية يشاركها متابعو الموقع من بيوتهم وبلدانهم. يراجع صاحب الدليل كل وصفة قبل نشرها، وتمرّ تلقائيًا على فاحص الأعشاب لتظهر محاذيرها.</p></section>`;
   if(MOM.err==="offline"||MOM.err==="nodb"){
-    h+=`<form class="momform" id="momWa"><h3>أرسل وصفة لأمي</h3>
-        <p class="hint" style="margin:0">اكتب الوصفة هنا ثم اضغط الزر، فيفتح واتساب والرسالة جاهزة لصاحب الدليل، وهو يضيفها للموقع.</p>
+    h+=`<form class="momform" id="momWa"><h3>شاركنا وصفتك</h3>
+        <p class="hint" style="margin:0">عندك وصفة تراثية من أمك أو جدتك أو من بلدك؟ اكتبها هنا ثم اضغط الزر، فيفتح واتساب والرسالة جاهزة لصاحب الدليل. يراجعها قبل نشرها، وقد يختصرها أو يضيف لها تنبيهات السلامة.</p>
         <label for="w-title">اسم الوصفة</label><input id="w-title" maxlength="80" required placeholder="مثال: مغلي الحلبة كما كانت تعمله أمي">
-        <label for="w-use">لماذا كانت تحضّرها؟</label><input id="w-use" maxlength="160" placeholder="مثال: للبرد، أو بعد الولادة، أو للمغص">
+        <label for="w-use">لماذا تُستعمل؟</label><input id="w-use" maxlength="160" placeholder="مثال: للبرد، أو بعد الولادة، أو للمغص">
         <label for="w-ing">المكوّنات ومقاديرها</label><textarea id="w-ing" rows="4" maxlength="1500" required placeholder="كل مكوّن في سطر"></textarea>
-        <label for="w-steps">طريقة التحضير</label><textarea id="w-steps" rows="4" maxlength="2000" placeholder="كما تتذكّرها"></textarea>
-        <label for="w-by">اسمك (اختياري)</label><input id="w-by" maxlength="40" placeholder="مثال: أختك فاطمة">
-        <label for="w-note">ذكرى أو ملاحظة (اختياري)</label><textarea id="w-note" rows="2" maxlength="800" placeholder="مثال: كانت تعمله لنا كل شتاء…"></textarea>
+        <label for="w-steps">طريقة التحضير</label><textarea id="w-steps" rows="4" maxlength="2000" placeholder="الخطوات والمدة وكم مرة تُستعمل"></textarea>
+        <label for="w-by">اسمك وبلدك (اختياري)</label><input id="w-by" maxlength="60" placeholder="مثال: أم محمد من الشارقة">
+        <label for="w-note">من أين عرفتها؟ أو ملاحظة (اختياري)</label><textarea id="w-note" rows="2" maxlength="800" placeholder="مثال: وصفة جدتي، كانت تعملها لنا كل شتاء…"></textarea>
         <div class="momactions"><button type="submit" class="mombtn wabtn">أرسل على واتساب</button><span class="hint">إن عندك صورة للوصفة أرسلها بعد الرسالة في المحادثة نفسها.</span></div>
       </form>`;
-    h+= STATIC_MOM.length ? await momCards(STATIC_MOM,false) : `<div class="empty-res momempty">ستظهر هنا وصفات العائلة قريبًا بإذن الله.</div>`;
+    h+= STATIC_MOM.length ? await momCards(STATIC_MOM,false) : `<div class="empty-res momempty">ستظهر هنا الوصفات قريبًا بإذن الله.</div>`;
   } else {
     if(writable){
       h+=`<form class="momform" id="momForm"><h3>أضف وصفة</h3>
@@ -3739,14 +3739,14 @@ async function renderMom(){
         <div class="momactions"><button type="submit" class="mombtn" ${MOM.sending?"disabled":""}>${MOM.sending?"جارٍ الحفظ…":"احفظ الوصفة"}</button><span class="hint" id="momMsg">${esc(MOM.msg)}</span></div>
       </form>`;
     } else if(MOM.db) {
-      h+=`<form class="momform" id="momWa"><h3>أرسل وصفة لأمي</h3>
-        <p class="hint" style="margin:0">اكتب الوصفة هنا ثم اضغط الزر، فيفتح واتساب والرسالة جاهزة لصاحب الدليل، وهو يضيفها للموقع.</p>
+      h+=`<form class="momform" id="momWa"><h3>شاركنا وصفتك</h3>
+        <p class="hint" style="margin:0">عندك وصفة تراثية من أمك أو جدتك أو من بلدك؟ اكتبها هنا ثم اضغط الزر، فيفتح واتساب والرسالة جاهزة لصاحب الدليل. يراجعها قبل نشرها، وقد يختصرها أو يضيف لها تنبيهات السلامة.</p>
         <label for="w-title">اسم الوصفة</label><input id="w-title" maxlength="80" required placeholder="مثال: مغلي الحلبة كما كانت تعمله أمي">
-        <label for="w-use">لماذا كانت تحضّرها؟</label><input id="w-use" maxlength="160" placeholder="مثال: للبرد، أو بعد الولادة، أو للمغص">
+        <label for="w-use">لماذا تُستعمل؟</label><input id="w-use" maxlength="160" placeholder="مثال: للبرد، أو بعد الولادة، أو للمغص">
         <label for="w-ing">المكوّنات ومقاديرها</label><textarea id="w-ing" rows="4" maxlength="1500" required placeholder="كل مكوّن في سطر"></textarea>
-        <label for="w-steps">طريقة التحضير</label><textarea id="w-steps" rows="4" maxlength="2000" placeholder="كما تتذكّرها"></textarea>
-        <label for="w-by">اسمك (اختياري)</label><input id="w-by" maxlength="40" placeholder="مثال: أختك فاطمة">
-        <label for="w-note">ذكرى أو ملاحظة (اختياري)</label><textarea id="w-note" rows="2" maxlength="800" placeholder="مثال: كانت تعمله لنا كل شتاء…"></textarea>
+        <label for="w-steps">طريقة التحضير</label><textarea id="w-steps" rows="4" maxlength="2000" placeholder="الخطوات والمدة وكم مرة تُستعمل"></textarea>
+        <label for="w-by">اسمك وبلدك (اختياري)</label><input id="w-by" maxlength="60" placeholder="مثال: أم محمد من الشارقة">
+        <label for="w-note">من أين عرفتها؟ أو ملاحظة (اختياري)</label><textarea id="w-note" rows="2" maxlength="800" placeholder="مثال: وصفة جدتي، كانت تعملها لنا كل شتاء…"></textarea>
         <div class="momactions"><button type="submit" class="mombtn wabtn">أرسل على واتساب</button><span class="hint">إن عندك صورة للوصفة أرسلها بعد الرسالة في المحادثة نفسها.</span></div>
       </form>`;
     }
@@ -3762,7 +3762,7 @@ async function renderMom(){
   el.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>confirmDel(b));
   const f=$("#momForm"); if(f) f.onsubmit=submitMom;
   const fw=$("#momWa"); if(fw) fw.onsubmit=e=>{ e.preventDefault(); const v=id=>($("#"+id).value||"").trim();
-    const t=["*وصفة لأمي مريم رحمها الله*","","*اسم الوصفة:* "+v("w-title"),v("w-use")&&"*لماذا كانت تحضّرها:* "+v("w-use"),"\n*المكوّنات:*",v("w-ing"),v("w-steps")&&"\n*طريقة التحضير:*\n"+v("w-steps"),v("w-note")&&"\n*ذكرى أو ملاحظة:*\n"+v("w-note"),v("w-by")&&"\n*أرسلها:* "+v("w-by"),"\n(أُرسلت من موقع مريم)"].filter(x=>x!==""&&x!==false&&x!==undefined).join("\n");
+    const t=["*وصفة جديدة لموقع مريم*","","*اسم الوصفة:* "+v("w-title"),v("w-use")&&"*الاستعمال:* "+v("w-use"),"\n*المكوّنات:*",v("w-ing"),v("w-steps")&&"\n*طريقة التحضير:*\n"+v("w-steps"),v("w-note")&&"\n*مصدرها أو ملاحظة:*\n"+v("w-note"),v("w-by")&&"\n*المرسل:* "+v("w-by"),"\n(أُرسلت من موقع مريم)"].filter(x=>x!==""&&x!==false&&x!==undefined).join("\n");
     waSend(t); };
 }
 function confirmDel(b){
@@ -3834,7 +3834,7 @@ const TILE_ICONS={
 };
 const TILES=[
  ["wizard","اقترح لي خلطة","أجب عن أسئلة قصيرة، فيقترح لك ما يناسب عمرك وحالتك وأدويتك"],
- ["mom","وصفات أمي","وصفات الوالدة مريم رحمها الله، يضيفها أفراد العائلة بذكرياتهم"],
+ ["mom","وصفات أمي","وصفات الوالدة مريم رحمها الله، ووصفات تراثية يشاركها المتابعون"],
  ["herbs","الأعشاب","صفحة لكل عشبة: استعمالاتها وأدلتها ومحاذيرها"],
  ["recipes","الخلطات","وصفات من الطب النبوي والعربي والعالم، بمقاديرها"],
  ["aid","الإسعافات الأولية","اللدغات والجروح والحروق وضربة الشمس: ماذا تفعل وما لا تفعل"],

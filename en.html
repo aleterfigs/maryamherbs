@@ -3714,19 +3714,19 @@ async function renderMom(){
   const el=$("#mom");
   const writable = MOM.db && MOM.myId && MOM.canWrite!==false;
   let h=`<section class="momhead"><h2 class="page-h">Mum's recipes</h2>
-   <p class="sub">Here we gather the recipes our mother used to make, <b>Maryam</b> may God have mercy on her, added by any of us who remembers a recipe or a memory with it. Every recipe is automatically checked against the herbs so its cautions appear.</p></section>`;
+   <p class="sub">Here are the recipes of our mother <b>Maryam</b> may God have mercy on her, alongside traditional recipes shared by the site's followers from their homes and countries. The guide's owner reviews every recipe before publishing it, and each one automatically passes through the herb checker to show its cautions.</p></section>`;
   if(MOM.err==="offline"||MOM.err==="nodb"){
-    h+=`<form class="momform" id="momWa"><h3>Send a recipe of Mum's</h3>
-        <p class="hint" style="margin:0">Write the recipe here and press the button; WhatsApp opens with a message ready for the guide's owner, who will add it to the site.</p>
+    h+=`<form class="momform" id="momWa"><h3>Share your recipe</h3>
+        <p class="hint" style="margin:0">Have a traditional recipe from your mother, grandmother or country? Write it here and press the button; WhatsApp opens with a message ready for the guide's owner. He reviews it before publishing, and may shorten it or add safety notes.</p>
         <label for="w-title">Recipe name</label><input id="w-title" maxlength="80" required placeholder="e.g. fenugreek decoction the way Mum made it">
-        <label for="w-use">Why did she make it?</label><input id="w-use" maxlength="160" placeholder="e.g. for colds, after childbirth, or for colic">
+        <label for="w-use">What is it used for?</label><input id="w-use" maxlength="160" placeholder="e.g. for colds, after childbirth, or for colic">
         <label for="w-ing">Ingredients and amounts</label><textarea id="w-ing" rows="4" maxlength="1500" required placeholder="One ingredient per line"></textarea>
-        <label for="w-steps">Method</label><textarea id="w-steps" rows="4" maxlength="2000" placeholder="As you remember it"></textarea>
-        <label for="w-by">Your name (optional)</label><input id="w-by" maxlength="40" placeholder="e.g. your sister Fatima">
-        <label for="w-note">A memory or note (optional)</label><textarea id="w-note" rows="2" maxlength="800" placeholder="e.g. she made it for us every winter…"></textarea>
+        <label for="w-steps">Method</label><textarea id="w-steps" rows="4" maxlength="2000" placeholder="Steps, duration and how often it's used"></textarea>
+        <label for="w-by">Your name and country (optional)</label><input id="w-by" maxlength="60" placeholder="e.g. Umm Mohammed from Sharjah">
+        <label for="w-note">Where did you learn it? Or a note (optional)</label><textarea id="w-note" rows="2" maxlength="800" placeholder="e.g. my grandmother's recipe; she made it for us every winter…"></textarea>
         <div class="momactions"><button type="submit" class="mombtn wabtn">Send on WhatsApp</button><span class="hint">If you have a photo of the recipe, send it after the message in the same chat.</span></div>
       </form>`;
-    h+= STATIC_MOM.length ? await momCards(STATIC_MOM,false) : `<div class="empty-res momempty">The family's recipes will appear here soon, God willing.</div>`;
+    h+= STATIC_MOM.length ? await momCards(STATIC_MOM,false) : `<div class="empty-res momempty">Recipes will appear here soon, God willing.</div>`;
   } else {
     if(writable){
       h+=`<form class="momform" id="momForm"><h3>Add a recipe</h3>
@@ -3740,14 +3740,14 @@ async function renderMom(){
         <div class="momactions"><button type="submit" class="mombtn" ${MOM.sending?"disabled":""}>${MOM.sending?"Saving…":"Save the recipe"}</button><span class="hint" id="momMsg">${esc(MOM.msg)}</span></div>
       </form>`;
     } else if(MOM.db) {
-      h+=`<form class="momform" id="momWa"><h3>Send a recipe of Mum's</h3>
-        <p class="hint" style="margin:0">Write the recipe here and press the button; WhatsApp opens with a message ready for the guide's owner, who will add it to the site.</p>
+      h+=`<form class="momform" id="momWa"><h3>Share your recipe</h3>
+        <p class="hint" style="margin:0">Have a traditional recipe from your mother, grandmother or country? Write it here and press the button; WhatsApp opens with a message ready for the guide's owner. He reviews it before publishing, and may shorten it or add safety notes.</p>
         <label for="w-title">Recipe name</label><input id="w-title" maxlength="80" required placeholder="e.g. fenugreek decoction the way Mum made it">
-        <label for="w-use">Why did she make it?</label><input id="w-use" maxlength="160" placeholder="e.g. for colds, after childbirth, or for colic">
+        <label for="w-use">What is it used for?</label><input id="w-use" maxlength="160" placeholder="e.g. for colds, after childbirth, or for colic">
         <label for="w-ing">Ingredients and amounts</label><textarea id="w-ing" rows="4" maxlength="1500" required placeholder="One ingredient per line"></textarea>
-        <label for="w-steps">Method</label><textarea id="w-steps" rows="4" maxlength="2000" placeholder="As you remember it"></textarea>
-        <label for="w-by">Your name (optional)</label><input id="w-by" maxlength="40" placeholder="e.g. your sister Fatima">
-        <label for="w-note">A memory or note (optional)</label><textarea id="w-note" rows="2" maxlength="800" placeholder="e.g. she made it for us every winter…"></textarea>
+        <label for="w-steps">Method</label><textarea id="w-steps" rows="4" maxlength="2000" placeholder="Steps, duration and how often it's used"></textarea>
+        <label for="w-by">Your name and country (optional)</label><input id="w-by" maxlength="60" placeholder="e.g. Umm Mohammed from Sharjah">
+        <label for="w-note">Where did you learn it? Or a note (optional)</label><textarea id="w-note" rows="2" maxlength="800" placeholder="e.g. my grandmother's recipe; she made it for us every winter…"></textarea>
         <div class="momactions"><button type="submit" class="mombtn wabtn">Send on WhatsApp</button><span class="hint">If you have a photo of the recipe, send it after the message in the same chat.</span></div>
       </form>`;
     }
@@ -3763,7 +3763,7 @@ async function renderMom(){
   el.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>confirmDel(b));
   const f=$("#momForm"); if(f) f.onsubmit=submitMom;
   const fw=$("#momWa"); if(fw) fw.onsubmit=e=>{ e.preventDefault(); const v=id=>($("#"+id).value||"").trim();
-    const t=["*A recipe of our mother Maryam, may God have mercy on her*","","*Recipe name:* "+v("w-title"),v("w-use")&&"*Why she made it:* "+v("w-use"),"\n*Ingredients:*",v("w-ing"),v("w-steps")&&"\n*Method:*\n"+v("w-steps"),v("w-note")&&"\n*Memory or note:*\n"+v("w-note"),v("w-by")&&"\n*Sent by:* "+v("w-by"),"\n(sent from the Maryam site)"].filter(x=>x!==""&&x!==false&&x!==undefined).join("\n");
+    const t=["*New recipe for the Maryam site*","","*Recipe name:* "+v("w-title"),v("w-use")&&"*Use:* "+v("w-use"),"\n*Ingredients:*",v("w-ing"),v("w-steps")&&"\n*Method:*\n"+v("w-steps"),v("w-note")&&"\n*Source or note:*\n"+v("w-note"),v("w-by")&&"\n*Sender:* "+v("w-by"),"\n(sent from the Maryam site)"].filter(x=>x!==""&&x!==false&&x!==undefined).join("\n");
     waSend(t); };
 }
 function confirmDel(b){
@@ -3835,7 +3835,7 @@ const TILE_ICONS={
 };
 const TILES=[
  ["wizard","Suggest a blend","Answer a few short questions and it suggests what suits your age, situation and medicines"],
- ["mom","Mum's recipes","The recipes of our late mother Maryam, added by family members with their memories"],
+ ["mom","Mum's recipes","Our mother Maryam's recipes, may God have mercy on her, plus traditional recipes shared by followers"],
  ["herbs","Herbs","A page for every herb: its uses, evidence and cautions"],
  ["recipes","Blends","Recipes from Prophetic, Arab and world medicine, with quantities"],
  ["aid","First aid","Stings, wounds, burns and heatstroke: what to do and what not to do"],
