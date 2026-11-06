@@ -3713,10 +3713,10 @@ async function renderMom(){
   const el=$("#mom");
   const writable = MOM.db && MOM.myId && MOM.canWrite!==false;
   let h=`<section class="momhead"><h2 class="page-h">وصفات أمي</h2>
-   <p class="sub">هنا وصفات الوالدة <b>مريم</b> رحمها الله، ووصفات تراثية يشاركها متابعو الموقع من بيوتهم وبلدانهم. يراجع صاحب الدليل كل وصفة قبل نشرها، وتمرّ تلقائيًا على فاحص الأعشاب لتظهر محاذيرها.</p></section>`;
+   <p class="sub">هنا يشارك المتابعون وصفات أمهاتهم وجداتهم التراثية من بيوتهم وبلدانهم، رحم الله من رحلت منهن وحفظ من بقيت. يراجع صاحب الدليل كل وصفة قبل نشرها، وتمرّ تلقائيًا على فاحص الأعشاب لتظهر محاذيرها.</p></section>`;
   if(MOM.err==="offline"||MOM.err==="nodb"){
     h+=`<form class="momform" id="momWa"><h3>شاركنا وصفتك</h3>
-        <p class="hint" style="margin:0">عندك وصفة تراثية من أمك أو جدتك أو من بلدك؟ اكتبها هنا ثم اضغط الزر، فيفتح واتساب والرسالة جاهزة لصاحب الدليل. يراجعها قبل نشرها، وقد يختصرها أو يضيف لها تنبيهات السلامة.</p>
+        <p class="hint" style="margin:0">عندك وصفة من أمك أو جدتك؟ اكتبها هنا ثم اضغط الزر، فيفتح واتساب والرسالة جاهزة لصاحب الدليل. يراجعها قبل نشرها، وقد يختصرها أو يضيف لها تنبيهات السلامة.</p>
         <label for="w-title">اسم الوصفة</label><input id="w-title" maxlength="80" required placeholder="مثال: مغلي الحلبة كما كانت تعمله أمي">
         <label for="w-use">لماذا تُستعمل؟</label><input id="w-use" maxlength="160" placeholder="مثال: للبرد، أو بعد الولادة، أو للمغص">
         <label for="w-ing">المكوّنات ومقاديرها</label><textarea id="w-ing" rows="4" maxlength="1500" required placeholder="كل مكوّن في سطر"></textarea>
@@ -3740,7 +3740,7 @@ async function renderMom(){
       </form>`;
     } else if(MOM.db) {
       h+=`<form class="momform" id="momWa"><h3>شاركنا وصفتك</h3>
-        <p class="hint" style="margin:0">عندك وصفة تراثية من أمك أو جدتك أو من بلدك؟ اكتبها هنا ثم اضغط الزر، فيفتح واتساب والرسالة جاهزة لصاحب الدليل. يراجعها قبل نشرها، وقد يختصرها أو يضيف لها تنبيهات السلامة.</p>
+        <p class="hint" style="margin:0">عندك وصفة من أمك أو جدتك؟ اكتبها هنا ثم اضغط الزر، فيفتح واتساب والرسالة جاهزة لصاحب الدليل. يراجعها قبل نشرها، وقد يختصرها أو يضيف لها تنبيهات السلامة.</p>
         <label for="w-title">اسم الوصفة</label><input id="w-title" maxlength="80" required placeholder="مثال: مغلي الحلبة كما كانت تعمله أمي">
         <label for="w-use">لماذا تُستعمل؟</label><input id="w-use" maxlength="160" placeholder="مثال: للبرد، أو بعد الولادة، أو للمغص">
         <label for="w-ing">المكوّنات ومقاديرها</label><textarea id="w-ing" rows="4" maxlength="1500" required placeholder="كل مكوّن في سطر"></textarea>
@@ -3754,7 +3754,7 @@ async function renderMom(){
     else if(MOM.err) h+=`<div class="empty-res">تعذّر تحميل الوصفات الآن.</div>`;
     else {
       const all=[...MOM.docs,...STATIC_MOM.filter(x=>!MOM.docs.some(d=>d.id===x.id))];
-      h+= all.length ? await momCards(all,true) : `<div class="empty-res momempty">لم تُضف وصفات بعد.<br>${writable?"كن أول من يضيف وصفة كانت أمنا تحضّرها، ولو كانت بسيطة.":"ستظهر هنا وصفات العائلة حين تُضاف."}</div>`;
+      h+= all.length ? await momCards(all,true) : `<div class="empty-res momempty">لم تُضف وصفات بعد.<br>${writable?"كن أول من يضيف وصفة كانت أمك تحضّرها، ولو كانت بسيطة.":"ستظهر هنا وصفات العائلة حين تُضاف."}</div>`;
     }
   }
   el.innerHTML=h;
@@ -3834,7 +3834,7 @@ const TILE_ICONS={
 };
 const TILES=[
  ["wizard","اقترح لي خلطة","أجب عن أسئلة قصيرة، فيقترح لك ما يناسب عمرك وحالتك وأدويتك"],
- ["mom","وصفات أمي","وصفات الوالدة مريم رحمها الله، ووصفات تراثية يشاركها المتابعون"],
+ ["mom","وصفات أمي","وصفات أمهات المتابعين وجداتهم، يشاركونها من بيوتهم"],
  ["herbs","الأعشاب","صفحة لكل عشبة: استعمالاتها وأدلتها ومحاذيرها"],
  ["recipes","الخلطات","وصفات من الطب النبوي والعربي والعالم، بمقاديرها"],
  ["aid","الإسعافات الأولية","اللدغات والجروح والحروق وضربة الشمس: ماذا تفعل وما لا تفعل"],

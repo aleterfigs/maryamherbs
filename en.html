@@ -3714,10 +3714,10 @@ async function renderMom(){
   const el=$("#mom");
   const writable = MOM.db && MOM.myId && MOM.canWrite!==false;
   let h=`<section class="momhead"><h2 class="page-h">Mum's recipes</h2>
-   <p class="sub">Here are the recipes of our mother <b>Maryam</b> may God have mercy on her, alongside traditional recipes shared by the site's followers from their homes and countries. The guide's owner reviews every recipe before publishing it, and each one automatically passes through the herb checker to show its cautions.</p></section>`;
+   <p class="sub">Here followers share the traditional recipes of their mothers and grandmothers, from their homes and countries. May God have mercy on those who have passed and keep those still with us. The guide's owner reviews every recipe before publishing it, and each one automatically passes through the herb checker to show its cautions.</p></section>`;
   if(MOM.err==="offline"||MOM.err==="nodb"){
     h+=`<form class="momform" id="momWa"><h3>Share your recipe</h3>
-        <p class="hint" style="margin:0">Have a traditional recipe from your mother, grandmother or country? Write it here and press the button; WhatsApp opens with a message ready for the guide's owner. He reviews it before publishing, and may shorten it or add safety notes.</p>
+        <p class="hint" style="margin:0">Have a recipe from your mother or grandmother? Write it here and press the button; WhatsApp opens with a message ready for the guide's owner. He reviews it before publishing, and may shorten it or add safety notes.</p>
         <label for="w-title">Recipe name</label><input id="w-title" maxlength="80" required placeholder="e.g. fenugreek decoction the way Mum made it">
         <label for="w-use">What is it used for?</label><input id="w-use" maxlength="160" placeholder="e.g. for colds, after childbirth, or for colic">
         <label for="w-ing">Ingredients and amounts</label><textarea id="w-ing" rows="4" maxlength="1500" required placeholder="One ingredient per line"></textarea>
@@ -3741,7 +3741,7 @@ async function renderMom(){
       </form>`;
     } else if(MOM.db) {
       h+=`<form class="momform" id="momWa"><h3>Share your recipe</h3>
-        <p class="hint" style="margin:0">Have a traditional recipe from your mother, grandmother or country? Write it here and press the button; WhatsApp opens with a message ready for the guide's owner. He reviews it before publishing, and may shorten it or add safety notes.</p>
+        <p class="hint" style="margin:0">Have a recipe from your mother or grandmother? Write it here and press the button; WhatsApp opens with a message ready for the guide's owner. He reviews it before publishing, and may shorten it or add safety notes.</p>
         <label for="w-title">Recipe name</label><input id="w-title" maxlength="80" required placeholder="e.g. fenugreek decoction the way Mum made it">
         <label for="w-use">What is it used for?</label><input id="w-use" maxlength="160" placeholder="e.g. for colds, after childbirth, or for colic">
         <label for="w-ing">Ingredients and amounts</label><textarea id="w-ing" rows="4" maxlength="1500" required placeholder="One ingredient per line"></textarea>
@@ -3755,7 +3755,7 @@ async function renderMom(){
     else if(MOM.err) h+=`<div class="empty-res">The recipes could not be loaded right now.</div>`;
     else {
       const all=[...MOM.docs,...STATIC_MOM.filter(x=>!MOM.docs.some(d=>d.id===x.id))];
-      h+= all.length ? await momCards(all,true) : `<div class="empty-res momempty">No recipes added yet.<br>${writable?"Be the first to add a recipe our mother used to make, however simple.":"The family's recipes will appear here once added."}</div>`;
+      h+= all.length ? await momCards(all,true) : `<div class="empty-res momempty">No recipes added yet.<br>${writable?"Be the first to add a recipe your mother used to make, however simple.":"The family's recipes will appear here once added."}</div>`;
     }
   }
   el.innerHTML=h;
@@ -3835,7 +3835,7 @@ const TILE_ICONS={
 };
 const TILES=[
  ["wizard","Suggest a blend","Answer a few short questions and it suggests what suits your age, situation and medicines"],
- ["mom","Mum's recipes","Our mother Maryam's recipes, may God have mercy on her, plus traditional recipes shared by followers"],
+ ["mom","Mum's recipes","Recipes from followers' mothers and grandmothers, shared from their homes"],
  ["herbs","Herbs","A page for every herb: its uses, evidence and cautions"],
  ["recipes","Blends","Recipes from Prophetic, Arab and world medicine, with quantities"],
  ["aid","First aid","Stings, wounds, burns and heatstroke: what to do and what not to do"],
