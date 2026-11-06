@@ -371,6 +371,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .mom-tab[aria-selected="true"]{background:var(--clay)!important;color:var(--sheet)!important}
 .tile[data-go="mom"]{border-color:var(--clay)}
 .tile[data-go="mom"] .ticon{background:color-mix(in srgb,var(--clay) 18%,var(--sheet));color:var(--clay)}
+.mombtn.wabtn{background:#1f7a4d}
 .momform{background:var(--sheet);border:1px solid var(--clay);border-radius:8px;padding:18px;display:flex;flex-direction:column;gap:6px;max-width:720px}
 .momform h3{font-family:var(--f-display);color:var(--clay);font-size:1.5rem;margin:0 0 4px}
 .momform label{font-size:.85rem;font-weight:600;color:var(--ink);margin-top:6px}
@@ -3714,7 +3715,16 @@ async function renderMom(){
   let h=`<section class="momhead"><h2 class="page-h">وصفات أمي</h2>
    <p class="sub">هنا نجمع الوصفات التي كانت تحضّرها الوالدة <b>مريم</b> رحمها الله، يضيفها كل من يتذكّر منّا وصفة أو ذكرى معها. تمرّ كل وصفة تلقائيًا على فاحص الأعشاب لتظهر محاذيرها.</p></section>`;
   if(MOM.err==="offline"||MOM.err==="nodb"){
-    h+=`<div class="notice"><b>عندك وصفة لأمي؟</b> أرسلها لصاحب الدليل على واتساب، مع اسمها ومكوّناتها وطريقتها وذكرى معها إن أحببت، وهو يضيفها هنا.</div>`;
+    h+=`<form class="momform" id="momWa"><h3>أرسل وصفة لأمي</h3>
+        <p class="hint" style="margin:0">اكتب الوصفة هنا ثم اضغط الزر، فيفتح واتساب والرسالة جاهزة لصاحب الدليل، وهو يضيفها للموقع.</p>
+        <label for="w-title">اسم الوصفة</label><input id="w-title" maxlength="80" required placeholder="مثال: مغلي الحلبة كما كانت تعمله أمي">
+        <label for="w-use">لماذا كانت تحضّرها؟</label><input id="w-use" maxlength="160" placeholder="مثال: للبرد، أو بعد الولادة، أو للمغص">
+        <label for="w-ing">المكوّنات ومقاديرها</label><textarea id="w-ing" rows="4" maxlength="1500" required placeholder="كل مكوّن في سطر"></textarea>
+        <label for="w-steps">طريقة التحضير</label><textarea id="w-steps" rows="4" maxlength="2000" placeholder="كما تتذكّرها"></textarea>
+        <label for="w-by">اسمك (اختياري)</label><input id="w-by" maxlength="40" placeholder="مثال: أختك فاطمة">
+        <label for="w-note">ذكرى أو ملاحظة (اختياري)</label><textarea id="w-note" rows="2" maxlength="800" placeholder="مثال: كانت تعمله لنا كل شتاء…"></textarea>
+        <div class="momactions"><button type="submit" class="mombtn wabtn">أرسل على واتساب</button><span class="hint">إن عندك صورة للوصفة أرسلها بعد الرسالة في المحادثة نفسها.</span></div>
+      </form>`;
     h+= STATIC_MOM.length ? await momCards(STATIC_MOM,false) : `<div class="empty-res momempty">ستظهر هنا وصفات العائلة قريبًا بإذن الله.</div>`;
   } else {
     if(writable){
@@ -3729,7 +3739,16 @@ async function renderMom(){
         <div class="momactions"><button type="submit" class="mombtn" ${MOM.sending?"disabled":""}>${MOM.sending?"جارٍ الحفظ…":"احفظ الوصفة"}</button><span class="hint" id="momMsg">${esc(MOM.msg)}</span></div>
       </form>`;
     } else if(MOM.db) {
-      h+=`<div class="notice"><b>عندك وصفة لأمي؟</b> أرسلها لصاحب الدليل على واتساب، مع اسمها ومكوّناتها وطريقتها وذكرى معها إن أحببت، وهو يضيفها هنا.</div>`;
+      h+=`<form class="momform" id="momWa"><h3>أرسل وصفة لأمي</h3>
+        <p class="hint" style="margin:0">اكتب الوصفة هنا ثم اضغط الزر، فيفتح واتساب والرسالة جاهزة لصاحب الدليل، وهو يضيفها للموقع.</p>
+        <label for="w-title">اسم الوصفة</label><input id="w-title" maxlength="80" required placeholder="مثال: مغلي الحلبة كما كانت تعمله أمي">
+        <label for="w-use">لماذا كانت تحضّرها؟</label><input id="w-use" maxlength="160" placeholder="مثال: للبرد، أو بعد الولادة، أو للمغص">
+        <label for="w-ing">المكوّنات ومقاديرها</label><textarea id="w-ing" rows="4" maxlength="1500" required placeholder="كل مكوّن في سطر"></textarea>
+        <label for="w-steps">طريقة التحضير</label><textarea id="w-steps" rows="4" maxlength="2000" placeholder="كما تتذكّرها"></textarea>
+        <label for="w-by">اسمك (اختياري)</label><input id="w-by" maxlength="40" placeholder="مثال: أختك فاطمة">
+        <label for="w-note">ذكرى أو ملاحظة (اختياري)</label><textarea id="w-note" rows="2" maxlength="800" placeholder="مثال: كانت تعمله لنا كل شتاء…"></textarea>
+        <div class="momactions"><button type="submit" class="mombtn wabtn">أرسل على واتساب</button><span class="hint">إن عندك صورة للوصفة أرسلها بعد الرسالة في المحادثة نفسها.</span></div>
+      </form>`;
     }
     if(!MOM.loaded && !MOM.err) h+=`<div class="empty-res">${MOM.slow?"تعذّر الوصول إلى الوصفات حتى الآن. تحقّق من الاتصال.":"جارٍ تحميل الوصفات…"}</div>`;
     else if(MOM.err) h+=`<div class="empty-res">تعذّر تحميل الوصفات الآن.</div>`;
@@ -3742,6 +3761,9 @@ async function renderMom(){
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
   el.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>confirmDel(b));
   const f=$("#momForm"); if(f) f.onsubmit=submitMom;
+  const fw=$("#momWa"); if(fw) fw.onsubmit=e=>{ e.preventDefault(); const v=id=>($("#"+id).value||"").trim();
+    const t=["*وصفة لأمي مريم رحمها الله*","","*اسم الوصفة:* "+v("w-title"),v("w-use")&&"*لماذا كانت تحضّرها:* "+v("w-use"),"\n*المكوّنات:*",v("w-ing"),v("w-steps")&&"\n*طريقة التحضير:*\n"+v("w-steps"),v("w-note")&&"\n*ذكرى أو ملاحظة:*\n"+v("w-note"),v("w-by")&&"\n*أرسلها:* "+v("w-by"),"\n(أُرسلت من موقع مريم)"].filter(x=>x!==""&&x!==false&&x!==undefined).join("\n");
+    waSend(t); };
 }
 function confirmDel(b){
   if(b.dataset.armed){ MOM.db.doc("mom/"+b.dataset.del).delete().catch(()=>{}); return; }
@@ -3769,6 +3791,8 @@ async function submitMom(e){
 }
 /* ---------- الملاحظات ---------- */
 const FB={sending:false,msg:""};
+const WA_NUM="971552900333";
+function waSend(text){ const u="https://wa.me/"+WA_NUM+"?text="+encodeURIComponent(text); const w=window.open(u,"_blank","noopener"); if(!w) location.href=u; }
 function renderFeedback(){
   const box=document.getElementById("fbBox"); if(!box) return;
   const writable = MOM.db && MOM.myId && MOM.canWrite!==false;
@@ -3778,7 +3802,10 @@ function renderFeedback(){
       <select id="fb-kind"><option>خطأ في معلومة</option><option>اقتراح وصفة أو عشبة</option><option>فكرة لتحسين الدليل</option><option>أخرى</option></select>
       <label for="fb-text">الملاحظة</label><textarea id="fb-text" rows="3" maxlength="1500" required></textarea>
       <div class="momactions"><button type="submit" class="mombtn" ${FB.sending?"disabled":""}>${FB.sending?"جارٍ الإرسال…":"أرسل"}</button><span class="hint" id="fbMsg">${esc(FB.msg)}</span></div></form>`;
-  } else h+=`<p class="hint">أرسل ملاحظتك لصاحب الدليل على واتساب، وجزاك الله خيرًا.</p>`;
+  } else h+=`<form id="fbWa" class="momform fb"><label for="fw-kind">نوع الملاحظة</label>
+      <select id="fw-kind"><option>خطأ في معلومة</option><option>اقتراح وصفة أو عشبة</option><option>فكرة لتحسين الدليل</option><option>أخرى</option></select>
+      <label for="fw-text">الملاحظة</label><textarea id="fw-text" rows="3" maxlength="1500" required></textarea>
+      <div class="momactions"><button type="submit" class="mombtn wabtn">أرسل على واتساب</button><span class="hint">تصل الملاحظة لصاحب الدليل على واتساب.</span></div></form>`;
   if(MOM.isAdmin){
     h+=`<h3>الملاحظات المرسلة (${MOM.notes.length.toLocaleString("ar-EG")})</h3>${MOM.notes.length?`<ul class="fblist">${MOM.notes.map(n=>`<li><b>${esc(n.kind)}</b> — ${esc(n.text)}<small>${n.createdAt?new Date(n.createdAt).toLocaleDateString("ar-EG"):""}</small><button type="button" class="reset" data-fdoc="${esc(n.doc)}" data-fat="${n.createdAt}">حذف</button></li>`).join("")}</ul>`:`<p class="hint">لا توجد ملاحظات بعد.</p>`}`;
   }
@@ -3790,6 +3817,7 @@ function renderFeedback(){
     catch(err){ FB.msg="تعذّر الإرسال الآن."; const keep=text; FB.sending=false; renderFeedback(); const t=document.getElementById("fb-text"); if(t) t.value=keep; return; }
     FB.sending=false; renderFeedback(); };
   box.querySelectorAll("[data-fdoc]").forEach(b=>b.onclick=async()=>{ try{ const ref=MOM.db.doc("notes/"+b.dataset.fdoc); const cur=await ref.get(); if(!cur.exists) return; const items=(cur.data().items||[]).filter(it=>String(it.createdAt)!==b.dataset.fat); await ref.set({...cur.data(),items}); }catch(e){} });
+  const fw=document.getElementById("fbWa"); if(fw) fw.onsubmit=e=>{ e.preventDefault(); const k=$("#fw-kind").value, t=($("#fw-text").value||"").trim(); if(!t) return; waSend("*ملاحظة على موقع مريم*\n*النوع:* "+k+"\n\n"+t); };
 }
 /* ---------- الرئيسية ---------- */
 const TILE_ICONS={

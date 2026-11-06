@@ -372,6 +372,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .mom-tab[aria-selected="true"]{background:var(--clay)!important;color:var(--sheet)!important}
 .tile[data-go="mom"]{border-color:var(--clay)}
 .tile[data-go="mom"] .ticon{background:color-mix(in srgb,var(--clay) 18%,var(--sheet));color:var(--clay)}
+.mombtn.wabtn{background:#1f7a4d}
 .momform{background:var(--sheet);border:1px solid var(--clay);border-radius:8px;padding:18px;display:flex;flex-direction:column;gap:6px;max-width:720px}
 .momform h3{font-family:var(--f-display);color:var(--clay);font-size:1.5rem;margin:0 0 4px}
 .momform label{font-size:.85rem;font-weight:600;color:var(--ink);margin-top:6px}
@@ -3715,7 +3716,16 @@ async function renderMom(){
   let h=`<section class="momhead"><h2 class="page-h">Mum's recipes</h2>
    <p class="sub">Here we gather the recipes our mother used to make, <b>Maryam</b> may God have mercy on her, added by any of us who remembers a recipe or a memory with it. Every recipe is automatically checked against the herbs so its cautions appear.</p></section>`;
   if(MOM.err==="offline"||MOM.err==="nodb"){
-    h+=`<div class="notice"><b>Have one of Mum's recipes?</b> Send it to the guide's owner on WhatsApp, with its name, ingredients, method and a memory if you like, and he will add it here.</div>`;
+    h+=`<form class="momform" id="momWa"><h3>Send a recipe of Mum's</h3>
+        <p class="hint" style="margin:0">Write the recipe here and press the button; WhatsApp opens with a message ready for the guide's owner, who will add it to the site.</p>
+        <label for="w-title">Recipe name</label><input id="w-title" maxlength="80" required placeholder="e.g. fenugreek decoction the way Mum made it">
+        <label for="w-use">Why did she make it?</label><input id="w-use" maxlength="160" placeholder="e.g. for colds, after childbirth, or for colic">
+        <label for="w-ing">Ingredients and amounts</label><textarea id="w-ing" rows="4" maxlength="1500" required placeholder="One ingredient per line"></textarea>
+        <label for="w-steps">Method</label><textarea id="w-steps" rows="4" maxlength="2000" placeholder="As you remember it"></textarea>
+        <label for="w-by">Your name (optional)</label><input id="w-by" maxlength="40" placeholder="e.g. your sister Fatima">
+        <label for="w-note">A memory or note (optional)</label><textarea id="w-note" rows="2" maxlength="800" placeholder="e.g. she made it for us every winter…"></textarea>
+        <div class="momactions"><button type="submit" class="mombtn wabtn">Send on WhatsApp</button><span class="hint">If you have a photo of the recipe, send it after the message in the same chat.</span></div>
+      </form>`;
     h+= STATIC_MOM.length ? await momCards(STATIC_MOM,false) : `<div class="empty-res momempty">The family's recipes will appear here soon, God willing.</div>`;
   } else {
     if(writable){
@@ -3730,7 +3740,16 @@ async function renderMom(){
         <div class="momactions"><button type="submit" class="mombtn" ${MOM.sending?"disabled":""}>${MOM.sending?"Saving…":"Save the recipe"}</button><span class="hint" id="momMsg">${esc(MOM.msg)}</span></div>
       </form>`;
     } else if(MOM.db) {
-      h+=`<div class="notice"><b>Have one of Mum's recipes?</b> Send it to the guide's owner on WhatsApp, with its name, ingredients, method and a memory if you like, and he will add it here.</div>`;
+      h+=`<form class="momform" id="momWa"><h3>Send a recipe of Mum's</h3>
+        <p class="hint" style="margin:0">Write the recipe here and press the button; WhatsApp opens with a message ready for the guide's owner, who will add it to the site.</p>
+        <label for="w-title">Recipe name</label><input id="w-title" maxlength="80" required placeholder="e.g. fenugreek decoction the way Mum made it">
+        <label for="w-use">Why did she make it?</label><input id="w-use" maxlength="160" placeholder="e.g. for colds, after childbirth, or for colic">
+        <label for="w-ing">Ingredients and amounts</label><textarea id="w-ing" rows="4" maxlength="1500" required placeholder="One ingredient per line"></textarea>
+        <label for="w-steps">Method</label><textarea id="w-steps" rows="4" maxlength="2000" placeholder="As you remember it"></textarea>
+        <label for="w-by">Your name (optional)</label><input id="w-by" maxlength="40" placeholder="e.g. your sister Fatima">
+        <label for="w-note">A memory or note (optional)</label><textarea id="w-note" rows="2" maxlength="800" placeholder="e.g. she made it for us every winter…"></textarea>
+        <div class="momactions"><button type="submit" class="mombtn wabtn">Send on WhatsApp</button><span class="hint">If you have a photo of the recipe, send it after the message in the same chat.</span></div>
+      </form>`;
     }
     if(!MOM.loaded && !MOM.err) h+=`<div class="empty-res">${MOM.slow?"The recipes could not be reached yet. Check your connection.":"Loading recipes…"}</div>`;
     else if(MOM.err) h+=`<div class="empty-res">The recipes could not be loaded right now.</div>`;
@@ -3743,6 +3762,9 @@ async function renderMom(){
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
   el.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>confirmDel(b));
   const f=$("#momForm"); if(f) f.onsubmit=submitMom;
+  const fw=$("#momWa"); if(fw) fw.onsubmit=e=>{ e.preventDefault(); const v=id=>($("#"+id).value||"").trim();
+    const t=["*A recipe of our mother Maryam, may God have mercy on her*","","*Recipe name:* "+v("w-title"),v("w-use")&&"*Why she made it:* "+v("w-use"),"\n*Ingredients:*",v("w-ing"),v("w-steps")&&"\n*Method:*\n"+v("w-steps"),v("w-note")&&"\n*Memory or note:*\n"+v("w-note"),v("w-by")&&"\n*Sent by:* "+v("w-by"),"\n(sent from the Maryam site)"].filter(x=>x!==""&&x!==false&&x!==undefined).join("\n");
+    waSend(t); };
 }
 function confirmDel(b){
   if(b.dataset.armed){ MOM.db.doc("mom/"+b.dataset.del).delete().catch(()=>{}); return; }
@@ -3770,6 +3792,8 @@ async function submitMom(e){
 }
 /* ---------- Feedback ---------- */
 const FB={sending:false,msg:""};
+const WA_NUM="971552900333";
+function waSend(text){ const u="https://wa.me/"+WA_NUM+"?text="+encodeURIComponent(text); const w=window.open(u,"_blank","noopener"); if(!w) location.href=u; }
 function renderFeedback(){
   const box=document.getElementById("fbBox"); if(!box) return;
   const writable = MOM.db && MOM.myId && MOM.canWrite!==false;
@@ -3779,7 +3803,10 @@ function renderFeedback(){
       <select id="fb-kind"><option>Wrong information</option><option>Suggest a recipe or herb</option><option>An idea to improve the guide</option><option>Other</option></select>
       <label for="fb-text">Feedback</label><textarea id="fb-text" rows="3" maxlength="1500" required></textarea>
       <div class="momactions"><button type="submit" class="mombtn" ${FB.sending?"disabled":""}>${FB.sending?"Sending…":"Send"}</button><span class="hint" id="fbMsg">${esc(FB.msg)}</span></div></form>`;
-  } else h+=`<p class="hint">Send your feedback to the guide's owner on WhatsApp — may God reward you.</p>`;
+  } else h+=`<form id="fbWa" class="momform fb"><label for="fw-kind">Type of feedback</label>
+      <select id="fw-kind"><option>Wrong information</option><option>Suggest a recipe or herb</option><option>An idea to improve the guide</option><option>Other</option></select>
+      <label for="fw-text">Feedback</label><textarea id="fw-text" rows="3" maxlength="1500" required></textarea>
+      <div class="momactions"><button type="submit" class="mombtn wabtn">Send on WhatsApp</button><span class="hint">Your note goes to the guide's owner on WhatsApp.</span></div></form>`;
   if(MOM.isAdmin){
     h+=`<h3>Feedback sent (${MOM.notes.length.toLocaleString("en-GB")})</h3>${MOM.notes.length?`<ul class="fblist">${MOM.notes.map(n=>`<li><b>${esc(n.kind)}</b> — ${esc(n.text)}<small>${n.createdAt?new Date(n.createdAt).toLocaleDateString("en-GB"):""}</small><button type="button" class="reset" data-fdoc="${esc(n.doc)}" data-fat="${n.createdAt}">Delete</button></li>`).join("")}</ul>`:`<p class="hint">No feedback yet.</p>`}`;
   }
@@ -3791,6 +3818,7 @@ function renderFeedback(){
     catch(err){ FB.msg="Could not send right now."; const keep=text; FB.sending=false; renderFeedback(); const t=document.getElementById("fb-text"); if(t) t.value=keep; return; }
     FB.sending=false; renderFeedback(); };
   box.querySelectorAll("[data-fdoc]").forEach(b=>b.onclick=async()=>{ try{ const ref=MOM.db.doc("notes/"+b.dataset.fdoc); const cur=await ref.get(); if(!cur.exists) return; const items=(cur.data().items||[]).filter(it=>String(it.createdAt)!==b.dataset.fat); await ref.set({...cur.data(),items}); }catch(e){} });
+  const fw=document.getElementById("fbWa"); if(fw) fw.onsubmit=e=>{ e.preventDefault(); const k=$("#fw-kind").value, t=($("#fw-text").value||"").trim(); if(!t) return; waSend("*Feedback on the Maryam site*\n*Type:* "+k+"\n\n"+t); };
 }
 /* ---------- Home ---------- */
 const TILE_ICONS={
