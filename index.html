@@ -485,6 +485,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
     </div>
     <div class="ngroup"><span class="nlabel">تعلّم وتحقّق</span>
       <button class="tab" id="tabNutri" aria-selected="false">الغذاء والفيتامينات</button>
+      <button class="tab" id="tabFolk" aria-selected="false">عادات شعبية</button>
       <button class="tab" id="tabSafety" aria-selected="false">فاحص السلامة</button>
       <button class="tab" id="tabGloss" aria-selected="false">معجم الأسماء</button>
       <button class="tab" id="tabAbout" aria-selected="false">عن الدليل</button>
@@ -514,6 +515,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
   <div class="page" id="organic" hidden></div>
   <div class="page" id="aid" hidden></div>
   <div class="page" id="nutri" hidden></div>
+  <div class="page" id="folk" hidden></div>
   <div class="page" id="safety" hidden></div>
   <div class="page" id="gloss" hidden></div>
   <div class="page" id="about" hidden></div>
@@ -554,7 +556,7 @@ const KIDS = {
   quince:"هلام البذور الكاملة المصفّى من 4 سنوات.",
   rose:"قطرات من ماء الورد الغذائي في الطعام.", amla:"كفاكهة أو مربّى بكميات صغيرة.", coriander:"كتوابل في الطعام فقط.", jujube:"كفاكهة مطبوخة أو مجففة منزوعة النوى.", miswak:"من 6 سنوات بإشراف الكبار.",
   calendula:"المراهم الخارجية الجاهزة مناسبة غالبًا بعد تجربتها على مساحة صغيرة.",
-  cumin:"كتوابل في الطعام فقط.", cardamom:"كتوابل في الطعام فقط.", cinnamon:"كتوابل في الطعام فقط.", egg:"من عمر 6 أشهر مطبوخًا جيدًا ومهروسًا مع أول الطعام، وبكمية صغيرة أول مرة لمراقبة الحساسية.", chicken:"مرقه ولحمه المهروس من عمر 6 أشهر مع الطعام، دون ملح.", mutton:"اللحم المهروس من عمر 6 أشهر مصدر ممتاز للحديد للرضيع.", camel:"مطبوخًا جيدًا ومفرومًا ناعمًا.", camelmilk:"مبسترًا فقط، ومن عمر سنة كشراب؛ ولا يُعطى بدل حليب الرضيع إلا بإشراف الطبيب.", liver:"كمية صغيرة مطبوخة جيدًا مرة في الأسبوع تكفي.", ghee:"قليل منه في الطعام مناسب.", pigeon:"مطبوخًا جيدًا ومنزوع العظام الصغيرة.", bonebroth:"مرق قليل الملح منزوع الدهن، من عمر سنة.", fig:"الثمار طعام مناسب، وتُقطّع للصغار. حليب التين لا يوضع على جلد الأطفال أبدًا.", palmpollen:"لا يُعطى للأطفال.", liqahwater:"قطرات في الماء للنكهة فوق عمر سنة فقط؛ ممنوع للرضّع.", ghaf:"لا يُعطى للأطفال.", truffle:"مطبوخة جيدًا في الطعام فقط.", milk:"الحليب كامل الدسم من عمر سنة، وقبلها حليب الأم أو الحليب الصناعي.", zamzam:"مناسب لكل الأعمار بكميات معتدلة.", pumpkin:"البذور كطعام صحي مناسبة للأطفال الأكبر (خطر الاختناق للصغار)."
+  cumin:"كتوابل في الطعام فقط.", cardamom:"كتوابل في الطعام فقط.", cinnamon:"كتوابل في الطعام فقط.", tailfat:"لا يُعطى للأطفال.", yogurt:"الزبادي الطبيعي من عمر 6 أشهر مع الطعام، واللبن المخيض قليل الملح من عمر سنة.", aqit:"يُذاب في الطعام ولا يُعطى قطعًا للصغار، وهو مالح.", goatmilk:"مبسترًا كشراب من عمر سنة فقط، ولا يُعطى بدل حليب الرضيع.", royaljelly:"لا يُعطى للأطفال.", beevenom:"ممنوع للأطفال.", locust:"لا يُعطى للأطفال.", dhub:"لا يُستعمل للأطفال.", ostrichoil:"على مساحة صغيرة من الجلد بعد التجربة فقط.", egg:"من عمر 6 أشهر مطبوخًا جيدًا ومهروسًا مع أول الطعام، وبكمية صغيرة أول مرة لمراقبة الحساسية.", chicken:"مرقه ولحمه المهروس من عمر 6 أشهر مع الطعام، دون ملح.", mutton:"اللحم المهروس من عمر 6 أشهر مصدر ممتاز للحديد للرضيع.", camel:"مطبوخًا جيدًا ومفرومًا ناعمًا.", camelmilk:"مبسترًا فقط، ومن عمر سنة كشراب؛ ولا يُعطى بدل حليب الرضيع إلا بإشراف الطبيب.", liver:"كمية صغيرة مطبوخة جيدًا مرة في الأسبوع تكفي.", ghee:"قليل منه في الطعام مناسب.", pigeon:"مطبوخًا جيدًا ومنزوع العظام الصغيرة.", bonebroth:"مرق قليل الملح منزوع الدهن، من عمر سنة.", fig:"الثمار طعام مناسب، وتُقطّع للصغار. حليب التين لا يوضع على جلد الأطفال أبدًا.", palmpollen:"لا يُعطى للأطفال.", liqahwater:"قطرات في الماء للنكهة فوق عمر سنة فقط؛ ممنوع للرضّع.", ghaf:"لا يُعطى للأطفال.", truffle:"مطبوخة جيدًا في الطعام فقط.", milk:"الحليب كامل الدسم من عمر سنة، وقبلها حليب الأم أو الحليب الصناعي.", zamzam:"مناسب لكل الأعمار بكميات معتدلة.", pumpkin:"البذور كطعام صحي مناسبة للأطفال الأكبر (خطر الاختناق للصغار)."
 };
 const NCCIH = {aloe:"aloe-vera",frankincense:"boswellia",chamomile:"chamomile",cinnamon:"cinnamon",fenugreek:"fenugreek",garlic:"garlic",ginger:"ginger",
   lavender:"lavender",licorice:"licorice-root",mint:"peppermint-oil",sage:"sage",sawpalmetto:"saw-palmetto",turmeric:"turmeric",valerian:"valerian",ashwagandha:"ashwagandha",greentea:"green-tea",flaxseed:"flaxseed-and-flaxseed-oil",cranberry:"cranberry",dandelion:"dandelion",milkthistle:"milk-thistle",
@@ -1362,6 +1364,66 @@ HERBS.push(
   warn:["اشترِه من القنوات الرسمية المعبّأة؛ الماء المعبّأ تجاريًا بلا رقابة قد يكون مغشوشًا أو ملوّثًا","الشرب للبركة لا يلغي الأخذ بالأسباب، فلا يُترك به علاج المريض"],
   inter:["لا تداخلات معروفة"],
   ref:"قال النبي ﷺ عن زمزم: «إنها مباركة، إنها طعامُ طُعم» (رواه مسلم)، وزاد غيره: «وشفاء سُقم». وروي: «ماء زمزم لما شُرب له» (رواه ابن ماجه وأحمد، واختلف العلماء في صحته وحسّنه جماعة)."}
+);
+/* من الحيوان: تكملة (إضافة) */
+HERBS.push(
+ {id:"tailfat", animal:true, ar:"إلية الشاة (الشحم)", lat:"Ovis aries (tail fat)", part:"دهن ذيل الضأن", ev:"l", c:["pain","land"],
+  use:"دهن ذيل الخروف، يُذاب ويُشرب على الريق لعرق النسا في الطب النبوي والشعبي، ويُدهن به على الظهر والمفاصل في البادية.",
+  uses:["عرق النسا: ورد فيه حديث، ولا توجد دراسات علمية عليه","دهن موضعي للمفاصل والجلد الجاف شعبيًا"],
+  prep:"في الحديث: تُذاب إلية شاة أعرابية، وتُقسم ثلاثة أجزاء، ويُشرب كل يوم جزء على الريق.",
+  warn:["دهون مشبعة كثيرة جدًا: لا تناسب مرضى القلب والكوليسترول والسمنة والسكري","ألم عرق النسا مع ضعف في الساق أو خدر حول الشرج أو صعوبة في التبول: طوارئ فورًا","الألم الذي يستمر أكثر من 6 أسابيع يحتاج طبيبًا"],
+  inter:["لا تداخلات دوائية معروفة"],
+  ref:"قال النبي ﷺ: «شفاء عرق النسا ألية شاة أعرابية تُذاب، ثم تُجزّأ ثلاثة أجزاء، ثم يُشرب على الريق في كل يوم جزء» (رواه ابن ماجه، وصحّحه الألباني)."},
+ {id:"yogurt", animal:true, ar:"الزبادي واللبن الرائب", lat:"Lac fermentatum", part:"حليب متخمّر", ev:"m", c:["digest","diarrhea","land"],
+  use:"حليب تخمّره بكتيريا نافعة، ومنه اللبن المخيض (الشنينة والدوغ) الذي يُشرب في الحرّ. يتحمّله كثير ممن لا يتحمّل الحليب.",
+  uses:["الإسهال المصاحب للمضادات الحيوية: البكتيريا النافعة قد تقلّله (دليل متوسط)","الهضم ومن لا يتحمّل اللاكتوز","اللبن المخيض البارد يعوّض السوائل والأملاح في الحرّ","مصدر للكالسيوم والبروتين"],
+  prep:"كوب يوميًا، ويُختار الطبيعي غير المحلّى.",
+  warn:["الزبادي المحلّى والمنكّه فيه سكر كثير","اللبن المخيض والأقط فيهما ملح؛ مرضى الضغط يقلّلون منهما","يُحفظ باردًا، ولا يُؤكل إن انتفخت علبته أو تغيّرت رائحته"],
+  inter:["يُفصل عن بعض المضادات الحيوية (دوكسيسيكلين وسيبروفلوكساسين) بساعتين إلى أربع"]},
+ {id:"aqit", animal:true, ar:"الأقط (البقل)", lat:"Dried fermented milk", part:"لبن مجفف", ev:"l", c:["fatigue","land"],
+  use:"لبن رائب يُغلى ويُجفّف في الشمس أقراصًا صلبة، زاد البادية في نجد والخليج والشام (ويسمّى البقل والكشك والجميد)، يُؤكل أو يُذاب في الماء.",
+  uses:["مصدر محفوظ للبروتين والكالسيوم","زاد السفر والبادية"],
+  prep:"يُؤكل قطعًا صغيرة، أو يُنقع ويُذاب في الماء أو المرق.",
+  warn:["غني بالملح: مرضى الضغط والكلى يقلّلون منه كثيرًا","صلب: لا يُعطى قطعًا للأطفال الصغار لخطر الاختناق","يُشترى من مصدر نظيف؛ الأقط المجفف في الشمس بلا رقابة قد يتلوّث"],
+  inter:["لا تداخلات دوائية مهمة"],
+  ref:"كان الأقط من طعام العرب في زمن النبي ﷺ، وفي حديث زكاة الفطر: «صاعًا من أقط» (متفق عليه)."},
+ {id:"goatmilk", animal:true, ar:"حليب الماعز", lat:"Lac caprae", part:"حليب الماعز", ev:"l", c:["fatigue","land"],
+  use:"حليب يُعطى في التراث للأطفال والضعيف، ويقال إنه أسهل هضمًا من حليب البقر.",
+  uses:["شراب مغذٍّ للكبار والأطفال فوق السنة","يتحمّله بعض الناس أفضل قليلًا من حليب البقر"],
+  prep:"يُشرب مبسترًا.",
+  warn:["لا يصلح بديلًا لحليب الأم أو الحليب الصناعي للرضيع: ينقصه حمض الفوليك وقد يسبب فقر الدم ويرهق الكلى","من عنده حساسية من حليب البقر يتحسّس غالبًا من حليب الماعز أيضًا","الحليب النيء قد ينقل الحمى المالطية: يُشرب مبسترًا أو مغليًا"],
+  inter:["كالحليب: يُفصل عن بعض المضادات الحيوية والحديد بساعتين"]},
+ {id:"royaljelly", animal:true, ar:"غذاء ملكات النحل", lat:"Royal jelly", part:"إفراز النحل العامل", ev:"l", c:["fatigue","land"],
+  use:"مادة بيضاء تغذّي بها الشغالات ملكة النحل، تُباع مكمّلًا للحيوية والخصوبة والجلد.",
+  uses:["الحيوية والتعب: دراسات قليلة وضعيفة","أعراض سن اليأس: تجارب صغيرة غير حاسمة"],
+  prep:"حسب العبوة من منتج مرخّص.",
+  warn:["قد يسبب حساسية شديدة ونوبات ربو، وسُجّلت حالات وفاة؛ لا يستعمله من عنده ربو أو حساسية من النحل أو حبوب اللقاح","لا يُستعمل في الحمل والرضاعة، ولا للأطفال"],
+  inter:["قد يزيد أثر الوارفارين (مميّع الدم)"]},
+ {id:"beevenom", animal:true, ar:"سمّ النحل (العلاج بلسع النحل)", lat:"Apitoxin", part:"سمّ لسعة النحل", ev:"x", c:["pain","land"],
+  use:"يُلسع المريض بالنحل مباشرة على أماكن الألم، ويُروَّج له لآلام المفاصل والروماتيزم.",
+  uses:["لا يوجد دليل كافٍ على فائدته، وخطره أكبر من نفعه"],
+  prep:"لا يُنصح به.",
+  warn:["قد يسبب صدمة تحسّسية قاتلة حتى لمن لُسع من قبل دون مشكلة، وسُجّلت وفيات","من يُلسع وتظهر عليه صعوبة تنفس أو تورّم الوجه أو دوخة: طوارئ فورًا"],
+  inter:["أدوية الضغط (حاصرات بيتا) تجعل الصدمة التحسّسية أخطر وأصعب علاجًا"]},
+ {id:"locust", animal:true, ar:"الجراد", lat:"Schistocerca gregaria", part:"الجراد المطبوخ", ev:"l", c:["fatigue","land"],
+  use:"كان الجراد طعامًا في الحجاز ونجد واليمن والمغرب، يُسلق أو يُحمّص ويُملّح، وهو غني بالبروتين.",
+  uses:["مصدر للبروتين والدهون الصحية"],
+  prep:"يُسلق في الماء والملح ثم يُجفّف أو يُحمّص.",
+  warn:["خطر كبير: أسراب الجراد تُرشّ بالمبيدات في حملات المكافحة، وأكلها سبّب حالات تسمّم؛ لا يُؤكل جراد مجهول المصدر","قد يتحسّس منه من عنده حساسية من الروبيان والقشريات"],
+  inter:["لا تداخلات دوائية معروفة"],
+  ref:"قال النبي ﷺ: «أُحلّت لنا ميتتان ودمان: فأما الميتتان فالحوت والجراد، وأما الدمان فالكبد والطحال» (رواه ابن ماجه وأحمد، وصحّحه الألباني)."},
+ {id:"dhub", animal:true, ar:"دهن الضبّ", lat:"Uromastyx (fat)", part:"دهن الضب", ev:"x", c:["pain","land"],
+  use:"يُدهن به شعبيًا في البادية للمفاصل والظهر والشعر وآلام الأذن.",
+  uses:["لا يوجد أي دليل علمي على فوائده"],
+  prep:"لا يُنصح به.",
+  warn:["الضبّ محمي من الصيد في الإمارات وعدد من دول الخليج، وصيده وبيعه مخالفة","الدهون الحيوانية المحفوظة بلا رقابة قد تتلوّث بالبكتيريا","لا يُقطّر شيء في الأذن، خاصة إن كان فيها ألم أو إفرازات، قبل أن يفحصها الطبيب"],
+  inter:["لا توجد دراسات"]},
+ {id:"ostrichoil", animal:true, ar:"زيت النعام", lat:"Struthio camelus (oil)", part:"دهن النعام", ev:"l", c:["skin","pain","land"],
+  use:"دهن طائر النعام، يُباع مرطّبًا للجلد والمفاصل والشعر.",
+  uses:["مرطّب للجلد الجاف","آلام المفاصل والعضلات: لا دليل كافٍ"],
+  prep:"يُدهن به موضعيًا من منتج مرخّص.",
+  warn:["يُجرّب أولًا على مساحة صغيرة من الجلد","لا يوضع على الجروح المفتوحة"],
+  inter:["لا تداخلات معروفة"]}
 );
 /* من الحيوان: البيض والدواجن واللحوم والألبان (إضافة) */
 HERBS.push(
@@ -2726,7 +2788,7 @@ RECIPES.push(
   ["اطحن المكوّنات في محضّر الطعام حتى تتماسك.","شكّلها كرات صغيرة.","تُحفظ في الثلاجة أسبوعًا."],
   "للأطفال الصغار: البذور مطحونة ناعمًا.",K(HM,{minAge:4,yield:"لعشرين كرة",dose:"كرتان يوميًا."})),
  X("الزبادي بالعسل والفاكهة","بكتيريا نافعة وبروتين في وجبة يحبّها الأطفال.",["adults","kids"],["immune","antibiotic"],
-  [[null,"علبة زبادي طبيعي فيه بكتيريا حيّة"],["honey","ملعقة صغيرة عسل"],[null,"حفنة توت أو موز مقطّع"]],
+  [["yogurt","علبة زبادي طبيعي فيه بكتيريا حيّة"],["honey","ملعقة صغيرة عسل"],[null,"حفنة توت أو موز مقطّع"]],
   ["اخلط المكوّنات.","تُؤكل فطورًا أو وجبة خفيفة."],
   "لا عسل دون السنة. "+"افصل بينه وبين جرعة المضاد الحيوي ساعتين إلى ثلاث، خاصة مع الدوكسيسايكلين والسيبروفلوكساسين، لأن الحليب يقلّل امتصاصها.",K(HM,{minAge:1,dose:"مرة يوميًا."})),
  /* ===== بعد المضادات الحيوية ===== */
@@ -2923,6 +2985,13 @@ RECIPES.push(
   [[null,"معالج مرخّص من الجهات الصحية"],[null,"كؤوس وأدوات معقّمة تُستعمل لمرة واحدة"]],
   ["اختر مركزًا مرخّصًا، وتأكد أن الأدوات تُفتح أمامك وتُرمى بعد الاستعمال.","أخبر المعالج بأدويتك وأمراضك، خاصة مميّعات الدم والسكري وفقر الدم.","بعد الجلسة: حافظ على نظافة الجروح الصغيرة، واشرب الماء، وارتح ذلك اليوم."],
   "لا تُجرى مع مميّعات الدم، أو فقر الدم، أو نقص الصفائح، أو الحمل، أو السكري غير المنضبط، أو ضعف المناعة، ولا للأطفال. ولا تُوقف علاجك الدوائي بسببها. ونهى النبي ﷺ أمّته عن الكيّ، فلا يُكوى الأطفال بالنار (الوسم) كما يحدث في بعض البيوت؛ فهو يسبّب حروقًا وتشوّهات.",K(NB,{minAge:18,evN:1,evWhy:"تجارب سريرية صغيرة على آلام الرقبة وأسفل الظهر، وجودتها محدودة",sup:"الحجامة إجراء يحتاج معالجًا مرخّصًا",dose:"على فترات متباعدة وبإشراف المعالج.",ref:"«الشفاء في ثلاثة: في شَرطة محجم، أو شربة عسل، أو كيّة بنار، وأنا أنهى أمتي عن الكيّ» (رواه البخاري)، و«إنّ أمثل ما تداويتم به الحجامة والقسط البحري» (متفق عليه)."}))
+);
+/* من الحيوان: تكملة الوصفات */
+RECIPES.push(
+ X("الشنينة (اللبن المخيض) بالنعناع","مشروب الصيف في الخليج والشام وتركيا، يعوّض السوائل والأملاح ويريح المعدة.",["adults","kids"],["digest","fatigue"],
+  [["yogurt","كوب زبادي طبيعي"],[null,"كوب ماء بارد"],["mint","أوراق نعناع طازجة أو رشّة نعناع يابس"],[null,"رشّة ملح خفيفة"]],
+  ["اخفق الزبادي مع الماء البارد حتى يصير ناعمًا.","أضف الملح والنعناع وقلّبه.","اشربه باردًا بعد الظهر أو مع الغداء."],
+  "مرضى الضغط يتركون الملح. يُفصل عن بعض المضادات الحيوية بساعتين.",{o:"gulf",minAge:1,dose:"كوب يوميًا في الحرّ."})
 );
 /* من الحيوان: وصفات */
 RECIPES.push(
@@ -3401,7 +3470,7 @@ function iconKind(h){
   return "leaf";
 }
 const herbIcon = (h,cls="hicon") => `<span class="${cls} k-${iconKind(h)}${h.ev==="x"?" danger":""}" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">${ICONS[iconKind(h)]}</svg></span>`;
-const LATQ = {fishoil:"fish oil capsules", codliver:"cod liver oil", seasalt:"sea salt", deadsea:"Dead Sea salt", seaweed:"kombu seaweed", agar:"agar agar", oyster:"oysters", ambergris:"ambergris", cuttlebone:"cuttlebone", pearlcoral:"pearl powder", seacucumber:"sea cucumber dried", sharkcart:"shark cartilage", chitosan:"chitosan", honey:"honey", vinegar:"apple cider vinegar", triphala:"Triphala", coffeehusk:"qishr coffee husk", loomi:"dried lime loomi", zahr:"Citrus aurantium flower", cherrystem:"cherry stems", egg:"chicken eggs", chicken:"chicken soup", mutton:"lamb meat dish", camel:"camel meat dish", camelmilk:"camel milk", liver:"lamb liver dish", ghee:"ghee clarified butter", pigeon:"stuffed pigeon hamam mahshi", bonebroth:"bone broth"};
+const LATQ = {fishoil:"fish oil capsules", codliver:"cod liver oil", seasalt:"sea salt", deadsea:"Dead Sea salt", seaweed:"kombu seaweed", agar:"agar agar", oyster:"oysters", ambergris:"ambergris", cuttlebone:"cuttlebone", pearlcoral:"pearl powder", seacucumber:"sea cucumber dried", sharkcart:"shark cartilage", chitosan:"chitosan", honey:"honey", vinegar:"apple cider vinegar", triphala:"Triphala", coffeehusk:"qishr coffee husk", loomi:"dried lime loomi", zahr:"Citrus aurantium flower", cherrystem:"cherry stems", egg:"chicken eggs", chicken:"chicken soup", mutton:"lamb meat dish", camel:"camel meat dish", camelmilk:"camel milk", liver:"lamb liver dish", ghee:"ghee clarified butter", pigeon:"stuffed pigeon hamam mahshi", bonebroth:"bone broth", tailfat:"sheep tail fat", yogurt:"laban yogurt drink", aqit:"aqit dried yogurt", goatmilk:"goat milk", royaljelly:"royal jelly", beevenom:"apitherapy bee sting", locust:"locust food", dhub:"Uromastyx lizard", ostrichoil:"ostrich oil"};
 const latinQ = h => LATQ[h.id] ? encodeURIComponent(LATQ[h.id]) : encodeURIComponent(h.lat.split(/\s[\/+(]/)[0].replace(/\(.*?\)/g,"").trim());
 const $ = s => document.querySelector(s);
 document.addEventListener("click",e=>{ if(e.target.closest(".rel-more")){ setView("about"); setTimeout(()=>{const t=document.getElementById("relHow"); t&&t.scrollIntoView({behavior:"smooth"});},50);} });
@@ -3498,17 +3567,17 @@ function renderRecipes(){
 }
 function setView(v){
   state.view=v;
-  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
+  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
   $("#recipes").hidden=v!=="recipes"; $("#wizard").hidden=v!=="wizard";
-  ["home","mom","women","kit","organic","aid","nutri","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
-  const pageView=["home","mom","women","wizard","kit","organic","aid","nutri","safety","gloss","about"].includes(v);
+  ["home","mom","women","kit","organic","aid","nutri","folk","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
+  const pageView=["home","mom","women","wizard","kit","organic","folk","aid","nutri","safety","gloss","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
   render();
 }
 function render(){
   renderAud();
-  if(["home","mom","women","kit","organic","aid","nutri","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
+  if(["home","mom","women","kit","organic","aid","nutri","folk","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
@@ -4175,11 +4244,12 @@ function renderHome(){
      <p class="hstats">${n(HERBS.length)} عشبة · ${n(RECIPES.length)} خلطة · ${n(Object.keys(ORIG).length)} تقليدًا · ${n(PROBS.length)} مشكلة صحية</p>
    </section>
    <div class="tiles">${TILES.map(([k,t,d],i)=>`<button type="button" class="tile${i===0?" tile-main":""}" data-go="${k}"><span class="ticon">${tileIcon(k)}</span><span class="ttext"><b>${t}</b><small>${d}</small></span></button>`).join("")}</div>
-   <section class="feat"><h3>أبواب موسّعة</h3><div class="featrow">${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>دليل كامل: الأنواع والسنّة والعلم والسلامة</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>باب المرأة</b><small>الدورة والحمل والنفاس، والبشرة والشعر، وتحذيرات التجميل</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>من البحر</b><small>زيت السمك والماء المالح والطحالب والعنبر: ما ينفع وما يُحذر</small></span></button><button type="button" class="featcard" data-organic="1">${herbIcon(byId.moringa)}<span><b>الزراعة العضوية</b><small>تحسين التربة، والكمبوست، ومكافحة طبيعية للآفات، وتقويم زراعي للبلاد العربية</small></span></button><button type="button" class="featcard" data-land="1">${herbIcon(byId.egg)}<span><b>من الحيوان</b><small>البيض والدواجن واللحوم والكبدة والسمن وحليب البقر والإبل: ما ينفع وما يُحذر</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>ازرع صيدليتك</b><small>أعشاب سهلة الزراعة في الخليج، ومتى وكيف تُزرع</small></span></button></div></section>
+   <section class="feat"><h3>أبواب موسّعة</h3><div class="featrow">${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>دليل كامل: الأنواع والسنّة والعلم والسلامة</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>باب المرأة</b><small>الدورة والحمل والنفاس، والبشرة والشعر، وتحذيرات التجميل</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>من البحر</b><small>زيت السمك والماء المالح والطحالب والعنبر: ما ينفع وما يُحذر</small></span></button><button type="button" class="featcard" data-organic="1">${herbIcon(byId.moringa)}<span><b>الزراعة العضوية</b><small>تحسين التربة، والكمبوست، ومكافحة طبيعية للآفات، وتقويم زراعي للبلاد العربية</small></span></button><button type="button" class="featcard" data-land="1">${herbIcon(byId.egg)}<span><b>من الحيوان</b><small>البيض والدواجن واللحوم والكبدة والسمن وحليب البقر والإبل: ما ينفع وما يُحذر</small></span></button><button type="button" class="featcard" data-folk="1">${herbIcon(byId.harmal)}<span><b>عادات شعبية: ما يصح وما يضر</b><small>تمليح المولود، والكحل، والتبخير، والتحنيك، والكيّ، والمجبّر، وعادات الأربعين</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>ازرع صيدليتك</b><small>أعشاب سهلة الزراعة في الخليج، ومتى وكيف تُزرع</small></span></button></div></section>
    <section class="quick"><h3>في الحالات الطارئة</h3><div class="opts">${["snake","scorpion","dog","burn","heat","poison"].map(id=>{const a=AID.find(x=>x.id===id);return `<button type="button" class="chip urgent" data-aidgo="${id}"><span class="dot ${SEV[a.sev][1]}"></span>${a.n}</button>`;}).join("")}</div></section>`;
   $("#home").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{ if(b.dataset.go==="wizard") Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:null,step:1}); setView(b.dataset.go); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
   $("#home").querySelectorAll("[data-grow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
+  $("#home").querySelectorAll("[data-folk]").forEach(b=>b.onclick=()=>{ fst.v=null; setView("folk"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-organic]").forEach(b=>b.onclick=()=>{ ost.id=null; setView("organic"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-women]").forEach(b=>b.onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-land]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="land"; setView("herbs"); window.scrollTo({top:0}); });
@@ -4496,6 +4566,93 @@ function renderWomen(){
   el.querySelectorAll("[data-gr]").forEach(b=>b.onclick=()=>goRecipe(b.dataset.gr));
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
   el.querySelectorAll("[data-nu]").forEach(b=>b.onclick=()=>{ nst.sym=null; setView("nutri"); const n=$("#n-"+b.dataset.nu); n&&n.scrollIntoView({block:"start"}); });
+}
+/* ---------- عادات شعبية ---------- */
+const fst={v:null};
+const FV={harm:["يضرّ","sev-e"],care:["بحذر","sev-d"],ok:["يصح","sev-h"]};
+const FOLK=[
+ {id:"salt",n:"تمليح المولود",v:"harm",
+  o:"يُفرك جلد المولود بالملح أو يُغسل بماء مالح أيامًا، بقصد «تقوية الجلد» وتقليل العرق والرائحة، في الخليج واليمن وبعض الأرياف.",
+  m:"جلد المولود رقيق يمتص الملح بسهولة. وقد سُجّلت حالات ارتفاع خطير في ملح الدم، وجفاف، وتقرّح في الجلد، وبعضها احتاج العناية المركزة.",
+  s:"يكفي غسل المولود بالماء الفاتر، ومرطّب بسيط للجلد الجاف بإرشاد الطبيب.",h:[]},
+ {id:"kohl",n:"الكحل للمولود والأطفال",v:"harm",
+  o:"يُوضع الكحل أو الإثمد في عيني المولود «لتوسيعهما» أو لدفع العين والحسد.",
+  m:"أغلب الكحل التقليدي غير المرخّص فيه رصاص، يُمتص من العين واليد والفم، ويضر دماغ الطفل ونموه. كما قد ينقل التهابات العين.",
+  s:"لا يُوضع للرضّع والأطفال أي كحل. وللكبار كحل مرخّص مكتوب عليه المكوّنات.",h:["ithmid"]},
+ {id:"bakhoor",n:"تبخير المولود والنفساء",v:"care",
+  o:"يُبخّر المولود والنفساء والغرفة بالبخور أو الحرمل أو اللبان، للرائحة الطيبة ودفع العين وتعقيم المكان.",
+  m:"الدخان في غرفة مغلقة يهيّج رئتي الرضيع، ويزيد نوبات الربو والتهابات الصدر، وقد يجمع أول أكسيد الكربون. والحرمل سام إن أُكل أو شُرب.",
+  s:"لا تبخير في غرفة الرضيع أو بقربه. وإن بُخّر البيت فبعيدًا عن الطفل، مع فتح النوافذ قبل عودته.",h:["harmal","frankincense"]},
+ {id:"tahneek",n:"التحنيك بالتمر",v:"ok",
+  o:"سنّة نبوية: تُمضغ تمرة ويُدلك بها حنك المولود في أيامه الأولى.",
+  m:"كمية صغيرة جدًا من التمر لا تضر. لكن مضغ التمرة بالفم قد ينقل للمولود جرثومة الهربس، وهي خطيرة جدًا عليه. والعسل ممنوع للرضيع لخطر التسمم الوشيقي.",
+  s:"تُهرس التمرة بملعقة نظيفة أو تُليّن بقليل من الماء بدل مضغها، ويُدلك الحنك بكمية صغيرة جدًا. ولا يحنّكه من عنده قرحة برد (هربس) على شفتيه.",h:["dates"],
+  ref:"عن أبي موسى رضي الله عنه قال: «وُلد لي غلام، فأتيت به النبي ﷺ فسمّاه إبراهيم، فحنّكه بتمرة» (متفق عليه)."},
+ {id:"cord",n:"الرماد والبن ومعجون الأسنان على الجروح والسرّة",v:"harm",
+  o:"يُوضع الرماد أو البن المطحون أو الكحل أو معجون الأسنان أو الزيت على سرّة المولود والجروح والحروق، لوقف النزف أو «التجفيف».",
+  m:"هذه المواد ليست معقّمة، وقد تنقل الالتهابات ومنها الكزاز، وهو قاتل للمولود. ومعجون الأسنان يحبس حرارة الحرق.",
+  s:"السرّة: تُترك نظيفة جافة مكشوفة للهواء حتى تسقط وحدها. الجروح: تُغسل بالماء النظيف وتُغطّى بضماد نظيف. الحروق: ماء جارٍ فاتر 20 دقيقة.",h:[]},
+ {id:"kayy",n:"الكيّ والوسم",v:"harm",
+  o:"تُكوى الجلدة بمسمار أو حديدة محمّاة لعلاج اليرقان وآلام البطن والصرع والكحة وغيرها، وما زال يُمارس في بعض البيوت.",
+  m:"يسبب حروقًا عميقة وتشوّهات دائمة والتهابات، ويؤخّر العلاج الحقيقي لأمراض خطيرة مثل يرقان المولود الذي قد يضر الدماغ.",
+  s:"الطبيب أولًا. ويرقان المولود يُفحص في اليوم نفسه، وعلاجه بالأشعة في المستشفى.",h:[],
+  ref:"قال النبي ﷺ: «الشفاء في ثلاثة: في شَرطة محجم، أو شربة عسل، أو كيّة بنار، وأنا أنهى أمتي عن الكيّ» (رواه البخاري)."},
+ {id:"bonesetter",n:"المجبّر الشعبي للكسور",v:"care",
+  o:"يُؤخذ المصاب بالكسر أو الالتواء إلى مجبّر شعبي يردّ العظم ويربطه بالجبائر والأقمشة.",
+  m:"بعضهم ماهر في الالتواءات البسيطة، لكن الكسور تحتاج صورة أشعة. والربط الشديد قد يقطع الدم عن الطرف فيموت العضل، وأكثر الضحايا أطفال. والكسر الذي يلتحم معوجًّا قد يحتاج جراحة لاحقًا.",
+  s:"صورة أشعة عند الطبيب أولًا لأي إصابة فيها تورّم شديد أو اعوجاج أو عجز عن الحركة. وإن رُبط الطرف فعلامات الخطر: ألم يشتدّ، وبرودة الأصابع أو ازرقاقها أو خدرها، فيُفكّ الرباط فورًا ويُذهب للطوارئ.",h:[]},
+ {id:"lead",n:"صبّ الرصاص",v:"harm",
+  o:"يُذاب الرصاص على النار ويُصبّ في الماء فوق رأس المريض، لكشف العين والحسد أو إبطالهما.",
+  m:"أبخرة الرصاص المذاب سامة، تُستنشق داخل البيت، وأخطرها على الأطفال والحوامل. وقد يسبب حروقًا.",
+  s:"الرقية الشرعية بالقرآن والأدعية لا تحتاج رصاصًا ولا غيره.",h:[]},
+ {id:"belt",n:"حزام النفساء (ربط البطن)",v:"ok",
+  o:"تربط النفساء بطنها بقماش أو حزام بعد الولادة لشدّ البطن ودعم الظهر.",
+  m:"الحزام المريح لا ضرر فيه، وقد يخفّف ألم الظهر ويريح بعد الولادة القيصرية بموافقة الطبيب. لكنه لا يعيد البطن وحده، والربط الشديد يضغط على الأحشاء ويضايق التنفس.",
+  s:"حزام مريح غير ضاغط، ويُفكّ عند الضيق. وبعد القيصرية بإذن الطبيب. وتمارين قاع الحوض والبطن بعد استشارة الطبيبة.",h:[]},
+ {id:"forty",n:"عادات الأربعين بعد الولادة",v:"care",
+  o:"تبقى النفساء أربعين يومًا في البيت، تُطعم الأطعمة الدافئة كالحلبة والمرق والعصيدة، ويُخدمها الأهل، وتُدفّأ كثيرًا.",
+  m:"الراحة ومساندة الأهل والطعام المغذي من أنفع ما يكون، وتحمي من اكتئاب ما بعد الولادة. لكن ملازمة الفراش تمامًا تزيد خطر جلطات الساقين. والتدفئة الشديدة في الصيف تسبب الإنهاك الحراري. ولا أصل لترك الاستحمام أو الإقلال من الماء.",
+  s:"راحة مع مشي خفيف في البيت من الأيام الأولى، وشرب الماء بكثرة خاصة مع الرضاعة، والاستحمام بالماء الدافئ، وغرفة معتدلة الحرارة. وإن ظهر حزن شديد أو أفكار مخيفة فالطبيبة فورًا.",h:["fenugreek"]},
+ {id:"swaddle",n:"القماط الشديد للمولود",v:"care",
+  o:"يُلفّ المولود لفًّا محكمًا والساقان ممدودتان ملتصقتان، ليهدأ وتستقيم ساقاه.",
+  m:"اللفّ يهدّئ الطفل، لكن شدّ الساقين ممدودتين يزيد خطر خلع الورك الولادي. والإفراط في اللفّ مع الحرّ يرفع حرارة الطفل.",
+  s:"إن قُمّط فالجزء العلوي فقط، والساقان حرّتان مثنيتان كوضع الضفدع، وبقماش خفيف. والنوم على الظهر دائمًا.",h:[]},
+ {id:"babyteas",n:"الماء والأعشاب للرضيع (ماء غريب، اليانسون، الكمّون)",v:"harm",
+  o:"يُعطى الرضيع في أسابيعه الأولى ماءً أو منقوع اليانسون أو الكمّون أو «ماء غريب» للمغص والغازات.",
+  m:"الرضيع دون 6 أشهر لا يحتاج إلا الحليب. الماء والأعشاب تملأ معدته فيقلّ رضاعه ووزنه، وقد يسبب الماء الزائد هبوط الملح في الدم ونوبات تشنّج. وقد يُخلط اليانسون النجمي بنوع ياباني سام للأعصاب.",
+  s:"للمغص: حمل الطفل، والتربيت، وتدليك البطن بلطف، والتأكد من طريقة الرضاعة. ومن 6 أشهر يُعطى الماء مع الطعام.",h:["anise","cumin"]},
+ {id:"henna",n:"الحناء للمواليد والأطفال",v:"care",
+  o:"يُخضّب المولود أو الطفل بالحناء في المناسبات أو لتبريد الجسم.",
+  m:"عند الأطفال المصابين بنقص إنزيم G6PD، وهو شائع في الخليج، قد تسبّب الحناء تكسّر الدم واليرقان الشديد. و«الحناء السوداء» المخلوطة بمادة PPD تسبب حروقًا وحساسية دائمة.",
+  s:"لا حناء للمواليد. وللأطفال الأكبر: بعد التأكد من فحص G6PD، وبالحناء الطبيعية الحمراء فقط، لا السوداء.",h:["henna"]},
+ {id:"amber",n:"عقد الكهرمان والخرز للتسنين",v:"harm",
+  o:"يُلبس الرضيع عقدًا أو سوارًا من الكهرمان أو الخرز لتخفيف ألم التسنين أو لدفع العين.",
+  m:"لا دليل على أنه يخفّف التسنين، وقد سُجّلت حالات اختناق وخنق بالعقد، وابتلاع الخرز.",
+  s:"عضّاضة مبرّدة في الثلاجة (لا المجمّدة)، وتدليك اللثة بإصبع نظيف.",h:[]},
+ {id:"wrapfever",n:"تلفيف المحموم بالأغطية",v:"harm",
+  o:"يُلفّ المريض المحموم بالبطانيات «ليعرق» فتنزل الحرارة.",
+  m:"الأغطية الكثيرة ترفع الحرارة أكثر وتسبب الجفاف، وقد تؤدي إلى تشنّجات عند الأطفال.",
+  s:"ملابس خفيفة، وغرفة معتدلة، وسوائل كثيرة، والطبيب عند علامات الخطر.",h:[],rec:"تبريد الحمّى بالماء"}
+];
+function renderFolk(){
+  const el=$("#folk"), list=fst.v?FOLK.filter(f=>f.v===fst.v):FOLK;
+  const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
+  el.innerHTML=`<h2 class="page-h">عادات شعبية: ما يصح وما يضر</h2>
+   <p class="sub">عادات توارثناها عن أمهاتنا وجداتنا بحبّ وحرص، بعضها نافع وبعضها ثبت ضرره. هنا أصل كل عادة، وما يقوله الطب، والبديل الآمن، احترامًا للتراث وحفظًا للأطفال والأمهات.</p>
+   <div class="sgroups"><div class="opts">${[[null,"الكل"],["harm","ما يضرّ"],["care","بحذر"],["ok","ما يصح"]].map(([k,t])=>`<button type="button" class="chip" data-fv="${k||""}" aria-pressed="${fst.v===k}">${k?`<span class="dot ${FV[k][1]}"></span>`:""}${t}</button>`).join("")}</div></div>
+   <div class="aidgrid">${list.map(f=>`<article class="aidcard ${FV[f.v][1]}">
+     <div class="aidhead"><h3>${f.n}</h3><span class="sevtag ${FV[f.v][1]}">${FV[f.v][0]}</span></div>
+     <p class="wintro"><b>العادة:</b> ${f.o}</p>
+     ${f.ref?`<div class="refq">${f.ref}</div>`:""}
+     <div class="aidcols"><div class="adont"><h4>ما يقوله الطب</h4><p style="margin:0">${f.m}</p></div>
+     <div class="ado"><h4>البديل الآمن</h4><p style="margin:0">${f.s}</p></div></div>
+     ${f.h.some(id=>byId[id])?`<div class="wlinks"><h4>صفحات ذات صلة</h4><div class="opts">${hl(f.h)}</div></div>`:""}
+     ${f.rec&&RECIPES.some(r=>r.name===f.rec)?`<div class="opts"><button type="button" class="chip" data-gr="${f.rec}">وصفة: ${f.rec}</button></div>`:""}
+   </article>`).join("")}</div>
+   <p class="hint">وإن كنت تعرف عادة شعبية منتشرة في بلدك لم نذكرها، فأرسلها لنا من نموذج «شاركنا وصفتك» في «وصفات أمي».</p>`;
+  el.querySelectorAll("[data-fv]").forEach(b=>b.onclick=()=>{ fst.v=b.dataset.fv||null; renderFolk(); });
+  el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
+  el.querySelectorAll("[data-gr]").forEach(b=>b.onclick=()=>goRecipe(b.dataset.gr));
 }
 /* ---------- الزراعة العضوية ---------- */
 const ost={id:null,zone:"gulf"};
@@ -4960,6 +5117,15 @@ liqahwater|Palm pollen water|ماء الطلع، ماي اللقاح، ماء ل
 ghaf|Ghaf tree|الغافة، الحنبل، الهنبل
 truffle|Desert truffle|الفقع، الكمأ، الترفاس، الزبيدي، الجمّة
 ithmid|Kohl, antimony|الكحل، الكحل العربي
+tailfat|Sheep tail fat|الإلية، الشحم، اللية
+yogurt|Yogurt, laban|الروب، اللبن الرائب، اللبن المخيض، الشنينة، الدوغ، الزبادي
+aqit|Dried yogurt (aqit)|البقل، الكشك، الجميد، المضير
+goatmilk|Goat milk|لبن الماعز، حليب العنز
+royaljelly|Royal jelly|الغذاء الملكي
+beevenom|Bee venom|لسع النحل، العلاج بالنحل
+locust|Locust|الجراد المسلوق
+dhub|Dhub fat|دهن الضب، الضب
+ostrichoil|Ostrich oil|دهن النعام
 milk|Milk|الحليب، حليب البقر، حليب الغنم، اللبن الحليب
 egg|Eggs|البيض البلدي، بيض الدجاج
 chicken|Chicken|الفراخ، الدجاج البلدي، مرق الدجاج
@@ -5111,10 +5277,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
-const NEWS={v:"2026-11-07h",date:"7 نوفمبر 2026",go:"",items:[
- "<b>باب جديد: من الحيوان.</b> البيض، والدجاج ومرقه، ولحم الضأن، ولحم الإبل، والكبدة، والسمن البلدي، والحمام، ومرق العظام، وحليب الإبل، وحديث ألبان البقر.",
- "وصفات جديدة: مرق الحمام للنفساء، ومرق العظام البيتي، والهريس، والبيض المسلوق للأطفال.",
- "تصحيح أخطاء شائعة: لا يوضع بياض البيض على الحروق، ولا يُشرب حليب الإبل نيئًا.",
+const NEWS={v:"2026-11-07i",date:"7 نوفمبر 2026",go:"folk",items:[
+ "<b>باب جديد: عادات شعبية، ما يصح وما يضر.</b> تمليح المولود، والكحل، والتبخير، والتحنيك، والكيّ، والمجبّر، وعادات الأربعين، والماء والأعشاب للرضيع، وغيرها، مع البديل الآمن لكل عادة.",
+ "<b>باب «من الحيوان»:</b> البيض والدجاج واللحوم والكبدة والسمن وحليب البقر والإبل، ثم إلية الشاة، والزبادي واللبن، والأقط، وحليب الماعز، ومنتجات النحل، والجراد، ودهن الضبّ وزيت النعام.",
+ "وصفات جديدة: الشنينة بالنعناع، ومرق الحمام للنفساء، ومرق العظام، والهريس، والبيض المسلوق للأطفال.",
  "<b>باب الزراعة العضوية</b> مع تقويم زراعي لخمس مناطق عربية."
 ]};
 (function(){
@@ -5140,6 +5306,7 @@ $("#tabRecipes").onclick=()=>setView("recipes");
 $("#tabMom").onclick=()=>setView("mom");
 $("#tabKit").onclick=()=>setView("kit");
 $("#tabOrganic").onclick=()=>{ ost.id=null; setView("organic"); };
+$("#tabFolk").onclick=()=>{ fst.v=null; setView("folk"); };
 function openFromHash(){ const m=location.hash.match(/^#r=(.+)$/); if(m){ try{ goRecipe(decodeURIComponent(m[1])); }catch(_){} } const mh=location.hash.match(/^#h=([a-z0-9]+)$/); if(mh&&byId[mh[1]]){ setView("herbs"); openPanel(byId[mh[1]]); } }
 window.addEventListener("load",openFromHash); window.addEventListener("hashchange",openFromHash);
 $("#tabWomen").onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); };
