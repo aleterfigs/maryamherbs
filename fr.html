@@ -449,6 +449,16 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .owrap{overflow-x:auto;margin:6px 0 18px}
 .ofarm{background:var(--paper);border:1px dashed var(--leaf);border-radius:8px;padding:10px 12px;margin-top:10px}
 .ofarm h4{margin:0 0 4px;color:var(--leaf)}
+.oh4{margin:18px 0 8px;color:var(--leaf);font-size:1.05rem}
+.aggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.agcard{background:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.agcard h5{margin:0 0 2px;font-size:1rem;color:var(--ink)}
+.agcard p{margin:4px 0 0;font-size:.9rem;line-height:1.75}
+.agcard .agmeta{color:var(--clay);font-size:.8rem;margin:0}
+.agwords{display:flex;flex-wrap:wrap;gap:6px}
+.agwords span{display:inline-flex;gap:6px;align-items:baseline;background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.88rem}
+.agwords i{font-style:normal;color:var(--muted)}
+#og-and{scroll-margin-top:12px}
 .osoon{border:2px dashed var(--clay);border-radius:10px;padding:14px;margin:18px 0;background:var(--sheet)}
 .osoon h3{margin:0 0 6px;color:var(--clay)}
 @media (max-width:560px){.otable td:first-child{white-space:normal}}
@@ -4776,12 +4786,39 @@ const OZONES={
   ["Juillet–août","L'été sec : récolter les légumes d'été, et lancer une pépinière de choux et choux-fleurs fin août.","Arroser le matin, et solariser les planches vides."]],
   note:"Dans les oasis et le Sahara, le calendrier se rapproche de celui de l'intérieur du Golfe, avec du gel les nuits d'hiver."}
 };
+const AGS=[
+ ["Ibn Wahshiyya","Irak, vers 904","«L'Agriculture nabatéenne»","La plus ancienne grande encyclopédie agricole en arabe, qui rapporte le savoir des anciens habitants de l'Irak sur le sol, l'eau et les arbres. Les Andalous s'en sont beaucoup inspirés ; à côté de la science, on y trouve des recettes magiques à ne pas suivre."],
+ ["Arib ibn Sa'd et Rabi' ibn Zayd","Cordoue, 961","«Le Calendrier de Cordoue»","Un calendrier mensuel qui indique pour chaque mois ce qu'on sème, plante et récolte, le temps qu'il fait et la mise bas du bétail. C'est le plus ancien calendrier agricole andalou parvenu jusqu'à nous."],
+ ["Ibn Wafid","Tolède, XIe siècle","«Recueil d'agriculture»","Médecin et botaniste à qui l'on attribue la direction du jardin royal d'al-Ma'mun à Tolède, qui servait de champ d'essai pour les plantes."],
+ ["Ibn Bassal","Tolède, puis Séville, XIe siècle","«Le Livre du dessein et de l'explication»","Un agriculteur savant qui a fondé son livre sur ses propres expériences. Il a divisé le sol en dix types selon la couleur, la texture et la fertilité, et détaillé les fumures : laquelle convient à quelle plante, et laquelle nuit. Il a aussi dirigé le jardin du sultan à Séville."],
+ ["Abou al-Khayr al-Ishbili","Séville, XIe–XIIe siècles","«Le Soutien du médecin dans la connaissance des plantes» et «Livre d'agriculture»","Il a décrit les plantes avec précision : formes, milieux, saisons, variétés et usages. Son livre est considéré comme l'ouvrage andalou de botanique le plus vaste."],
+ ["Al-Tighnari","Grenade, début du XIIe siècle","«La Fleur du jardin et le délice des esprits»","Un agronome de la cour de Grenade qui a écrit sur le sol, l'irrigation, la greffe et la culture des céréales et des légumineuses."],
+ ["Ibn al-Awwam","Séville, fin du XIIe siècle","«Livre d'agriculture»","La plus célèbre encyclopédie agricole du Moyen Âge : elle décrit la culture d'environ 585 plantes et de plus de cinquante arbres fruitiers, réunit l'agriculture nabatéenne, romaine et andalouse avec sa propre expérience, et a été traduite en espagnol et en français."],
+ ["Ibn Luyun al-Tujibi","Almería, 1282–1349","«Exposé de la beauté et de l'excellence dans les principes de l'art de l'agriculture»","Il a mis la science agricole en un long poème en 1348 pour que les agriculteurs puissent l'apprendre par cœur, et a classé les plantes selon leur usage, dont les plantes d'ornement et d'agrément."]
+];
+const AGT=[
+ ["Classification des sols","Ibn Bassal les a divisés en dix types, chacun avec les cultures et la fumure qui lui conviennent.","La pédologie classe toujours les sols selon leur texture et leur fertilité et choisit les cultures en conséquence.","ok"],
+ ["Fumier composté","Ils conseillaient de composter le fumier mélangé à la paille et à la cendre avant usage, et de choisir le fumier selon la plante, comme la fiente de pigeon pour les plantes faibles.","C'est exactement le compost d'aujourd'hui, et le compostage tue les germes et les graines d'adventices.","ok"],
+ ["Irrigation et partage de l'eau","Canaux, norias, citernes et galeries souterraines, avec un partage de l'eau par tours entre agriculteurs.","La base de l'irrigation moderne ; les aflaj et le Tribunal des eaux de Valence fonctionnent encore aujourd'hui.","ok"],
+ ["La greffe","Ils ont décrit de nombreuses méthodes de greffe pour améliorer les fruits.","Juste entre variétés proches, mais greffer des arbres de familles éloignées, comme le décrivent certains livres, ne fonctionne pas.","care"],
+ ["Lutte contre les ravageurs","Cendre, fumée, infusions d'herbes amères, et huile d'olive sur les troncs.","Proche de la lutte biologique actuelle, en testant chaque méthode sur une petite surface d'abord.","ok"],
+ ["Conservation des grains et des semences","Stockage dans des greniers et des silos souterrains secs, avec de la cendre ou des feuilles qui repoussent les insectes.","Un principe juste : la sécheresse et l'éloignement des insectes sont la base de la conservation des semences.","ok"],
+ ["Saisons et savoir des étoiles (anwa')","Ils liaient l'agriculture aux saisons des pluies et de la chaleur et au lever des étoiles.","Connaître les saisons est juste et utile, mais planter selon les mansions lunaires et les horoscopes n'a aucune preuve.","care"],
+ ["Recettes étranges","Certains livres contiennent des recettes magiques, comme suspendre des objets aux arbres contre le froid ou les ravageurs.","Elles n'ont aucun fondement scientifique et ne sont pas utilisées.","harm"]
+];
+const AGW=[["Riz","arroz"],["Sucre","azúcar"],["Orange amère","naranja"],["Citron","limón"],["Aubergine","berenjena"],["Artichaut","alcachofa"],["Safran","azafrán"],["Coton","algodón"],["Huile et olives","aceite, aceituna"],["Canal d'irrigation (saqiya)","acequia"],["Noria (na'ura)","noria"],["Citerne (jubb)","aljibe"]];
+const AGL=[
+ ["Le Tribunal des eaux de Valence","Il se réunit chaque jeudi devant la cathédrale de Valence depuis des siècles pour régler oralement les litiges d'irrigation entre agriculteurs, et beaucoup d'historiens en font remonter l'origine à la période andalouse. L'UNESCO l'a inscrit au patrimoine immatériel en 2009."],
+ ["Les aflaj d'Oman et d'Al Aïn","Des canaux souterrains et de surface qui amènent l'eau par gravité des montagnes aux fermes, l'eau étant partagée entre agriculteurs par tours et par heures. Les aflaj d'Oman sont au patrimoine mondial depuis 2006, et les sites culturels d'Al Aïn avec leurs oasis depuis 2011."],
+ ["Le Generalife de Grenade","Le jardin de l'Alhambra, avec ses parterres, ses canaux et ses fontaines, témoin vivant de l'art andalou des jardins, inscrit au patrimoine mondial avec l'Alhambra."]
+];
+const AGLESSON=["Nourrissez le sol avec du fumier composté : c'est par là que les savants andalous commençaient leurs livres : le sol, puis l'eau, puis la fumure.","Connaissez votre sol avant de planter, comme Ibn Bassal.","Partagez l'eau avec équité et sagesse, car l'eau est ce qu'il y a de plus précieux en agriculture.","Expérimentez de vos mains et notez, comme Ibn Bassal et Ibn al-Awwam ont écrit ce qu'ils avaient essayé.","Prenez du patrimoine ce qui s'accorde avec l'expérience et la science, et laissez ce qui relevait de la magie ou de la superstition."];
 function renderOrganic(){
   const el=$("#organic"), cur=ost.id&&OG.find(t=>t.id===ost.id), list=cur?[cur]:OG;
   const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
   el.innerHTML=`<h2 class="page-h">Agriculture biologique</h2>
    <p class="sub">Cultivez vos herbes et vos légumes sans pesticides ni engrais chimiques, avec des méthodes adaptées à la chaleur de nos pays arabes, avec un soin particulier pour le sol sableux et l'eau salée du Golfe. D'abord pour la maison et les bacs, avec des conseils pour ceux qui ont une ferme, et un calendrier de plantation pour chaque région arabe.</p>
-   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Calendrier de plantation</button><button type="button" class="chip" data-ogrow="1">Plantes faciles à cultiver</button></div></div>
+   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Calendrier de plantation</button><button type="button" class="chip" data-ohist="1">Du patrimoine andalou</button><button type="button" class="chip" data-ogrow="1">Plantes faciles à cultiver</button></div></div>
    <div class="aidgrid${cur?" one":""}">${list.map(t=>`<article class="aidcard wcard" id="og-${t.id}">
      <div class="aidhead"><h3>${t.n}</h3></div>
      <p class="wintro">${t.intro}</p>
@@ -4796,10 +4833,26 @@ function renderOrganic(){
    <p class="hint" style="margin:0 0 4px"><b>${OZONES[ost.zone].n}:</b> ${OZONES[ost.zone].c}</p>
    <div class="owrap"><table class="otable"><thead><tr><th>Mois</th><th>Quoi planter</th><th>Entretien</th></tr></thead><tbody>${OZONES[ost.zone].rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>
    ${OZONES[ost.zone].note?`<p class="hint">${OZONES[ost.zone].note}</p>`:""}</section>
+      <section id="og-and" class="ohist"><h3 class="page-h" style="font-size:1.4rem;margin-top:22px">Du patrimoine agricole arabe et andalou</h3>
+   <p class="sub">Entre le Xe et le XIVe siècle, les savants d'al-Andalus et d'Irak ont écrit les plus grandes encyclopédies agricoles de leur époque, à Cordoue, Tolède, Séville et Grenade. Leur agriculture était biologique par nature : fumier composté, irrigation soignée, et lutte contre les ravageurs avec la cendre et les herbes.</p>
+   <h4 class="oh4">Les savants de l'agriculture et leurs livres</h4>
+   <div class="aggrid">${AGS.map(([n,w,b,t])=>`<article class="agcard"><h5>${n}</h5><p class="agmeta">${w} · ${b}</p><p>${t}</p></article>`).join("")}</div>
+   <h4 class="oh4">Leurs méthodes et ce qu'en dit la science aujourd'hui</h4>
+   <div class="owrap"><table class="otable"><thead><tr><th>Préparation</th><th>Dans les livres d'agriculture</th><th>Aujourd'hui</th></tr></thead><tbody>${AGT.map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h4 class="oh4">Cultures et mots passés d'al-Andalus à l'Europe</h4>
+   <p class="sub" style="margin-top:0">De nombreuses cultures se sont répandues en al-Andalus et en Sicile, et leurs noms arabes survivent en espagnol aujourd'hui. Les historiens débattent de la part de nouveauté et de ce qui était déjà connu.</p>
+   <div class="agwords">${AGW.map(([a,e])=>`<span><b>${a}</b><i dir="ltr" lang="es">${e}</i></span>`).join("")}</div>
+   <h4 class="oh4">Un patrimoine toujours vivant</h4>
+   <div class="aggrid">${AGL.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <div class="ofarm"><h4>Leçons pour l'agriculteur bio d'aujourd'hui</h4><ul style="margin:0">${AGLESSON.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <p class="hint"><button type="button" class="wlink" data-goand="1">Recettes de médecine andalouse dans le guide</button></p>
+   </section>
    <section class="osoon"><h3>Conseils de l'agriculteur</h3><p style="margin:0">Bientôt, si Dieu le veut : conseils et expériences de la ferme bio du créateur du guide, éprouvés dans le sol et la chaleur des Émirats.</p></section>`}`;
   el.querySelectorAll("[data-og]").forEach(b=>b.onclick=()=>{ ost.id = ost.id===b.dataset.og?null:b.dataset.og; renderOrganic(); });
   el.querySelectorAll("[data-oz]").forEach(b=>b.onclick=()=>{ ost.zone=b.dataset.oz; renderOrganic(); const n=$(`[data-oz="${ost.zone}"]`); n&&n.focus({preventScroll:true}); });
   el.querySelectorAll("[data-ocal]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-cal"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-ohist]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-and"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-goand]").forEach(b=>b.onclick=()=>{ state.origin="andalus"; state.q=""; $("#q").value=""; setView("recipes"); window.scrollTo({top:0}); });
   el.querySelectorAll("[data-ogrow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
 }
@@ -5321,9 +5374,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-07k",date:"7 novembre 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07l",date:"7 novembre 2026",go:"folk",items:[
  "<b>Nouvelle rubrique : coutumes populaires, ce qui est juste et ce qui nuit.</b> Saler le nouveau-né, le khôl, l'encens, le tahnik, la cautérisation, les rebouteux, les quarante jours, l'eau et les plantes pour le nourrisson et d'autres, avec l'alternative sûre pour chaque coutume.",
  "<b>La rubrique «D'origine animale» :</b> œufs, poulet, viandes, foie, smen, lait de vache et de chamelle, puis graisse de queue de mouton, yaourt et lben, aqit, lait de chèvre, produits de la ruche, criquets, graisse de dhub et huile d'autruche.",
+ "<b>Agriculture biologique :</b> une nouvelle section, «Du patrimoine agricole arabe et andalou» : Ibn Bassal, Ibn al-Awwam et le Calendrier de Cordoue, leurs méthodes et ce qu'en dit la science, les mots arabes en espagnol, les aflaj et le Tribunal des eaux de Valence.",
  "<b>Médecine prophétique :</b> chaque hadith affiche désormais son degré (authentique, bon, discuté, faible), et les recettes prophétiques sont classées de la plus authentique à la moins sûre.",
  "Chaque recette indique désormais qu'elle relève de la médecine traditionnelle, en invitant à choisir des ingrédients bio ou locaux et propres.",
  "<b>Alimentation et vitamines :</b> une nouvelle fiche sur les protéines, et des liens directs depuis les sources de chaque vitamine vers les pages œufs, foie, viandes et laits.",

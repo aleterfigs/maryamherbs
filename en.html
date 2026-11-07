@@ -449,6 +449,16 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .owrap{overflow-x:auto;margin:6px 0 18px}
 .ofarm{background:var(--paper);border:1px dashed var(--leaf);border-radius:8px;padding:10px 12px;margin-top:10px}
 .ofarm h4{margin:0 0 4px;color:var(--leaf)}
+.oh4{margin:18px 0 8px;color:var(--leaf);font-size:1.05rem}
+.aggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.agcard{background:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.agcard h5{margin:0 0 2px;font-size:1rem;color:var(--ink)}
+.agcard p{margin:4px 0 0;font-size:.9rem;line-height:1.75}
+.agcard .agmeta{color:var(--clay);font-size:.8rem;margin:0}
+.agwords{display:flex;flex-wrap:wrap;gap:6px}
+.agwords span{display:inline-flex;gap:6px;align-items:baseline;background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.88rem}
+.agwords i{font-style:normal;color:var(--muted)}
+#og-and{scroll-margin-top:12px}
 .osoon{border:2px dashed var(--clay);border-radius:10px;padding:14px;margin:18px 0;background:var(--sheet)}
 .osoon h3{margin:0 0 6px;color:var(--clay)}
 @media (max-width:560px){.otable td:first-child{white-space:normal}}
@@ -4776,12 +4786,39 @@ const OZONES={
   ["July–August","The dry summer: pick summer vegetables, and start a cabbage and cauliflower nursery in late August.","Water in the morning, and solarise empty beds."]],
   note:"In the oases and the Sahara the calendar is close to the inland Gulf's, with frost on winter nights."}
 };
+const AGS=[
+ ["Ibn Wahshiyya","Iraq, around 904 CE","«Nabataean Agriculture»","The oldest large agricultural encyclopaedia in Arabic, recording the knowledge of the ancient people of Iraq on soil, water and trees. The Andalusians relied on it heavily; alongside the science it contains magical recipes that are not to be followed."],
+ ["Arib ibn Sa'd and Rabi' ibn Zayd","Córdoba, 961 CE","«The Calendar of Córdoba»","A monthly calendar listing for each month what to sow, plant and harvest, the weather, and when livestock give birth. It is the oldest Andalusian farming calendar to survive."],
+ ["Ibn Wafid","Toledo, 11th century","«Compendium of Agriculture»","A physician and botanist credited with overseeing al-Ma'mun's royal garden in Toledo, which served as an experimental field for plants."],
+ ["Ibn Bassal","Toledo, then Seville, 11th century","«The Book of Purpose and Explanation»","A scholar-farmer who based his book on his own hands-on experiments. He divided soil into ten types by colour, texture and fertility, and detailed manures: which suits which plant, and which does harm. He also oversaw the Sultan's garden in Seville."],
+ ["Abu al-Khayr al-Ishbili","Seville, 11th–12th centuries","«The Physician's Support in Knowing Plants» and «Book of Agriculture»","He described plants precisely: their forms, habitats, seasons, varieties and uses. His book is considered the most extensive Andalusian work of botany."],
+ ["Al-Tighnari","Granada, early 12th century","«The Flower of the Garden and Delight of Minds»","An agronomist at the court of Granada who wrote on soil, irrigation, grafting and growing cereals and pulses."],
+ ["Ibn al-Awwam","Seville, late 12th century","«Book of Agriculture»","The most famous farming encyclopaedia of the Middle Ages: it describes growing about 585 plants and more than fifty fruit trees, combining Nabataean, Roman and Andalusian farming with his own experience, and was translated into Spanish and French."],
+ ["Ibn Luyun al-Tujibi","Almería, 1282–1349 CE","«Exposition of Beauty and Utmost Excellence in the Principles of the Art of Agriculture»","He set the science of agriculture into a long poem in 1348 so farmers could memorise it, and classified plants by use, including ornamental plants and plants for delight."]
+];
+const AGT=[
+ ["Soil classification","Ibn Bassal divided it into ten types, each with the crops and manure that suit it.","Soil science still classifies soil by texture and fertility and chooses crops accordingly.","ok"],
+ ["Composted manure","They advised composting manure mixed with straw and ash before use, and choosing manure to suit the plant, such as pigeon droppings for weak plants.","It is exactly today's compost, and composting kills germs and weed seeds.","ok"],
+ ["Irrigation and water sharing","Channels, water wheels, cisterns and underground canals, with water shared among farmers in turns.","The basis of modern irrigation, and the aflaj and Valencia's Water Tribunal still work today.","ok"],
+ ["Grafting","They wrote many methods of grafting trees to improve fruit.","Correct between closely related varieties, but grafting trees from distant families, as some books describe, does not work.","care"],
+ ["Pest control","Ash, smoke, infusions of bitter herbs, and olive oil on trunks.","Close to organic pest control today, testing each method on a small area first.","ok"],
+ ["Storing grain and seeds","Storage in dry granaries and underground pits, with ash or insect-repelling leaves.","A sound principle: dryness and keeping insects away are the basis of seed storage.","ok"],
+ ["Seasons and star lore (anwa')","They tied farming to the seasons of rain and heat and to the rising of stars.","Knowing the seasons is correct and useful, but planting by lunar mansions and horoscopes has no evidence.","care"],
+ ["Strange recipes","Some books contain magical recipes, such as hanging objects on trees to ward off cold or pests.","They have no scientific basis and are not used.","harm"]
+];
+const AGW=[["Rice","arroz"],["Sugar","azúcar"],["Bitter orange","naranja"],["Lemon","limón"],["Aubergine","berenjena"],["Artichoke","alcachofa"],["Saffron","azafrán"],["Cotton","algodón"],["Oil and olives","aceite, aceituna"],["Irrigation channel (saqiya)","acequia"],["Water wheel (na'ura)","noria"],["Cistern (jubb)","aljibe"]];
+const AGL=[
+ ["The Water Tribunal of Valencia","It meets every Thursday outside Valencia Cathedral, as it has for centuries, to settle farmers' irrigation disputes orally, and many historians trace its origin to the Andalusian period. UNESCO added it to the intangible heritage list in 2009."],
+ ["The aflaj of Oman and Al Ain","Underground and surface channels that carry water by gravity from the mountains to the farms, with water shared among farmers in turns and hours. The aflaj of Oman have been on the World Heritage List since 2006, and the Cultural Sites of Al Ain with their oases since 2011."],
+ ["The Generalife in Granada","The garden of the Alhambra, with its beds, channels and fountains, is a living witness to the Andalusian art of gardening, and is on the World Heritage List with the Alhambra."]
+];
+const AGLESSON=["Feed the soil with composted manure; it is where Andalusian scholars began their books: soil, then water, then manure.","Know your soil before you plant, as Ibn Bassal did.","Share water fairly and wisely, for water is the most precious thing in farming.","Experiment with your own hands and keep records, as Ibn Bassal and Ibn al-Awwam wrote down what they had tried.","Take from heritage what agrees with experience and science, and leave what was magic or superstition."];
 function renderOrganic(){
   const el=$("#organic"), cur=ost.id&&OG.find(t=>t.id===ost.id), list=cur?[cur]:OG;
   const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
   el.innerHTML=`<h2 class="page-h">Organic farming</h2>
    <p class="sub">Grow your herbs and vegetables clean, without pesticides or chemical fertilisers, using methods suited to the heat of our Arab lands, with special care for the Gulf's sandy soil and salty water. For homes and beds first, with tips for those with a farm, and a planting calendar for each Arab region.</p>
-   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Planting calendar</button><button type="button" class="chip" data-ogrow="1">Easy herbs to grow</button></div></div>
+   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Planting calendar</button><button type="button" class="chip" data-ohist="1">From Andalusian heritage</button><button type="button" class="chip" data-ogrow="1">Easy herbs to grow</button></div></div>
    <div class="aidgrid${cur?" one":""}">${list.map(t=>`<article class="aidcard wcard" id="og-${t.id}">
      <div class="aidhead"><h3>${t.n}</h3></div>
      <p class="wintro">${t.intro}</p>
@@ -4796,10 +4833,26 @@ function renderOrganic(){
    <p class="hint" style="margin:0 0 4px"><b>${OZONES[ost.zone].n}:</b> ${OZONES[ost.zone].c}</p>
    <div class="owrap"><table class="otable"><thead><tr><th>Month</th><th>What to plant</th><th>Care</th></tr></thead><tbody>${OZONES[ost.zone].rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>
    ${OZONES[ost.zone].note?`<p class="hint">${OZONES[ost.zone].note}</p>`:""}</section>
+      <section id="og-and" class="ohist"><h3 class="page-h" style="font-size:1.4rem;margin-top:22px">From the heritage of Arab and Andalusian farming</h3>
+   <p class="sub">Between the 10th and 14th centuries, scholars of al-Andalus and Iraq wrote the greatest farming encyclopaedias of their age, in Córdoba, Toledo, Seville and Granada. Their farming was organic by nature: composted manure, careful irrigation, and pest control with ash and herbs.</p>
+   <h4 class="oh4">Farming scholars and their books</h4>
+   <div class="aggrid">${AGS.map(([n,w,b,t])=>`<article class="agcard"><h5>${n}</h5><p class="agmeta">${w} · ${b}</p><p>${t}</p></article>`).join("")}</div>
+   <h4 class="oh4">Their methods and what science says today</h4>
+   <div class="owrap"><table class="otable"><thead><tr><th>Method</th><th>In the farming books</th><th>Today</th></tr></thead><tbody>${AGT.map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h4 class="oh4">Crops and words that travelled from al-Andalus to Europe</h4>
+   <p class="sub" style="margin-top:0">Many crops spread in al-Andalus and Sicily, and their Arabic names survive in Spanish today. Historians differ on how many of them were new and how many were known before.</p>
+   <div class="agwords">${AGW.map(([a,e])=>`<span><b>${a}</b><i dir="ltr" lang="es">${e}</i></span>`).join("")}</div>
+   <h4 class="oh4">Living heritage today</h4>
+   <div class="aggrid">${AGL.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <div class="ofarm"><h4>Lessons for today's organic farmer</h4><ul style="margin:0">${AGLESSON.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <p class="hint"><button type="button" class="wlink" data-goand="1">Andalusian medicine recipes in the guide</button></p>
+   </section>
    <section class="osoon"><h3>Farmer's tips</h3><p style="margin:0">Coming soon, God willing: tips and experience from the guide owner's organic farm, tested in the UAE's soil and heat.</p></section>`}`;
   el.querySelectorAll("[data-og]").forEach(b=>b.onclick=()=>{ ost.id = ost.id===b.dataset.og?null:b.dataset.og; renderOrganic(); });
   el.querySelectorAll("[data-oz]").forEach(b=>b.onclick=()=>{ ost.zone=b.dataset.oz; renderOrganic(); const n=$(`[data-oz="${ost.zone}"]`); n&&n.focus({preventScroll:true}); });
   el.querySelectorAll("[data-ocal]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-cal"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-ohist]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-and"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-goand]").forEach(b=>b.onclick=()=>{ state.origin="andalus"; state.q=""; $("#q").value=""; setView("recipes"); window.scrollTo({top:0}); });
   el.querySelectorAll("[data-ogrow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
 }
@@ -5321,9 +5374,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- What's new: shown once to returning visitors after each update ---------- */
-const NEWS={v:"2026-11-07k",date:"7 November 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07l",date:"7 November 2026",go:"folk",items:[
  "<b>New section: folk customs, what is sound and what harms.</b> Salting newborns, kohl, incense, tahneek, cautery, bonesetters, the forty days after birth, water and herbs for babies and more, with the safe alternative for each custom.",
  "<b>The «From animals» section:</b> eggs, chicken, meat, liver, ghee, cow's and camel milk, plus sheep tail fat, yogurt and laban, aqit, goat milk, bee products, locusts, dhub fat and ostrich oil.",
+ "<b>Organic farming:</b> a new section, «From the heritage of Arab and Andalusian farming»: Ibn Bassal, Ibn al-Awwam and the Calendar of Córdoba, their methods and what science says today, Arabic words in Spanish, and the aflaj and Valencia's Water Tribunal.",
  "<b>Prophetic medicine:</b> each hadith now shows its grade (authentic, good, disputed, weak), and Prophetic recipes are ordered from the most authentic.",
  "Every recipe now notes that it comes from traditional medicine, encouraging organic or clean local ingredients.",
  "<b>Food and vitamins:</b> a new protein card, and direct links from each vitamin's food sources to the pages on eggs, liver, meat and milk.",

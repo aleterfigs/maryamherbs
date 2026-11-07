@@ -448,6 +448,16 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .owrap{overflow-x:auto;margin:6px 0 18px}
 .ofarm{background:var(--paper);border:1px dashed var(--leaf);border-radius:8px;padding:10px 12px;margin-top:10px}
 .ofarm h4{margin:0 0 4px;color:var(--leaf)}
+.oh4{margin:18px 0 8px;color:var(--leaf);font-size:1.05rem}
+.aggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.agcard{background:var(--sheet);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.agcard h5{margin:0 0 2px;font-size:1rem;color:var(--ink)}
+.agcard p{margin:4px 0 0;font-size:.9rem;line-height:1.75}
+.agcard .agmeta{color:var(--clay);font-size:.8rem;margin:0}
+.agwords{display:flex;flex-wrap:wrap;gap:6px}
+.agwords span{display:inline-flex;gap:6px;align-items:baseline;background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.88rem}
+.agwords i{font-style:normal;color:var(--muted)}
+#og-and{scroll-margin-top:12px}
 .osoon{border:2px dashed var(--clay);border-radius:10px;padding:14px;margin:18px 0;background:var(--sheet)}
 .osoon h3{margin:0 0 6px;color:var(--clay)}
 @media (max-width:560px){.otable td:first-child{white-space:normal}}
@@ -4774,12 +4784,39 @@ const OZONES={
   ["يوليو–أغسطس","الصيف الجاف: قطف الخضار الصيفية، ومشتل الملفوف والقرنبيط آخر أغسطس.","الري الصباحي، وتعقيم الأحواض الفارغة بالشمس."]],
   note:"في الواحات والصحراء الكبرى يقترب التقويم من تقويم الخليج الداخلي، مع صقيع في ليالي الشتاء."}
 };
+const AGS=[
+ ["ابن وحشية","العراق، نحو سنة 904م","«الفلاحة النبطية»","أقدم موسوعة زراعية كبيرة بالعربية، نقل فيها معارف أهل العراق القدماء في التربة والماء والأشجار. اعتمد عليه الأندلسيون كثيرًا، وفيه إلى جانب العلم وصفات سحرية لا يُؤخذ بها."],
+ ["عريب بن سعد وربيع بن زيد","قرطبة، سنة 961م","«تقويم قرطبة»","تقويم شهري يذكر لكل شهر ما يُزرع ويُغرس ويُجنى، وأحوال الطقس، وولادة الماشية. وهو أقدم تقويم زراعي أندلسي وصلنا."],
+ ["ابن وافد","طليطلة، القرن الحادي عشر","«مجموع في الفلاحة»","طبيب وعالم نبات، يُنسب إليه الإشراف على بستان المأمون الملكي في طليطلة، وكان البستان حقل تجارب للنباتات."],
+ ["ابن بصّال","طليطلة ثم إشبيلية، القرن الحادي عشر","«كتاب القصد والبيان»","فلّاح عالم بنى كتابه على تجاربه بيده. قسّم التربة عشرة أنواع حسب لونها وملمسها وخصوبتها، وفصّل في الأسمدة: أيّها يناسب أيّ نبات، وأيّها يضر. وأشرف على بستان السلطان في إشبيلية."],
+ ["أبو الخير الإشبيلي","إشبيلية، القرنان الحادي عشر والثاني عشر","«عمدة الطبيب في معرفة النبات» و«كتاب الفلاحة»","وصف النباتات وصفًا دقيقًا: أشكالها، وأماكن نموّها، ومواسمها، وأصنافها، واستعمالاتها. ويُعدّ كتابه أوسع كتاب أندلسي في علم النبات."],
+ ["الطِّغنَري","غرناطة، أوائل القرن الثاني عشر","«زهر البستان ونزهة الأذهان»","عالم زراعي عمل في بلاط غرناطة، وكتب في التربة والري والتطعيم وزراعة الحبوب والبقول."],
+ ["ابن العوّام","إشبيلية، أواخر القرن الثاني عشر","«كتاب الفلاحة»","أشهر موسوعة زراعية في العصور الوسطى: وصف فيها زراعة نحو 585 نباتًا وأكثر من خمسين شجرة مثمرة، وجمع الفلاحة النبطية والرومانية والأندلسية وتجاربه، وتُرجم إلى الإسبانية والفرنسية."],
+ ["ابن ليّون التجيبي","ألمرية، 1282–1349م","«إبداء الملاحة وإنهاء الرجاحة في أصول صناعة الفلاحة»","نظم علم الفلاحة أرجوزةً شعرية سنة 1348م ليسهل على المزارعين حفظه، وصنّف النباتات حسب استعمالها، ومنها نباتات الزينة والبهجة."]
+];
+const AGT=[
+ ["تصنيف التربة","قسّمها ابن بصّال عشرة أنواع، ولكل نوع ما يناسبه من زرع وسماد.","ما زال علم التربة يصنّفها حسب القوام والخصوبة، ويختار المحصول على أساسها.","ok"],
+ ["السماد المخمّر","نصحوا بتخمير الروث وخلطه بالتبن والرماد قبل وضعه، واختيار السماد حسب النبات، كروث الحمام للنباتات الضعيفة.","هو الكمبوست اليوم بعينه، وتخميره يقتل الجراثيم وبذور الأعشاب الضارة.","ok"],
+ ["الري وتوزيع الماء","السواقي والنواعير والجِباب والقنوات تحت الأرض، وتوزيع الماء بالدور بين المزارعين.","أساس الري الحديث، والأفلاج ومحكمة المياه في بلنسية ما زالت تعمل حتى اليوم.","ok"],
+ ["التطعيم (التركيب)","كتبوا طرقًا كثيرة لتطعيم الأشجار لتحسين الثمار.","صحيح بين الأصناف المتقاربة، أما تطعيم أشجار من فصائل بعيدة كما يرد في بعض الكتب فلا ينجح.","care"],
+ ["مكافحة الآفات","الرماد، والدخان، ومنقوع الأعشاب المرّة، وزيت الزيتون على الجذوع.","قريب من المكافحة العضوية اليوم، مع اختبار كل طريقة على مساحة صغيرة أولًا.","ok"],
+ ["حفظ الحبوب والبذور","التخزين في الأهراء والمطامير الجافة، مع الرماد أو الأوراق الطاردة للحشرات.","مبدأ صحيح: الجفاف وطرد الحشرات أساس حفظ البذور.","ok"],
+ ["الأنواء والمواسم","ربطوا الزراعة بمواسم المطر والحرّ وطلوع النجوم.","معرفة المواسم صحيحة ومفيدة، أما الزراعة بمنازل القمر والطوالع فلا دليل عليها.","care"],
+ ["الوصفات الغريبة","في بعض الكتب وصفات سحرية، كتعليق أشياء على الشجر لدفع البرد أو الآفات.","لا أصل لها علميًا، ولا تُستعمل.","harm"]
+];
+const AGW=[["الرز","arroz"],["السكّر","azúcar"],["النارنج","naranja"],["الليمون","limón"],["الباذنجان","berenjena"],["الخرشوف (الأرضي شوكي)","alcachofa"],["الزعفران","azafrán"],["القطن","algodón"],["الزيت والزيتون","aceite, aceituna"],["الساقية","acequia"],["الناعورة","noria"],["الجُبّ (خزان الماء)","aljibe"]];
+const AGL=[
+ ["محكمة المياه في بلنسية","تجتمع كل خميس أمام كاتدرائية بلنسية منذ قرون لحلّ نزاعات الري بين المزارعين شفهيًا، ويُرجع كثير من المؤرخين أصلها إلى العهد الأندلسي. أدرجتها اليونسكو في التراث غير المادي سنة 2009."],
+ ["الأفلاج في عُمان والعين","قنوات تحت الأرض وفوقها تنقل الماء بالجاذبية من الجبال إلى المزارع، ويُوزّع الماء بين المزارعين بالدور والساعات. أفلاج عُمان في قائمة التراث العالمي منذ 2006، ومواقع العين الثقافية بواحاتها منذ 2011."],
+ ["جنة العريف في غرناطة","بستان قصر الحمراء، بأحواضه وسواقيه ونوافيره، شاهد حي على فن البستنة الأندلسي، وهو في قائمة التراث العالمي مع الحمراء."]
+];
+const AGLESSON=["غذِّ التربة بالسماد المخمّر، فهي أول ما بدأ به علماء الأندلس كتبهم: التربة ثم الماء ثم السماد.","اعرف تربتك قبل أن تزرع، كما فعل ابن بصّال.","وزّع الماء بعدل وحكمة، فالماء أغلى ما في الزراعة.","جرّب بيدك وسجّل، فابن بصّال وابن العوّام كتبا ما جرّباه.","خذ من التراث ما وافق التجربة والعلم، واترك ما كان سحرًا أو خرافة."];
 function renderOrganic(){
   const el=$("#organic"), cur=ost.id&&OG.find(t=>t.id===ost.id), list=cur?[cur]:OG;
   const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
   el.innerHTML=`<h2 class="page-h">الزراعة العضوية</h2>
    <p class="sub">ازرع أعشابك وخضارك نظيفة بلا مبيدات ولا أسمدة كيميائية، بطرق تناسب حرّ بلادنا العربية، مع عناية خاصة بتربة الخليج الرملية وملوحة مائه. للبيوت والأحواض أولًا، مع نصائح لمن عنده مزرعة، وتقويم زراعي لكل منطقة عربية.</p>
-   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">تقويم الزراعة</button><button type="button" class="chip" data-ogrow="1">أعشاب سهلة الزراعة</button></div></div>
+   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">تقويم الزراعة</button><button type="button" class="chip" data-ohist="1">من تراث الأندلس</button><button type="button" class="chip" data-ogrow="1">أعشاب سهلة الزراعة</button></div></div>
    <div class="aidgrid${cur?" one":""}">${list.map(t=>`<article class="aidcard wcard" id="og-${t.id}">
      <div class="aidhead"><h3>${t.n}</h3></div>
      <p class="wintro">${t.intro}</p>
@@ -4794,10 +4831,26 @@ function renderOrganic(){
    <p class="hint" style="margin:0 0 4px"><b>${OZONES[ost.zone].n}:</b> ${OZONES[ost.zone].c}</p>
    <div class="owrap"><table class="otable"><thead><tr><th>الشهر</th><th>ماذا تزرع</th><th>العناية</th></tr></thead><tbody>${OZONES[ost.zone].rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>
    ${OZONES[ost.zone].note?`<p class="hint">${OZONES[ost.zone].note}</p>`:""}</section>
+      <section id="og-and" class="ohist"><h3 class="page-h" style="font-size:1.4rem;margin-top:22px">من تراث الزراعة العربية والأندلسية</h3>
+   <p class="sub">بين القرنين العاشر والرابع عشر الميلاديين كتب علماء الأندلس والعراق أعظم موسوعات الفلاحة في عصرهم، في قرطبة وطليطلة وإشبيلية وغرناطة. كانت زراعتهم عضوية بطبيعتها: سماد مخمّر، وري محكم، ومكافحة بالرماد والأعشاب.</p>
+   <h4 class="oh4">علماء الفلاحة وكتبهم</h4>
+   <div class="aggrid">${AGS.map(([n,w,b,t])=>`<article class="agcard"><h5>${n}</h5><p class="agmeta">${w} · ${b}</p><p>${t}</p></article>`).join("")}</div>
+   <h4 class="oh4">طرقهم وما يقوله العلم اليوم</h4>
+   <div class="owrap"><table class="otable"><thead><tr><th>الطريقة</th><th>في كتب الفلاحة</th><th>اليوم</th></tr></thead><tbody>${AGT.map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h4 class="oh4">محاصيل وكلمات عبرت من الأندلس إلى أوروبا</h4>
+   <p class="sub" style="margin-top:0">انتشرت زراعة محاصيل كثيرة في الأندلس وصقلية، وبقيت أسماؤها العربية في الإسبانية إلى اليوم. ويختلف المؤرخون في مقدار ما كان جديدًا منها وما كان معروفًا قبلها.</p>
+   <div class="agwords">${AGW.map(([a,e])=>`<span><b>${a}</b><i dir="ltr" lang="es">${e}</i></span>`).join("")}</div>
+   <h4 class="oh4">تراث حيّ حتى اليوم</h4>
+   <div class="aggrid">${AGL.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <div class="ofarm"><h4>دروس للمزارع العضوي اليوم</h4><ul style="margin:0">${AGLESSON.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <p class="hint"><button type="button" class="wlink" data-goand="1">وصفات من الطب الأندلسي في الدليل</button></p>
+   </section>
    <section class="osoon"><h3>نصائح المزارع</h3><p style="margin:0">قريبًا بإذن الله: نصائح وتجارب من مزرعة صاحب الدليل العضوية، مجرّبة في أرض الإمارات وحرّها.</p></section>`}`;
   el.querySelectorAll("[data-og]").forEach(b=>b.onclick=()=>{ ost.id = ost.id===b.dataset.og?null:b.dataset.og; renderOrganic(); });
   el.querySelectorAll("[data-oz]").forEach(b=>b.onclick=()=>{ ost.zone=b.dataset.oz; renderOrganic(); const n=$(`[data-oz="${ost.zone}"]`); n&&n.focus({preventScroll:true}); });
   el.querySelectorAll("[data-ocal]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-cal"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-ohist]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-and"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-goand]").forEach(b=>b.onclick=()=>{ state.origin="andalus"; state.q=""; $("#q").value=""; setView("recipes"); window.scrollTo({top:0}); });
   el.querySelectorAll("[data-ogrow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
 }
@@ -5319,9 +5372,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
-const NEWS={v:"2026-11-07k",date:"7 نوفمبر 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07l",date:"7 نوفمبر 2026",go:"folk",items:[
  "<b>باب جديد: عادات شعبية، ما يصح وما يضر.</b> تمليح المولود، والكحل، والتبخير، والتحنيك، والكيّ، والمجبّر، وعادات الأربعين، والماء والأعشاب للرضيع، وغيرها، مع البديل الآمن لكل عادة.",
  "<b>باب «من الحيوان»:</b> البيض والدجاج واللحوم والكبدة والسمن وحليب البقر والإبل، ثم إلية الشاة، والزبادي واللبن، والأقط، وحليب الماعز، ومنتجات النحل، والجراد، ودهن الضبّ وزيت النعام.",
+ "<b>الزراعة العضوية:</b> قسم جديد «من تراث الزراعة العربية والأندلسية»: ابن بصّال وابن العوّام وتقويم قرطبة، وطرقهم وما يقوله العلم اليوم، والكلمات العربية في الإسبانية، والأفلاج ومحكمة المياه في بلنسية.",
  "<b>الطب النبوي:</b> صار يظهر بجانب كل حديث درجته (صحيح، حسن، مختلف فيه، ضعيف)، وتُرتّب الوصفات النبوية من الأصحّ سندًا.",
  "على كل وصفة تنبيه بأنها من الطب التقليدي، مع الحث على اختيار مكوّنات عضوية أو بلدية نظيفة.",
  "<b>الغذاء والفيتامينات:</b> بطاقة جديدة للبروتين، وروابط مباشرة من مصادر كل فيتامين إلى صفحات البيض والكبدة واللحوم والألبان.",
