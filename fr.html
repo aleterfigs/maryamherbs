@@ -107,8 +107,14 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(2.2rem,6vw,3.2re
 .aud button[aria-pressed="true"] small{color:var(--sheet);opacity:.85}
 .kidnote{font-size:.82rem;color:var(--clay);margin:0}
 @media (max-width:480px){.aud button small{display:none}}
-.wiz{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:20px;align-items:start}
-@media (max-width:780px){.wiz{grid-template-columns:1fr}}
+.wiz{display:grid;grid-template-columns:1fr;gap:16px;align-items:start;max-width:820px;margin-inline:auto;width:100%}
+.wprog{display:flex;gap:6px;align-items:center;font-size:.82rem;color:var(--muted);margin:0}
+.wprog i{display:inline-block;width:26px;height:5px;border-radius:3px;background:var(--line)}
+.wprog i.on{background:var(--leaf)}
+.wbig .chip{font-size:1.05rem;padding:11px 22px}
+.wstepbtns{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.wlink{font:inherit;font-size:.88rem;background:none;border:0;color:var(--leaf);text-decoration:underline;cursor:pointer;padding:0}
+.wq-title{font-size:1.15rem;margin:0;color:var(--ink)}
 .wform{background:var(--sheet);border:1px solid var(--line);border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:18px}
 .q{display:flex;flex-direction:column;gap:8px}
 .q h3{font-size:.98rem;margin:0;color:var(--ink);font-weight:600;display:flex;gap:8px;align-items:baseline}
@@ -385,7 +391,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .panel .ract{margin-top:-4px}
 .rbtn:hover{background:var(--leaf-soft)}
 .rbtn.done{background:var(--leaf);color:var(--sheet)}
-#wres,#wform,#wq1,#wq2,#wmore{scroll-margin-top:12px}
+#wizard,#wres,#wform,#wq1,#wq2,#wmore{scroll-margin-top:12px}
 .q.off h3{opacity:.55}
 .wmore{border:1px solid var(--line);border-radius:6px;padding:10px 12px;background:var(--paper)}
 .wmore summary{cursor:pointer;font-weight:600;font-size:.92rem;color:var(--leaf)}
@@ -3602,7 +3608,7 @@ const RED={
  meno:["Saignement après un an sans règles","Fortes palpitations ou douleur thoracique","Des bouffées intenses qui perturbent le sommeil et la vie : il existe des traitements efficaces chez le médecin"]
 };
 const BANDS=[...AGES,[18,"18–39 ans"],[40,"40–59 ans"],[60,"60 ans et plus"]];
-const w={g:null,band:null,more:false,sex:"girl",who:"woman",age:4,preg:false,lact:false,prob:null,conds:new Set(),meds:new Set(),alg:new Set(),orig:new Set()};
+const w={step:1,g:null,band:null,more:false,sex:"girl",who:"woman",age:4,preg:false,lact:false,prob:null,conds:new Set(),meds:new Set(),alg:new Set(),orig:new Set()};
 function chip(key,label,on,multi){return `<button type="button" class="chip" data-k="${key}" aria-pressed="${on}" ${multi?"":'role="radio" aria-checked="'+on+'"'}>${label}</button>`;}
 function probsFor(){
   const kidSmall=w.who==="kid"&&w.age<12;
@@ -3615,27 +3621,36 @@ function renderWForm(){
   wSync();
   const ready=wReady(), kidSmall=ready&&w.who==="kid"&&w.age<12, infant=ready&&w.band===0;
   if(!ready||infant||!probsFor().some(p=>p[0]===w.prob)) w.prob=null;
-  let h=`<div class="q" id="wq1"><h3><span class="n">1</span>Sexe et âge</h3>
-    <p class="hint">Sexe</p><div class="opts" role="radiogroup">${chip("g:f","Féminin",w.g==="f")}${chip("g:m","Masculin",w.g==="m")}</div>
-    <p class="hint">Âge</p><div class="opts" role="radiogroup">${BANDS.map(([a,t])=>chip("band:"+a,t,w.band===a)).join("")}</div>`;
-  if(ready&&w.who==="woman") h+=`<div class="sub-q"><p class="hint">Choisissez le cas échéant</p><div class="opts">${chip("preg","Enceinte",w.preg,1)}${chip("lact","Allaitante",w.lact,1)}</div></div>`;
-  h+=`</div><div class="q${ready&&!infant?"":" off"}" id="wq2"><h3><span class="n">2</span>Quel est le problème ?</h3>`;
-  if(!ready) h+=`<p class="hint">Choisissez d'abord le sexe et l'âge pour voir les problèmes correspondants.</p>`;
-  else if(infant) h+=`<p class="hint">On ne donne pas de plantes aux bébés de moins d'un an ; lisez l'avertissement.</p>`;
-  else { const avail=probsFor(); h+=PGROUPS.map(([g,keys])=>{const items=avail.filter(p=>keys.includes(p[0]));return items.length?`<div class="pgroup"><span class="pglabel">${g}</span><div class="opts" role="radiogroup">${items.map(([k,t])=>chip("prob:"+k,t,w.prob===k)).join("")}</div></div>`:"";}).join(""); }
-  h+=`</div>`;
-  if(ready&&!infant){
-    const conds=kidSmall?WCONDS.filter(c=>KIDCONDS.includes(c[0])):WCONDS;
-    const open=w.more||w.conds.size||w.meds.size||w.alg.size||w.orig.size;
-    h+=`<details class="wmore" id="wmore" ${open?"open":""}><summary>Pour des résultats plus précis (facultatif) : maladies chroniques, médicaments, allergies</summary><div class="wmore-in">`;
-    h+=`<div class="q"><h3><span class="n">3</span>Maladies chroniques</h3><p class="hint">Choisissez tout ce qui s'applique, ou laissez vide.</p><div class="opts">${conds.map(([k,t])=>chip("cond:"+k,t,w.conds.has(k),1)).join("")}</div></div>`;
-    if(kidSmall) h+=`<div class="q"><h3><span class="n">4</span>Médicaments</h3><p class="hint">Si l'enfant prend un médicament régulier, demandez à son médecin avant toute plante.</p></div>`;
-    else h+=`<div class="q"><h3><span class="n">4</span>Médicaments que vous prenez régulièrement</h3><div class="opts">${WMEDS.filter(m=>!(m[0]==="horm"&&w.who==="man")).map(([k,t])=>chip("med:"+k,t,w.meds.has(k),1)).join("")}</div></div>`;
-    h+=`<div class="q"><h3><span class="n">5</span>Allergies connues</h3><div class="opts">${WALG.map(([k,t])=>chip("alg:"+k,t,w.alg.has(k),1)).join("")}</div></div>
-      <div class="q"><h3><span class="n">6</span>De quelle tradition ?</h3><p class="hint">Facultatif ; laissez vide pour voir toutes les traditions.</p><div class="opts">${Object.entries(ORIG).map(([k,t])=>chip("orig:"+k,t,w.orig.has(k),1)).join("")}</div></div></div></details>`;
+  if(w.step>=2&&!w.g) w.step=1; if(w.step>=3&&!ready) w.step=2; if(w.step===3&&infant) w.step=4; if(w.step===4&&!w.prob&&!infant) w.step=ready?3:1;
+  const prog=n=>`<p class="wprog">${[1,2,3].map(i=>`<i class="${i<=n?"on":""}"></i>`).join("")}<span>Étape ${n.toLocaleString("fr-FR")}/${(3).toLocaleString("fr-FR")}</span></p>`;
+  const back=n=>`<button type="button" class="wlink" data-k="step:${n}">Retour</button>`;
+  let h="";
+  if(w.step===1){
+    h=`<div class="q" id="wq1">${prog(1)}<h3 class="wq-title">Pour qui cherchez-vous un remède ?</h3><p class="hint">Pour vous-même ou un proche.</p><div class="opts wbig" role="radiogroup">${chip("g:f","Féminin",w.g==="f")}${chip("g:m","Masculin",w.g==="m")}</div></div>`;
+  } else if(w.step===2){
+    const askPreg=w.g==="f"&&w.band!=null&&w.band>=18;
+    h=`<div class="q" id="wq1">${prog(2)}<h3 class="wq-title">Quel âge ?</h3><div class="opts wbig" role="radiogroup">${BANDS.map(([a,t])=>chip("band:"+a,t,w.band===a)).join("")}</div>
+      ${askPreg?`<h3 class="wq-title" style="margin-top:14px">Êtes-vous enceinte ou allaitante ?</h3><div class="opts wbig" role="radiogroup">${chip("pl:no","Non",w.plDone&&!w.preg&&!w.lact)}${chip("pl:preg","Enceinte",w.preg)}${chip("pl:lact","Allaitante",w.lact)}</div>`:""}
+      <div class="wstepbtns">${back(1)}</div></div>`;
+  } else if(w.step===3){
+    const avail=probsFor();
+    h=`<div class="q" id="wq2">${prog(3)}<h3 class="wq-title">Quel est le problème ?</h3>${PGROUPS.map(([g,keys])=>{const items=avail.filter(p=>keys.includes(p[0]));return items.length?`<div class="pgroup"><span class="pglabel">${g}</span><div class="opts" role="radiogroup">${items.map(([k,t])=>chip("prob:"+k,t,w.prob===k)).join("")}</div></div>`:"";}).join("")}<div class="wstepbtns">${back(2)}</div></div>`;
+  } else {
+    const plabel=(PROBS.find(p=>p[0]===w.prob)||[,""])[1], blabel=(BANDS.find(b=>b[0]===w.band)||[,""])[1];
+    h=`<div class="q" id="wq2"><p class="wsum"><b>${w.g==="m"?"Masculin":"Féminin"}</b> · ${blabel}${w.preg?" · Enceinte":""}${w.lact?" · Allaitante":""}${plabel?` · <b>${plabel}</b>`:""}</p>
+      <div class="wstepbtns">${infant?"":`<button type="button" class="wlink" data-k="step:3">Changer de problème</button>`}<button type="button" class="wlink" data-k="step:1">Changer le sexe ou l'âge</button><button type="button" class="wlink" data-k="reset">Nouvelle recherche</button></div></div>`;
+    if(!infant){
+      const conds=kidSmall?WCONDS.filter(c=>KIDCONDS.includes(c[0])):WCONDS;
+      const open=w.more||w.conds.size||w.meds.size||w.alg.size||w.orig.size;
+      h+=`<details class="wmore" id="wmore" ${open?"open":""}><summary>Pour des résultats plus précis (facultatif) : maladies chroniques, médicaments, allergies</summary><div class="wmore-in">`;
+      h+=`<div class="q"><h3>Maladies chroniques</h3><p class="hint">Choisissez tout ce qui s'applique, ou laissez vide.</p><div class="opts">${conds.map(([k,t])=>chip("cond:"+k,t,w.conds.has(k),1)).join("")}</div></div>`;
+      if(kidSmall) h+=`<div class="q"><h3>Médicaments</h3><p class="hint">Si l'enfant prend un médicament régulier, demandez à son médecin avant toute plante.</p></div>`;
+      else h+=`<div class="q"><h3>Médicaments que vous prenez régulièrement</h3><div class="opts">${WMEDS.filter(m=>!(m[0]==="horm"&&w.who==="man")).map(([k,t])=>chip("med:"+k,t,w.meds.has(k),1)).join("")}</div></div>`;
+      h+=`<div class="q"><h3>Allergies connues</h3><div class="opts">${WALG.map(([k,t])=>chip("alg:"+k,t,w.alg.has(k),1)).join("")}</div></div>
+        <div class="q"><h3>De quelle tradition ?</h3><p class="hint">Facultatif ; laissez vide pour voir toutes les traditions.</p><div class="opts">${Object.entries(ORIG).map(([k,t])=>chip("orig:"+k,t,w.orig.has(k),1)).join("")}</div></div></div></details>`;
+    }
   }
-  h+=`<button type="button" class="reset" data-k="reset">Effacer tous les choix</button>
-    <p class="hint" style="margin:0">Nous ne recueillons ni votre nom ni aucune information qui vous identifie. Nous enregistrons seulement des comptages généraux (sexe, âge et problème choisi) pour savoir ce dont les visiteurs ont besoin ; les maladies chroniques, les médicaments et les allergies ne sont envoyés nulle part.</p>`;
+  if(w.step===1) h+=`<p class="hint" style="margin:0">Nous ne recueillons ni votre nom ni aucune information qui vous identifie. Nous enregistrons seulement des comptages généraux (sexe, âge et problème choisi) pour savoir ce dont les visiteurs ont besoin ; les maladies chroniques, les médicaments et les allergies ne sont envoyés nulle part.</p>`;
   $("#wform").innerHTML=h;
 }
 function evalRecipe(r){
@@ -3744,7 +3759,7 @@ const PROBNOTE={
 };
 function renderWRes(){
   const el=$("#wres");
-  if(!wReady()){ el.innerHTML=`<div class="empty-res">Commencez par choisir le sexe et l'âge, puis le problème, pour voir tous les remèdes adaptés.</div>`; return; }
+  el.hidden=w.step!==4; if(w.step!==4){ el.innerHTML=""; return; }
   const kidSmall=w.who==="kid"&&w.age<12;
   if(w.who==="kid"&&w.age===0){ el.innerHTML=`<div class="red"><h4>Bébés de moins d'un an</h4><ul><li>Aucune plante, aucune tisane ni aucun miel n'est recommandé pour les bébés de moins d'un an.</li><li>Le lait maternel ou infantile est ce dont le bébé a besoin.</li><li>Toute fièvre chez un bébé de moins de 3 mois, une somnolence, un refus de téter ou une difficulté à respirer : allez immédiatement chez le médecin ou aux urgences.</li></ul></div>`; return; }
   if(!w.prob){ el.innerHTML=`<div class="empty-res">Choisissez le problème à l'étape deux pour voir les mélanges adaptés.</div>`; return; }
@@ -3754,7 +3769,7 @@ function renderWRes(){
   ok.sort((a,b)=>((b[0].top?1:0)-(a[0].top?1:0))||(relOf(b[0]).score-relOf(a[0]).score)||(b[1].c.length?0:1)-(a[1].c.length?0:1));
   const n=ok.length, cnt = n===1?"Un mélange adapté":n===2?"Deux mélanges adaptés":n<=10?`${n.toLocaleString("fr-FR")} mélanges adaptés`:`${n.toLocaleString("fr-FR")} mélanges adaptés`;
   const plabel=(PROBS.find(p=>p[0]===w.prob)||[,""])[1], blabel=(BANDS.find(b=>b[0]===w.band)||[,""])[1];
-  let h=`<p class="wsum"><b>${w.g==="m"?"Masculin":"Féminin"}</b> · ${blabel}${w.preg?" · Enceinte":""}${w.lact?" · Allaitante":""} · <b>${plabel}</b></p><button type="button" class="wback wmorebtn" data-wback="1">↑ ${w.conds.size||w.meds.size||w.alg.size?"Modifier le problème, les médicaments ou les allergies":"Une maladie chronique, des médicaments ou des allergies ? Ajoutez-les pour écarter les remèdes inadaptés"}</button>${PROBNOTE[w.prob]?`<div class="refq">${PROBNOTE[w.prob]}</div>`:""}${PROBGUIDE[w.prob]?`<div class="guide pguide">${PROBGUIDE[w.prob].map((s,i)=>`<details ${i===0?"open":""}><summary>${s.t}</summary><div>${s.h}</div></details>`).join("")}</div>`:""}<h2 class="res-head">${n?cnt:"Aucun mélange adapté"}</h2>`;
+  let h=`${PROBNOTE[w.prob]?`<div class="refq">${PROBNOTE[w.prob]}</div>`:""}${PROBGUIDE[w.prob]?`<div class="guide pguide">${PROBGUIDE[w.prob].map((s,i)=>`<details ${i===0?"open":""}><summary>${s.t}</summary><div>${s.h}</div></details>`).join("")}</div>`:""}<h2 class="res-head">${n?cnt:"Aucun mélange adapté"}</h2>`;
   if(!ok.length) h+=`<div class="empty-res">${cands.length?"Aucun des mélanges disponibles pour ce problème ne convient à votre situation. Mieux vaut demander à un médecin ou à un pharmacien.":kidSmall?"Il n'y a pas de mélange adapté à cet âge et à ce problème. Demandez à un pédiatre.":"Il n'y a pas encore de mélanges pour ce problème."}</div>`;
   for(const [r,e] of ok){
     h+=`<article class="rcard">${badge(r)}<h4 class="t">${r.name}</h4><p class="for">${r.for}</p>${relBox(r)}${refBox(r)}
@@ -3782,17 +3797,17 @@ function renderWizard(){ renderWForm(); renderWRes(); const wb=$("#wres [data-wb
 $("#wform").addEventListener("toggle",e=>{ if(e.target.id==="wmore") w.more=e.target.open; },true);
 function wGo(el){ if(!el) return; const r=el.getBoundingClientRect(); if(window.matchMedia("(max-width:780px)").matches || r.top<0 || r.top>innerHeight*0.5) el.scrollIntoView({behavior:"smooth",block:"start"}); }
 $("#wform").addEventListener("click",e=>{
-  const b=e.target.closest("[data-k]"); if(!b) return; const k=b.dataset.k, [t,v]=k.split(":");
-  const wasReady=wReady();
-  if(k==="reset"){ Object.assign(w,{g:null,band:null,more:false,who:"woman",age:4,preg:false,lact:false,prob:null}); w.conds.clear(); w.meds.clear(); w.alg.clear(); w.orig.clear(); }
-  else if(t==="g") w.g=v; else if(t==="band") w.band=+v; else if(t==="preg") w.preg=!w.preg; else if(t==="lact") w.lact=!w.lact;
-  else if(t==="prob") w.prob=v;
+  const b=e.target.closest("[data-k]"); if(!b) return; const k=b.dataset.k, [t,v]=k.split(":"); const st=w.step;
+  if(k==="reset"){ Object.assign(w,{step:1,g:null,band:null,more:false,plDone:false,who:"woman",age:4,preg:false,lact:false,prob:null}); w.conds.clear(); w.meds.clear(); w.alg.clear(); w.orig.clear(); }
+  else if(t==="step") w.step=+v;
+  else if(t==="g"){ if(w.g!==v){ w.band=null; w.preg=w.lact=false; w.plDone=false; } w.g=v; w.step=2; }
+  else if(t==="band"){ w.band=+v; w.preg=w.lact=false; w.plDone=false; if(!(w.g==="f"&&w.band>=18)) w.step=w.band===0?4:3; }
+  else if(t==="pl"){ w.preg=v==="preg"; w.lact=v==="lact"; w.plDone=true; w.step=3; }
+  else if(t==="prob"){ w.prob=v; w.step=4; }
   else { const s={cond:w.conds,med:w.meds,alg:w.alg,orig:w.orig}[t]; s.has(v)?s.delete(v):s.add(v); }
   renderWizard();
-  const again=$("#wform").querySelector(`[data-k="${CSS.escape(k)}"]`); again&&again.focus({preventScroll:true});
-  if(t==="prob"){ wGo($("#wres")); wTrack(); }
-  else if((t==="g"||t==="band") && !wasReady && wReady()) wGo(w.band===0?$("#wres"):$("#wq2"));
-  else if(k==="reset") wGo($("#wq1"));
+  if(w.step!==st){ const top=$("#wizard"); top.scrollIntoView({behavior:"smooth",block:"start"}); const f=$("#wform .chip,#wform .wlink"); f&&f.focus({preventScroll:true}); if(t==="prob") wTrack(); }
+  else { const again=$("#wform").querySelector(`[data-k="${CSS.escape(k)}"]`); again&&again.focus({preventScroll:true}); }
 });
 /* ---------- Recettes de maman (partagées) ---------- */
 const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -4789,7 +4804,7 @@ $("#tabHome").onclick=()=>setView("home");
 $("#goHome").onclick=()=>setView("home");
 $("#tabWiz").onclick=()=>setView("wizard");
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-07",date:"7 novembre 2026",go:"wizard",items:[
+const NEWS={v:"2026-11-07b",date:"7 novembre 2026",go:"wizard",items:[
  "<b>Trouver un remède est plus simple :</b> choisissez le sexe et l'âge, puis le problème, et tous les remèdes adaptés s'affichent directement.",
  "Si vous avez une maladie chronique ou prenez des médicaments, ajoutez-les dans la partie facultative pour écarter les remèdes qui ne vous conviennent pas.",
  "Chaque recette et chaque plante a maintenant un bouton <b>Copier</b> et un bouton <b>Partager</b> pour l'envoyer à vos proches sur WhatsApp."
