@@ -3289,7 +3289,11 @@ function renderChips(){
   const el=$("#chips"); el.innerHTML="";
   const all=document.createElement("button"); all.className="chip"; all.textContent="All";
   all.setAttribute("aria-pressed", String(!state.cond)); all.onclick=()=>{state.cond=null;render()}; el.append(all);
+  /* Show only categories with herbs suited to the chosen group (and search, if any) */
+  const NOTFOR={men:["women","lactation","postpartum"],women:["men"],kids:["men","libido","lactation","postpartum","weight"]}[state.aud]||[];
+  const sc=state.cond; state.cond=null; const pool=HERBS.filter(matches); state.cond=sc;
   for(const [k,v] of Object.entries(CONDS)){
+    if(k!==state.cond && (NOTFOR.includes(k) || !pool.some(h=>h.c.includes(k)))) continue;
     const b=document.createElement("button"); b.className="chip"; b.textContent=v;
     b.setAttribute("aria-pressed", String(state.cond===k));
     b.onclick=()=>{state.cond = state.cond===k?null:k; render()}; el.append(b);
@@ -3299,7 +3303,7 @@ function renderAud(){
   const el=$("#aud"); el.innerHTML="";
   for(const [k,t,s] of AUDS){
     const b=document.createElement("button"); b.type="button"; b.setAttribute("aria-pressed",String(state.aud===k));
-    b.innerHTML=`${t}<small>${s}</small>`; b.onclick=()=>{state.aud=k; render()}; el.append(b);
+    b.innerHTML=`${t}<small>${s}</small>`; b.onclick=()=>{state.aud=k; state.cond=null; render()}; el.append(b);
   }
   $("#kidsNotice").hidden = state.aud!=="kids";
 }
