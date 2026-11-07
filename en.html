@@ -424,6 +424,16 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .fblist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
 .fblist li{border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-size:.9rem;display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}
 .fblist small{color:var(--muted);margin-inline-start:auto}
+#newsbox{position:fixed;inset:0;z-index:40;background:rgba(20,30,18,.45);display:flex;align-items:center;justify-content:center;padding:16px}
+#newsbox[hidden]{display:none}
+#newsbox .nb{background:var(--sheet);color:var(--ink);border:1px solid var(--leaf);border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.3);max-width:440px;width:100%;padding:18px 18px 14px;max-height:85vh;overflow:auto}
+#newsbox h3{margin:0 0 4px;color:var(--leaf);font-size:1.15rem}
+#newsbox .nd{margin:0 0 10px;font-size:.8rem;color:var(--muted)}
+#newsbox ul{margin:0 0 14px;padding-inline-start:20px;display:flex;flex-direction:column;gap:8px;line-height:1.7}
+#newsbox .nbtns{display:flex;gap:8px;flex-wrap:wrap}
+#newsbox .nbtns button{font:inherit;padding:8px 16px;border-radius:999px;cursor:pointer;border:1px solid var(--leaf)}
+#newsbox .ngo{background:var(--leaf);color:#fff}
+#newsbox .nok{background:transparent;color:var(--leaf)}
 </style>
 
 <div class="wrap" dir="ltr" lang="en">
@@ -4766,6 +4776,30 @@ $("#scrim").onclick=closePanel;
 $("#tabHome").onclick=()=>setView("home");
 $("#goHome").onclick=()=>setView("home");
 $("#tabWiz").onclick=()=>setView("wizard");
+/* ---------- What's new: shown once to returning visitors after each update ---------- */
+const NEWS={v:"2026-11-07",date:"7 November 2026",go:"wizard",items:[
+ "<b>Finding a remedy is now easier:</b> choose sex and age, then the problem, and all the suitable remedies appear straight away.",
+ "If you have a chronic illness or take medicines, add them in the optional section to rule out remedies that don't suit you.",
+ "Every recipe and every herb now has a <b>Copy</b> button and a <b>Share</b> button, to send it to your family on WhatsApp."
+]};
+(function(){
+  const K="maryam-news-seen"; let seen=null, returning=false;
+  try{ seen=localStorage.getItem(K); returning=!!(localStorage.getItem("herb-favs")||localStorage.getItem("home-kit-v1")||localStorage.getItem("maryam-install-later")); }catch(e){ return; }
+  if(seen===NEWS.v) return;
+  returning=returning||!!seen||!!(navigator.serviceWorker&&navigator.serviceWorker.controller);
+  const mark=()=>{ try{ localStorage.setItem(K,NEWS.v); }catch(e){} };
+  if(!returning || /^#[rh]=/.test(location.hash)){ mark(); return; }
+  const box=document.createElement("div"); box.id="newsbox"; box.hidden=true; box.setAttribute("role","dialog"); box.setAttribute("aria-modal","true"); box.setAttribute("aria-labelledby","newsT");
+  box.innerHTML=`<div class="nb"><h3 id="newsT">New on the site</h3><p class="nd">Update of ${NEWS.date}</p><ul>${NEWS.items.map(x=>`<li>${x}</li>`).join("")}</ul><div class="nbtns">${NEWS.go?`<button type="button" class="ngo">Try it now</button>`:""}<button type="button" class="nok">OK</button></div></div>`;
+  document.body.appendChild(box);
+  const close=()=>{ mark(); box.hidden=true; window.maryamNewsOpen=false; };
+  box.querySelector(".nok").onclick=close;
+  const g=box.querySelector(".ngo"); if(g) g.onclick=()=>{ close(); setView(NEWS.go); scrollTo({top:0}); };
+  box.addEventListener("click",e=>{ if(e.target===box) close(); });
+  document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!box.hidden) close(); });
+  window.maryamNewsOpen=true;
+  setTimeout(()=>{ box.hidden=false; box.querySelector(".nok").focus({preventScroll:true}); },1200);
+})();
 $("#tabHerbs").onclick=()=>setView("herbs");
 $("#tabRecipes").onclick=()=>setView("recipes");
 $("#tabMom").onclick=()=>setView("mom");
@@ -4818,7 +4852,7 @@ initShared();
  var ua=navigator.userAgent, ios=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
  var iosSafari=ios&&/Safari/.test(ua)&&!/CriOS|FxiOS|EdgiOS|FBAN|FBAV|Instagram|Line[/]/.test(ua);
  var how=el.querySelector(".how"), go=el.querySelector(".go"), deferred=null;
- function show(){ el.hidden=false; requestAnimationFrame(function(){el.classList.add("on");}); }
+ function show(){ if(window.maryamNewsOpen){ setTimeout(show,1500); return; } el.hidden=false; requestAnimationFrame(function(){el.classList.add("on");}); }
  window.addEventListener("beforeinstallprompt",function(e){ e.preventDefault(); deferred=e; go.hidden=false; how.hidden=true; show(); });
  window.addEventListener("appinstalled",function(){ snooze(); });
  go.onclick=function(){ if(!deferred) return; deferred.prompt(); deferred.userChoice.then(function(c){ if(c&&c.outcome==="accepted") snooze(); deferred=null; go.hidden=true; }); };
