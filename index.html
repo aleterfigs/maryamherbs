@@ -279,6 +279,11 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(2.2rem,6vw,3.2re
 .rel-s.s-y{color:var(--mid)}.rel-s.s-y i{background:var(--mid)}
 .rel-s.s-r{color:var(--warn)}.rel-s.s-r i{background:var(--warn)}
 .rel-src{color:var(--muted)}
+.hg{display:inline-block;font-size:.74rem;font-weight:600;border-radius:999px;padding:1px 9px;margin-inline-end:6px;vertical-align:middle;border:1px solid currentColor}
+.hg-4,.hg-3{color:#2e7d4f;background:color-mix(in srgb,#2e7d4f 10%,var(--sheet))}
+.hg-2{color:#2f6f8f;background:color-mix(in srgb,#2f6f8f 10%,var(--sheet))}
+.hg-1{color:#b26a00;background:color-mix(in srgb,#b26a00 10%,var(--sheet))}
+.hg-0{color:#b3412e;background:color-mix(in srgb,#b3412e 10%,var(--sheet))}
 .rel ul{margin:8px 0 2px;padding-inline-start:18px}.rel li{margin-bottom:4px}
 .rel-n{color:var(--muted)}
 .rsort{display:flex;gap:8px;align-items:center;grid-column:1/-1;font-size:.88rem;color:var(--muted)}
@@ -386,6 +391,8 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .tile[data-go="mom"] .ticon{background:color-mix(in srgb,var(--clay) 18%,var(--sheet));color:var(--clay)}
 .mombtn.wabtn{background:#1f7a4d}
 .ract{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.tradnote{margin:8px 0 0;font-size:.8rem;line-height:1.7;color:var(--muted)}
+.tradnote .wlink{font-size:.8rem}
 .rbtn{font:inherit;font-size:.85rem;font-weight:600;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid var(--leaf);background:var(--sheet);color:var(--leaf);cursor:pointer}
 .rbtn svg{width:16px;height:16px}
 .panel .ract{margin-top:-4px}
@@ -1888,7 +1895,7 @@ RECIPES.push(
  X("البطيخ بالرطب","طعام صيفي مرطّب يجمع حلاوة الرطب وبرودة البطيخ.",["adults","kids"],["fatigue"],
   [["dates","3 رطبات"],[null,"شريحة بطيخ"]],
   ["تؤكل الرطبات مع البطيخ.","مناسب بعد الجهد في الحر."],
-  "لمريض السكري: كمية صغيرة.",K(NB,{minAge:4,ref:"كان ﷺ يأكل البطيخ بالرطب ويقول: «نكسر حرّ هذا ببرد هذا، وبرد هذا بحرّ هذا» (رواه أبو داود والترمذي)."})),
+  "لمريض السكري: كمية صغيرة.",K(NB,{minAge:4,ref:"كان ﷺ يأكل البطيخ بالرطب ويقول: «نكسر حرّ هذا ببرد هذا، وبرد هذا بحرّ هذا» (رواه أبو داود والترمذي، وصحّحه الألباني)."})),
  X("القثّاء بالرطب","الخيار مع الرطب، وجبة خفيفة مرطّبة.",["adults","kids"],["fatigue","digest"],
   [["dates","3 رطبات"],[null,"خيارة صغيرة"]],
   ["قطّع الخيار.","يؤكل مع الرطب."],
@@ -3289,6 +3296,26 @@ const P2C={digest:["digest"],cold:["cold"],throat:["mouth","cold"],sleep:["sleep
 const SUPERVISE=new Set(["senna","licorice","wormwood","pennyroyal","harmal","colocynth","stjohns","valerian","codliver","ivy"]);
 const EVN={s:3,m:2,l:1,x:0};
 const REL_EV=[["تراثي","l"],["محدود","l"],["متوسط","m"],["قوي نسبيًا","s"]];
+/* درجة الحديث: تُستخرج من نص المرجع نفسه */
+const HGTXT=["حديث ضعيف","مختلف في صحته","حديث حسن","حديث صحيح","آية من القرآن"];
+function hgOf(t){
+  if(!t) return null;
+  if(/﴿/.test(t)) return 4;
+  let g=null; const up=v=>{ if(g===null||v>g) g=v; };
+  const cites=t.match(/\(([^()]*)\)/g)||[];
+  for(const c of cites){
+    if(/مرسل|ضعيف|ضعّف|لا يصح/.test(c)) up(0); /*HGRX*/
+    else if(/اختلف|توقّف|خلاف/.test(c)) up(/حسّنه|صحّحه/.test(c)?1:1); /*HGRX*/
+    else if(/تعليقًا|بعض المحدّثين/.test(c)) up(2); /*HGRX*/
+    else if(/متفق عليه|رواه البخاري|رواه مسلم|صحّحه|حسن صحيح|صحيح/.test(c)) up(3); /*HGRX*/
+    else if(/حسّنه|حسن/.test(c)) up(2); /*HGRX*/
+  }
+  if(g===null && /لا يصح|ضعيف|ضعف/.test(t)) g=0; /*HGRX*/
+  return g;
+}
+const HG_PRE={};
+const hgFor=(k,t)=> k in HG_PRE ? HG_PRE[k] : hgOf(t);
+const hgBadge=(t,k)=>{ const g=hgFor(k,t); return g===null?"":`<span class="hg hg-${g}">${HGTXT[g]}</span>`; };
 function relOf(r){
   if(r._rel) return r._rel;
   const ids=[...new Set(r.ing.map(i=>i[0]).filter(Boolean))].filter(id=>byId[id]);
@@ -3305,9 +3332,11 @@ function relOf(r){
   if(r.sup){ safe="r"; why=r.sup; }
   else if(sup.length){ safe="r"; why=sup.map(id=>byId[id].ar.split(" (")[0]).join("، "); }
   else if(!r.topical && ids.some(id=>exAll.has(id))){ safe="y"; why=ids.filter(id=>exAll.has(id)).map(id=>byId[id].ar.split(" (")[0]).join("، "); }
-  const src = r.o==="nabawi" ? (r.ref?"حديث أو أثر":"الطب النبوي") : (r.o==="islamic"||r.o==="andalus") ? "كتب الطب التراثي" : r.o==="home" ? "وصفة منزلية حديثة" : "عادة شعبية متوارثة";
+  const _hg=r.ref?hgFor("r:"+r.name,r.ref):null;
+  const src = r.o==="nabawi" ? (r.ref?(_hg!==null?HGTXT[_hg]:"حديث أو أثر"):"الطب النبوي") : (r.o==="islamic"||r.o==="andalus") ? "كتب الطب التراثي" : r.o==="home" ? "وصفة منزلية حديثة" : "عادة شعبية متوارثة";
   if(r.evN!=null){ best=r.evN; by=null; }
-  return r._rel={ev:best, by, safe, why, src, score:best*10+({g:3,y:2,r:0})[safe]};
+  const hg=_hg;
+  return r._rel={ev:best, by, safe, why, src, hg, score:best*10+({g:3,y:2,r:0})[safe]};
 }
 const EVTXT=["تراثي بلا دراسات","دليل محدود","دليل متوسط","دليل قوي نسبيًا"];
 const SAFETXT={g:"آمنة لمعظم الناس",y:"تحتاج حذرًا لبعض الفئات",r:"للاستعمال القصير أو بإشراف"};
@@ -3319,7 +3348,7 @@ function relBox(r){
    <ul><li><b>الدليل:</b> ${evWhy}.</li><li><b>السلامة:</b> ${sWhy}.</li><li><b>المصدر:</b> ${x.src}.</li><li class="rel-n">تقييم تقديري لمكوّنات الخلطة، فالخلطة نفسها لم تُختبر كتركيبة غالبًا. <button type="button" class="herb-link rel-more">كيف يُحسب؟</button></li></ul></details>`;
 }
 
-const refBox = r => r.ref ? `<div class="refq">${r.ref}</div>` : "";
+const refBox = r => r.ref ? `<div class="refq">${hgBadge(r.ref,"r:"+r.name)}${r.ref}</div>` : "";
 /* كم ومتى؟ */
 const DOSE = {
  "منقوع السنا لليلة واحدة":"مرة واحدة قبل النوم، لا أكثر من 3–5 أيام متتالية، ولا أكثر من أسبوع أبدًا.",
@@ -3549,7 +3578,7 @@ function renderRecipes(){
   const rText=r=>norm([r.name,r.for,...r.ing.map(i=>(i[0]?byId[i[0]].ar:"")+" "+i[1])].join(" "));
   let list=RECIPES.filter(r=>state.origin==="all"||r.o===state.origin).filter(r=>state.aud==="all"||r.a.includes(state.aud)).filter(r=>!q||qMatch(q,rText(r),c=>(r.p||[]).some(k=>k===c||(C2P[c]||[]).includes(k))));
   if(q&&!list.length) list=RECIPES.filter(r=>state.origin==="all"||r.o===state.origin).filter(r=>state.aud==="all"||r.a.includes(state.aud)).filter(r=>qMatch(q,rText(r),c=>r.ing.some(i=>i[0]&&byId[i[0]].c.includes(c))));
-  if(state.rsort!=="orig") list=list.map((r,i)=>[r,i]).sort((a,b)=>relOf(b[0]).score-relOf(a[0]).score||a[1]-b[1]).map(x=>x[0]);
+  if(state.rsort!=="orig") list=list.map((r,i)=>[r,i]).sort((a,b)=>(state.origin==="nabawi"?((relOf(b[0]).hg??-1)-(relOf(a[0]).hg??-1)):0)||relOf(b[0]).score-relOf(a[0]).score||a[1]-b[1]).map(x=>x[0]);
   const so=document.createElement("label"); so.className="rsort"; so.innerHTML=`ترتيب الخلطات: <select><option value="rel">الأوثق أولًا</option><option value="orig">حسب المصدر</option></select>`;
   const sel=so.querySelector("select"); sel.value=state.rsort==="orig"?"orig":"rel"; sel.onchange=()=>{state.rsort=sel.value; render();}; el.append(so);
   $("#count").textContent=`${list.length.toLocaleString("ar-EG")} من ${RECIPES.length.toLocaleString("ar-EG")} خلطة`;
@@ -4945,12 +4974,13 @@ const nst={sym:null};
 const SITE_URL="https://maryamherbs.com/";
 const IC_COPY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>';
 const IC_SHARE='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>';
-const ractBox=r=>`<div class="ract"><button type="button" class="rbtn" data-rcopy="${esc(r.name)}">${IC_COPY}<span>نسخ الوصفة</span></button><button type="button" class="rbtn" data-rshare="${esc(r.name)}">${IC_SHARE}<span>مشاركة</span></button></div>`;
+const TRAD_NOTE="من الطب التقليدي، وأغلب وصفاته لم تُختبر بدراسات كبيرة. اختر مكوّنات عضوية أو بلدية نظيفة من مصدر موثوق ما استطعت، وإن لم تتحسّن فراجع الطبيب.";
+const ractBox=r=>`<p class="tradnote">🌿 ${TRAD_NOTE} <button type="button" class="wlink" data-goorg="1">ازرع أعشابك عضويًا</button></p><div class="ract"><button type="button" class="rbtn" data-rcopy="${esc(r.name)}">${IC_COPY}<span>نسخ الوصفة</span></button><button type="button" class="rbtn" data-rshare="${esc(r.name)}">${IC_SHARE}<span>مشاركة</span></button></div>`;
 const recipeLink=r=>SITE_URL+"#r="+encodeURIComponent(r.name);
 function recipeText(r){
   const ing=r.ing.map(([id,t])=>"• "+(id?byId[id].ar.split(" (")[0]+": ":"")+t).join("\n");
   const st=r.steps.map((x,i)=>(i+1)+". "+x).join("\n");
-  return ["*"+r.name+"*", r.for, "", "*المكوّنات* ("+(r.yield||"لكوب واحد")+"):", ing, "", "*الطريقة:*", st, "", "*الكمية والمدة:* "+doseOf(r), "*تنبيه:* "+r.note, "", "من دليل «مريم» للأعشاب:", recipeLink(r)].join("\n");
+  return ["*"+r.name+"*", r.for, "", "*المكوّنات* ("+(r.yield||"لكوب واحد")+"):", ing, "", "*الطريقة:*", st, "", "*الكمية والمدة:* "+doseOf(r), "*تنبيه:* "+r.note, "", "🌿 "+TRAD_NOTE, "", "من دليل «مريم» للأعشاب:", recipeLink(r)].join("\n");
 }
 const herbLink=h=>SITE_URL+"#h="+h.id;
 function herbText(h){
@@ -4959,6 +4989,7 @@ function herbText(h){
 }
 function flashBtn(b,txt){ const sp=b.querySelector("span"), old=sp.textContent; sp.textContent=txt; b.classList.add("done"); setTimeout(()=>{sp.textContent=old; b.classList.remove("done");},2000); }
 async function copyText(t){ try{ await navigator.clipboard.writeText(t); return true; }catch(e){ try{ const ta=document.createElement("textarea"); ta.value=t; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.opacity="0"; document.body.append(ta); ta.select(); const ok=document.execCommand("copy"); ta.remove(); return ok; }catch(_){ return false; } } }
+document.addEventListener("click",e=>{ const g=e.target.closest("[data-goorg]"); if(g){ if(typeof ost!=="undefined") ost.id=null; setView("organic"); window.scrollTo({top:0}); } });
 document.addEventListener("click",async e=>{
   const c=e.target.closest("[data-rcopy],[data-hcopy]"), sh=e.target.closest("[data-rshare],[data-hshare]"); if(!c&&!sh) return;
   const el=c||sh, hid=el.dataset.hcopy||el.dataset.hshare;
@@ -5257,7 +5288,7 @@ function openPanel(h){
     <dl class="facts">${ALIAS[h.id]?`<dt>أسماء أخرى</dt><dd>${ALIAS[h.id].alt.join("، ")} · <span dir="ltr">${ALIAS[h.id].en}</span></dd>`:""}<dt>الجزء المستخدم</dt><dd>${h.part}</dd><dt>قوة الدليل</dt><dd><span class="ev ${h.ev}">${EV[h.ev]}</span></dd>
     <dt>للأطفال</dt><dd>${KIDS[h.id]||"لا يُنصح بها للأطفال إلا بوصف من الطبيب."}</dd></dl>
     <div class="tags">${h.c.map(c=>`<span class="tag">${CONDS[c]}</span>`).join("")}</div>
-    ${(h.ref||HREF[h.id])?`<section class="ref"><h3>في التراث الإسلامي</h3><p>${h.ref||HREF[h.id]}</p></section>`:""}
+    ${(h.ref||HREF[h.id])?`<section class="ref"><h3>في التراث الإسلامي</h3><p>${hgBadge(h.ref||HREF[h.id],"h:"+h.id)}${h.ref||HREF[h.id]}</p></section>`:""}
     ${h.guide?`<section class="guide"><h3>الدليل الموسّع</h3>${h.guide.map((s,i)=>`<details ${i===0?"open":""}><summary>${s.t}</summary><div>${s.h}</div></details>`).join("")}</section>`:""}
     <section><h3>الاستخدامات الشائعة</h3><ul>${h.uses.map(u=>`<li>${u}</li>`).join("")}</ul></section>
     <section><h3>طريقة التحضير المعتادة</h3><p style="margin:0">${h.prep}</p></section>
@@ -5288,9 +5319,11 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
-const NEWS={v:"2026-11-07j",date:"7 نوفمبر 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07k",date:"7 نوفمبر 2026",go:"folk",items:[
  "<b>باب جديد: عادات شعبية، ما يصح وما يضر.</b> تمليح المولود، والكحل، والتبخير، والتحنيك، والكيّ، والمجبّر، وعادات الأربعين، والماء والأعشاب للرضيع، وغيرها، مع البديل الآمن لكل عادة.",
  "<b>باب «من الحيوان»:</b> البيض والدجاج واللحوم والكبدة والسمن وحليب البقر والإبل، ثم إلية الشاة، والزبادي واللبن، والأقط، وحليب الماعز، ومنتجات النحل، والجراد، ودهن الضبّ وزيت النعام.",
+ "<b>الطب النبوي:</b> صار يظهر بجانب كل حديث درجته (صحيح، حسن، مختلف فيه، ضعيف)، وتُرتّب الوصفات النبوية من الأصحّ سندًا.",
+ "على كل وصفة تنبيه بأنها من الطب التقليدي، مع الحث على اختيار مكوّنات عضوية أو بلدية نظيفة.",
  "<b>الغذاء والفيتامينات:</b> بطاقة جديدة للبروتين، وروابط مباشرة من مصادر كل فيتامين إلى صفحات البيض والكبدة واللحوم والألبان.",
  "وصفات جديدة: الشنينة بالنعناع، ومرق الحمام للنفساء، ومرق العظام، والهريس، والبيض المسلوق للأطفال.",
  "<b>باب الزراعة العضوية</b> مع تقويم زراعي لخمس مناطق عربية."

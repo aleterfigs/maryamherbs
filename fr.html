@@ -280,6 +280,11 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(2.2rem,6vw,3.2re
 .rel-s.s-y{color:var(--mid)}.rel-s.s-y i{background:var(--mid)}
 .rel-s.s-r{color:var(--warn)}.rel-s.s-r i{background:var(--warn)}
 .rel-src{color:var(--muted)}
+.hg{display:inline-block;font-size:.74rem;font-weight:600;border-radius:999px;padding:1px 9px;margin-inline-end:6px;vertical-align:middle;border:1px solid currentColor}
+.hg-4,.hg-3{color:#2e7d4f;background:color-mix(in srgb,#2e7d4f 10%,var(--sheet))}
+.hg-2{color:#2f6f8f;background:color-mix(in srgb,#2f6f8f 10%,var(--sheet))}
+.hg-1{color:#b26a00;background:color-mix(in srgb,#b26a00 10%,var(--sheet))}
+.hg-0{color:#b3412e;background:color-mix(in srgb,#b3412e 10%,var(--sheet))}
 .rel ul{margin:8px 0 2px;padding-inline-start:18px}.rel li{margin-bottom:4px}
 .rel-n{color:var(--muted)}
 .rsort{display:flex;gap:8px;align-items:center;grid-column:1/-1;font-size:.88rem;color:var(--muted)}
@@ -387,6 +392,8 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .tile[data-go="mom"] .ticon{background:color-mix(in srgb,var(--clay) 18%,var(--sheet));color:var(--clay)}
 .mombtn.wabtn{background:#1f7a4d}
 .ract{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.tradnote{margin:8px 0 0;font-size:.8rem;line-height:1.7;color:var(--muted)}
+.tradnote .wlink{font-size:.8rem}
 .rbtn{font:inherit;font-size:.85rem;font-weight:600;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid var(--leaf);background:var(--sheet);color:var(--leaf);cursor:pointer}
 .rbtn svg{width:16px;height:16px}
 .panel .ract{margin-top:-4px}
@@ -1889,7 +1896,7 @@ RECIPES.push(
  X("Pastèque et dattes fraîches","Un aliment d'été hydratant qui associe la douceur des dattes à la fraîcheur de la pastèque.",["adults","kids"],["fatigue"],
   [["dates","3 Dattes fraîches"],[null,"Une tranche de pastèque"]],
   ["Manger les dattes avec la pastèque.","Bon après un effort dans la chaleur."],
-  "Pour les diabétiques : une petite quantité.",K(NB,{minAge:4,ref:"Le Prophète ﷺ mangeait de la pastèque avec des dattes fraîches et disait : « Nous brisons la chaleur de l'une par la fraîcheur de l'autre, et la fraîcheur de l'une par la chaleur de l'autre » (Abu Dawud et Tirmidhi)."})),
+  "Pour les diabétiques : une petite quantité.",K(NB,{minAge:4,ref:"Il ﷺ mangeait la pastèque avec des dattes fraîches et disait : «Nous corrigeons la chaleur de ceci par la fraîcheur de cela, et la fraîcheur de cela par la chaleur de ceci» (Abou Daoud et Tirmidhi, jugé authentique par al-Albani)."})),
  X("Concombre et dattes fraîches","Du concombre avec des dattes fraîches, un en-cas léger et hydratant.",["adults","kids"],["fatigue","digest"],
   [["dates","3 Dattes fraîches"],[null,"Un petit concombre"]],
   ["Couper le concombre en tranches.","Le manger avec les dattes fraîches."],
@@ -3290,6 +3297,26 @@ const P2C={digest:["digest"],cold:["cold"],throat:["mouth","cold"],sleep:["sleep
 const SUPERVISE=new Set(["senna","licorice","wormwood","pennyroyal","harmal","colocynth","stjohns","valerian","codliver","ivy"]);
 const EVN={s:3,m:2,l:1,x:0};
 const REL_EV=[["Traditionnel","l"],["Limité","l"],["Modéré","m"],["Plutôt solide","s"]];
+/* Degré du hadith : tiré du texte de la référence */
+const HGTXT=["Hadith faible","Authenticité discutée","Hadith bon (hasan)","Hadith authentique (sahih)","Verset du Coran"];
+function hgOf(t){
+  if(!t) return null;
+  if(/﴿/.test(t)) return 4;
+  let g=null; const up=v=>{ if(g===null||v>g) g=v; };
+  const cites=t.match(/\(([^()]*)\)/g)||[];
+  for(const c of cites){
+    if(/مرسل|ضعيف|ضعّف|لا يصح/.test(c)) up(0); /*HGRX*/
+    else if(/اختلف|توقّف|خلاف/.test(c)) up(/حسّنه|صحّحه/.test(c)?1:1); /*HGRX*/
+    else if(/تعليقًا|بعض المحدّثين/.test(c)) up(2); /*HGRX*/
+    else if(/متفق عليه|رواه البخاري|رواه مسلم|صحّحه|حسن صحيح|صحيح/.test(c)) up(3); /*HGRX*/
+    else if(/حسّنه|حسن/.test(c)) up(2); /*HGRX*/
+  }
+  if(g===null && /لا يصح|ضعيف|ضعف/.test(t)) g=0; /*HGRX*/
+  return g;
+}
+const HG_PRE={"r:Talbina": 3, "r:Miel dans de l'eau tiède à jeun": 3, "r:Nigelle au miel": 3, "r:Sept dattes ajwa le matin": 3, "r:Rompre le jeûne avec des dattes fraîches et de l'eau": 2, "r:L'huile d'olive à manger et à oindre": 3, "r:Siwak": 2, "r:Vinaigre à l'huile (« le meilleur condiment »)": 3, "r:Pastèque et dattes fraîches": 3, "r:Concombre et dattes fraîches": 3, "r:Courge cuite (dubba')": 3, "r:Gingembre au miel": 4, "r:Henné pour les pieds gercés": 2, "r:Jus de grenade frais": 4, "r:Cresson alénois au lait pour les jeunes mères": 0, "r:Huile de nigelle au miel": 3, "r:Six dattes le dernier mois de grossesse": 4, "r:Henné et katam pour couvrir les cheveux blancs": 3, "r:Se laver à l'eau et au sidr": 3, "r:Truffes à l'oignon": 3, "r:Tharid": 3, "r:Dattes au beurre": 3, "r:Un verre de lait avec l'invocation": 2, "r:Boire l'eau de Zamzam": 3, "r:Rafraîchir la fièvre avec de l'eau": 3, "r:La règle des tiers pour manger": 3, "r:Bonnes manières pour boire l'eau": 3, "r:La hijama (ventouses) : ce qu'il faut savoir": 3, "h:ginger": 4, "h:nigella": 3, "h:fenugreek": 0, "h:senna": 2, "h:pumpkin": 3, "h:honey": 4, "h:dates": 4, "h:barley": 3, "h:olive": 3, "h:miswak": 2, "h:costus": 3, "h:sidr": 4, "h:pomegranate": 4, "h:basil": 3, "h:henna": 3, "h:gardencress": 0, "h:violet": null, "h:myrtle": null, "h:truffle": 3, "h:ithmid": 2, "h:milk": 2, "h:zamzam": 3, "h:tailfat": 3, "h:aqit": 3, "h:locust": 3, "h:mutton": 3, "h:camel": 3, "h:camelmilk": 3, "h:ghee": 0, "h:fig": 4, "h:palmpollen": 3, "h:fishoil": 4, "h:seasalt": 3, "h:ambergris": null, "h:pearlcoral": 4};
+const hgFor=(k,t)=> k in HG_PRE ? HG_PRE[k] : hgOf(t);
+const hgBadge=(t,k)=>{ const g=hgFor(k,t); return g===null?"":`<span class="hg hg-${g}">${HGTXT[g]}</span>`; };
 function relOf(r){
   if(r._rel) return r._rel;
   const ids=[...new Set(r.ing.map(i=>i[0]).filter(Boolean))].filter(id=>byId[id]);
@@ -3306,9 +3333,11 @@ function relOf(r){
   if(r.sup){ safe="r"; why=r.sup; }
   else if(sup.length){ safe="r"; why=sup.map(id=>byId[id].ar.split(" (")[0]).join(", "); }
   else if(!r.topical && ids.some(id=>exAll.has(id))){ safe="y"; why=ids.filter(id=>exAll.has(id)).map(id=>byId[id].ar.split(" (")[0]).join(", "); }
-  const src = r.o==="nabawi" ? (r.ref?"Hadith ou récit":"Médecine prophétique") : (r.o==="islamic"||r.o==="andalus") ? "Livres de médecine classiques" : r.o==="home" ? "Recette maison moderne" : "Coutume populaire héritée";
+  const _hg=r.ref?hgFor("r:"+r.name,r.ref):null;
+  const src = r.o==="nabawi" ? (r.ref?(_hg!==null?HGTXT[_hg]:"Hadith ou récit"):"Médecine prophétique") : (r.o==="islamic"||r.o==="andalus") ? "Livres de médecine classiques" : r.o==="home" ? "Recette maison moderne" : "Coutume populaire héritée";
   if(r.evN!=null){ best=r.evN; by=null; }
-  return r._rel={ev:best, by, safe, why, src, score:best*10+({g:3,y:2,r:0})[safe]};
+  const hg=_hg;
+  return r._rel={ev:best, by, safe, why, src, hg, score:best*10+({g:3,y:2,r:0})[safe]};
 }
 const EVTXT=["Traditionnel, sans études","Preuves limitées","Preuves modérées","Preuves plutôt solides"];
 const SAFETXT={g:"Sûr pour la plupart des gens",y:"Demande de la prudence pour certains groupes",r:"Usage court ou sous surveillance"};
@@ -3320,7 +3349,7 @@ function relBox(r){
    <ul><li><b>Preuves :</b> ${evWhy}.</li><li><b>Sécurité :</b> ${sWhy}.</li><li><b>Source :</b> ${x.src}.</li><li class="rel-n">Une évaluation estimée à partir des ingrédients du mélange, car le mélange lui-même n'a généralement pas été testé en tant que combinaison. <button type="button" class="herb-link rel-more">Comment est-ce calculé ?</button></li></ul></details>`;
 }
 
-const refBox = r => r.ref ? `<div class="refq">${r.ref}</div>` : "";
+const refBox = r => r.ref ? `<div class="refq">${hgBadge(r.ref,"r:"+r.name)}${r.ref}</div>` : "";
 /* Combien et quand ? */
 const DOSE = {
  "Infusion de séné d'une nuit":"Une fois au coucher ; pas plus de 3 à 5 jours de suite, et jamais plus d'une semaine.",
@@ -3551,7 +3580,7 @@ function renderRecipes(){
   const rText=r=>norm([r.name,r.for,...r.ing.map(i=>(i[0]?byId[i[0]].ar:"")+" "+i[1])].join(" "));
   let list=RECIPES.filter(r=>state.origin==="all"||r.o===state.origin).filter(r=>state.aud==="all"||r.a.includes(state.aud)).filter(r=>!q||qMatch(q,rText(r),c=>(r.p||[]).some(k=>k===c||(C2P[c]||[]).includes(k))));
   if(q&&!list.length) list=RECIPES.filter(r=>state.origin==="all"||r.o===state.origin).filter(r=>state.aud==="all"||r.a.includes(state.aud)).filter(r=>qMatch(q,rText(r),c=>r.ing.some(i=>i[0]&&byId[i[0]].c.includes(c))));
-  if(state.rsort!=="orig") list=list.map((r,i)=>[r,i]).sort((a,b)=>relOf(b[0]).score-relOf(a[0]).score||a[1]-b[1]).map(x=>x[0]);
+  if(state.rsort!=="orig") list=list.map((r,i)=>[r,i]).sort((a,b)=>(state.origin==="nabawi"?((relOf(b[0]).hg??-1)-(relOf(a[0]).hg??-1)):0)||relOf(b[0]).score-relOf(a[0]).score||a[1]-b[1]).map(x=>x[0]);
   const so=document.createElement("label"); so.className="rsort"; so.innerHTML=`Trier les mélanges : <select><option value="rel">Les plus fiables d'abord</option><option value="orig">Par tradition</option></select>`;
   const sel=so.querySelector("select"); sel.value=state.rsort==="orig"?"orig":"rel"; sel.onchange=()=>{state.rsort=sel.value; render();}; el.append(so);
   $("#count").textContent=`${list.length.toLocaleString("fr-FR")} sur ${RECIPES.length.toLocaleString("fr-FR")} mélanges`;
@@ -4947,12 +4976,13 @@ const nst={sym:null};
 const SITE_URL="https://maryamherbs.com/fr.html";
 const IC_COPY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>';
 const IC_SHARE='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>';
-const ractBox=r=>`<div class="ract"><button type="button" class="rbtn" data-rcopy="${esc(r.name)}">${IC_COPY}<span>Copier la recette</span></button><button type="button" class="rbtn" data-rshare="${esc(r.name)}">${IC_SHARE}<span>Partager</span></button></div>`;
+const TRAD_NOTE="Issu de la médecine traditionnelle ; la plupart de ses recettes n'ont pas été testées dans de grandes études. Choisissez si possible des ingrédients bio ou locaux et propres, d'une source fiable, et si vous n'allez pas mieux, consultez un médecin.";
+const ractBox=r=>`<p class="tradnote">🌿 ${TRAD_NOTE} <button type="button" class="wlink" data-goorg="1">Cultivez vos plantes en bio</button></p><div class="ract"><button type="button" class="rbtn" data-rcopy="${esc(r.name)}">${IC_COPY}<span>Copier la recette</span></button><button type="button" class="rbtn" data-rshare="${esc(r.name)}">${IC_SHARE}<span>Partager</span></button></div>`;
 const recipeLink=r=>SITE_URL+"#r="+encodeURIComponent(r.name);
 function recipeText(r){
   const ing=r.ing.map(([id,t])=>"• "+(id?byId[id].ar.split(" (")[0]+": ":"")+t).join("\n");
   const st=r.steps.map((x,i)=>(i+1)+". "+x).join("\n");
-  return ["*"+r.name+"*", r.for, "", "*Ingrédients* ("+(r.yield||"Pour une tasse")+"):", ing, "", "*Préparation :*", st, "", "*Quantité et durée :* "+doseOf(r), "*Attention :* "+r.note, "", "Extrait du guide des plantes «Maryam» :", recipeLink(r)].join("\n");
+  return ["*"+r.name+"*", r.for, "", "*Ingrédients* ("+(r.yield||"Pour une tasse")+"):", ing, "", "*Préparation :*", st, "", "*Quantité et durée :* "+doseOf(r), "*Attention :* "+r.note, "", "🌿 "+TRAD_NOTE, "", "Extrait du guide des plantes «Maryam» :", recipeLink(r)].join("\n");
 }
 const herbLink=h=>SITE_URL+"#h="+h.id;
 function herbText(h){
@@ -4961,6 +4991,7 @@ function herbText(h){
 }
 function flashBtn(b,txt){ const sp=b.querySelector("span"), old=sp.textContent; sp.textContent=txt; b.classList.add("done"); setTimeout(()=>{sp.textContent=old; b.classList.remove("done");},2000); }
 async function copyText(t){ try{ await navigator.clipboard.writeText(t); return true; }catch(e){ try{ const ta=document.createElement("textarea"); ta.value=t; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.opacity="0"; document.body.append(ta); ta.select(); const ok=document.execCommand("copy"); ta.remove(); return ok; }catch(_){ return false; } } }
+document.addEventListener("click",e=>{ const g=e.target.closest("[data-goorg]"); if(g){ if(typeof ost!=="undefined") ost.id=null; setView("organic"); window.scrollTo({top:0}); } });
 document.addEventListener("click",async e=>{
   const c=e.target.closest("[data-rcopy],[data-hcopy]"), sh=e.target.closest("[data-rshare],[data-hshare]"); if(!c&&!sh) return;
   const el=c||sh, hid=el.dataset.hcopy||el.dataset.hshare;
@@ -5259,7 +5290,7 @@ function openPanel(h){
     <dl class="facts">${ALIAS[h.id]?`<dt>Autres noms</dt><dd>${ALIAS[h.id].alt.join(", ")} · <span dir="ltr">${ALIAS[h.id].en}</span></dd>`:""}<dt>Partie utilisée</dt><dd>${h.part}</dd><dt>Niveau de preuve</dt><dd><span class="ev ${h.ev}">${EV[h.ev]}</span></dd>
     <dt>Pour les enfants</dt><dd>${KIDS[h.id]||"Déconseillé aux enfants sauf prescription médicale."}</dd></dl>
     <div class="tags">${h.c.map(c=>`<span class="tag">${CONDS[c]}</span>`).join("")}</div>
-    ${(h.ref||HREF[h.id])?`<section class="ref"><h3>Dans le patrimoine islamique</h3><p>${h.ref||HREF[h.id]}</p></section>`:""}
+    ${(h.ref||HREF[h.id])?`<section class="ref"><h3>Dans le patrimoine islamique</h3><p>${hgBadge(h.ref||HREF[h.id],"h:"+h.id)}${h.ref||HREF[h.id]}</p></section>`:""}
     ${h.guide?`<section class="guide"><h3>Guide détaillé</h3>${h.guide.map((s,i)=>`<details ${i===0?"open":""}><summary>${s.t}</summary><div>${s.h}</div></details>`).join("")}</section>`:""}
     <section><h3>Usages courants</h3><ul>${h.uses.map(u=>`<li>${u}</li>`).join("")}</ul></section>
     <section><h3>Préparation habituelle</h3><p style="margin:0">${h.prep}</p></section>
@@ -5290,9 +5321,11 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-07j",date:"7 novembre 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07k",date:"7 novembre 2026",go:"folk",items:[
  "<b>Nouvelle rubrique : coutumes populaires, ce qui est juste et ce qui nuit.</b> Saler le nouveau-né, le khôl, l'encens, le tahnik, la cautérisation, les rebouteux, les quarante jours, l'eau et les plantes pour le nourrisson et d'autres, avec l'alternative sûre pour chaque coutume.",
  "<b>La rubrique «D'origine animale» :</b> œufs, poulet, viandes, foie, smen, lait de vache et de chamelle, puis graisse de queue de mouton, yaourt et lben, aqit, lait de chèvre, produits de la ruche, criquets, graisse de dhub et huile d'autruche.",
+ "<b>Médecine prophétique :</b> chaque hadith affiche désormais son degré (authentique, bon, discuté, faible), et les recettes prophétiques sont classées de la plus authentique à la moins sûre.",
+ "Chaque recette indique désormais qu'elle relève de la médecine traditionnelle, en invitant à choisir des ingrédients bio ou locaux et propres.",
  "<b>Alimentation et vitamines :</b> une nouvelle fiche sur les protéines, et des liens directs depuis les sources de chaque vitamine vers les pages œufs, foie, viandes et laits.",
  "Nouvelles recettes : shneena à la menthe, bouillon de pigeon après l'accouchement, bouillon d'os, harees et œuf dur pour les enfants.",
  "<b>La rubrique agriculture biologique</b> avec un calendrier de plantation pour cinq régions arabes."
