@@ -430,6 +430,10 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .fblist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
 .fblist li{border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-size:.9rem;display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}
 .fblist small{color:var(--muted);margin-inline-start:auto}
+#totop{position:fixed;inset-inline-end:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:25;width:48px;height:48px;border-radius:50%;border:0;background:var(--leaf);color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .25s,transform .25s}
+#totop.on{opacity:.92;transform:none;pointer-events:auto}
+#totop:focus-visible{outline:3px solid var(--clay);outline-offset:2px}
+@media print{#totop{display:none}}
 #newsbox{position:fixed;inset:0;z-index:40;background:rgba(20,30,18,.45);display:flex;align-items:center;justify-content:center;padding:16px}
 #newsbox[hidden]{display:none}
 #newsbox .nb{background:var(--sheet);color:var(--ink);border:1px solid var(--leaf);border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.3);max-width:440px;width:100%;padding:18px 18px 14px;max-height:85vh;overflow:auto}
@@ -4823,6 +4827,15 @@ $("#scrim").onclick=closePanel;
 $("#tabHome").onclick=()=>setView("home");
 $("#goHome").onclick=()=>setView("home");
 $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:null,step:1}); setView("wizard"); };
+/* ---------- Bouton retour en haut ---------- */
+(function(){
+  const b=document.createElement("button"); b.type="button"; b.id="totop"; b.setAttribute("aria-label","Retour en haut"); b.title="Retour en haut";
+  b.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+  b.onclick=()=>{ const r=matchMedia("(prefers-reduced-motion: reduce)").matches; scrollTo({top:0,behavior:r?"auto":"smooth"}); };
+  document.body.appendChild(b);
+  let t=0; const upd=()=>{ t=0; b.classList.toggle("on", scrollY>600); };
+  addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
+})();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
 const NEWS={v:"2026-11-07d",date:"7 novembre 2026",go:"wizard",items:[
  "<b>Trouver un remède est plus simple :</b> choisissez le sexe et l'âge, puis le problème, et tous les remèdes adaptés s'affichent directement.",
