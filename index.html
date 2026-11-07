@@ -384,9 +384,16 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .panel .ract{margin-top:-4px}
 .rbtn:hover{background:var(--leaf-soft)}
 .rbtn.done{background:var(--leaf);color:var(--sheet)}
-#wres,#wform{scroll-margin-top:12px}
+#wres,#wform,#wq1,#wq2,#wmore{scroll-margin-top:12px}
+.q.off h3{opacity:.55}
+.wmore{border:1px solid var(--line);border-radius:6px;padding:10px 12px;background:var(--paper)}
+.wmore summary{cursor:pointer;font-weight:600;font-size:.92rem;color:var(--leaf)}
+.wmore-in{display:flex;flex-direction:column;gap:18px;margin-top:14px}
+.wsum{margin:0;font-size:.9rem;color:var(--muted)}
+.wsum b{color:var(--ink)}
 .wback{display:none;align-self:flex-start;font:inherit;font-size:.85rem;background:none;border:0;color:var(--leaf);text-decoration:underline;cursor:pointer;padding:0}
 @media (max-width:780px){.wback{display:inline}}
+.wback.wmorebtn{display:inline;text-align:start}
 .momform{background:var(--sheet);border:1px solid var(--clay);border-radius:8px;padding:18px;display:flex;flex-direction:column;gap:6px;max-width:720px}
 .momform h3{font-family:var(--f-display);color:var(--clay);font-size:1.5rem;margin:0 0 4px}
 .momform label{font-size:.85rem;font-weight:600;color:var(--ink);margin-top:6px}
@@ -3582,28 +3589,40 @@ const RED={
  hair:["تساقط مفاجئ أو على شكل بقع","حكّة شديدة مع قشور سميكة أو التهاب","تساقط مع تعب وتغيّر في الوزن (قد يكون من الغدة)"],
  meno:["نزف بعد انقطاع الدورة لمدة سنة","خفقان شديد أو ألم صدر","هبّات شديدة تعيق النوم والحياة: هناك علاجات فعّالة لدى الطبيبة"]
 };
-const w={sex:"girl",who:"woman",age:4,preg:false,lact:false,prob:"digest",conds:new Set(),meds:new Set(),alg:new Set(),orig:new Set()};
+const BANDS=[...AGES,[18,"18–39 سنة"],[40,"40–59 سنة"],[60,"60 سنة فأكثر"]];
+const w={g:null,band:null,more:false,sex:"girl",who:"woman",age:4,preg:false,lact:false,prob:null,conds:new Set(),meds:new Set(),alg:new Set(),orig:new Set()};
 function chip(key,label,on,multi){return `<button type="button" class="chip" data-k="${key}" aria-pressed="${on}" ${multi?"":'role="radio" aria-checked="'+on+'"'}>${label}</button>`;}
 function probsFor(){
   const kidSmall=w.who==="kid"&&w.age<12;
   const teenGirl=w.who==="kid"&&w.age>=12&&w.sex==="girl";
   return PROBS.filter(([k,,r])=>!r || (r==="adult"&&!kidSmall) || (r==="adult18"&&w.who!=="kid") || (r==="woman"&&(w.who==="woman"||teenGirl)) || (r==="man"&&w.who==="man"));
 }
+function wReady(){ return !!w.g && w.band!=null; }
+function wSync(){ if(w.band==null) return; if(w.band<18){ w.who="kid"; w.age=w.band; w.sex=w.g==="m"?"boy":"girl"; } else { w.who=w.g==="m"?"man":"woman"; w.age=w.band; } if(w.who!=="woman"){ w.preg=false; w.lact=false; } }
 function renderWForm(){
-  const kid=w.who==="kid", kidSmall=kid&&w.age<12;
-  if(!probsFor().some(p=>p[0]===w.prob)) w.prob=null;
-  let h=`<div class="q"><h3><span class="n">١</span>لمن الخلطة؟</h3><div class="opts" role="radiogroup">${[["kid","طفل"],["woman","امرأة"],["man","رجل"]].map(([k,t])=>chip("who:"+k,t,w.who===k)).join("")}</div>`;
-  if(kid) h+=`<div class="sub-q"><p class="hint">العمر</p><div class="opts" role="radiogroup">${AGES.map(([a,t])=>chip("age:"+a,t,w.age===a)).join("")}</div>${w.age>=12?`<p class="hint">فتاة أم فتى؟</p><div class="opts" role="radiogroup">${chip("sex:girl","فتاة",w.sex==="girl")}${chip("sex:boy","فتى",w.sex==="boy")}</div>`:""}</div>`;
-  if(w.who==="woman") h+=`<div class="sub-q"><p class="hint">اختاري إن وُجد</p><div class="opts">${chip("preg","حامل",w.preg,1)}${chip("lact","مرضع",w.lact,1)}</div></div>`;
-  const avail=probsFor();
-  h+=`</div><div class="q"><h3><span class="n">٢</span>ما المشكلة؟</h3>${PGROUPS.map(([g,keys])=>{const items=avail.filter(p=>keys.includes(p[0]));return items.length?`<div class="pgroup"><span class="pglabel">${g}</span><div class="opts" role="radiogroup">${items.map(([k,t])=>chip("prob:"+k,t,w.prob===k)).join("")}</div></div>`:"";}).join("")}</div>`;
-  const conds=kidSmall?WCONDS.filter(c=>KIDCONDS.includes(c[0])):WCONDS;
-  h+=`<div class="q"><h3><span class="n">٣</span>أمراض مزمنة</h3><p class="hint">اختر كل ما ينطبق، أو اتركه فارغًا.</p><div class="opts">${conds.map(([k,t])=>chip("cond:"+k,t,w.conds.has(k),1)).join("")}</div></div>`;
-  if(kidSmall) h+=`<div class="q"><h3><span class="n">٤</span>أدوية</h3><p class="hint">إن كان الطفل يتناول أي دواء منتظم، فاستشر طبيبه قبل أي عشبة.</p></div>`;
-  else h+=`<div class="q"><h3><span class="n">٤</span>أدوية تتناولها بانتظام</h3><div class="opts">${WMEDS.filter(m=>!(m[0]==="horm"&&w.who==="man")).map(([k,t])=>chip("med:"+k,t,w.meds.has(k),1)).join("")}</div></div>`;
-  h+=`<div class="q"><h3><span class="n">٥</span>حساسية معروفة</h3><div class="opts">${WALG.map(([k,t])=>chip("alg:"+k,t,w.alg.has(k),1)).join("")}</div></div>
-    <div class="q"><h3><span class="n">٦</span>من أي تراث؟</h3><p class="hint">اختياري؛ اتركه فارغًا لترى كل التقاليد.</p><div class="opts">${Object.entries(ORIG).map(([k,t])=>chip("orig:"+k,t,w.orig.has(k),1)).join("")}</div></div>
-    <button type="button" class="reset" data-k="reset">مسح كل الاختيارات</button>
+  wSync();
+  const ready=wReady(), kidSmall=ready&&w.who==="kid"&&w.age<12, infant=ready&&w.band===0;
+  if(!ready||infant||!probsFor().some(p=>p[0]===w.prob)) w.prob=null;
+  let h=`<div class="q" id="wq1"><h3><span class="n">١</span>الجنس والعمر</h3>
+    <p class="hint">الجنس</p><div class="opts" role="radiogroup">${chip("g:f","أنثى",w.g==="f")}${chip("g:m","ذكر",w.g==="m")}</div>
+    <p class="hint">العمر</p><div class="opts" role="radiogroup">${BANDS.map(([a,t])=>chip("band:"+a,t,w.band===a)).join("")}</div>`;
+  if(ready&&w.who==="woman") h+=`<div class="sub-q"><p class="hint">اختاري إن وُجد</p><div class="opts">${chip("preg","حامل",w.preg,1)}${chip("lact","مرضع",w.lact,1)}</div></div>`;
+  h+=`</div><div class="q${ready&&!infant?"":" off"}" id="wq2"><h3><span class="n">٢</span>ما المشكلة؟</h3>`;
+  if(!ready) h+=`<p class="hint">اختر الجنس والعمر أولًا لتظهر المشكلات المناسبة.</p>`;
+  else if(infant) h+=`<p class="hint">لا تُعطى الأعشاب لمن هم دون السنة؛ اقرأ التنبيه.</p>`;
+  else { const avail=probsFor(); h+=PGROUPS.map(([g,keys])=>{const items=avail.filter(p=>keys.includes(p[0]));return items.length?`<div class="pgroup"><span class="pglabel">${g}</span><div class="opts" role="radiogroup">${items.map(([k,t])=>chip("prob:"+k,t,w.prob===k)).join("")}</div></div>`:"";}).join(""); }
+  h+=`</div>`;
+  if(ready&&!infant){
+    const conds=kidSmall?WCONDS.filter(c=>KIDCONDS.includes(c[0])):WCONDS;
+    const open=w.more||w.conds.size||w.meds.size||w.alg.size||w.orig.size;
+    h+=`<details class="wmore" id="wmore" ${open?"open":""}><summary>لنتائج أدق لحالتك (اختياري): أمراض مزمنة، أدوية، حساسية</summary><div class="wmore-in">`;
+    h+=`<div class="q"><h3><span class="n">٣</span>أمراض مزمنة</h3><p class="hint">اختر كل ما ينطبق، أو اتركه فارغًا.</p><div class="opts">${conds.map(([k,t])=>chip("cond:"+k,t,w.conds.has(k),1)).join("")}</div></div>`;
+    if(kidSmall) h+=`<div class="q"><h3><span class="n">٤</span>أدوية</h3><p class="hint">إن كان الطفل يتناول أي دواء منتظم، فاستشر طبيبه قبل أي عشبة.</p></div>`;
+    else h+=`<div class="q"><h3><span class="n">٤</span>أدوية تتناولها بانتظام</h3><div class="opts">${WMEDS.filter(m=>!(m[0]==="horm"&&w.who==="man")).map(([k,t])=>chip("med:"+k,t,w.meds.has(k),1)).join("")}</div></div>`;
+    h+=`<div class="q"><h3><span class="n">٥</span>حساسية معروفة</h3><div class="opts">${WALG.map(([k,t])=>chip("alg:"+k,t,w.alg.has(k),1)).join("")}</div></div>
+      <div class="q"><h3><span class="n">٦</span>من أي تراث؟</h3><p class="hint">اختياري؛ اتركه فارغًا لترى كل التقاليد.</p><div class="opts">${Object.entries(ORIG).map(([k,t])=>chip("orig:"+k,t,w.orig.has(k),1)).join("")}</div></div></div></details>`;
+  }
+  h+=`<button type="button" class="reset" data-k="reset">مسح كل الاختيارات</button>
     <p class="hint" style="margin:0">إجاباتك لا تُحفظ ولا تُرسل إلى أي مكان؛ تُستخدم فقط لتصفية النتائج على هذه الصفحة.</p>`;
   $("#wform").innerHTML=h;
 }
@@ -3712,7 +3731,9 @@ const PROBNOTE={
  postpartum:"الأهم بعد الولادة: الراحة، والسوائل، والغذاء الغني بالحديد والبروتين، ومساندة الأهل النفسية. إن كنتِ ترضعين فاختاري «مرضع» في الخطوة الأولى ليستبعد المساعد ما لا يناسب الرضاعة. ولا تضعي أعشابًا أو زيوتًا داخل المهبل."
 };
 function renderWRes(){
-  const el=$("#wres"), kidSmall=w.who==="kid"&&w.age<12;
+  const el=$("#wres");
+  if(!wReady()){ el.innerHTML=`<div class="empty-res">ابدأ باختيار الجنس والعمر، ثم المشكلة، لتظهر كل الخلطات المناسبة.</div>`; return; }
+  const kidSmall=w.who==="kid"&&w.age<12;
   if(w.who==="kid"&&w.age===0){ el.innerHTML=`<div class="red"><h4>الرضّع دون السنة</h4><ul><li>لا يُنصح بأي أعشاب أو مشروبات عشبية أو عسل لمن هم دون السنة.</li><li>الرضاعة الطبيعية أو الحليب الصناعي هو ما يحتاجه الرضيع.</li><li>أي حرارة لرضيع دون 3 أشهر، أو خمول، أو رفض للرضاعة، أو صعوبة تنفّس: اذهب للطبيب أو الطوارئ فورًا.</li></ul></div>`; return; }
   if(!w.prob){ el.innerHTML=`<div class="empty-res">اختر المشكلة في الخطوة الثانية لتظهر الخلطات المناسبة.</div>`; return; }
   const cands=RECIPES.filter(r=>r.p.includes(w.prob)).filter(r=>!w.orig.size||w.orig.has(r.o)).filter(r=> kidSmall ? (r.minAge!=null&&w.age>=r.minAge) : !(r.a.length===1&&r.a[0]==="kids"));
@@ -3720,7 +3741,8 @@ function renderWRes(){
   for(const r of cands){ const e=evalRecipe(r); (e.ex.length?bad:ok).push([r,e]); }
   ok.sort((a,b)=>((b[0].top?1:0)-(a[0].top?1:0))||(relOf(b[0]).score-relOf(a[0]).score)||(b[1].c.length?0:1)-(a[1].c.length?0:1));
   const n=ok.length, cnt = n===1?"خلطة واحدة مناسبة":n===2?"خلطتان مناسبتان":n<=10?`${n.toLocaleString("ar-EG")} خلطات مناسبة`:`${n.toLocaleString("ar-EG")} خلطة مناسبة`;
-  let h=`<button type="button" class="wback" data-wback="1">↑ عدّل الحالة أو الأدوية أو الحساسية</button>${PROBNOTE[w.prob]?`<div class="refq">${PROBNOTE[w.prob]}</div>`:""}${PROBGUIDE[w.prob]?`<div class="guide pguide">${PROBGUIDE[w.prob].map((s,i)=>`<details ${i===0?"open":""}><summary>${s.t}</summary><div>${s.h}</div></details>`).join("")}</div>`:""}<h2 class="res-head">${n?cnt:"لا توجد خلطة مناسبة"}</h2>`;
+  const plabel=(PROBS.find(p=>p[0]===w.prob)||[,""])[1], blabel=(BANDS.find(b=>b[0]===w.band)||[,""])[1];
+  let h=`<p class="wsum"><b>${w.g==="m"?"ذكر":"أنثى"}</b> · ${blabel}${w.preg?" · حامل":""}${w.lact?" · مرضع":""} · <b>${plabel}</b></p><button type="button" class="wback wmorebtn" data-wback="1">↑ ${w.conds.size||w.meds.size||w.alg.size?"عدّل الحالة أو الأدوية أو الحساسية":"عندك مرض مزمن أو أدوية أو حساسية؟ أضفها لتُستبعد الخلطات غير المناسبة"}</button>${PROBNOTE[w.prob]?`<div class="refq">${PROBNOTE[w.prob]}</div>`:""}${PROBGUIDE[w.prob]?`<div class="guide pguide">${PROBGUIDE[w.prob].map((s,i)=>`<details ${i===0?"open":""}><summary>${s.t}</summary><div>${s.h}</div></details>`).join("")}</div>`:""}<h2 class="res-head">${n?cnt:"لا توجد خلطة مناسبة"}</h2>`;
   if(!ok.length) h+=`<div class="empty-res">${cands.length?"كل الخلطات المتاحة لهذه المشكلة لا تناسب حالتك. الأفضل استشارة الطبيب أو الصيدلي.":kidSmall?"لا توجد خلطة مناسبة لهذا العمر وهذه المشكلة. استشر طبيب الأطفال.":"لا توجد خلطات لهذه المشكلة بعد."}</div>`;
   for(const [r,e] of ok){
     h+=`<article class="rcard">${badge(r)}<h4 class="t">${r.name}</h4><p class="for">${r.for}</p>${relBox(r)}${refBox(r)}
@@ -3732,16 +3754,21 @@ function renderWRes(){
   el.innerHTML=h;
   el.querySelectorAll(".herb-link[data-h]").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
 }
-function renderWizard(){ renderWForm(); renderWRes(); const wb=$("#wres [data-wback]"); if(wb) wb.onclick=()=>$("#wform").scrollIntoView({behavior:"smooth",block:"start"}); }
+function renderWizard(){ renderWForm(); renderWRes(); const wb=$("#wres [data-wback]"); if(wb) wb.onclick=()=>{ w.more=true; renderWForm(); const m=$("#wmore")||$("#wform"); m.scrollIntoView({behavior:"smooth",block:"start"}); }; }
+$("#wform").addEventListener("toggle",e=>{ if(e.target.id==="wmore") w.more=e.target.open; },true);
+function wGo(el){ if(!el) return; const r=el.getBoundingClientRect(); if(window.matchMedia("(max-width:780px)").matches || r.top<0 || r.top>innerHeight*0.5) el.scrollIntoView({behavior:"smooth",block:"start"}); }
 $("#wform").addEventListener("click",e=>{
   const b=e.target.closest("[data-k]"); if(!b) return; const k=b.dataset.k, [t,v]=k.split(":");
-  if(k==="reset"){ Object.assign(w,{who:"woman",age:4,preg:false,lact:false,prob:null}); w.conds.clear(); w.meds.clear(); w.alg.clear(); w.orig.clear(); }
-  else if(t==="who") w.who=v; else if(t==="sex") w.sex=v; else if(t==="age") w.age=+v; else if(t==="preg") w.preg=!w.preg; else if(t==="lact") w.lact=!w.lact;
+  const wasReady=wReady();
+  if(k==="reset"){ Object.assign(w,{g:null,band:null,more:false,who:"woman",age:4,preg:false,lact:false,prob:null}); w.conds.clear(); w.meds.clear(); w.alg.clear(); w.orig.clear(); }
+  else if(t==="g") w.g=v; else if(t==="band") w.band=+v; else if(t==="preg") w.preg=!w.preg; else if(t==="lact") w.lact=!w.lact;
   else if(t==="prob") w.prob=v;
   else { const s={cond:w.conds,med:w.meds,alg:w.alg,orig:w.orig}[t]; s.has(v)?s.delete(v):s.add(v); }
   renderWizard();
   const again=$("#wform").querySelector(`[data-k="${CSS.escape(k)}"]`); again&&again.focus({preventScroll:true});
-  if(t==="prob" && window.matchMedia("(max-width:780px)").matches){ const hd=$("#wres"); hd.scrollIntoView({behavior:"smooth",block:"start"}); }
+  if(t==="prob") wGo($("#wres"));
+  else if((t==="g"||t==="band") && !wasReady && wReady()) wGo(w.band===0?$("#wres"):$("#wq2"));
+  else if(k==="reset") wGo($("#wq1"));
 });
 /* ---------- وصفات أمي (مشتركة) ---------- */
 const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
