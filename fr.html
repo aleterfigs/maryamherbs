@@ -467,7 +467,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .agwords{display:flex;flex-wrap:wrap;gap:6px}
 .agwords span{display:inline-flex;gap:6px;align-items:baseline;background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.88rem}
 .agwords i{font-style:normal;color:var(--muted)}
-#og-and{scroll-margin-top:12px}
+#og-and,#og-pest{scroll-margin-top:12px}
 .osoon{border:2px dashed var(--clay);border-radius:10px;padding:14px;margin:18px 0;background:var(--sheet)}
 .osoon h3{margin:0 0 6px;color:var(--clay)}
 @media (max-width:560px){.otable td:first-child{white-space:normal}}
@@ -4708,7 +4708,7 @@ function renderFolk(){
   el.querySelectorAll("[data-gr]").forEach(b=>b.onclick=()=>goRecipe(b.dataset.gr));
 }
 /* ---------- Agriculture biologique ---------- */
-const ost={id:null,zone:"gulf"};
+const ost={id:null,zone:"gulf",pv:null};
 const OG=[
  {id:"soil",n:"Améliorer le sol sableux",
   intro:"Le sol des Émirats est surtout sableux, pauvre en matière organique, et tend à être alcalin et salé : il ne retient ni l'eau ni les nutriments. La base de l'agriculture biologique, c'est nourrir le sol, pas la plante.",
@@ -4822,12 +4822,58 @@ const AGL=[
  ["Le Generalife de Grenade","Le jardin de l'Alhambra, avec ses parterres, ses canaux et ses fontaines, témoin vivant de l'art andalou des jardins, inscrit au patrimoine mondial avec l'Alhambra."]
 ];
 const AGLESSON=["Nourrissez le sol avec du fumier composté : c'est par là que les savants andalous commençaient leurs livres : le sol, puis l'eau, puis la fumure.","Connaissez votre sol avant de planter, comme Ibn Bassal.","Partagez l'eau avec équité et sagesse, car l'eau est ce qu'il y a de plus précieux en agriculture.","Expérimentez de vos mains et notez, comme Ibn Bassal et Ibn al-Awwam ont écrit ce qu'ils avaient essayé.","Prenez du patrimoine ce qui s'accorde avec l'expérience et la science, et laissez ce qui relevait de la magie ou de la superstition."];
+const PH=[
+ ["Sumer (Irak)","vers 2500 av. J.-C.","L'une des plus anciennes traces de l'histoire : des composés soufrés utilisés contre les insectes et les acariens."],
+ ["L'Égypte ancienne","Des milliers d'années","Les grains étaient stockés dans des silos secs et fermés, et l'on gardait des chats dans les maisons et les greniers pour protéger les récoltes des souris."],
+ ["La Grèce","vers 300 av. J.-C.","Théophraste a décrit des maladies des plantes comme la rouille et la brûlure, et noté qu'elles sont plus fréquentes dans les lieux bas et humides et que certaines variétés résistent mieux. Il fut l'un des premiers à écrire sur les maladies des plantes."],
+ ["Les Romains","Ier siècle apr. J.-C.","Ils utilisaient l'amurque (l'eau amère issue du pressage des olives) pour éloigner fourmis et insectes et protéger les semences ; Caton et Pline en ont parlé."],
+ ["Chine","vers 304 apr. J.-C.","La première lutte biologique documentée : on vendait des nids de fourmis prédatrices aux producteurs d'agrumes, et l'on reliait les arbres par des ponts de bambou pour que les fourmis mangent les insectes nuisibles."],
+ ["Irak : Ibn Wahshiyya","vers 904","«L'Agriculture nabatéenne» consacre de longs chapitres aux ravageurs des arbres et des cultures et à leurs remèdes, mêlant savoir éprouvé et magie."],
+ ["Al-Andalus : Ibn Bassal et Ibn al-Awwam","XIe et XIIe siècles","Ibn al-Awwam a consacré des chapitres aux maladies et ravageurs des arbres : propreté, taille des parties atteintes, cendre, fumée, infusions de plantes, et choix du lieu et du moment."],
+ ["Le Golfe et Oman","Tradition héritée","Nettoyer le palmier des bases de palmes et des fibres sèches, couvrir les régimes de dattes, poudrer les palmiers de soufre contre l'acarien «ghubair», et partager l'eau des aflaj de façon qu'elle ne stagne pas."]
+];
+const PM=[
+ ["Propreté et brûlage des parties malades","Couper les branches malades et les brûler loin du verger, et enlever les mauvaises herbes.","La règle la plus importante de la protection des plantes aujourd'hui : ce qui est infecté reste une source d'infection.","ok"],
+ ["Ramasser les fruits tombés","Ramasser et détruire les fruits tombés.","Cela coupe le cycle des mouches des fruits et des vers qui vivent dans les fruits tombés.","ok"],
+ ["La rotation des cultures","Ne pas cultiver la même plante au même endroit chaque année.","Elle coupe le cycle des ravageurs et des maladies du sol.","ok"],
+ ["La jachère","La terre est laissée un an sans culture pour se reposer.","Utile, mais il vaut mieux aujourd'hui semer des légumineuses en engrais vert plutôt que la laisser nue.","care"],
+ ["Choisir semences et variétés","Choisir les semences les plus vigoureuses et saines, et les variétés connues pour leur résistance.","La base de l'agriculture moderne : les variétés résistantes sont la protection la moins chère.","ok"],
+ ["Le moment et le lieu","Semer en saison, et éviter les lieux bas et humides.","Juste : l'humidité et le manque d'air sont parmi les principales causes des maladies fongiques.","ok"],
+ ["Tailler pour aérer","Éclaircir les branches trop serrées.","L'air et le soleil entrent, et les champignons et cochenilles diminuent.","ok"],
+ ["La cendre","Répandue sur les plantes, et mêlée aux grains stockés contre les charançons.","Utile pour le stockage et contre les limaces, mais elle est alcaline : ne pas en abuser sur les sols du Golfe, déjà alcalins.","care"],
+ ["Le soufre","Poudré sur les plantes.","Autorisé en bio contre l'oïdium et les acariens, mais il brûle les feuilles au-delà d'environ 32° : à utiliser tôt le matin ou en hiver.","care"],
+ ["L'amurque (lie d'huile)","Pulvérisée pour éloigner fourmis et insectes.","Elle a un effet répulsif, mais en excès elle nuit au sol et à ses organismes utiles.","care"],
+ ["La fumée","Brûler des matières dans le verger pour que la fumée chasse les insectes.","Effet limité et passager, et la fumée nuit aux personnes : on ne doit pas compter dessus.","care"],
+ ["Les ennemis naturels","Les fourmis prédatrices en Chine, les oiseaux, et les poules sous les arbres.","La lutte biologique est la base de l'agriculture bio aujourd'hui. Mais dans nos jardins, les fourmis protègent souvent les pucerons au lieu de les manger.","ok"],
+ ["Greffer sur des porte-greffes vigoureux","Greffer une bonne variété sur un arbre vigoureux.","Utilisé aujourd'hui pour résister aux maladies du sol, à la sécheresse et au sel.","ok"],
+ ["Couvrir régimes et fruits","Sacs ou filets autour des régimes de dattes et de certains fruits.","Une protection efficace contre les oiseaux, les insectes et la poussière, qui réduit le besoin de traitements.","ok"],
+ ["Infusions de coloquinte, de laurier-rose et de tabac","Pulvérisées sur les arbres pour tuer les insectes.","Toxiques pour l'homme, les animaux et les abeilles, à ne pas utiliser.","harm"],
+ ["Le sel autour des arbres","Répandu pour éloigner les termites.","Il tue le sol et abîme les racines, et nos sols sont déjà salés.","harm"],
+ ["Effrayer l'arbre stérile","Frapper l'arbre ou le menacer d'une hache pour qu'il donne des fruits, comme le décrivent certains vieux livres.","Une superstition. Le manque de fruits vient de la fumure, de l'arrosage, de la pollinisation ou de l'âge.","harm"],
+ ["Amulettes et objets suspendus","Suspendre des objets aux arbres contre les ravageurs et le froid.","Aucun fondement.","harm"]
+];
+const PMODERN=["Solarisation du sol à la fin de l'été : arroser, puis couvrir d'un plastique transparent 4 à 6 semaines.","Pièges à phéromones contre le charançon du palmier et les foreurs, et pièges jaunes englués contre les aleurodes.","Pulvériser de l'argile blanche (kaolin) sur les arbres : elle protège les fruits des coups de soleil et repousse certains insectes, très utile dans la chaleur du Golfe.","Bactéries utiles (Bt) contre les chenilles, et savon potassique et huile de neem contre les insectes piqueurs-suceurs.","Composés de cuivre autorisés en bio contre certaines maladies fongiques, en quantité limitée car ils s'accumulent dans le sol.","Quarantaine végétale : ne déplacez pas de rejets de palmier, de plants ou de terre d'une ferme infestée, et respectez la réglementation agricole de votre pays."];
+const PFIG=[
+ ["Mouche des fruits","Ramassez chaque jour les fruits tombés et abîmés, cueillez dès la maturité, et suspendez des pièges attractifs contre la mouche des fruits."],
+ ["Cochenilles et cochenilles farineuses","Taillez pour aérer l'arbre, frottez les branches atteintes, et pulvérisez du savon potassique ou une huile horticole légère en hiver quand l'arbre est sans feuilles."],
+ ["Rouille du figuier","Taches jaune-brun sur les feuilles par temps humide en fin d'été. Ramassez et détruisez les feuilles tombées, taillez pour aérer, et ne mouillez pas les feuilles en arrosant."],
+ ["Foreur du figuier","Trous dans le tronc et sciure à sa base. Coupez et détruisez les branches atteintes, bouchez les trous, et consultez le service agricole s'il se propage."],
+ ["Pourriture des fruits et coléoptères","Les fruits qui éclatent après un fort arrosage attirent coléoptères et pourriture. Arrosez régulièrement pendant la maturation, et cueillez au fur et à mesure."],
+ ["La caprification","Suspendre des figues sauvages sur l'arbre pour la pollinisation. Seules certaines variétés en ont besoin ; la plupart des variétés cultivées dans le Golfe fructifient sans elle."]
+];
+const PPALM=[
+ ["Charançon rouge du palmier","Le ravageur le plus dangereux du palmier : trous dans le tronc, écoulement brun, odeur de fermentation, et cœur qui flétrit. Ne déplacez pas de rejets d'une ferme infestée, couvrez les plaies de taille, et signalez-le aussitôt au service agricole, qui dispose de pièges à phéromones et de programmes de lutte."],
+ ["Ghubair (acarien des poussières)","Toiles et poussière sur les régimes qui rendent les dattes sèches et poussiéreuses. Couvrez les régimes, arrosez d'eau, et poudrez de soufre tôt le matin, comme le faisaient nos aïeux."],
+ ["Punaise doubas","Un insecte qui sécrète un miellat collant sur les palmes, à Oman, en Irak et dans le Golfe. Réduisez la densité, enlevez rejets et mauvaises herbes autour du palmier, et luttez avec les conseils du service agricole."],
+ ["Petite pyrale des dattes (humaira)","De petits fruits rouges et creux tombent tôt. Ramassez et détruisez les fruits tombés, et couvrez les régimes tôt."],
+ ["Nettoyage du palmier (takrib)","Enlever les bases de palmes, les fibres et les palmes sèches, qui abritent insectes et rongeurs. À faire au bon moment, en couvrant les grosses plaies."]
+];
 function renderOrganic(){
   const el=$("#organic"), cur=ost.id&&OG.find(t=>t.id===ost.id), list=cur?[cur]:OG;
   const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
   el.innerHTML=`<h2 class="page-h">Agriculture biologique</h2>
    <p class="sub">Cultivez vos herbes et vos légumes sans pesticides ni engrais chimiques, avec des méthodes adaptées à la chaleur de nos pays arabes, avec un soin particulier pour le sol sableux et l'eau salée du Golfe. D'abord pour la maison et les bacs, avec des conseils pour ceux qui ont une ferme, et un calendrier de plantation pour chaque région arabe.</p>
-   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Calendrier de plantation</button><button type="button" class="chip" data-ohist="1">Du patrimoine andalou</button><button type="button" class="chip" data-ogrow="1">Plantes faciles à cultiver</button></div></div>
+   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Calendrier de plantation</button><button type="button" class="chip" data-ohist="1">Du patrimoine andalou</button><button type="button" class="chip" data-opest="1">Prévention des ravageurs dans le patrimoine</button><button type="button" class="chip" data-ogrow="1">Plantes faciles à cultiver</button></div></div>
    <div class="aidgrid${cur?" one":""}">${list.map(t=>`<article class="aidcard wcard" id="og-${t.id}">
      <div class="aidhead"><h3>${t.n}</h3></div>
      <p class="wintro">${t.intro}</p>
@@ -4856,10 +4902,27 @@ function renderOrganic(){
    <div class="ofarm"><h4>Leçons pour l'agriculteur bio d'aujourd'hui</h4><ul style="margin:0">${AGLESSON.map(x=>`<li>${x}</li>`).join("")}</ul></div>
    <p class="hint"><button type="button" class="wlink" data-goand="1">Recettes de médecine andalouse dans le guide</button></p>
    </section>
+   <section id="og-pest" class="ohist"><h3 class="page-h" style="font-size:1.4rem;margin-top:22px">Prévenir les maladies et ravageurs des plantes dans le patrimoine</h3>
+   <p class="sub">Des milliers d'années avant les pesticides chimiques, les agriculteurs protégeaient leurs cultures par la propreté, les saisons, la cendre, le soufre et les ennemis naturels. Beaucoup de leurs méthodes sont aujourd'hui la base de la lutte biologique et intégrée.</p>
+   <h4 class="oh4">Un voyage dans l'histoire</h4>
+   <div class="aggrid">${PH.map(([n,w,t])=>`<article class="agcard"><h5>${n}</h5><p class="agmeta">${w}</p><p>${t}</p></article>`).join("")}</div>
+   <h4 class="oh4">Les méthodes traditionnelles et ce qu'en dit la science aujourd'hui</h4>
+   <div class="sgroups"><div class="opts">${[[null,"Tout"],["ok","Juste"],["care","Avec prudence"],["harm","Nuisible"]].map(([k,t])=>`<button type="button" class="chip" data-pv="${k||""}" aria-pressed="${ost.pv===k}">${k?`<span class="dot ${FV[k][1]}"></span>`:""}${t}</button>`).join("")}</div></div>
+   <div class="owrap"><table class="otable"><thead><tr><th>Préparation</th><th>Dans le patrimoine</th><th>Aujourd'hui</th></tr></thead><tbody>${PM.filter(r=>!ost.pv||r[3]===ost.pv).map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h4 class="oh4">Ce que la science moderne apporte à l'agriculteur bio</h4>
+   <div class="ofarm"><ul style="margin:0">${PMODERN.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <h4 class="oh4">Ravageurs du figuier et prévention</h4>
+   <div class="aggrid">${PFIG.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <h4 class="oh4">Ravageurs du palmier et prévention</h4>
+   <div class="aggrid">${PPALM.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <p class="hint">Ce sont des informations générales. Face à un ravageur grave ou répandu, consultez le service agricole de votre pays, qui propose des programmes de lutte et des conseils gratuits aux agriculteurs.</p>
+   </section>
    <section class="osoon"><h3>Conseils de l'agriculteur</h3><p style="margin:0">Bientôt, si Dieu le veut : conseils et expériences de la ferme bio du créateur du guide, éprouvés dans le sol et la chaleur des Émirats.</p></section>`}`;
   el.querySelectorAll("[data-og]").forEach(b=>b.onclick=()=>{ ost.id = ost.id===b.dataset.og?null:b.dataset.og; renderOrganic(); });
   el.querySelectorAll("[data-oz]").forEach(b=>b.onclick=()=>{ ost.zone=b.dataset.oz; renderOrganic(); const n=$(`[data-oz="${ost.zone}"]`); n&&n.focus({preventScroll:true}); });
   el.querySelectorAll("[data-ocal]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-cal"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-opest]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-pest"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-pv]").forEach(b=>b.onclick=()=>{ ost.pv=b.dataset.pv||null; const y=scrollY; renderOrganic(); scrollTo({top:y}); const n=$(`[data-pv="${b.dataset.pv}"]`); n&&n.focus({preventScroll:true}); });
   el.querySelectorAll("[data-ohist]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-and"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
   el.querySelectorAll("[data-goand]").forEach(b=>b.onclick=()=>{ state.origin="andalus"; state.q=""; $("#q").value=""; setView("recipes"); window.scrollTo({top:0}); });
   el.querySelectorAll("[data-ogrow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
@@ -5391,9 +5454,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-07m",date:"7 novembre 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07n",date:"7 novembre 2026",go:"folk",items:[
  "<b>Nouvelle rubrique : coutumes populaires, ce qui est juste et ce qui nuit.</b> Saler le nouveau-né, le khôl, l'encens, le tahnik, la cautérisation, les rebouteux, les quarante jours, l'eau et les plantes pour le nourrisson et d'autres, avec l'alternative sûre pour chaque coutume.",
  "<b>La rubrique «D'origine animale» :</b> œufs, poulet, viandes, foie, smen, lait de vache et de chamelle, puis graisse de queue de mouton, yaourt et lben, aqit, lait de chèvre, produits de la ruche, criquets, graisse de dhub et huile d'autruche.",
+ "<b>Agriculture biologique :</b> une section élargie, «Prévenir les maladies et ravageurs des plantes dans le patrimoine» : de Sumer, de la Chine et d'al-Andalus au Golfe, avec un avis sur chaque méthode, et les ravageurs du figuier et du palmier et leur prévention.",
  "<b>Texte plus grand :</b> les boutons A+ et A− en haut de la page agrandissent ou réduisent tout le texte, et le site retient votre choix.",
  "<b>Agriculture biologique :</b> une nouvelle section, «Du patrimoine agricole arabe et andalou» : Ibn Bassal, Ibn al-Awwam et le Calendrier de Cordoue, leurs méthodes et ce qu'en dit la science, les mots arabes en espagnol, les aflaj et le Tribunal des eaux de Valence.",
  "<b>Médecine prophétique :</b> chaque hadith affiche désormais son degré (authentique, bon, discuté, faible), et les recettes prophétiques sont classées de la plus authentique à la moins sûre.",

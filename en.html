@@ -467,7 +467,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .agwords{display:flex;flex-wrap:wrap;gap:6px}
 .agwords span{display:inline-flex;gap:6px;align-items:baseline;background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.88rem}
 .agwords i{font-style:normal;color:var(--muted)}
-#og-and{scroll-margin-top:12px}
+#og-and,#og-pest{scroll-margin-top:12px}
 .osoon{border:2px dashed var(--clay);border-radius:10px;padding:14px;margin:18px 0;background:var(--sheet)}
 .osoon h3{margin:0 0 6px;color:var(--clay)}
 @media (max-width:560px){.otable td:first-child{white-space:normal}}
@@ -4708,7 +4708,7 @@ function renderFolk(){
   el.querySelectorAll("[data-gr]").forEach(b=>b.onclick=()=>goRecipe(b.dataset.gr));
 }
 /* ---------- Organic farming ---------- */
-const ost={id:null,zone:"gulf"};
+const ost={id:null,zone:"gulf",pv:null};
 const OG=[
  {id:"soil",n:"Improving sandy soil",
   intro:"UAE soil is mostly sandy, poor in organic matter and tends to be alkaline and salty, so it holds neither water nor nutrients. The basis of organic farming is feeding the soil, not the plant.",
@@ -4822,12 +4822,58 @@ const AGL=[
  ["The Generalife in Granada","The garden of the Alhambra, with its beds, channels and fountains, is a living witness to the Andalusian art of gardening, and is on the World Heritage List with the Alhambra."]
 ];
 const AGLESSON=["Feed the soil with composted manure; it is where Andalusian scholars began their books: soil, then water, then manure.","Know your soil before you plant, as Ibn Bassal did.","Share water fairly and wisely, for water is the most precious thing in farming.","Experiment with your own hands and keep records, as Ibn Bassal and Ibn al-Awwam wrote down what they had tried.","Take from heritage what agrees with experience and science, and leave what was magic or superstition."];
+const PH=[
+ ["Sumer (Iraq)","around 2500 BCE","One of the oldest records in history: sulphur compounds used against insects and mites."],
+ ["Ancient Egypt","Thousands of years","Grain stored in dry, sealed silos, and cats kept in homes and stores to protect the harvest from mice."],
+ ["Greece","around 300 BCE","Theophrastus described plant diseases such as rust and blight, and noted that they are worse in damp low-lying places and that some varieties are hardier than others. He was among the first to write about plant diseases."],
+ ["The Romans","1st century CE","They used amurca (the bitter water left from pressing olives) to repel ants and insects and protect seeds; Cato and Pliny wrote about it."],
+ ["China","around 304 CE","The first documented biological control: people sold nests of predatory ants to citrus growers and joined the trees with bamboo bridges so the ants would eat the harmful insects."],
+ ["Iraq: Ibn Wahshiyya","around 904 CE","«The Nabataean Agriculture» has long chapters on pests of trees and crops and their remedies, mixing tested knowledge with magic."],
+ ["Al-Andalus: Ibn Bassal and Ibn al-Awwam","11th and 12th centuries","Ibn al-Awwam devoted chapters to tree diseases and pests: cleanliness, cutting out what is affected, ash, smoke, herbal infusions, and choosing the right place and time."],
+ ["The Gulf and Oman","Inherited tradition","Cleaning the palm of old frond bases and dry fibre, covering the date bunches, dusting the palms with sulphur against «ghubair» mites, and sharing aflaj water in a way that stops it standing."]
+];
+const PM=[
+ ["Cleanliness and burning what is diseased","Cutting out diseased branches and burning them away from the orchard, and removing weeds.","The most important rule of plant protection today: what is infected remains a source of infection.","ok"],
+ ["Collecting fallen fruit","Gathering and destroying fallen fruit.","It breaks the cycle of fruit flies and worms that live in fallen fruit.","ok"],
+ ["Crop rotation","Not growing the same crop in the same place every year.","It breaks the cycle of pests and diseases that live in the soil.","ok"],
+ ["Leaving land fallow","The land is left unsown for a year to rest.","Useful, but today it is better to sow legumes as green manure rather than leave it bare.","care"],
+ ["Choosing seeds and varieties","Choosing the strongest, healthiest seeds and varieties known to resist disease.","The basis of modern farming: resistant varieties are the cheapest protection.","ok"],
+ ["Timing and site","Sowing in season, and avoiding damp low-lying places.","Correct: damp and poor air flow are among the main causes of fungal disease.","ok"],
+ ["Pruning for air flow","Thinning crowded branches.","It lets in air and sun, so fungi and scale insects decrease.","ok"],
+ ["Ash","Scattered on plants, and mixed with stored grain against weevils.","Useful in storage and against snails, but it is alkaline, so do not overuse it on Gulf soil, which is alkaline already.","care"],
+ ["Sulphur","Dusted as a powder on plants.","Allowed in organic farming against powdery mildew and mites, but it burns leaves in heat above about 32°, so use it early in the morning or in winter.","care"],
+ ["Amurca (olive-oil lees)","Sprayed to repel ants and insects.","It has a repellent effect, but too much harms the soil and its beneficial organisms.","care"],
+ ["Smoke","Burning materials in the orchard so the smoke drives insects away.","Its effect is limited and short-lived, and smoke harms people, so it should not be relied on.","care"],
+ ["Natural enemies","Predatory ants in China, birds, and chickens under the trees.","Biological control is the basis of organic farming today. But in our gardens ants often protect aphids rather than eat them.","ok"],
+ ["Grafting onto strong rootstocks","Grafting a good variety onto a strong tree.","Used today to resist soil diseases, drought and salinity.","ok"],
+ ["Covering bunches and fruit","Bags or nets around date bunches and some fruit.","Effective protection from birds, insects and dust, and it reduces the need for spraying.","ok"],
+ ["Colocynth, oleander and tobacco infusions","Sprayed on trees to kill insects.","Poisonous to people, animals and bees, and not used.","harm"],
+ ["Salt around trees","Scattered to repel termites.","It kills the soil and harms roots, and our soil is salty already.","harm"],
+ ["Frightening a barren tree","Striking a tree or threatening it with an axe so it will bear fruit, as some old books describe.","A superstition. Poor fruiting is caused by feeding, watering, pollination or age.","harm"],
+ ["Charms and hanging objects","Hanging objects on trees to ward off pests and cold.","They have no basis.","harm"]
+];
+const PMODERN=["Soil solarisation at the end of summer: water, then a clear cover for 4–6 weeks.","Pheromone traps for the palm weevil and stem borers, and yellow sticky traps for whitefly.","Spraying white clay (kaolin) on trees: it protects fruit from sunburn and repels some insects, which is very useful in the Gulf heat.","Beneficial bacteria (Bt) for caterpillars, and potassium soap and neem oil for sap-sucking insects.","Copper compounds permitted in organic farming for some fungal diseases, in limited amounts because they build up in the soil.","Plant quarantine: do not move palm offshoots, seedlings or soil from an infested farm, and follow your country's agricultural regulations."];
+const PFIG=[
+ ["Fruit fly","Collect fallen and damaged fruit daily, pick fruit as soon as it ripens, and hang fruit fly lure traps."],
+ ["Scale insects and mealybugs","Prune to open up the tree, rub the affected branches, and spray potassium soap or a light horticultural oil in winter when the tree is bare."],
+ ["Fig rust","Yellow-brown spots on the leaves in humid weather at the end of summer. Gather and destroy fallen leaves, prune for air flow, and do not wet the leaves when watering."],
+ ["Fig stem borer","Holes in the trunk and sawdust at its base. Cut out and destroy affected branches, seal the holes, and consult the agricultural authority if it spreads."],
+ ["Fruit rot and beetles","Fruit that splits after heavy watering attracts beetles and rot. Water steadily as the fruit ripens, and pick as you go."],
+ ["Caprification","Hanging wild figs on the tree for pollination. Only certain varieties need it; most varieties grown in the Gulf fruit without it."]
+];
+const PPALM=[
+ ["Red palm weevil","The most dangerous palm pest: holes in the trunk, brown ooze and a fermented smell, and a wilting heart. Do not move offshoots from an infested farm, cover pruning wounds, and report it to the agricultural authority at once; they have pheromone traps and control programmes."],
+ ["Ghubair (dust mite)","Webbing and dust on the bunches that make dates dry and dusty. Cover the bunches, spray water, and dust with sulphur early in the morning, as our grandfathers did."],
+ ["Dubas bug","An insect that secretes sticky honeydew on the fronds, in Oman, Iraq and the Gulf. Reduce planting density, remove offshoots and weeds around the palm, and control it with the agricultural authority's guidance."],
+ ["Lesser date moth (humaira)","Small, red, hollow fruits fall early. Collect and destroy fallen fruit, and cover the bunches early."],
+ ["Cleaning the palm (takreeb)","Removing old frond bases, fibre and dry fronds, which shelter insects and rodents. Do it at the right time, and cover large wounds."]
+];
 function renderOrganic(){
   const el=$("#organic"), cur=ost.id&&OG.find(t=>t.id===ost.id), list=cur?[cur]:OG;
   const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
   el.innerHTML=`<h2 class="page-h">Organic farming</h2>
    <p class="sub">Grow your herbs and vegetables clean, without pesticides or chemical fertilisers, using methods suited to the heat of our Arab lands, with special care for the Gulf's sandy soil and salty water. For homes and beds first, with tips for those with a farm, and a planting calendar for each Arab region.</p>
-   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Planting calendar</button><button type="button" class="chip" data-ohist="1">From Andalusian heritage</button><button type="button" class="chip" data-ogrow="1">Easy herbs to grow</button></div></div>
+   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Planting calendar</button><button type="button" class="chip" data-ohist="1">From Andalusian heritage</button><button type="button" class="chip" data-opest="1">Pest prevention in heritage</button><button type="button" class="chip" data-ogrow="1">Easy herbs to grow</button></div></div>
    <div class="aidgrid${cur?" one":""}">${list.map(t=>`<article class="aidcard wcard" id="og-${t.id}">
      <div class="aidhead"><h3>${t.n}</h3></div>
      <p class="wintro">${t.intro}</p>
@@ -4856,10 +4902,27 @@ function renderOrganic(){
    <div class="ofarm"><h4>Lessons for today's organic farmer</h4><ul style="margin:0">${AGLESSON.map(x=>`<li>${x}</li>`).join("")}</ul></div>
    <p class="hint"><button type="button" class="wlink" data-goand="1">Andalusian medicine recipes in the guide</button></p>
    </section>
+   <section id="og-pest" class="ohist"><h3 class="page-h" style="font-size:1.4rem;margin-top:22px">Preventing plant diseases and pests in heritage</h3>
+   <p class="sub">Thousands of years before chemical pesticides, farmers protected their crops with cleanliness, seasons, ash, sulphur and natural enemies. Many of their methods are now the basis of organic and integrated pest management.</p>
+   <h4 class="oh4">A journey through history</h4>
+   <div class="aggrid">${PH.map(([n,w,t])=>`<article class="agcard"><h5>${n}</h5><p class="agmeta">${w}</p><p>${t}</p></article>`).join("")}</div>
+   <h4 class="oh4">Traditional methods and what science says today</h4>
+   <div class="sgroups"><div class="opts">${[[null,"All"],["ok","Sound"],["care","With care"],["harm","Harmful"]].map(([k,t])=>`<button type="button" class="chip" data-pv="${k||""}" aria-pressed="${ost.pv===k}">${k?`<span class="dot ${FV[k][1]}"></span>`:""}${t}</button>`).join("")}</div></div>
+   <div class="owrap"><table class="otable"><thead><tr><th>Method</th><th>In heritage</th><th>Today</th></tr></thead><tbody>${PM.filter(r=>!ost.pv||r[3]===ost.pv).map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h4 class="oh4">What modern science adds for the organic farmer</h4>
+   <div class="ofarm"><ul style="margin:0">${PMODERN.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <h4 class="oh4">Fig pests and prevention</h4>
+   <div class="aggrid">${PFIG.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <h4 class="oh4">Palm pests and prevention</h4>
+   <div class="aggrid">${PPALM.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <p class="hint">This is general information. If a serious or widespread pest appears, consult your country's agricultural authority, which offers control programmes and free advice to farmers.</p>
+   </section>
    <section class="osoon"><h3>Farmer's tips</h3><p style="margin:0">Coming soon, God willing: tips and experience from the guide owner's organic farm, tested in the UAE's soil and heat.</p></section>`}`;
   el.querySelectorAll("[data-og]").forEach(b=>b.onclick=()=>{ ost.id = ost.id===b.dataset.og?null:b.dataset.og; renderOrganic(); });
   el.querySelectorAll("[data-oz]").forEach(b=>b.onclick=()=>{ ost.zone=b.dataset.oz; renderOrganic(); const n=$(`[data-oz="${ost.zone}"]`); n&&n.focus({preventScroll:true}); });
   el.querySelectorAll("[data-ocal]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-cal"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-opest]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-pest"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-pv]").forEach(b=>b.onclick=()=>{ ost.pv=b.dataset.pv||null; const y=scrollY; renderOrganic(); scrollTo({top:y}); const n=$(`[data-pv="${b.dataset.pv}"]`); n&&n.focus({preventScroll:true}); });
   el.querySelectorAll("[data-ohist]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-and"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
   el.querySelectorAll("[data-goand]").forEach(b=>b.onclick=()=>{ state.origin="andalus"; state.q=""; $("#q").value=""; setView("recipes"); window.scrollTo({top:0}); });
   el.querySelectorAll("[data-ogrow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
@@ -5391,9 +5454,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- What's new: shown once to returning visitors after each update ---------- */
-const NEWS={v:"2026-11-07m",date:"7 November 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07n",date:"7 November 2026",go:"folk",items:[
  "<b>New section: folk customs, what is sound and what harms.</b> Salting newborns, kohl, incense, tahneek, cautery, bonesetters, the forty days after birth, water and herbs for babies and more, with the safe alternative for each custom.",
  "<b>The «From animals» section:</b> eggs, chicken, meat, liver, ghee, cow's and camel milk, plus sheep tail fat, yogurt and laban, aqit, goat milk, bee products, locusts, dhub fat and ostrich oil.",
+ "<b>Organic farming:</b> an extended section, «Preventing plant diseases and pests in heritage»: from Sumer, China and al-Andalus to the Gulf, with a verdict on each method, and fig and palm pests and how to prevent them.",
  "<b>Larger text:</b> the A+ and A− buttons at the top of the page make all the text bigger or smaller, and the site remembers your choice.",
  "<b>Organic farming:</b> a new section, «From the heritage of Arab and Andalusian farming»: Ibn Bassal, Ibn al-Awwam and the Calendar of Córdoba, their methods and what science says today, Arabic words in Spanish, and the aflaj and Valencia's Water Tribunal.",
  "<b>Prophetic medicine:</b> each hadith now shows its grade (authentic, good, disputed, weak), and Prophetic recipes are ordered from the most authentic.",
