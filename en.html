@@ -431,6 +431,9 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .fblist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
 .fblist li{border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-size:.9rem;display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}
 .fblist small{color:var(--muted);margin-inline-start:auto}
+.foods li:has(.flinks){flex-wrap:wrap}
+.flinks{display:flex;flex-wrap:wrap;gap:4px;flex-basis:100%;margin-top:4px;padding-inline-start:2px}
+.flinks .herb-link{font:inherit;font-size:.8rem;border:1px solid var(--leaf);border-radius:999px;background:transparent;color:var(--leaf);padding:1px 8px;cursor:pointer;text-decoration:none}
 .otable{width:100%;border-collapse:collapse;font-size:.9rem;background:var(--sheet);border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .otable th,.otable td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:start;vertical-align:top;line-height:1.7}
 .otable th{background:var(--leaf);color:var(--sheet);font-weight:600}
@@ -4857,21 +4860,28 @@ const NUTR = [
  {id:"iron", n:"Iron", need:"8 mg for men, 18 mg for women before menopause, and 27 mg in pregnancy",
   risk:["Women with heavy periods","Pregnant women","Children and teenagers during growth spurts","Vegetarians","People who drink tea with meals"],
   sym:["Tiredness and exhaustion","Paleness","Shortness of breath on exertion","Dizziness","Hair loss","Brittle or spoon-shaped nails","Cravings to eat ice or clay"],
-  food:[["Excellent","Liver and red meat (easily absorbed iron)"],["Good","Chicken, fish and shellfish"],["Good","Lentils, chickpeas, fava beans and black-eyed peas"],["Moderate","Spinach, molokhia and mallow"],["Moderate","Date syrup, dried dates and dried apricots"],["Moderate","Pumpkin seeds, sesame and tahini"]],
+  food:[["Excellent","Liver and red meat (easily absorbed iron)",["liver", "mutton", "camel"]],["Good","Chicken, fish and shellfish",["chicken"]],["Good","Lentils, chickpeas, fava beans and black-eyed peas"],["Moderate","Spinach, molokhia and mallow"],["Moderate","Date syrup, dried dates and dried apricots"],["Moderate","Pumpkin seeds, sesame and tahini"]],
   tips:["Eat with a source of vitamin C (lemon, tomato, pepper, orange) to double the absorption of plant iron.","Drink tea and coffee an hour after meals, not with them.","Milk and calcium reduce iron absorption when taken together."],
   warn:"Adult iron tablets can be deadly for children if swallowed: keep them out of reach. And do not take iron without a test, because too much is harmful.",
-  rec:["Lentil and spinach soup for iron","Chickpea and parsley salad with lemon for iron","Chicken livers with pomegranate molasses","Cooked mallow","Dibis w'rashi"]},
+  rec:["Lentil and spinach soup for iron","Chickpea and parsley salad with lemon for iron","Chicken livers with pomegranate molasses","Cooked mallow","Dibis w'rashi","Harees"]},
+ {id:"protein", n:"Protein", need:"About 0.8 g per kilo of body weight daily for adults, and a little more for older people, pregnant and breastfeeding women, and the convalescent",
+  risk:["Older people, especially those with a poor appetite","People recovering from illness or surgery","Pregnant and breastfeeding women","Children during growth spurts","Vegetarians who do not vary their pulses and grains","People on strict weight-loss diets"],
+  sym:["Muscle weakness and loss of muscle mass","Tiredness","Slow wound healing","Hair loss and weak nails","Frequent infections","Swollen feet in severe deficiency"],
+  food:[["Excellent","Eggs",["egg"]],["Excellent","Chicken, meat and fish",["chicken","mutton","camel"]],["Good","Yogurt, laban, milk and cheese",["yogurt","milk"]],["Good","Lentils, chickpeas, broad beans and beans"],["Moderate","Nuts and seeds: almonds, pumpkin seeds and sesame"]],
+  tips:["Spread protein across your three meals rather than having it all at once.","For vegetarians: combine pulses with grains, such as lentils with rice or chickpeas with bread.","For older people: an egg at breakfast and yogurt between meals raise protein easily."],
+  warn:"People with kidney disease should only increase protein under a doctor's supervision. Most people do not need protein powders, and some are adulterated with banned substances.",
+  rec:["Boiled egg for children","Eggs with spinach and za'atar","Chicken soup (Maimonides' advice)","Harees","Shneena (buttermilk) with mint"]},
  {id:"vitd", n:"Vitamin D", need:"600 IU (15 mcg) daily for adults, and 800 for those over seventy",
   risk:["Most people in the Gulf despite the sun, because of the heat, staying indoors and covering the body","People with dark skin","Older people","Exclusively breastfed babies","People with obesity"],
   sym:["Bone and muscle pain","Tiredness","Muscle weakness","Frequent infections","Hair loss"],
-  food:[["Good","Oily fish: salmon, sardines, mackerel (kingfish) and tuna"],["Moderate","Egg yolk"],["Moderate","Fortified milk, laban and juices"],["Low","Sun-exposed mushrooms"],["The main source","Sun: 10–30 minutes on the arms and face a few times a week, before the skin reddens"]],
+  food:[["Good","Oily fish: salmon, sardines, mackerel (kingfish) and tuna"],["Moderate","Egg yolk",["egg"]],["Moderate","Fortified milk, laban and juices",["milk", "yogurt"]],["Low","Sun-exposed mushrooms"],["The main source","Sun: 10–30 minutes on the arms and face a few times a week, before the skin reddens"]],
   tips:["Food alone rarely provides enough; many people need a supplement after a blood test.","Absorbed better with a meal containing fat.","Window glass blocks the rays that make vitamin D."],
   warn:"Very high doses over long periods without monitoring can raise blood calcium and harm the kidneys. Set the dose with the doctor based on your test.",
-  rec:["Sardine salad with lemon and cumin","Eggs with spinach and za'atar"]},
+  rec:["Sardine salad with lemon and cumin","Eggs with spinach and za'atar","Boiled egg for children"]},
  {id:"b12", n:"Vitamin B12", need:"2.4 mcg daily for adults",
   risk:["Vegans who eat no animal products","Older people","People taking metformin for diabetes","People taking acid medicines for long periods","After stomach operations and sleeve surgery"],
   sym:["Numbness and tingling in the hands and feet","Tiredness and paleness","Poor memory and concentration","Mouth ulcers and a red tongue","Loss of balance"],
-  food:[["Excellent","Liver and shellfish"],["Good","Meat, fish, sardines and tuna"],["Good","Eggs, milk, laban and cheese"],["Moderate","Fortified foods (breakfast cereals)"]],
+  food:[["Excellent","Liver and shellfish",["liver"]],["Good","Meat, fish, sardines and tuna"],["Good","Eggs, milk, laban and cheese",["egg", "milk", "yogurt"]],["Moderate","Fortified foods (breakfast cereals)"]],
   tips:["Not found in plants in useful amounts.","With metformin or after stomach surgery: have it checked yearly.","Long-term deficiency can cause permanent nerve damage, so do not delay testing."],
   warn:"Treating a severe deficiency may need injections decided by the doctor.",
   rec:["Chicken soup (Maimonides' advice)","Sardine salad with lemon and cumin","Eggs with spinach and za'atar","Chicken livers with pomegranate molasses"]},
@@ -4885,17 +4895,17 @@ const NUTR = [
  {id:"calcium", n:"Calcium", need:"1000 mg daily for adults, 1,300 for teenagers, and 1,200 for women over fifty",
   risk:["Teenagers","Women after menopause","People who do not eat dairy","Vitamin D deficiency"],
   sym:["Muscle cramps","Tingling around the mouth and fingers","Osteoporosis in the long run (usually without symptoms)"],
-  food:[["Excellent","Milk, laban, yoghurt and cheese"],["Good","Tinned sardines with their bones"],["Good","Tahini and sesame"],["Moderate","Almonds and dried figs"],["Moderate","Leafy greens (molokhia, rocket and broccoli)"]],
+  food:[["Excellent","Milk, laban, yoghurt and cheese",["milk", "yogurt", "goatmilk"]],["Good","Tinned sardines with their bones"],["Good","Tahini and sesame"],["Moderate","Almonds and dried figs",["fig"]],["Moderate","Leafy greens (molokhia, rocket and broccoli)"]],
   tips:["Needs vitamin D to be absorbed.","The body absorbs calcium better in small amounts through the day.","Fizzy drinks and too much salt and coffee reduce calcium stores."],
   warn:"Too many calcium supplements may cause kidney stones and constipation; food is the best source.",
-  rec:["Calcium yoghurt with dates and sesame","Homemade sesame and date halwa","Sardine salad with lemon and cumin","Camel milk with honey"]},
+  rec:["Calcium yoghurt with dates and sesame","Homemade sesame and date halwa","Sardine salad with lemon and cumin","Camel milk with honey","Shneena (buttermilk) with mint"]},
  {id:"zinc", n:"Zinc", need:"11 mg for men, and 8 mg for women",
   risk:["Vegetarians","Older people","Pregnant and breastfeeding women","Chronic bowel diseases"],
   sym:["Hair loss","Slow wound healing","Frequent infections","Weak sense of taste and smell","Skin rash"],
-  food:[["Excellent","Oysters"],["Good","Red meat and chicken"],["Good","Pumpkin seeds, sesame and cashews"],["Moderate","Chickpeas, lentils and fava beans"],["Moderate","Oats and whole grains"]],
+  food:[["Excellent","Oysters"],["Good","Red meat and chicken",["mutton", "chicken"]],["Good","Pumpkin seeds, sesame and cashews"],["Moderate","Chickpeas, lentils and fava beans"],["Moderate","Oats and whole grains"]],
   tips:["Soaking and sprouting improve its absorption from pulses and grains."],
   warn:"Too many zinc supplements over long periods cause copper deficiency and anaemia.",
-  rec:["Pumpkin-seed snack","Pumpkin-seed and garlic salad","Oat porridge with flax and dates"]},
+  rec:["Pumpkin-seed snack","Pumpkin-seed and garlic salad","Oat porridge with flax and dates","Harees","Chicken soup (Maimonides' advice)"]},
  {id:"mg", n:"Magnesium", need:"400–420 mg for men, and 310–320 mg for women",
   risk:["People with diabetes","People taking diuretics or acid medicines for long periods","Older people"],
   sym:["Muscle cramps, especially at night","Tiredness","Palpitations","Headache","Trouble sleeping"],
@@ -4906,10 +4916,10 @@ const NUTR = [
  {id:"iodine", n:"Iodine", need:"150 mcg for adults, 220 in pregnancy, and 290 when breastfeeding",
   risk:["Pregnant and breastfeeding women","People using non-iodised salt"],
   sym:["An enlarged thyroid","Tiredness, weight gain and feeling cold (underactive thyroid)","In pregnancy: affects the baby's brain development"],
-  food:[["Excellent","Fish and seafood"],["Good","Iodised salt"],["Good","Milk, laban and eggs"]],
+  food:[["Excellent","Fish and seafood"],["Good","Iodised salt"],["Good","Milk, laban and eggs",["milk", "yogurt", "egg"]]],
   tips:["Use iodised salt at home, in moderate amounts.","Himalayan salt and sea salt are usually not iodised."],
   warn:"Do not take iodine supplements or concentrated seaweed without a doctor, especially with thyroid disease.",
-  rec:["Sardine salad with lemon and cumin"]},
+  rec:["Sardine salad with lemon and cumin","Boiled egg for children","Shneena (buttermilk) with mint"]},
  {id:"vitc", n:"Vitamin C", need:"90 mg for men, and 75 mg for women, plus 35 mg for smokers",
   risk:["People who do not eat fresh fruit and vegetables","Smokers","Older people"],
   sym:["Bleeding gums","Slow wound healing","Bruising easily","Tiredness"],
@@ -4920,10 +4930,10 @@ const NUTR = [
  {id:"vita", n:"Vitamin A", need:"900 mcg for men, and 700 mcg for women",
   risk:["Malnutrition","Fat-absorption disorders"],
   sym:["Poor vision in the dark","Dry eyes and skin","Frequent infections"],
-  food:[["Excellent","Liver (in moderate amounts)"],["Good","Carrots, sweet potatoes, pumpkin and mango"],["Good","Spinach, molokhia and moringa leaves"],["Moderate","Eggs, milk and butter"]],
+  food:[["Excellent","Liver (in moderate amounts)",["liver"]],["Good","Carrots, sweet potatoes, pumpkin and mango"],["Good","Spinach, molokhia and moringa leaves"],["Moderate","Eggs, milk and butter",["egg", "milk", "ghee"]]],
   tips:["Colourful plant sources are safe and do not cause excess."],
   warn:"Pregnant women should not eat much liver or take vitamin A supplements beyond their pregnancy vitamins, because excess harms the baby.",
-  rec:["Moringa-leaf soup (tinola)","Moringa with yoghurt","Chicken livers with pomegranate molasses"]},
+  rec:["Moringa-leaf soup (tinola)","Moringa with yoghurt","Chicken livers with pomegranate molasses","Boiled egg for children"]},
  {id:"omega", n:"Omega-3", need:"Two portions of oily fish a week",
   risk:["People who do not eat fish"],
   sym:["No clear symptoms of deficiency, but it matters for heart, brain and eye health"],
@@ -4932,7 +4942,7 @@ const NUTR = [
   warn:"High-dose fish-oil supplements may increase bleeding with blood thinners.",
   rec:["Sardine salad with lemon and cumin","Soaked flaxseed"]}
 ];
-const NSYM = [["Tiredness and exhaustion",["iron","b12","vitd","folate","mg"]],["Paleness and shortness of breath",["iron","b12","folate"]],["Hair loss",["iron","zinc","vitd"]],["Numbness and tingling in the limbs",["b12"]],["Bone and muscle pain",["vitd","calcium"]],["Muscle cramps",["mg","calcium"]],["Mouth ulcers and cracked mouth corners",["b12","iron","folate"]],["Bleeding gums and slow wound healing",["vitc","zinc"]],["Poor vision in the dark",["vita"]],["Frequent infections",["vitd","zinc","vitc","vita"]],["Brittle nails",["iron"]]];
+const NSYM = [["Tiredness and exhaustion",["iron","b12","vitd","folate","mg","protein"]],["Muscle weakness and weight loss",["protein","vitd"]],["Paleness and shortness of breath",["iron","b12","folate"]],["Hair loss",["iron","zinc","vitd","protein"]],["Numbness and tingling in the limbs",["b12"]],["Bone and muscle pain",["vitd","calcium"]],["Muscle cramps",["mg","calcium"]],["Mouth ulcers and cracked mouth corners",["b12","iron","folate"]],["Bleeding gums and slow wound healing",["vitc","zinc","protein"]],["Poor vision in the dark",["vita"]],["Frequent infections",["vitd","zinc","vitc","vita"]],["Brittle nails",["iron"]]];
 const nst={sym:null};
 const SITE_URL="https://maryamherbs.com/en.html";
 const IC_COPY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>';
@@ -4972,13 +4982,14 @@ function renderNutri(){
    <div class="ngrid">${list.map(x=>`<article class="ncard" id="n-${x.id}">
      <h3>${x.n}</h3><p class="need"><b>Daily need:</b> ${x.need}</p>
      <div class="ncols"><div><h4>Most at risk of deficiency</h4><ul>${x.risk.map(r=>`<li>${r}</li>`).join("")}</ul></div><div><h4>Deficiency symptoms</h4><ul>${x.sym.map(r=>`<li>${r}</li>`).join("")}</ul></div></div>
-     <h4>Best sources</h4><ul class="foods">${x.food.map(([g,f])=>`<li><span class="fg">${g}</span>${f}</li>`).join("")}</ul>
+     <h4>Best sources</h4><ul class="foods">${x.food.map(([g,f,ids])=>`<li><span class="fg">${g}</span>${f}${ids&&ids.some(i=>byId[i])?` <span class="flinks">${ids.filter(i=>byId[i]).map(i=>`<button type="button" class="herb-link" data-h="${i}">${byId[i].ar.split(" (")[0]}</button>`).join(" ")}</span>`:""}</li>`).join("")}</ul>
      <h4>For better absorption</h4><ul>${x.tips.map(r=>`<li>${r}</li>`).join("")}</ul>
      <div class="caution" style="font-size:.86rem">${x.warn}</div>
      ${x.rec.length?`<h4>Recipes in the guide</h4><div class="opts">${x.rec.map(r=>`<button type="button" class="chip" data-gr="${r}">${r}</button>`).join("")}</div>`:""}
    </article>`).join("")}</div>
    <div class="red"><h4>When do you need a test and a doctor?</h4><ul><li>Tiredness, paleness or shortness of breath lasting more than two weeks.</li><li>Numbness in the limbs or poor memory.</li><li>Before and during pregnancy, and with heavy periods.</li><li>With long-term medicines such as metformin and acid medicines, or after stomach surgery.</li><li>Do not take «vitamin injections» or high doses without a test; too much of some vitamins is as harmful as too little.</li></ul></div>`;
   el.querySelectorAll("[data-ns]").forEach(b=>b.onclick=()=>{ nst.sym = nst.sym===b.dataset.ns?null:b.dataset.ns; renderNutri(); });
+  el.querySelectorAll(".flinks .herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
   el.querySelectorAll("[data-gr]").forEach(b=>b.onclick=()=>goRecipe(b.dataset.gr));
 }
 /* ---------- Name glossary ---------- */
@@ -5279,9 +5290,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- What's new: shown once to returning visitors after each update ---------- */
-const NEWS={v:"2026-11-07i",date:"7 November 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07j",date:"7 November 2026",go:"folk",items:[
  "<b>New section: folk customs, what is sound and what harms.</b> Salting newborns, kohl, incense, tahneek, cautery, bonesetters, the forty days after birth, water and herbs for babies and more, with the safe alternative for each custom.",
  "<b>The «From animals» section:</b> eggs, chicken, meat, liver, ghee, cow's and camel milk, plus sheep tail fat, yogurt and laban, aqit, goat milk, bee products, locusts, dhub fat and ostrich oil.",
+ "<b>Food and vitamins:</b> a new protein card, and direct links from each vitamin's food sources to the pages on eggs, liver, meat and milk.",
  "New recipes: shneena with mint, pigeon broth after childbirth, bone broth, harees, and boiled egg for children.",
  "<b>The organic farming section</b> with a planting calendar for five Arab regions."
 ]};

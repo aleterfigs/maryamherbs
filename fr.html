@@ -431,6 +431,9 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .fblist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
 .fblist li{border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-size:.9rem;display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}
 .fblist small{color:var(--muted);margin-inline-start:auto}
+.foods li:has(.flinks){flex-wrap:wrap}
+.flinks{display:flex;flex-wrap:wrap;gap:4px;flex-basis:100%;margin-top:4px;padding-inline-start:2px}
+.flinks .herb-link{font:inherit;font-size:.8rem;border:1px solid var(--leaf);border-radius:999px;background:transparent;color:var(--leaf);padding:1px 8px;cursor:pointer;text-decoration:none}
 .otable{width:100%;border-collapse:collapse;font-size:.9rem;background:var(--sheet);border:1px solid var(--line);border-radius:8px;overflow:hidden}
 .otable th,.otable td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:start;vertical-align:top;line-height:1.7}
 .otable th{background:var(--leaf);color:var(--sheet);font-weight:600}
@@ -4857,21 +4860,28 @@ const NUTR = [
  {id:"iron", n:"Fer", need:"8 mg pour les hommes, 18 mg pour les femmes avant la ménopause, et 27 mg pendant la grossesse",
   risk:["Femmes aux règles abondantes","Femmes enceintes","Enfants et adolescents en pleine croissance","Végétariens","Personnes qui boivent du thé aux repas"],
   sym:["Fatigue et épuisement","Pâleur","Essoufflement à l'effort","Vertiges","Chute de cheveux","Ongles cassants ou en cuillère","Envies de manger de la glace ou de l'argile"],
-  food:[["Excellente","Foie et viande rouge (fer facilement absorbé)"],["Bonne","Poulet, poisson et fruits de mer"],["Bonne","Lentilles, pois chiches, fèves et haricots cornille"],["Modéré","Épinards, mloukhia et mauve"],["Modéré","Sirop de dattes, dattes sèches et abricots secs"],["Modéré","Graines de courge, sésame et tahini"]],
+  food:[["Excellente","Foie et viande rouge (fer facilement absorbé)",["liver", "mutton", "camel"]],["Bonne","Poulet, poisson et fruits de mer",["chicken"]],["Bonne","Lentilles, pois chiches, fèves et haricots cornille"],["Modéré","Épinards, mloukhia et mauve"],["Modéré","Sirop de dattes, dattes sèches et abricots secs"],["Modéré","Graines de courge, sésame et tahini"]],
   tips:["Mangez avec une source de vitamine C (citron, tomate, poivron, orange) pour doubler l'absorption du fer végétal.","Buvez le thé et le café une heure après les repas, pas pendant.","Le lait et le calcium réduisent l'absorption du fer pris en même temps."],
   warn:"Les comprimés de fer pour adultes peuvent être mortels pour un enfant qui les avale : gardez-les hors de portée. Et ne prenez pas de fer sans analyse, car l'excès est nocif.",
-  rec:["Soupe de lentilles et d'épinards pour le fer","Salade de pois chiches et persil au citron pour le fer","Foies de volaille à la mélasse de grenade","Mauve cuisinée","Dibs w'rashi"]},
+  rec:["Soupe de lentilles et d'épinards pour le fer","Salade de pois chiches et persil au citron pour le fer","Foies de volaille à la mélasse de grenade","Mauve cuisinée","Dibs w'rashi","Harees"]},
+ {id:"protein", n:"Protéines", need:"Environ 0,8 g par kilo de poids corporel par jour chez l'adulte, un peu plus pour les personnes âgées, les femmes enceintes et allaitantes et les convalescents",
+  risk:["Les personnes âgées, surtout celles qui ont peu d'appétit","Les convalescents après une maladie ou une opération","Les femmes enceintes et allaitantes","Les enfants en période de croissance","Les végétariens qui ne varient pas légumineuses et céréales","Les personnes qui suivent un régime amaigrissant strict"],
+  sym:["Faiblesse et perte de masse musculaire","Fatigue","Cicatrisation lente","Chute de cheveux et ongles fragiles","Infections fréquentes","Gonflement des pieds en cas de carence sévère"],
+  food:[["Excellente","Œufs",["egg"]],["Excellente","Poulet, viandes et poisson",["chicken","mutton","camel"]],["Bonne","Yaourt, lben, lait et fromage",["yogurt","milk"]],["Bonne","Lentilles, pois chiches, fèves et haricots"],["Modéré","Fruits à coque et graines : amandes, graines de courge et sésame"]],
+  tips:["Répartissez les protéines sur les trois repas plutôt que de tout prendre en une fois.","Pour les végétariens : associez légumineuses et céréales, comme lentilles et riz ou pois chiches et pain.","Pour les personnes âgées : un œuf au petit-déjeuner et un yaourt entre les repas augmentent facilement les protéines."],
+  warn:"En cas de maladie rénale, n'augmenter les protéines que sous surveillance médicale. La plupart des gens n'ont pas besoin de poudres protéinées, et certaines sont frelatées avec des substances interdites.",
+  rec:["Œuf dur pour les enfants","Œufs aux épinards et au zaatar","Soupe de poulet (le conseil de Maïmonide)","Harees","Shneena (lben) à la menthe"]},
  {id:"vitd", n:"Vitamine D", need:"600 UI (15 µg) par jour pour les adultes, et 800 après soixante-dix ans",
   risk:["La plupart des gens dans le Golfe malgré le soleil, à cause de la chaleur, de la vie à l'intérieur et des vêtements couvrants","Personnes à la peau foncée","Personnes âgées","Bébés allaités exclusivement","Personnes obèses"],
   sym:["Douleurs osseuses et musculaires","Fatigue","Faiblesse musculaire","Infections fréquentes","Chute de cheveux"],
-  food:[["Bonne","Poissons gras : saumon, sardines, maquereau (thazard) et thon"],["Modéré","Jaune d'œuf"],["Modéré","Lait, laban et jus enrichis"],["Faible","Champignons exposés au soleil"],["La source principale","Soleil : 10 à 30 minutes sur les bras et le visage quelques fois par semaine, avant que la peau ne rougisse"]],
+  food:[["Bonne","Poissons gras : saumon, sardines, maquereau (thazard) et thon"],["Modéré","Jaune d'œuf",["egg"]],["Modéré","Lait, laban et jus enrichis",["milk", "yogurt"]],["Faible","Champignons exposés au soleil"],["La source principale","Soleil : 10 à 30 minutes sur les bras et le visage quelques fois par semaine, avant que la peau ne rougisse"]],
   tips:["L'alimentation seule en apporte rarement assez ; beaucoup ont besoin d'un complément après une prise de sang.","Mieux absorbée avec un repas contenant des graisses.","Le verre des fenêtres bloque les rayons qui produisent la vitamine D."],
   warn:"De très fortes doses sur de longues périodes sans surveillance peuvent élever le calcium sanguin et nuire aux reins. Fixez la dose avec le médecin selon votre analyse.",
-  rec:["Salade de sardines au citron et au cumin","Œufs aux épinards et au zaatar"]},
+  rec:["Salade de sardines au citron et au cumin","Œufs aux épinards et au zaatar","Œuf dur pour les enfants"]},
  {id:"b12", n:"Vitamine B12", need:"2.4 µg par jour pour les adultes",
   risk:["Végétaliens qui ne consomment aucun produit animal","Personnes âgées","Personnes sous metformine pour le diabète","Personnes sous anti-acides pendant de longues périodes","Après une chirurgie de l'estomac ou une sleeve"],
   sym:["Engourdissements et fourmillements des mains et des pieds","Fatigue et pâleur","Mauvaise mémoire et concentration","Aphtes et langue rouge","Perte d'équilibre"],
-  food:[["Excellente","Foie et fruits de mer"],["Bonne","Viande, poisson, sardines et thon"],["Bonne","Œufs, lait, laban et fromage"],["Modéré","Aliments enrichis (céréales du petit-déjeuner)"]],
+  food:[["Excellente","Foie et fruits de mer",["liver"]],["Bonne","Viande, poisson, sardines et thon"],["Bonne","Œufs, lait, laban et fromage",["egg", "milk", "yogurt"]],["Modéré","Aliments enrichis (céréales du petit-déjeuner)"]],
   tips:["Absente des végétaux en quantités utiles.","Sous metformine ou après une chirurgie de l'estomac : faites-la doser chaque année.","Un manque prolongé peut causer des lésions nerveuses permanentes, donc ne retardez pas l'analyse."],
   warn:"Traiter un manque important peut nécessiter des injections décidées par le médecin.",
   rec:["Soupe de poulet (le conseil de Maïmonide)","Salade de sardines au citron et au cumin","Œufs aux épinards et au zaatar","Foies de volaille à la mélasse de grenade"]},
@@ -4885,17 +4895,17 @@ const NUTR = [
  {id:"calcium", n:"Le calcium", need:"1000 mg par jour pour les adultes, 1 300 pour les adolescents, et 1 200 pour les femmes de plus de cinquante ans",
   risk:["Adolescents","Femmes après la ménopause","Personnes qui ne consomment pas de produits laitiers","Manque de vitamine D"],
   sym:["Crampes musculaires","Fourmillements autour de la bouche et des doigts","Ostéoporose à long terme (généralement sans symptômes)"],
-  food:[["Excellente","Lait, laban, yaourt et fromage"],["Bonne","Sardines en boîte avec leurs arêtes"],["Bonne","Tahini et sésame"],["Modéré","Amandes et figues sèches"],["Modéré","Légumes verts (mloukhia, roquette et brocoli)"]],
+  food:[["Excellente","Lait, laban, yaourt et fromage",["milk", "yogurt", "goatmilk"]],["Bonne","Sardines en boîte avec leurs arêtes"],["Bonne","Tahini et sésame"],["Modéré","Amandes et figues sèches",["fig"]],["Modéré","Légumes verts (mloukhia, roquette et brocoli)"]],
   tips:["A besoin de vitamine D pour être absorbé.","Le corps absorbe mieux le calcium en petites quantités réparties dans la journée.","Les sodas et l'excès de sel et de café réduisent les réserves de calcium."],
   warn:"Trop de compléments de calcium peut provoquer calculs rénaux et constipation ; l'alimentation est la meilleure source.",
-  rec:["Yaourt calcique aux dattes et au sésame","Halwa maison au sésame et aux dattes","Salade de sardines au citron et au cumin","Lait de chamelle au miel"]},
+  rec:["Yaourt calcique aux dattes et au sésame","Halwa maison au sésame et aux dattes","Salade de sardines au citron et au cumin","Lait de chamelle au miel","Shneena (lben) à la menthe"]},
  {id:"zinc", n:"Zinc", need:"11 mg pour les hommes, et 8 mg pour les femmes",
   risk:["Végétariens","Personnes âgées","Femmes enceintes et allaitantes","Maladies intestinales chroniques"],
   sym:["Chute de cheveux","Cicatrisation lente","Infections fréquentes","Goût et odorat affaiblis","Éruption cutanée"],
-  food:[["Excellente","Huîtres"],["Bonne","Viande rouge et poulet"],["Bonne","Graines de courge, sésame et noix de cajou"],["Modéré","Pois chiches, lentilles et fèves"],["Modéré","Avoine et céréales complètes"]],
+  food:[["Excellente","Huîtres"],["Bonne","Viande rouge et poulet",["mutton", "chicken"]],["Bonne","Graines de courge, sésame et noix de cajou"],["Modéré","Pois chiches, lentilles et fèves"],["Modéré","Avoine et céréales complètes"]],
   tips:["Le trempage et la germination améliorent son absorption à partir des légumineuses et des céréales."],
   warn:"Trop de compléments de zinc sur de longues périodes provoque un manque de cuivre et une anémie.",
-  rec:["En-cas de graines de courge","Salade aux graines de courge et à l'ail","Bouillie d'avoine au lin et aux dattes"]},
+  rec:["En-cas de graines de courge","Salade aux graines de courge et à l'ail","Bouillie d'avoine au lin et aux dattes","Harees","Soupe de poulet (le conseil de Maïmonide)"]},
  {id:"mg", n:"Magnésium", need:"400–420 mg pour les hommes, et 310 à 320 mg pour les femmes",
   risk:["Personnes diabétiques","Personnes sous diurétiques ou anti-acides pendant de longues périodes","Personnes âgées"],
   sym:["Crampes musculaires, surtout la nuit","Fatigue","Palpitations","Maux de tête","Difficultés de sommeil"],
@@ -4906,10 +4916,10 @@ const NUTR = [
  {id:"iodine", n:"Iode", need:"150 µg pour les adultes, 220 pendant la grossesse, et 290 pendant l'allaitement",
   risk:["Femmes enceintes et allaitantes","Personnes utilisant du sel non iodé"],
   sym:["Une thyroïde augmentée de volume","Fatigue, prise de poids et frilosité (hypothyroïdie)","Pendant la grossesse : affecte le développement du cerveau du bébé"],
-  food:[["Excellente","Poisson et fruits de mer"],["Bonne","Sel iodé"],["Bonne","Lait, laban et œufs"]],
+  food:[["Excellente","Poisson et fruits de mer"],["Bonne","Sel iodé"],["Bonne","Lait, laban et œufs",["milk", "yogurt", "egg"]]],
   tips:["Utilisez du sel iodé à la maison, en quantité modérée.","Le sel de l'Himalaya et le sel de mer ne sont généralement pas iodés."],
   warn:"Ne prenez pas de compléments d'iode ni d'algues concentrées sans médecin, surtout en cas de maladie de la thyroïde.",
-  rec:["Salade de sardines au citron et au cumin"]},
+  rec:["Salade de sardines au citron et au cumin","Œuf dur pour les enfants","Shneena (lben) à la menthe"]},
  {id:"vitc", n:"Vitamine C", need:"90 mg pour les hommes, et 75 mg pour les femmes, plus 35 mg pour les fumeurs",
   risk:["Personnes qui ne mangent pas de fruits et légumes frais","Fumeurs","Personnes âgées"],
   sym:["Saignement des gencives","Cicatrisation lente","Bleus fréquents","Fatigue"],
@@ -4920,10 +4930,10 @@ const NUTR = [
  {id:"vita", n:"Vitamine A", need:"900 µg pour les hommes, et 700 µg pour les femmes",
   risk:["Malnutrition","Troubles de l'absorption des graisses"],
   sym:["Mauvaise vision dans l'obscurité","Yeux et peau secs","Infections fréquentes"],
-  food:[["Excellente","Foie (en quantité modérée)"],["Bonne","Carottes, patates douces, potiron et mangue"],["Bonne","Épinards, mloukhia et feuilles de moringa"],["Modéré","Œufs, lait et beurre"]],
+  food:[["Excellente","Foie (en quantité modérée)",["liver"]],["Bonne","Carottes, patates douces, potiron et mangue"],["Bonne","Épinards, mloukhia et feuilles de moringa"],["Modéré","Œufs, lait et beurre",["egg", "milk", "ghee"]]],
   tips:["Les sources végétales colorées sont sûres et ne provoquent pas d'excès."],
   warn:"Les femmes enceintes ne doivent pas manger beaucoup de foie ni prendre de compléments de vitamine A en plus de leurs vitamines de grossesse, car l'excès nuit au bébé.",
-  rec:["Soupe aux feuilles de moringa (tinola)","Moringa au yaourt","Foies de volaille à la mélasse de grenade"]},
+  rec:["Soupe aux feuilles de moringa (tinola)","Moringa au yaourt","Foies de volaille à la mélasse de grenade","Œuf dur pour les enfants"]},
  {id:"omega", n:"Oméga-3", need:"Deux portions de poisson gras par semaine",
   risk:["Personnes qui ne mangent pas de poisson"],
   sym:["Pas de symptômes clairs de manque, mais ils comptent pour la santé du cœur, du cerveau et des yeux"],
@@ -4932,7 +4942,7 @@ const NUTR = [
   warn:"Les compléments d'huile de poisson à forte dose peuvent augmenter le saignement avec les anticoagulants.",
   rec:["Salade de sardines au citron et au cumin","Graines de lin trempées"]}
 ];
-const NSYM = [["Fatigue et épuisement",["iron","b12","vitd","folate","mg"]],["Pâleur et essoufflement",["iron","b12","folate"]],["Chute de cheveux",["iron","zinc","vitd"]],["Engourdissements et fourmillements des membres",["b12"]],["Douleurs osseuses et musculaires",["vitd","calcium"]],["Crampes musculaires",["mg","calcium"]],["Aphtes et gerçures aux coins de la bouche",["b12","iron","folate"]],["Gencives qui saignent et cicatrisation lente",["vitc","zinc"]],["Mauvaise vision dans l'obscurité",["vita"]],["Infections fréquentes",["vitd","zinc","vitc","vita"]],["Ongles cassants",["iron"]]];
+const NSYM = [["Fatigue et épuisement",["iron","b12","vitd","folate","mg","protein"]],["Faiblesse musculaire et perte de poids",["protein","vitd"]],["Pâleur et essoufflement",["iron","b12","folate"]],["Chute de cheveux",["iron","zinc","vitd","protein"]],["Engourdissements et fourmillements des membres",["b12"]],["Douleurs osseuses et musculaires",["vitd","calcium"]],["Crampes musculaires",["mg","calcium"]],["Aphtes et gerçures aux coins de la bouche",["b12","iron","folate"]],["Gencives qui saignent et cicatrisation lente",["vitc","zinc","protein"]],["Mauvaise vision dans l'obscurité",["vita"]],["Infections fréquentes",["vitd","zinc","vitc","vita"]],["Ongles cassants",["iron"]]];
 const nst={sym:null};
 const SITE_URL="https://maryamherbs.com/fr.html";
 const IC_COPY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>';
@@ -4972,13 +4982,14 @@ function renderNutri(){
    <div class="ngrid">${list.map(x=>`<article class="ncard" id="n-${x.id}">
      <h3>${x.n}</h3><p class="need"><b>Besoin quotidien :</b> ${x.need}</p>
      <div class="ncols"><div><h4>Les plus exposés au manque</h4><ul>${x.risk.map(r=>`<li>${r}</li>`).join("")}</ul></div><div><h4>Symptômes du manque</h4><ul>${x.sym.map(r=>`<li>${r}</li>`).join("")}</ul></div></div>
-     <h4>Meilleures sources</h4><ul class="foods">${x.food.map(([g,f])=>`<li><span class="fg">${g}</span>${f}</li>`).join("")}</ul>
+     <h4>Meilleures sources</h4><ul class="foods">${x.food.map(([g,f,ids])=>`<li><span class="fg">${g}</span>${f}${ids&&ids.some(i=>byId[i])?` <span class="flinks">${ids.filter(i=>byId[i]).map(i=>`<button type="button" class="herb-link" data-h="${i}">${byId[i].ar.split(" (")[0]}</button>`).join(" ")}</span>`:""}</li>`).join("")}</ul>
      <h4>Pour une meilleure absorption</h4><ul>${x.tips.map(r=>`<li>${r}</li>`).join("")}</ul>
      <div class="caution" style="font-size:.86rem">${x.warn}</div>
      ${x.rec.length?`<h4>Recettes du guide</h4><div class="opts">${x.rec.map(r=>`<button type="button" class="chip" data-gr="${r}">${r}</button>`).join("")}</div>`:""}
    </article>`).join("")}</div>
    <div class="red"><h4>Quand faut-il une analyse et un médecin ?</h4><ul><li>Fatigue, pâleur ou essoufflement depuis plus de deux semaines.</li><li>Engourdissement des membres ou mauvaise mémoire.</li><li>Avant et pendant la grossesse, et en cas de règles abondantes.</li><li>Avec des traitements au long cours comme la metformine et les anti-acides, ou après une chirurgie de l'estomac.</li><li>Ne prenez pas d'«injections de vitamines» ni de fortes doses sans analyse ; l'excès de certaines vitamines est aussi nocif que le manque.</li></ul></div>`;
   el.querySelectorAll("[data-ns]").forEach(b=>b.onclick=()=>{ nst.sym = nst.sym===b.dataset.ns?null:b.dataset.ns; renderNutri(); });
+  el.querySelectorAll(".flinks .herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
   el.querySelectorAll("[data-gr]").forEach(b=>b.onclick=()=>goRecipe(b.dataset.gr));
 }
 /* ---------- Glossaire des noms ---------- */
@@ -5279,9 +5290,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-07i",date:"7 novembre 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07j",date:"7 novembre 2026",go:"folk",items:[
  "<b>Nouvelle rubrique : coutumes populaires, ce qui est juste et ce qui nuit.</b> Saler le nouveau-né, le khôl, l'encens, le tahnik, la cautérisation, les rebouteux, les quarante jours, l'eau et les plantes pour le nourrisson et d'autres, avec l'alternative sûre pour chaque coutume.",
  "<b>La rubrique «D'origine animale» :</b> œufs, poulet, viandes, foie, smen, lait de vache et de chamelle, puis graisse de queue de mouton, yaourt et lben, aqit, lait de chèvre, produits de la ruche, criquets, graisse de dhub et huile d'autruche.",
+ "<b>Alimentation et vitamines :</b> une nouvelle fiche sur les protéines, et des liens directs depuis les sources de chaque vitamine vers les pages œufs, foie, viandes et laits.",
  "Nouvelles recettes : shneena à la menthe, bouillon de pigeon après l'accouchement, bouillon d'os, harees et œuf dur pour les enfants.",
  "<b>La rubrique agriculture biologique</b> avec un calendrier de plantation pour cinq régions arabes."
 ]};
