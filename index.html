@@ -429,6 +429,17 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .fblist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
 .fblist li{border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-size:.9rem;display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}
 .fblist small{color:var(--muted);margin-inline-start:auto}
+.otable{width:100%;border-collapse:collapse;font-size:.9rem;background:var(--sheet);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.otable th,.otable td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:start;vertical-align:top;line-height:1.7}
+.otable th{background:var(--leaf);color:var(--sheet);font-weight:600}
+.otable td:first-child{font-weight:600;color:var(--leaf);white-space:nowrap}
+.otable tr:last-child td{border-bottom:0}
+.owrap{overflow-x:auto;margin:6px 0 18px}
+.ofarm{background:var(--paper);border:1px dashed var(--leaf);border-radius:8px;padding:10px 12px;margin-top:10px}
+.ofarm h4{margin:0 0 4px;color:var(--leaf)}
+.osoon{border:2px dashed var(--clay);border-radius:10px;padding:14px;margin:18px 0;background:var(--sheet)}
+.osoon h3{margin:0 0 6px;color:var(--clay)}
+@media (max-width:560px){.otable td:first-child{white-space:normal}}
 #totop{position:fixed;inset-inline-end:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:25;width:48px;height:48px;border-radius:50%;border:0;background:var(--leaf);color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .25s,transform .25s}
 #totop.on{opacity:.92;transform:none;pointer-events:auto}
 #totop:focus-visible{outline:3px solid var(--clay);outline-offset:2px}
@@ -469,6 +480,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
     <div class="ngroup"><span class="nlabel">البيت والطوارئ</span>
       <button class="tab" id="tabAid" aria-selected="false">الإسعافات الأولية</button>
       <button class="tab" id="tabKit" aria-selected="false">الصيدلية المنزلية</button>
+      <button class="tab" id="tabOrganic" aria-selected="false">الزراعة العضوية</button>
     </div>
     <div class="ngroup"><span class="nlabel">تعلّم وتحقّق</span>
       <button class="tab" id="tabNutri" aria-selected="false">الغذاء والفيتامينات</button>
@@ -498,6 +510,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
   <div class="page" id="mom" hidden></div>
   <div class="page" id="women" hidden></div>
   <div class="page" id="kit" hidden></div>
+  <div class="page" id="organic" hidden></div>
   <div class="page" id="aid" hidden></div>
   <div class="page" id="nutri" hidden></div>
   <div class="page" id="safety" hidden></div>
@@ -3402,17 +3415,17 @@ function renderRecipes(){
 }
 function setView(v){
   state.view=v;
-  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabAid","aid"],["tabNutri","nutri"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
+  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
   $("#recipes").hidden=v!=="recipes"; $("#wizard").hidden=v!=="wizard";
-  ["home","mom","women","kit","aid","nutri","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
-  const pageView=["home","mom","women","wizard","kit","aid","nutri","safety","gloss","about"].includes(v);
+  ["home","mom","women","kit","organic","aid","nutri","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
+  const pageView=["home","mom","women","wizard","kit","organic","aid","nutri","safety","gloss","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
   render();
 }
 function render(){
   renderAud();
-  if(["home","mom","women","kit","aid","nutri","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
+  if(["home","mom","women","kit","organic","aid","nutri","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
@@ -4079,11 +4092,12 @@ function renderHome(){
      <p class="hstats">${n(HERBS.length)} عشبة · ${n(RECIPES.length)} خلطة · ${n(Object.keys(ORIG).length)} تقليدًا · ${n(PROBS.length)} مشكلة صحية</p>
    </section>
    <div class="tiles">${TILES.map(([k,t,d],i)=>`<button type="button" class="tile${i===0?" tile-main":""}" data-go="${k}"><span class="ticon">${tileIcon(k)}</span><span class="ttext"><b>${t}</b><small>${d}</small></span></button>`).join("")}</div>
-   <section class="feat"><h3>أبواب موسّعة</h3><div class="featrow">${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>دليل كامل: الأنواع والسنّة والعلم والسلامة</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>باب المرأة</b><small>الدورة والحمل والنفاس، والبشرة والشعر، وتحذيرات التجميل</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>من البحر</b><small>زيت السمك والماء المالح والطحالب والعنبر: ما ينفع وما يُحذر</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>ازرع صيدليتك</b><small>أعشاب سهلة الزراعة في الخليج، ومتى وكيف تُزرع</small></span></button></div></section>
+   <section class="feat"><h3>أبواب موسّعة</h3><div class="featrow">${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>دليل كامل: الأنواع والسنّة والعلم والسلامة</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>باب المرأة</b><small>الدورة والحمل والنفاس، والبشرة والشعر، وتحذيرات التجميل</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>من البحر</b><small>زيت السمك والماء المالح والطحالب والعنبر: ما ينفع وما يُحذر</small></span></button><button type="button" class="featcard" data-organic="1">${herbIcon(byId.moringa)}<span><b>الزراعة العضوية في الخليج</b><small>تربة رملية، وكمبوست، ومكافحة طبيعية للآفات، وتقويم زراعي للإمارات</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>ازرع صيدليتك</b><small>أعشاب سهلة الزراعة في الخليج، ومتى وكيف تُزرع</small></span></button></div></section>
    <section class="quick"><h3>في الحالات الطارئة</h3><div class="opts">${["snake","scorpion","dog","burn","heat","poison"].map(id=>{const a=AID.find(x=>x.id===id);return `<button type="button" class="chip urgent" data-aidgo="${id}"><span class="dot ${SEV[a.sev][1]}"></span>${a.n}</button>`;}).join("")}</div></section>`;
   $("#home").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{ if(b.dataset.go==="wizard") Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:null,step:1}); setView(b.dataset.go); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
   $("#home").querySelectorAll("[data-grow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
+  $("#home").querySelectorAll("[data-organic]").forEach(b=>b.onclick=()=>{ ost.id=null; setView("organic"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-women]").forEach(b=>b.onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-sea]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="sea"; setView("herbs"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-aidgo]").forEach(b=>b.onclick=()=>{ ast.id=b.dataset.aidgo; setView("aid"); window.scrollTo({top:0}); });
@@ -4398,6 +4412,83 @@ function renderWomen(){
   el.querySelectorAll("[data-gr]").forEach(b=>b.onclick=()=>goRecipe(b.dataset.gr));
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
   el.querySelectorAll("[data-nu]").forEach(b=>b.onclick=()=>{ nst.sym=null; setView("nutri"); const n=$("#n-"+b.dataset.nu); n&&n.scrollIntoView({block:"start"}); });
+}
+/* ---------- الزراعة العضوية ---------- */
+const ost={id:null};
+const OG=[
+ {id:"soil",n:"تحسين التربة الرملية",
+  intro:"تربة الإمارات رملية في الغالب، فقيرة بالمادة العضوية، وتميل إلى القلوية والملوحة، فلا تحفظ الماء ولا الغذاء. وأساس الزراعة العضوية تغذية التربة لا النبات.",
+  do:["أضف طبقة من الكمبوست بسمك 5–10 سم واخلطها في أعلى 20–30 سم من التربة قبل كل موسم.","للبيوت: أحواض مرتفعة أو أصص بخلطة من الرمل والكمبوست وألياف جوز الهند (كوكوبيت).","ازرع البقوليات في الشتاء كالبرسيم والفول، ثم اقلبها في التربة قبل أن تُزهر لتغنيها بالنيتروجين (السماد الأخضر).","غطِّ سطح التربة دائمًا بالقش أو الأوراق الجافة أو السعف المفروم، فالتربة المكشوفة تحترق في الشمس.","اعرف ملوحة ماء الري وتربتك بتحليل بسيط، فالملوحة أكبر عدو للزراعة في الخليج."],
+  dont:["السماد الحيواني الطازج: يحرق الجذور، وقد ينقل جراثيم خطرة وبذور أعشاب ضارة. استعمله بعد تخميره شهرين إلى ثلاثة على الأقل.","الأسمدة الكيميائية والمبيدات الصناعية: لا تُستعمل في الزراعة العضوية.","حرث التربة وتركها مكشوفة في الصيف."],
+  farm:"قبل الموسم: حلّل التربة والماء في مختبر معتمد، وسجّل كميات السماد العضوي التي تضيفها كل موسم، فهذا يفيدك في الشهادة العضوية لاحقًا.",
+  h:["fenugreek"]},
+ {id:"compost",n:"صنع الكمبوست في البيت",
+  intro:"الكمبوست سماد عضوي تصنعه بنفسك من مخلفات المطبخ والحديقة، وهو أنفع ما يُضاف للتربة الرملية. والحرّ عندنا يسرّع تحلّله، بشرط ألّا يجف.",
+  do:["اجمع موادّ «بنية» جافة: أوراق يابسة، وسعف مفروم، وكرتون بلا حبر لامع، ونشارة خشب غير معالج.","واجمع موادّ «خضراء» رطبة: بقايا الخضار والفاكهة، وتفل القهوة والشاي، والعشب المقصوص.","اخلط تقريبًا جزأين إلى ثلاثة من البني مع جزء من الأخضر، في حاوية مثقوبة أو كومة في الظل.","أبقِها رطبة مثل إسفنجة معصورة: في الصيف رشّها بالماء كل يومين إلى ثلاثة، وغطّها.","قلّبها مرة في الأسبوع. يجهز خلال شهرين إلى ثلاثة أشهر حين يصير داكنًا ورائحته كرائحة التراب بعد المطر.","سماد الديدان: ديدان حمراء مخصصة في صندوق داخل البيت، لأن حرارة الصيف فوق 35° تقتلها."],
+  dont:["اللحوم والأسماك والألبان والزيوت: تجذب الحشرات والقطط وتسبب رائحة كريهة.","فضلات القطط والكلاب، والنباتات المريضة.","ترك الكومة تجف تمامًا في الشمس، فيتوقف التحلّل."],
+  farm:"في المزرعة: اصنع صفوفًا طويلة من الكمبوست وقلّبها بالآلة، واخلط روث الماشية مع مخلفات النخيل المفرومة؛ فالنخلة الواحدة تعطي كميات كبيرة من السعف كل سنة.",
+  h:[]},
+ {id:"pests",n:"مكافحة الآفات طبيعيًا",
+  intro:"الوقاية أولًا: النبات القوي في تربة غنية وفي موسمه الصحيح يقاوم الآفات أكثر. وإن ظهرت آفة فابدأ بالأخف.",
+  do:["افحص ظهر الأوراق كل أسبوع، وأزل الأوراق المصابة مبكرًا.","رشّة ماء قوية تُسقط المنّ عن الأوراق.","الصابون البوتاسي المخصص للزراعة للمنّ والذبابة البيضاء، حسب تعليمات العبوة.","زيت النيم المخصص للزراعة، حسب تعليمات العبوة.","منقوع الثوم والفلفل الحار طارد لبعض الحشرات؛ يُصفّى جيدًا ويُجرّب على ورقة أولًا.","المصائد الصفراء اللاصقة للذبابة البيضاء والحشرات الطائرة.","البكتيريا النافعة (Bt) للديدان التي تأكل الأوراق، وهي مسموحة في الزراعة العضوية، حسب العبوة.","شجّع الحشرات النافعة كالدعسوقة، بزراعة الشبت والكزبرة والشمر وتركها تُزهر.","سوسة النخيل الحمراء: بلّغ البلدية أو الجهة الزراعية فورًا، فلها برامج مكافحة ومصائد خاصة."],
+  dont:["الرشّ وقت الظهيرة: يحرق الأوراق. رشّ في المساء.","الرشّ على الأزهار وقت نشاط النحل.","منقوع التبغ: النيكوتين سام للإنسان والحيوان، ولا يُستعمل.","الظن أن «طبيعي» يعني آمنًا: البس قفازات، وأبعد الأطفال، والتزم بتعليمات العبوة ومدة الانتظار قبل القطف.","صابون الجلي المنزلي بكثرة: قد يحرق النبات."],
+  farm:"في المزرعة: سجّل كل مادة ترشّها وتاريخها؛ فالجهات المانحة للشهادة العضوية تطلب هذا السجل، ولا تقبل إلا موادّ مسموحة في المعايير العضوية.",
+  h:["neem","garlic","dill","coriander"]},
+ {id:"water",n:"الري وتوفير الماء في الحرّ",
+  intro:"الماء أغلى ما في زراعة الخليج. والري الذكي يوفّر نصف الماء أو أكثر، ويجعل النبات أقوى.",
+  do:["الري بالتنقيط مع مؤقّت: يوصل الماء للجذور مباشرة.","اسقِ في الصباح الباكر قبل الثامنة، أو بعد المغرب.","غطِّ التربة بطبقة 5–10 سم من القش أو الأوراق أو السعف المفروم، فتقلّ حاجة الري كثيرًا.","في الصيف: شبكة تظليل 30–50٪ فوق الخضار والأعشاب الطرية.","اجمع النباتات حسب حاجتها للماء: العطشى معًا، والمتحمّلة للجفاف معًا.","الأشجار تُسقى ريًّا عميقًا متباعدًا، لا قليلًا كل يوم، لتنزل جذورها إلى العمق."],
+  dont:["الري وقت الظهيرة: يتبخّر معظمه.","رشّ الأوراق بالماء في الشمس.","الماء الراكد: يعفّن الجذور، والمورينغا والزعتر يموتان منه.","سقي الخضار الورقية بالماء الرمادي (ماء الغسيل والاستحمام)."],
+  farm:"في المزرعة: افحص ملوحة ماء البئر كل موسم. الماء المالح يحتاج غسيلًا دوريًا للتربة بري غزير، واختيار محاصيل تتحمّل الملوحة كالنخيل والسدر والبنجر.",
+  h:["moringa"]},
+ {id:"companion",n:"الزراعة المتجاورة",
+  intro:"بعض النباتات تفيد بعضها إذا زُرعت متجاورة: تجذب الحشرات النافعة، أو تطرد الضارة، أو تغذي التربة. وأكثر هذا من خبرة المزارعين، والتجارب العلمية عليه قليلة.",
+  do:["الريحان بجوار الطماطم: عادة قديمة عند المزارعين.","القطيفة (الأقحوان الفرنسي) بين الخضار: تجذب الملقّحات، وجذورها قد تقلّل الديدان الثعبانية في التربة.","البقوليات كالفاصوليا والفول بين الخضار: تغذي التربة بالنيتروجين.","الشبت والكزبرة والشمر حين تُزهر: تجذب الدعسوقة والحشرات النافعة.","البصل والثوم على أطراف الأحواض: رائحتهما تطرد بعض الحشرات."],
+  dont:["النعناع في الأرض مباشرة: ينتشر ويغزو الحوض؛ ازرعه في أصيص.","الشمر بجانب أغلب الخضار: يُضعف نموها حسب خبرة المزارعين؛ ازرعه وحده.","زرع المحصول نفسه في المكان نفسه كل موسم: بدّل مكانه لتقلّ أمراضه."],
+  farm:"",
+  h:["basil","mint","fennel"]},
+ {id:"seeds",n:"حفظ البذور البلدية",
+  intro:"البذور البلدية المحلية تأقلمت مع حرّنا وتربتنا عبر أجيال. وحفظها من موسم لموسم يوفّر المال، ويحفظ أصنافًا قد تضيع.",
+  do:["اختر البذور البلدية أو «مفتوحة التلقيح»؛ أما البذور الهجينة (المكتوب عليها F1) فلا تعطي النبتة نفسها إن زُرعت بذورها.","اختر أقوى النباتات وأفضلها ثمارًا، واتركها حتى تنضج بذورها تمامًا.","جفّف البذور في الظل جيدًا أيامًا.","احفظها في ظرف ورقي أو برطمان زجاجي محكم في مكان بارد جاف، والثلاجة مناسبة إن كان البرطمان محكمًا.","اكتب على كل ظرف الاسم والتاريخ، فأغلب البذور تبقى صالحة من سنتين إلى خمس.","تبادل البذور مع الجيران والمزارعين."],
+  dont:["أخذ البذور من نبات مريض.","حفظها في أكياس بلاستيك قبل أن تجف تمامًا: تتعفّن.","تركها في مكان حار كالسيارة أو المخزن غير المكيّف."],
+  farm:"",
+  h:[]},
+ {id:"cert",n:"للمزارعين: الشهادة العضوية والتسويق",
+  intro:"في الإمارات لا يجوز أن يُكتب «عضوي» على منتج إلا بشهادة من جهة معتمدة. وتشرف على الزراعة العضوية وزارة التغير المناخي والبيئة، ولبعض الإمارات برامج لدعم المزارعين، كبرنامج الشارقة للتحوّل إلى الزراعة العضوية.",
+  do:["تواصل مع وزارة التغير المناخي والبيئة أو الجهة الزراعية في إمارتك لمعرفة الجهات المعتمدة والبرامج الداعمة.","توقّع فترة تحوّل: المزرعة تطبّق المعايير العضوية مدة قبل أن يحق لها بيع إنتاجها باسم «عضوي».","احتفظ بسجلات كاملة: البذور، والأسمدة، والرشّ، والمحاصيل، والمبيعات.","الشهادة تشمل التعبئة والتخزين أيضًا، فإن كنت تجفّف أو تعبّئ فاسأل عن شهادة المصنع."],
+  dont:["كتابة «عضوي» أو «طبيعي 100٪ عضوي» على منتج غير مشهود له: مخالفة قانونية.","خلط محصول عضوي بغير عضوي في التخزين أو التعبئة."],
+  farm:"",
+  h:[]}
+];
+const OCAL=[
+ ["أغسطس–سبتمبر","تعقيم التربة بالشمس: رطّبها وغطّها بغطاء بلاستيك شفاف 4–6 أسابيع لتقتل الآفات وبذور الأعشاب الضارة. وجهّز الكمبوست.","زرع بذور الطماطم والفلفل والباذنجان في مشتل مظلّل آخر سبتمبر."],
+ ["أكتوبر–نوفمبر","بداية الموسم الذهبي: الكوسا والخيار والفاصوليا والبطاطا، والأعشاب الورقية: النعناع والبقدونس والكزبرة والشبت والجرجير والحلبة والخس والسبانخ والجزر والفجل والبصل والثوم والبابونج.","نقل شتلات الطماطم والفلفل إلى الأرض، وإضافة الكمبوست."],
+ ["ديسمبر–يناير","استمرار الخضار الورقية، والبازلاء والفول. وأفضل وقت لغرس الأشجار: التين والرمان والعنب والليمون.","القطف المستمر، وحماية الشتلات من الرياح الباردة."],
+ ["فبراير–مارس","زرع محاصيل الصيف: البامية والملوخية والبطيخ والشمّام والقرع والذرة والريحان.","آخر فرصة للخضار الشتوية، وتجهيز شبكات التظليل."],
+ ["أبريل–مايو","ما يتحمّل الحرّ: المورينغا والسدر والحناء والبامية والملوخية.","تغطية التربة بالقش، والري الصباحي، وتركيب شبكات التظليل."],
+ ["يونيو–يوليو","الصيف القاسي: تبقى البامية والملوخية والمورينغا والنخيل، والريحان في ظل جزئي.","جني الرطب، والري الباكر، وترك الأحواض الفارغة مغطاة."]
+];
+function renderOrganic(){
+  const el=$("#organic"), cur=ost.id&&OG.find(t=>t.id===ost.id), list=cur?[cur]:OG;
+  const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
+  el.innerHTML=`<h2 class="page-h">الزراعة العضوية في الخليج</h2>
+   <p class="sub">ازرع أعشابك وخضارك نظيفة بلا مبيدات ولا أسمدة كيميائية، بطرق تناسب حرّ الخليج وتربته الرملية وملوحة مائه. للبيوت والأحواض أولًا، مع نصائح لمن عنده مزرعة.</p>
+   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">تقويم الزراعة</button><button type="button" class="chip" data-ogrow="1">أعشاب سهلة الزراعة</button></div></div>
+   <div class="aidgrid${cur?" one":""}">${list.map(t=>`<article class="aidcard wcard" id="og-${t.id}">
+     <div class="aidhead"><h3>${t.n}</h3></div>
+     <p class="wintro">${t.intro}</p>
+     ${t.h.some(id=>byId[id])?`<div class="wlinks"><h4>أعشاب ذات صلة</h4><div class="opts">${hl(t.h)}</div></div>`:""}
+     <div class="aidcols"><div class="ado"><h4>افعل</h4><ul>${t.do.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+     <div class="adont"><h4>تجنّب</h4><ul>${t.dont.map(x=>`<li>${x}</li>`).join("")}</ul></div></div>
+     ${t.farm?`<div class="ofarm"><h4>لمن عنده مزرعة</h4><p style="margin:0">${t.farm}</p></div>`:""}
+   </article>`).join("")}</div>
+   ${cur?"":`<section id="og-cal"><h3 class="page-h" style="font-size:1.4rem;margin-top:22px">تقويم الزراعة في الإمارات</h3>
+   <p class="sub">تقريبي، ويختلف قليلًا بين الساحل والمناطق الداخلية والجبلية.</p>
+   <div class="owrap"><table class="otable"><thead><tr><th>الشهر</th><th>ماذا تزرع</th><th>العناية</th></tr></thead><tbody>${OCAL.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div></section>
+   <section class="osoon"><h3>نصائح المزارع</h3><p style="margin:0">قريبًا بإذن الله: نصائح وتجارب من مزرعة صاحب الدليل العضوية، مجرّبة في أرض الإمارات وحرّها.</p></section>`}`;
+  el.querySelectorAll("[data-og]").forEach(b=>b.onclick=()=>{ ost.id = ost.id===b.dataset.og?null:b.dataset.og; renderOrganic(); });
+  el.querySelectorAll("[data-ocal]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-cal"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-ogrow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
+  el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
 }
 /* ---------- الإسعافات الأولية ---------- */
 const SEV={e:["طوارئ فورًا","sev-e"],d:["طبيب في اليوم نفسه","sev-d"],h:["يُعالج في البيت غالبًا","sev-h"]};
@@ -4889,11 +4980,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
-const NEWS={v:"2026-11-07e",date:"7 نوفمبر 2026",go:"herbs",items:[
- "<b>أعشاب جديدة من أرضنا:</b> التين، ولقاح النخل، وماء اللقاح، والغاف شجرة الإمارات الوطنية.",
- "وصفتان جديدتان للتين: التين المجفف المنقوع للإمساك، والتين بالجوز والعسل.",
- "في «وصفات أمي» أول تجربة من المتابعين: حليب التين للإكزيما، مع تنبيهات السلامة.",
- "زر جديد في أسفل الشاشة يعيدك إلى أعلى الصفحة بلمسة."
+const NEWS={v:"2026-11-07f",date:"7 نوفمبر 2026",go:"organic",items:[
+ "<b>باب جديد: الزراعة العضوية في الخليج.</b> تحسين التربة الرملية، وصنع الكمبوست في البيت، ومكافحة الآفات طبيعيًا، والري في الحرّ، وتقويم زراعي للإمارات.",
+ "<b>أعشاب جديدة من أرضنا:</b> التين، ولقاح النخل، وماء اللقاح، والغاف شجرة الإمارات الوطنية، مع وصفتين للتين.",
+ "في «وصفات أمي» أول تجربة من المتابعين: حليب التين للإكزيما، مع تنبيهات السلامة."
 ]};
 (function(){
   const K="maryam-news-seen"; let seen=null, returning=false;
@@ -4917,6 +5007,7 @@ $("#tabHerbs").onclick=()=>setView("herbs");
 $("#tabRecipes").onclick=()=>setView("recipes");
 $("#tabMom").onclick=()=>setView("mom");
 $("#tabKit").onclick=()=>setView("kit");
+$("#tabOrganic").onclick=()=>{ ost.id=null; setView("organic"); };
 function openFromHash(){ const m=location.hash.match(/^#r=(.+)$/); if(m){ try{ goRecipe(decodeURIComponent(m[1])); }catch(_){} } const mh=location.hash.match(/^#h=([a-z0-9]+)$/); if(mh&&byId[mh[1]]){ setView("herbs"); openPanel(byId[mh[1]]); } }
 window.addEventListener("load",openFromHash); window.addEventListener("hashchange",openFromHash);
 $("#tabWomen").onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); };

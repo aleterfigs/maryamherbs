@@ -430,6 +430,17 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .fblist{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
 .fblist li{border:1px solid var(--line);border-radius:6px;padding:8px 12px;font-size:.9rem;display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}
 .fblist small{color:var(--muted);margin-inline-start:auto}
+.otable{width:100%;border-collapse:collapse;font-size:.9rem;background:var(--sheet);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.otable th,.otable td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:start;vertical-align:top;line-height:1.7}
+.otable th{background:var(--leaf);color:var(--sheet);font-weight:600}
+.otable td:first-child{font-weight:600;color:var(--leaf);white-space:nowrap}
+.otable tr:last-child td{border-bottom:0}
+.owrap{overflow-x:auto;margin:6px 0 18px}
+.ofarm{background:var(--paper);border:1px dashed var(--leaf);border-radius:8px;padding:10px 12px;margin-top:10px}
+.ofarm h4{margin:0 0 4px;color:var(--leaf)}
+.osoon{border:2px dashed var(--clay);border-radius:10px;padding:14px;margin:18px 0;background:var(--sheet)}
+.osoon h3{margin:0 0 6px;color:var(--clay)}
+@media (max-width:560px){.otable td:first-child{white-space:normal}}
 #totop{position:fixed;inset-inline-end:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:25;width:48px;height:48px;border-radius:50%;border:0;background:var(--leaf);color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transform:translateY(16px);pointer-events:none;transition:opacity .25s,transform .25s}
 #totop.on{opacity:.92;transform:none;pointer-events:auto}
 #totop:focus-visible{outline:3px solid var(--clay);outline-offset:2px}
@@ -470,6 +481,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
     <div class="ngroup"><span class="nlabel">Maison et urgences</span>
       <button class="tab" id="tabAid" aria-selected="false">Premiers secours</button>
       <button class="tab" id="tabKit" aria-selected="false">Pharmacie familiale</button>
+      <button class="tab" id="tabOrganic" aria-selected="false">Agriculture biologique</button>
     </div>
     <div class="ngroup"><span class="nlabel">Apprendre et vérifier</span>
       <button class="tab" id="tabNutri" aria-selected="false">Alimentation et vitamines</button>
@@ -499,6 +511,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
   <div class="page" id="mom" hidden></div>
   <div class="page" id="women" hidden></div>
   <div class="page" id="kit" hidden></div>
+  <div class="page" id="organic" hidden></div>
   <div class="page" id="aid" hidden></div>
   <div class="page" id="nutri" hidden></div>
   <div class="page" id="safety" hidden></div>
@@ -3404,17 +3417,17 @@ function renderRecipes(){
 }
 function setView(v){
   state.view=v;
-  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabAid","aid"],["tabNutri","nutri"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
+  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
   $("#recipes").hidden=v!=="recipes"; $("#wizard").hidden=v!=="wizard";
-  ["home","mom","women","kit","aid","nutri","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
-  const pageView=["home","mom","women","wizard","kit","aid","nutri","safety","gloss","about"].includes(v);
+  ["home","mom","women","kit","organic","aid","nutri","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
+  const pageView=["home","mom","women","wizard","kit","organic","aid","nutri","safety","gloss","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
   render();
 }
 function render(){
   renderAud();
-  if(["home","mom","women","kit","aid","nutri","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
+  if(["home","mom","women","kit","organic","aid","nutri","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
@@ -4081,11 +4094,12 @@ function renderHome(){
      <p class="hstats">${n(HERBS.length)} plantes · ${n(RECIPES.length)} mélanges · ${n(Object.keys(ORIG).length)} traditions · ${n(PROBS.length)} problèmes de santé</p>
    </section>
    <div class="tiles">${TILES.map(([k,t,d],i)=>`<button type="button" class="tile${i===0?" tile-main":""}" data-go="${k}"><span class="ticon">${tileIcon(k)}</span><span class="ttext"><b>${t}</b><small>${d}</small></span></button>`).join("")}</div>
-   <section class="feat"><h3>Sections détaillées</h3><div class="featrow">${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>Un guide complet : variétés, Sunna, science et sécurité</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>Espace femmes</b><small>Règles, grossesse et post-partum, peau et cheveux, et mises en garde cosmétiques</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>De la mer</b><small>Huile de poisson, eau salée, algues et ambre gris : ce qui aide et ce dont il faut se méfier</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>Cultivez votre pharmacie</b><small>Des plantes faciles à cultiver dans le Golfe, et quand et comment les planter</small></span></button></div></section>
+   <section class="feat"><h3>Sections détaillées</h3><div class="featrow">${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>Un guide complet : variétés, Sunna, science et sécurité</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>Espace femmes</b><small>Règles, grossesse et post-partum, peau et cheveux, et mises en garde cosmétiques</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>De la mer</b><small>Huile de poisson, eau salée, algues et ambre gris : ce qui aide et ce dont il faut se méfier</small></span></button><button type="button" class="featcard" data-organic="1">${herbIcon(byId.moringa)}<span><b>L'agriculture biologique dans le Golfe</b><small>Sol sableux, compost, lutte naturelle contre les ravageurs et calendrier de plantation pour les Émirats</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>Cultivez votre pharmacie</b><small>Des plantes faciles à cultiver dans le Golfe, et quand et comment les planter</small></span></button></div></section>
    <section class="quick"><h3>En cas d'urgence</h3><div class="opts">${["snake","scorpion","dog","burn","heat","poison"].map(id=>{const a=AID.find(x=>x.id===id);return `<button type="button" class="chip urgent" data-aidgo="${id}"><span class="dot ${SEV[a.sev][1]}"></span>${a.n}</button>`;}).join("")}</div></section>`;
   $("#home").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{ if(b.dataset.go==="wizard") Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:null,step:1}); setView(b.dataset.go); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
   $("#home").querySelectorAll("[data-grow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
+  $("#home").querySelectorAll("[data-organic]").forEach(b=>b.onclick=()=>{ ost.id=null; setView("organic"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-women]").forEach(b=>b.onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-sea]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="sea"; setView("herbs"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-aidgo]").forEach(b=>b.onclick=()=>{ ast.id=b.dataset.aidgo; setView("aid"); window.scrollTo({top:0}); });
@@ -4400,6 +4414,83 @@ function renderWomen(){
   el.querySelectorAll("[data-gr]").forEach(b=>b.onclick=()=>goRecipe(b.dataset.gr));
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
   el.querySelectorAll("[data-nu]").forEach(b=>b.onclick=()=>{ nst.sym=null; setView("nutri"); const n=$("#n-"+b.dataset.nu); n&&n.scrollIntoView({block:"start"}); });
+}
+/* ---------- Agriculture biologique ---------- */
+const ost={id:null};
+const OG=[
+ {id:"soil",n:"Améliorer le sol sableux",
+  intro:"Le sol des Émirats est surtout sableux, pauvre en matière organique, et tend à être alcalin et salé : il ne retient ni l'eau ni les nutriments. La base de l'agriculture biologique, c'est nourrir le sol, pas la plante.",
+  do:["Ajoutez une couche de compost de 5 à 10 cm et mélangez-la aux 20 à 30 premiers centimètres du sol avant chaque saison.","À la maison : bacs surélevés ou pots remplis d'un mélange de sable, de compost et de fibre de coco.","Semez des légumineuses en hiver, comme le trèfle ou les fèves, puis enfouissez-les avant la floraison pour enrichir le sol en azote (engrais vert).","Couvrez toujours la surface du sol de paille, de feuilles sèches ou de palmes broyées ; un sol nu brûle au soleil.","Faites mesurer la salinité de votre eau d'arrosage et de votre sol : le sel est le pire ennemi de l'agriculture dans le Golfe."],
+  dont:["Le fumier frais : il brûle les racines et peut transmettre des germes dangereux et des graines d'adventices. Utilisez-le seulement après l'avoir composté au moins deux à trois mois.","Engrais chimiques et pesticides de synthèse : non utilisés en agriculture biologique.","Labourer le sol et le laisser nu en été."],
+  farm:"Avant la saison : faites analyser le sol et l'eau par un laboratoire agréé, et notez les quantités d'engrais organique ajoutées chaque saison ; cela servira pour la certification bio plus tard.",
+  h:["fenugreek"]},
+ {id:"compost",n:"Faire son compost à la maison",
+  intro:"Le compost est un engrais organique fait maison à partir des déchets de cuisine et de jardin, et c'est le meilleur apport pour un sol sableux. Notre chaleur accélère la décomposition, à condition que le tas ne sèche pas.",
+  do:["Rassemblez des matières «brunes» sèches : feuilles mortes, palmes broyées, carton sans encre brillante et sciure de bois non traité.","Et des matières «vertes» humides : épluchures de légumes et de fruits, marc de café et de thé, tontes de gazon.","Mélangez environ deux à trois parts de brun pour une part de vert, dans un bac percé ou en tas à l'ombre.","Gardez-le humide comme une éponge essorée : en été, arrosez-le tous les deux ou trois jours et couvrez-le.","Retournez-le une fois par semaine. Il est prêt en deux à trois mois, quand il est sombre et sent la terre après la pluie.","Lombricompost : des vers rouges spéciaux dans un bac à l'intérieur, car la chaleur estivale au-dessus de 35° les tue."],
+  dont:["Viande, poisson, produits laitiers et huiles : ils attirent insectes et chats et sentent mauvais.","Déjections de chats et de chiens, et plantes malades.","Laisser le tas sécher complètement au soleil, ce qui arrête la décomposition."],
+  farm:"À la ferme : faites de longs andains de compost retournés à la machine, et mélangez le fumier avec les déchets de palmier broyés ; un seul palmier donne beaucoup de palmes chaque année.",
+  h:[]},
+ {id:"pests",n:"Lutte naturelle contre les ravageurs",
+  intro:"La prévention d'abord : une plante vigoureuse dans un sol riche et à la bonne saison résiste mieux. Si un ravageur apparaît, commencez par le moyen le plus doux.",
+  do:["Inspectez le dessous des feuilles chaque semaine et retirez tôt les feuilles atteintes.","Un jet d'eau puissant fait tomber les pucerons des feuilles.","Savon potassique pour le jardin contre les pucerons et les aleurodes, selon la notice.","Huile de neem pour le jardin, selon la notice.","Une infusion d'ail et de piment éloigne certains insectes ; filtrez-la bien et testez-la d'abord sur une feuille.","Pièges jaunes englués contre les aleurodes et les insectes volants.","Bactéries utiles (Bt) contre les chenilles qui mangent les feuilles ; autorisées en bio, selon la notice.","Favorisez les insectes utiles comme les coccinelles en cultivant aneth, coriandre et fenouil et en les laissant fleurir.","Charançon rouge du palmier : signalez-le aussitôt à la municipalité ou au service agricole, qui ont des programmes de lutte et des pièges spéciaux."],
+  dont:["Pulvériser à midi : cela brûle les feuilles. Pulvérisez le soir.","Pulvériser sur les fleurs quand les abeilles sont actives.","Infusion de tabac : la nicotine est toxique pour l'homme et les animaux, à ne pas utiliser.","Croire que «naturel» veut dire sans danger : portez des gants, éloignez les enfants, et respectez la notice et le délai avant récolte.","Beaucoup de liquide vaisselle : il peut brûler les plantes."],
+  farm:"À la ferme : notez chaque produit pulvérisé et sa date ; les organismes certificateurs demandent ce registre et n'acceptent que les substances autorisées en bio.",
+  h:["neem","garlic","dill","coriander"]},
+ {id:"water",n:"Arrosage et économie d'eau dans la chaleur",
+  intro:"L'eau est ce qu'il y a de plus précieux dans l'agriculture du Golfe. Un arrosage intelligent économise la moitié de l'eau ou plus et rend les plantes plus fortes.",
+  do:["Goutte-à-goutte avec minuterie : l'eau arrive directement aux racines.","Arrosez tôt le matin avant huit heures, ou après le coucher du soleil.","Couvrez le sol de 5 à 10 cm de paille, de feuilles ou de palmes broyées : le besoin d'arrosage diminue beaucoup.","En été : un filet d'ombrage de 30 à 50 % au-dessus des légumes et des herbes tendres.","Regroupez les plantes selon leurs besoins en eau : les assoiffées ensemble, les résistantes à la sécheresse ensemble.","Les arbres reçoivent un arrosage profond et espacé, pas un peu chaque jour, pour que leurs racines descendent en profondeur."],
+  dont:["Arroser à midi : la plus grande partie s'évapore.","Mouiller les feuilles en plein soleil.","L'eau stagnante : elle fait pourrir les racines, et le moringa et le thym en meurent.","Arroser les légumes-feuilles avec des eaux grises (lessive et douche)."],
+  farm:"À la ferme : contrôlez la salinité de l'eau du puits à chaque saison. L'eau salée exige un lessivage régulier du sol par un arrosage abondant, et des cultures tolérantes au sel comme le palmier, le jujubier et la betterave.",
+  h:["moringa"]},
+ {id:"companion",n:"Cultures associées",
+  intro:"Certaines plantes s'aident quand elles poussent côte à côte : elles attirent les insectes utiles, éloignent les nuisibles ou nourrissent le sol. C'est surtout l'expérience des agriculteurs, avec peu d'essais scientifiques.",
+  do:["Le basilic près des tomates : une vieille habitude des jardiniers.","L'œillet d'Inde parmi les légumes : il attire les pollinisateurs, et ses racines pourraient réduire les nématodes du sol.","Les légumineuses comme les haricots et les fèves parmi les légumes : elles nourrissent le sol en azote.","L'aneth, la coriandre et le fenouil en fleur : ils attirent les coccinelles et les insectes utiles.","Oignons et ail en bordure des planches : leur odeur éloigne certains insectes."],
+  dont:["La menthe en pleine terre : elle s'étend et envahit la planche ; cultivez-la en pot.","Le fenouil près de la plupart des légumes : selon les agriculteurs, il freine leur croissance ; cultivez-le à part.","Cultiver la même plante au même endroit chaque saison : faites tourner les cultures pour réduire les maladies."],
+  farm:"",
+  h:["basil","mint","fennel"]},
+ {id:"seeds",n:"Conserver les semences locales",
+  intro:"Les semences locales anciennes se sont adaptées à notre chaleur et à notre sol au fil des générations. Les conserver d'une saison à l'autre fait économiser et préserve des variétés qui pourraient disparaître.",
+  do:["Choisissez des semences locales ou «à pollinisation libre» ; les semences hybrides (marquées F1) ne redonnent pas la même plante si l'on sème leurs graines.","Choisissez les plantes les plus vigoureuses aux meilleurs fruits, et laissez leurs graines mûrir complètement.","Faites bien sécher les graines à l'ombre plusieurs jours.","Conservez-les dans une enveloppe en papier ou un bocal en verre hermétique dans un endroit frais et sec ; le réfrigérateur convient si le bocal est hermétique.","Notez le nom et la date sur chaque enveloppe ; la plupart des graines restent viables deux à cinq ans.","Échangez des graines avec vos voisins et les agriculteurs."],
+  dont:["Prendre des graines sur une plante malade.","Les mettre en sachet plastique avant qu'elles soient tout à fait sèches : elles moisissent.","Les laisser dans un endroit chaud, comme une voiture ou un entrepôt non climatisé."],
+  farm:"",
+  h:[]},
+ {id:"cert",n:"Pour les agriculteurs : certification bio et commercialisation",
+  intro:"Aux Émirats, le mot «biologique» ne peut figurer sur un produit qu'avec la certification d'un organisme agréé. L'agriculture biologique relève du ministère du Changement climatique et de l'Environnement, et certains émirats ont des programmes d'aide aux agriculteurs, comme celui de Charjah pour la conversion au bio.",
+  do:["Contactez le ministère du Changement climatique et de l'Environnement ou le service agricole de votre émirat pour connaître les organismes agréés et les programmes d'aide.","Prévoyez une période de conversion : la ferme applique les normes bio un certain temps avant de pouvoir vendre sa production comme «biologique».","Tenez des registres complets : semences, engrais, traitements, récoltes et ventes.","La certification couvre aussi l'emballage et le stockage : si vous séchez ou conditionnez, renseignez-vous sur la certification de l'usine."],
+  dont:["Écrire «biologique» ou «100 % naturel bio» sur un produit non certifié : une infraction.","Mélanger produits bio et non bio au stockage ou à l'emballage."],
+  farm:"",
+  h:[]}
+];
+const OCAL=[
+ ["Août–septembre","Solarisez le sol : humidifiez-le et couvrez-le d'un plastique transparent 4 à 6 semaines pour tuer ravageurs et graines d'adventices. Et préparez le compost.","Semez tomates, poivrons et aubergines en pépinière ombragée fin septembre."],
+ ["Octobre–novembre","Début de la saison d'or : courgettes, concombres, haricots et pommes de terre, et herbes à feuilles : menthe, persil, coriandre, aneth, roquette, fenugrec, laitue, épinards, carottes, radis, oignons, ail et camomille.","Repiquez les plants de tomates et de poivrons en pleine terre, et ajoutez du compost."],
+ ["Décembre–janvier","Suite des légumes-feuilles, plus pois et fèves. Le meilleur moment pour planter les arbres : figuier, grenadier, vigne et citronnier.","Récoltez régulièrement et protégez les jeunes plants des vents froids."],
+ ["Février–mars","Semez les cultures d'été : gombo, mloukhiya, pastèque, melon, courge, maïs et basilic.","Dernière chance pour les légumes d'hiver ; préparez les filets d'ombrage."],
+ ["Avril–mai","Les plantes qui supportent la chaleur : moringa, jujubier, henné, gombo et mloukhiya.","Paillez le sol, arrosez le matin et installez les filets d'ombrage."],
+ ["Juin–juillet","Plein été : gombo, mloukhiya, moringa et palmiers continuent, et le basilic à mi-ombre.","Récoltez les dattes fraîches, arrosez tôt et gardez les planches vides couvertes."]
+];
+function renderOrganic(){
+  const el=$("#organic"), cur=ost.id&&OG.find(t=>t.id===ost.id), list=cur?[cur]:OG;
+  const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
+  el.innerHTML=`<h2 class="page-h">L'agriculture biologique dans le Golfe</h2>
+   <p class="sub">Cultivez vos herbes et vos légumes sans pesticides ni engrais chimiques, avec des méthodes adaptées à la chaleur du Golfe, à son sol sableux et à son eau salée. D'abord pour la maison et les bacs, avec des conseils pour ceux qui ont une ferme.</p>
+   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Calendrier de plantation</button><button type="button" class="chip" data-ogrow="1">Plantes faciles à cultiver</button></div></div>
+   <div class="aidgrid${cur?" one":""}">${list.map(t=>`<article class="aidcard wcard" id="og-${t.id}">
+     <div class="aidhead"><h3>${t.n}</h3></div>
+     <p class="wintro">${t.intro}</p>
+     ${t.h.some(id=>byId[id])?`<div class="wlinks"><h4>Plantes liées</h4><div class="opts">${hl(t.h)}</div></div>`:""}
+     <div class="aidcols"><div class="ado"><h4>À faire</h4><ul>${t.do.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+     <div class="adont"><h4>À éviter</h4><ul>${t.dont.map(x=>`<li>${x}</li>`).join("")}</ul></div></div>
+     ${t.farm?`<div class="ofarm"><h4>Si vous avez une ferme</h4><p style="margin:0">${t.farm}</p></div>`:""}
+   </article>`).join("")}</div>
+   ${cur?"":`<section id="og-cal"><h3 class="page-h" style="font-size:1.4rem;margin-top:22px">Calendrier de plantation aux Émirats</h3>
+   <p class="sub">Approximatif ; il varie un peu entre la côte, l'intérieur et les montagnes.</p>
+   <div class="owrap"><table class="otable"><thead><tr><th>Mois</th><th>Quoi planter</th><th>Entretien</th></tr></thead><tbody>${OCAL.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div></section>
+   <section class="osoon"><h3>Conseils de l'agriculteur</h3><p style="margin:0">Bientôt, si Dieu le veut : conseils et expériences de la ferme bio du créateur du guide, éprouvés dans le sol et la chaleur des Émirats.</p></section>`}`;
+  el.querySelectorAll("[data-og]").forEach(b=>b.onclick=()=>{ ost.id = ost.id===b.dataset.og?null:b.dataset.og; renderOrganic(); });
+  el.querySelectorAll("[data-ocal]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-cal"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-ogrow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
+  el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
 }
 /* ---------- Premiers secours ---------- */
 const SEV={e:["Urgence immédiate","sev-e"],d:["Médecin le jour même","sev-d"],h:["Se soigne généralement à la maison","sev-h"]};
@@ -4891,11 +4982,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-07e",date:"7 novembre 2026",go:"herbs",items:[
- "<b>Nouvelles plantes de chez nous :</b> la figue, le pollen de palmier, l'eau de pollen de palmier, et le ghaf, arbre national des Émirats.",
- "Deux nouvelles recettes de figue : figues sèches trempées contre la constipation, et figues aux noix et au miel.",
- "Dans «Les recettes de maman», la première expérience d'un abonné : le latex de figuier contre l'eczéma, avec des conseils de sécurité.",
- "Un nouveau bouton en bas de l'écran vous ramène en haut de la page d'un geste."
+const NEWS={v:"2026-11-07f",date:"7 novembre 2026",go:"organic",items:[
+ "<b>Nouvelle rubrique : l'agriculture biologique dans le Golfe.</b> Améliorer le sol sableux, faire son compost, lutter naturellement contre les ravageurs, arroser dans la chaleur, et un calendrier de plantation pour les Émirats.",
+ "<b>Nouvelles plantes de chez nous :</b> Figue, pollen de palmier, eau de pollen de palmier, et ghaf, l'arbre national des Émirats, avec deux recettes de figue.",
+ "Dans «Les recettes de maman», la première expérience d'un abonné : le latex de figuier contre l'eczéma, avec des conseils de sécurité."
 ]};
 (function(){
   const K="maryam-news-seen"; let seen=null, returning=false;
@@ -4919,6 +5009,7 @@ $("#tabHerbs").onclick=()=>setView("herbs");
 $("#tabRecipes").onclick=()=>setView("recipes");
 $("#tabMom").onclick=()=>setView("mom");
 $("#tabKit").onclick=()=>setView("kit");
+$("#tabOrganic").onclick=()=>{ ost.id=null; setView("organic"); };
 function openFromHash(){ const m=location.hash.match(/^#r=(.+)$/); if(m){ try{ goRecipe(decodeURIComponent(m[1])); }catch(_){} } const mh=location.hash.match(/^#h=([a-z0-9]+)$/); if(mh&&byId[mh[1]]){ setView("herbs"); openPanel(byId[mh[1]]); } }
 window.addEventListener("load",openFromHash); window.addEventListener("hashchange",openFromHash);
 $("#tabWomen").onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); };
