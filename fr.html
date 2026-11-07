@@ -50,7 +50,7 @@
   --ok:#8fcf9b; --mid:#e0c062; --low:#a6abb5; color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.7;
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:calc(15px * var(--fs,1));line-height:1.7;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wrap{max-width:1080px;margin:0 auto;padding-block:28px 48px;display:flex;flex-direction:column;gap:22px}
 header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
@@ -311,10 +311,19 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(2.2rem,6vw,3.2re
 .growtips{grid-column:1/-1;background:var(--sheet);border:1px solid var(--leaf);border-radius:8px;padding:14px 18px}
 .growtips h3{margin:0 0 6px;color:var(--leaf);font-family:var(--f-display);font-size:1.3rem}
 .growtips ul{margin:0;padding-inline-start:20px;font-size:.9rem}.growtips li{margin-bottom:5px}
+html{font-size:calc(100% * var(--fs,1))}
+.fsz{display:flex;gap:4px}
+.fs-big .mast{padding-inline-end:0}
+.fs-big .langs{position:static;flex-direction:row;flex-wrap:wrap;order:-1;align-self:stretch;margin-bottom:6px}
+.fs-big .fsz{gap:4px}
+.fs-big .fsz button{min-width:48px}
+.fsz button{flex:1;font:inherit;font-size:.85rem;font-weight:700;color:var(--leaf);border:1px solid var(--leaf);border-radius:999px;background:var(--sheet);padding:3px 0;cursor:pointer;min-height:32px}
+.fsz button:disabled{opacity:.4;cursor:default}
+.fsz button:focus-visible{outline:3px solid var(--clay);outline-offset:2px}
 .langs{position:absolute;inset-block-start:0;inset-inline-end:0;display:flex;flex-direction:column;gap:6px;align-items:stretch}
 .langsw{text-align:center;font-size:.85rem;font-weight:600;color:var(--leaf);border:1px solid var(--leaf);border-radius:999px;padding:3px 14px;text-decoration:none;background:var(--sheet)}
 .langsw:hover{background:var(--leaf-soft)}
-.mast{position:relative;padding-inline-end:100px}
+.mast{position:relative;padding-inline-end:calc(104px * var(--fs,1))}
 footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padding-top:14px}
 @media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
 /* ===== redesign: header, nav, home ===== */
@@ -484,7 +493,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
       <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9"/><path d="M12 13c-3-.5-5-2.5-5.5-6 3.5.3 5.3 2.3 5.5 6z"/><path d="M12 10c2.5-.6 4.3-2.4 4.8-5.5-3 .3-4.6 2-4.8 5.5z"/><path d="M12 17c2.3-.3 3.8-1.6 4.4-4-2.4.1-3.9 1.4-4.4 4z"/></svg></span>
       <span class="brand-text"><h1>Maryam</h1><span class="brand-sub">Un guide des plantes et des remèdes naturels</span></span>
     </button>
-    <nav class="langs" aria-label="Language"><a class="langsw" href="index.html" lang="ar" dir="rtl" style="font-family:'Noto Naskh Arabic',serif">العربية</a><a class="langsw" href="en.html" lang="en" dir="ltr">English</a></nav>
+    <nav class="langs" aria-label="Language"><a class="langsw" href="index.html" lang="ar" dir="rtl" style="font-family:'Noto Naskh Arabic',serif">العربية</a><a class="langsw" href="en.html" lang="en" dir="ltr">English</a><div class="fsz" role="group" aria-label="Taille du texte"><button type="button" data-fs="-1" dir="ltr" aria-label="Réduire le texte" title="Réduire le texte">A−</button><button type="button" data-fs="1" dir="ltr" aria-label="Agrandir le texte" title="Agrandir le texte">A+</button></div></nav>
     <p class="dedic">Une aumône continue (sadaqa jariya) pour l'âme de ma mère, Maryam. Que Dieu lui fasse miséricorde et lui pardonne.</p>
   </header>
 
@@ -5364,6 +5373,14 @@ $("#scrim").onclick=closePanel;
 $("#tabHome").onclick=()=>setView("home");
 $("#goHome").onclick=()=>setView("home");
 $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:null,step:1}); setView("wizard"); };
+/* ---------- Taille du texte (pour les seniors) ---------- */
+(function(){
+  const L=[0.9,1,1.12,1.25,1.4], K="maryam-fs"; let i=1;
+  try{ const v=parseInt(localStorage.getItem(K),10); if(v>=0&&v<L.length) i=v; }catch(e){}
+  const apply=()=>{ document.documentElement.style.setProperty("--fs",L[i]); document.documentElement.classList.toggle("fs-big",L[i]>=1.12); document.querySelectorAll(".fsz [data-fs]").forEach(b=>{ b.disabled = (+b.dataset.fs<0&&i===0)||(+b.dataset.fs>0&&i===L.length-1); }); };
+  document.querySelectorAll(".fsz [data-fs]").forEach(b=>b.onclick=()=>{ i=Math.max(0,Math.min(L.length-1,i+ +b.dataset.fs)); try{ localStorage.setItem(K,i); }catch(e){} apply(); });
+  apply();
+})();
 /* ---------- Bouton retour en haut ---------- */
 (function(){
   const b=document.createElement("button"); b.type="button"; b.id="totop"; b.setAttribute("aria-label","Retour en haut"); b.title="Retour en haut";
@@ -5374,9 +5391,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-07l",date:"7 novembre 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07m",date:"7 novembre 2026",go:"folk",items:[
  "<b>Nouvelle rubrique : coutumes populaires, ce qui est juste et ce qui nuit.</b> Saler le nouveau-né, le khôl, l'encens, le tahnik, la cautérisation, les rebouteux, les quarante jours, l'eau et les plantes pour le nourrisson et d'autres, avec l'alternative sûre pour chaque coutume.",
  "<b>La rubrique «D'origine animale» :</b> œufs, poulet, viandes, foie, smen, lait de vache et de chamelle, puis graisse de queue de mouton, yaourt et lben, aqit, lait de chèvre, produits de la ruche, criquets, graisse de dhub et huile d'autruche.",
+ "<b>Texte plus grand :</b> les boutons A+ et A− en haut de la page agrandissent ou réduisent tout le texte, et le site retient votre choix.",
  "<b>Agriculture biologique :</b> une nouvelle section, «Du patrimoine agricole arabe et andalou» : Ibn Bassal, Ibn al-Awwam et le Calendrier de Cordoue, leurs méthodes et ce qu'en dit la science, les mots arabes en espagnol, les aflaj et le Tribunal des eaux de Valence.",
  "<b>Médecine prophétique :</b> chaque hadith affiche désormais son degré (authentique, bon, discuté, faible), et les recettes prophétiques sont classées de la plus authentique à la moins sûre.",
  "Chaque recette indique désormais qu'elle relève de la médecine traditionnelle, en invitant à choisir des ingrédients bio ou locaux et propres.",
