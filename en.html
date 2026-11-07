@@ -467,7 +467,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .agwords{display:flex;flex-wrap:wrap;gap:6px}
 .agwords span{display:inline-flex;gap:6px;align-items:baseline;background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.88rem}
 .agwords i{font-style:normal;color:var(--muted)}
-#og-and,#og-pest{scroll-margin-top:12px}
+#og-and,#og-pest,#og-em{scroll-margin-top:12px}
 .osoon{border:2px dashed var(--clay);border-radius:10px;padding:14px;margin:18px 0;background:var(--sheet)}
 .osoon h3{margin:0 0 6px;color:var(--clay)}
 @media (max-width:560px){.otable td:first-child{white-space:normal}}
@@ -4868,12 +4868,39 @@ const PPALM=[
  ["Lesser date moth (humaira)","Small, red, hollow fruits fall early. Collect and destroy fallen fruit, and cover the bunches early."],
  ["Cleaning the palm (takreeb)","Removing old frond bases, fibre and dry fronds, which shelter insects and rodents. Do it at the right time, and cover large wounds."]
 ];
+const EMSTEP=[
+ ["Quantities","one part original EM‑1, one part molasses (unsulphured sugar-cane molasses) and 18 parts water. Example: one litre of EM‑1, one litre of molasses and 18 litres of water."],
+ ["Water","Unchlorinated water: well water, or tap water left uncovered for a full day so the chlorine escapes. Warm it to about 40° and dissolve the molasses in it first."],
+ ["Container","A clean plastic container (not metal), filled almost to the brim to leave little air, and tightly closed."],
+ ["Fermentation","7 to 10 days in the shade at about 20° to 37°. Open the lid slightly every day in the first days to let gas out, then close it."],
+ ["Sign of success","A pleasant sweet-sour smell like pickles, an orange-brown colour, and a pH between 3.2 and 3.8 on a pH strip. A foul or rotten smell means the solution has spoiled, so do not use it."],
+ ["Storage","In the shade away from sun and heat; use within 30 to 45 days. Do not activate the activated solution a second time; always start from original EM‑1."]
+];
+const EMUSE=[
+ ["Spraying livestock and poultry barns","Dilute 1 to 50 or 1 to 100 and spray lightly on the litter, floors and walls, not on the animals or their feed.","A Thai study on broiler chickens: ammonia fell clearly and the birds' stress indicator dropped. It does not replace cleanliness, ventilation and vaccination.","ok"],
+ ["Bokashi (fermenting kitchen scraps)","Bran moistened with EM solution and molasses is sprinkled in layers over food scraps in a sealed bucket; after two weeks it is buried in the soil.","A tried and successful way to turn kitchen scraps into fertiliser without a foul smell.","ok"],
+ ["Speeding up compost","Spray the solution diluted 1 to 100 on each layer of the compost heap.","It reduces flies and smell. Its effect on speed and compost quality varies between studies.","ok"],
+ ["With irrigation water for the soil","Dilute 1 to 500 or 1 to 1000 in irrigation water, preferably together with compost, not instead of it.","Results are mixed: most vegetable studies found a positive effect, but the most careful trial (Switzerland) attributed the effect to the molasses and nutrients, not the bacteria.","care"],
+ ["Fish fertiliser","Fish fermented with molasses and EM, diluted for spraying or irrigation (method in detail below).","Fish fertiliser itself is a well-known organic fertiliser rich in nitrogen and amino acids, with a proven role in feeding plants.","ok"],
+ ["Spraying plant leaves","Dilute 1 to 500 and spray early in the morning or in the evening.","There is no settled evidence that it prevents disease on its own.","care"],
+ ["Mud balls in ponds and lakes","Balls of clay and bran soaked in the solution and thrown into the water.","Controlled studies (Netherlands 2010, Hawaii 2025) found no improvement; phosphate rose and oxygen fell. Do not throw them into fish ponds or irrigation tanks.","harm"]
+];
+const EMFISH=[
+ ["Quantities (20-litre drum)","5 kg of fresh fish or fish scraps (heads, guts and bones), 2 litres of molasses, 100 ml of original EM‑1 and 3 litres of unchlorinated water. Instead of the EM‑1 and water, you can use 3 litres of activated solution."],
+ ["Preparation","Cut the fish into small pieces. Dissolve the molasses in warm water and add the EM, then pour it over the fish in a plastic drum and stir well. The fish must be fresh, not rotten."],
+ ["Fermentation","Close the drum tightly and leave it in the shade for two to 3 weeks; it may take a month or more for the fish to dissolve. When the lid swells, open it slightly to let the gas out, then close it."],
+ ["Sign of success","The fish dissolves into a brown liquid with a sour fermented smell. A strong rotten smell like carrion means fermentation failed, usually from too little molasses or air getting in."],
+ ["Straining and storage","Strain through cloth and add the solids to the compost. Bottle it leaving space at the top, and open the caps now and then to let gas out."],
+ ["Use","On leaves: about 150 ml in 16 litres of water (roughly 1 to 100), weekly, early morning or evening. For soil with irrigation water: one litre in 200 litres of water."],
+ ["Note","Do not spray it on leafy vegetables eaten raw close to harvest; stop at least two weeks before picking. Keep it away from children and animals."]
+];
+const EM5=["One part EM‑1, one part molasses, one part vinegar (white or apple cider), one part distilled alcohol, and 20 parts warm water.","Optionally add crushed garlic, hot pepper, mint or neem.","Close and ferment until the pH falls below 4; it is best left a month before use.","Dilute 1 to 500 and spray on plants weekly, alternating with activated EM‑1.","Do not spray the type containing hot pepper in barns, as it irritates the eyes and breathing of birds and livestock."];
 function renderOrganic(){
   const el=$("#organic"), cur=ost.id&&OG.find(t=>t.id===ost.id), list=cur?[cur]:OG;
   const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
   el.innerHTML=`<h2 class="page-h">Organic farming</h2>
    <p class="sub">Grow your herbs and vegetables clean, without pesticides or chemical fertilisers, using methods suited to the heat of our Arab lands, with special care for the Gulf's sandy soil and salty water. For homes and beds first, with tips for those with a farm, and a planting calendar for each Arab region.</p>
-   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Planting calendar</button><button type="button" class="chip" data-ohist="1">From Andalusian heritage</button><button type="button" class="chip" data-opest="1">Pest prevention in heritage</button><button type="button" class="chip" data-ogrow="1">Easy herbs to grow</button></div></div>
+   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Planting calendar</button><button type="button" class="chip" data-ohist="1">From Andalusian heritage</button><button type="button" class="chip" data-opest="1">Pest prevention in heritage</button><button type="button" class="chip" data-oem="1">Beneficial microbes EM</button><button type="button" class="chip" data-ogrow="1">Easy herbs to grow</button></div></div>
    <div class="aidgrid${cur?" one":""}">${list.map(t=>`<article class="aidcard wcard" id="og-${t.id}">
      <div class="aidhead"><h3>${t.n}</h3></div>
      <p class="wintro">${t.intro}</p>
@@ -4917,10 +4944,25 @@ function renderOrganic(){
    <div class="aggrid">${PPALM.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
    <p class="hint">This is general information. If a serious or widespread pest appears, consult your country's agricultural authority, which offers control programmes and free advice to farmers.</p>
    </section>
+   <section id="og-em" class="ohist"><h3 class="page-h" style="font-size:1.4rem;margin-top:22px">Beneficial microbes EM and how to activate them</h3>
+   <p class="sub">EM stands for Effective Microorganisms, developed by the Japanese professor Teruo Higa at the University of the Ryukyus in Okinawa in the 1980s. It is a mix of lactic acid bacteria, photosynthetic bacteria and yeasts in a molasses liquid, sold as EM‑1. Once activated it is called activated solution (EMAS).</p>
+   <h4 class="oh4">How to activate it, step by step</h4>
+   <div class="aggrid">${EMSTEP.map(([n,t],i)=>`<article class="agcard"><h5>${i+1}. ${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <h4 class="oh4">Uses and what studies say</h4>
+   <div class="owrap"><table class="otable"><thead><tr><th>Use</th><th>Method</th><th>Evidence</th></tr></thead><tbody>${EMUSE.map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <div class="ofarm"><b>From the site owner's experience (organic farmer):</b> I spray the livestock and poultry barns with the activated solution, and no smells remain. Fish fertiliser fermented with EM is the most successful fertiliser I use on the farm.</div>
+   <h4 class="oh4">Fish fertiliser fermented with EM</h4>
+   <p class="sub">Fish is rich in nitrogen, amino acids, phosphorus and trace elements, and fish fertiliser is one of the oldest and most successful organic fertilisers. Fermenting it with EM and molasses turns it into an easily absorbed liquid and reduces its smell.</p>
+   <div class="aggrid">${EMFISH.map(([n,t],i)=>`<article class="agcard"><h5>${i+1}. ${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <h4 class="oh4">EM‑5 mix for preventive spraying</h4>
+   <div class="ofarm"><ul style="margin:0">${EM5.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <p class="hint">EM is a safe product generally accepted in organic farming; its clearest benefits are reducing smells and fermenting compost. It does not replace compost, cleanliness and ventilation.</p>
+   </section>
    <section class="osoon"><h3>Farmer's tips</h3><p style="margin:0">Coming soon, God willing: tips and experience from the guide owner's organic farm, tested in the UAE's soil and heat.</p></section>`}`;
   el.querySelectorAll("[data-og]").forEach(b=>b.onclick=()=>{ ost.id = ost.id===b.dataset.og?null:b.dataset.og; renderOrganic(); });
   el.querySelectorAll("[data-oz]").forEach(b=>b.onclick=()=>{ ost.zone=b.dataset.oz; renderOrganic(); const n=$(`[data-oz="${ost.zone}"]`); n&&n.focus({preventScroll:true}); });
   el.querySelectorAll("[data-ocal]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-cal"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-oem]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-em"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
   el.querySelectorAll("[data-opest]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-pest"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
   el.querySelectorAll("[data-pv]").forEach(b=>b.onclick=()=>{ ost.pv=b.dataset.pv||null; const y=scrollY; renderOrganic(); scrollTo({top:y}); const n=$(`[data-pv="${b.dataset.pv}"]`); n&&n.focus({preventScroll:true}); });
   el.querySelectorAll("[data-ohist]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-and"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
@@ -5454,9 +5496,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- What's new: shown once to returning visitors after each update ---------- */
-const NEWS={v:"2026-11-07n",date:"7 November 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07o",date:"7 November 2026",go:"folk",items:[
  "<b>New section: folk customs, what is sound and what harms.</b> Salting newborns, kohl, incense, tahneek, cautery, bonesetters, the forty days after birth, water and herbs for babies and more, with the safe alternative for each custom.",
  "<b>The «From animals» section:</b> eggs, chicken, meat, liver, ghee, cow's and camel milk, plus sheep tail fat, yogurt and laban, aqit, goat milk, bee products, locusts, dhub fat and ostrich oil.",
+ "<b>Beneficial microbes EM:</b> how to activate them step by step, their successful uses in barns and compost, how to make fermented fish fertiliser, and the EM‑5 mix, with what studies say.",
  "<b>Organic farming:</b> an extended section, «Preventing plant diseases and pests in heritage»: from Sumer, China and al-Andalus to the Gulf, with a verdict on each method, and fig and palm pests and how to prevent them.",
  "<b>Larger text:</b> the A+ and A− buttons at the top of the page make all the text bigger or smaller, and the site remembers your choice.",
  "<b>Organic farming:</b> a new section, «From the heritage of Arab and Andalusian farming»: Ibn Bassal, Ibn al-Awwam and the Calendar of Córdoba, their methods and what science says today, Arabic words in Spanish, and the aflaj and Valencia's Water Tribunal.",

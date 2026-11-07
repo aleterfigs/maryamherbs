@@ -467,7 +467,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .agwords{display:flex;flex-wrap:wrap;gap:6px}
 .agwords span{display:inline-flex;gap:6px;align-items:baseline;background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.88rem}
 .agwords i{font-style:normal;color:var(--muted)}
-#og-and,#og-pest{scroll-margin-top:12px}
+#og-and,#og-pest,#og-em{scroll-margin-top:12px}
 .osoon{border:2px dashed var(--clay);border-radius:10px;padding:14px;margin:18px 0;background:var(--sheet)}
 .osoon h3{margin:0 0 6px;color:var(--clay)}
 @media (max-width:560px){.otable td:first-child{white-space:normal}}
@@ -4868,12 +4868,39 @@ const PPALM=[
  ["Petite pyrale des dattes (humaira)","De petits fruits rouges et creux tombent tôt. Ramassez et détruisez les fruits tombés, et couvrez les régimes tôt."],
  ["Nettoyage du palmier (takrib)","Enlever les bases de palmes, les fibres et les palmes sèches, qui abritent insectes et rongeurs. À faire au bon moment, en couvrant les grosses plaies."]
 ];
+const EMSTEP=[
+ ["Quantités","une part d'EM‑1 d'origine, une part de mélasse (mélasse de canne non soufrée) et 18 parts d'eau. Exemple : un litre d'EM‑1, un litre de mélasse et 18 litres d'eau."],
+ ["L'eau","Une eau non chlorée : eau de puits, ou eau du robinet laissée à l'air une journée entière pour que le chlore s'échappe. La chauffer vers 40° et y dissoudre d'abord la mélasse."],
+ ["Le récipient","Un récipient en plastique propre (pas de métal), rempli presque à ras bord pour limiter l'air, et bien fermé."],
+ ["La fermentation","7 à 10 jours à l'ombre, entre 20° et 37° environ. Entrouvrir le couvercle chaque jour les premiers jours pour laisser sortir le gaz, puis refermer."],
+ ["Signe de réussite","Une odeur aigre-douce agréable, comme celle des cornichons, une couleur brun orangé, et un pH entre 3,2 et 3,8 sur une bandelette. Une odeur fétide ou pourrie signifie que la solution est gâtée : ne pas l'utiliser."],
+ ["La conservation","À l'ombre, loin du soleil et de la chaleur ; à utiliser dans les 30 à 45 jours. Ne pas réactiver une solution déjà activée : toujours repartir de l'EM‑1 d'origine."]
+];
+const EMUSE=[
+ ["Pulvériser les étables et poulaillers","Diluer à 1 pour 50 ou 1 pour 100 et pulvériser légèrement sur la litière, les sols et les murs, pas sur les animaux ni sur leur nourriture.","Une étude thaïlandaise sur des poulets de chair : l'ammoniac a nettement baissé et l'indicateur de stress des oiseaux a diminué. Cela ne remplace ni la propreté, ni l'aération, ni la vaccination.","ok"],
+ ["Le bokashi (fermentation des restes de cuisine)","Du son humidifié avec la solution EM et la mélasse est saupoudré en couches sur les restes alimentaires dans un seau hermétique ; après deux semaines, on l'enfouit dans le sol.","Une méthode éprouvée pour transformer les restes de cuisine en engrais sans mauvaise odeur.","ok"],
+ ["Accélérer le compost","Pulvériser la solution diluée à 1 pour 100 sur chaque couche du tas de compost.","Elle réduit les mouches et l'odeur. Son effet sur la vitesse et la qualité du compost varie selon les études.","ok"],
+ ["Avec l'eau d'irrigation pour le sol","Diluer à 1 pour 500 ou 1 pour 1000 dans l'eau d'irrigation, de préférence avec du compost, pas à sa place.","Résultats partagés : la plupart des études sur les légumes ont trouvé un effet positif, mais l'essai le plus rigoureux (Suisse) a attribué l'effet à la mélasse et aux nutriments, non aux bactéries.","care"],
+ ["L'engrais de poisson","Du poisson fermenté avec de la mélasse et de l'EM, dilué pour la pulvérisation ou l'irrigation (méthode détaillée ci-dessous).","L'engrais de poisson lui-même est un engrais organique connu, riche en azote et en acides aminés, au rôle établi dans la nutrition des plantes.","ok"],
+ ["Pulvériser les feuilles","Diluer à 1 pour 500 et pulvériser tôt le matin ou le soir.","Aucune preuve établie qu'il prévienne seul les maladies.","care"],
+ ["Boules de boue dans les mares et les lacs","Des boules d'argile et de son imbibées de solution, jetées dans l'eau.","Des études contrôlées (Pays-Bas 2010, Hawaï 2025) n'ont trouvé aucune amélioration : le phosphate a augmenté et l'oxygène a baissé. Ne pas en jeter dans les bassins à poissons ni les réservoirs d'irrigation.","harm"]
+];
+const EMFISH=[
+ ["Quantités (fût de 20 litres)","5 kg de poisson frais ou de déchets de poisson (têtes, viscères et arêtes), 2 litres de mélasse, 100 ml d'EM‑1 d'origine et 3 litres d'eau non chlorée. À la place de l'EM‑1 et de l'eau, on peut utiliser 3 litres de solution activée."],
+ ["La préparation","Couper le poisson en petits morceaux. Dissoudre la mélasse dans l'eau tiède et ajouter l'EM, puis verser sur le poisson dans un fût en plastique et bien remuer. Le poisson doit être frais, pas avarié."],
+ ["La fermentation","Fermer le fût hermétiquement et le laisser à l'ombre deux à 3 semaines ; il peut falloir un mois ou plus pour que le poisson se dissolve. Quand le couvercle gonfle, l'entrouvrir pour laisser sortir le gaz, puis refermer."],
+ ["Signe de réussite","Le poisson se dissout en un liquide brun à l'odeur fermentée et aigre. Une forte odeur de pourriture, comme celle d'une charogne, signifie que la fermentation a échoué, souvent par manque de mélasse ou entrée d'air."],
+ ["Filtrage et conservation","Filtrer à travers un tissu et ajouter les résidus solides au compost. Mettre en bouteilles en laissant un espace en haut, et ouvrir les bouchons de temps en temps pour laisser sortir le gaz."],
+ ["L'utilisation","Sur les feuilles : environ 150 ml dans 16 litres d'eau (près de 1 pour 100), chaque semaine, tôt le matin ou le soir. Pour le sol avec l'eau d'irrigation : un litre dans 200 litres d'eau."],
+ ["Remarque","Ne pas pulvériser sur les légumes-feuilles mangés crus près de la récolte ; arrêter au moins deux semaines avant la cueillette. Tenir hors de portée des enfants et des animaux."]
+];
+const EM5=["Une part d'EM‑1, une part de mélasse, une part de vinaigre (blanc ou de cidre), une part d'alcool distillé et 20 parts d'eau tiède.","On peut y ajouter de l'ail écrasé, du piment, de la menthe ou du neem.","Fermer et laisser fermenter jusqu'à ce que le pH descende sous 4 ; il vaut mieux attendre un mois avant l'emploi.","Diluer à 1 pour 500 et pulvériser sur les plantes chaque semaine, en alternance avec l'EM‑1 activé.","Ne pas pulvériser la version au piment dans les étables : elle irrite les yeux et la respiration des oiseaux et du bétail."];
 function renderOrganic(){
   const el=$("#organic"), cur=ost.id&&OG.find(t=>t.id===ost.id), list=cur?[cur]:OG;
   const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
   el.innerHTML=`<h2 class="page-h">Agriculture biologique</h2>
    <p class="sub">Cultivez vos herbes et vos légumes sans pesticides ni engrais chimiques, avec des méthodes adaptées à la chaleur de nos pays arabes, avec un soin particulier pour le sol sableux et l'eau salée du Golfe. D'abord pour la maison et les bacs, avec des conseils pour ceux qui ont une ferme, et un calendrier de plantation pour chaque région arabe.</p>
-   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Calendrier de plantation</button><button type="button" class="chip" data-ohist="1">Du patrimoine andalou</button><button type="button" class="chip" data-opest="1">Prévention des ravageurs dans le patrimoine</button><button type="button" class="chip" data-ogrow="1">Plantes faciles à cultiver</button></div></div>
+   <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Calendrier de plantation</button><button type="button" class="chip" data-ohist="1">Du patrimoine andalou</button><button type="button" class="chip" data-opest="1">Prévention des ravageurs dans le patrimoine</button><button type="button" class="chip" data-oem="1">Les microbes utiles EM</button><button type="button" class="chip" data-ogrow="1">Plantes faciles à cultiver</button></div></div>
    <div class="aidgrid${cur?" one":""}">${list.map(t=>`<article class="aidcard wcard" id="og-${t.id}">
      <div class="aidhead"><h3>${t.n}</h3></div>
      <p class="wintro">${t.intro}</p>
@@ -4917,10 +4944,25 @@ function renderOrganic(){
    <div class="aggrid">${PPALM.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
    <p class="hint">Ce sont des informations générales. Face à un ravageur grave ou répandu, consultez le service agricole de votre pays, qui propose des programmes de lutte et des conseils gratuits aux agriculteurs.</p>
    </section>
+   <section id="og-em" class="ohist"><h3 class="page-h" style="font-size:1.4rem;margin-top:22px">Les microbes utiles EM et leur activation</h3>
+   <p class="sub">EM signifie « micro-organismes efficaces », mis au point par le professeur japonais Teruo Higa à l'université des Ryūkyū à Okinawa dans les années 1980. C'est un mélange de bactéries lactiques, de bactéries photosynthétiques et de levures dans un liquide à base de mélasse, vendu sous le nom d'EM‑1. Une fois activé, on l'appelle solution activée (EMAS).</p>
+   <h4 class="oh4">L'activation pas à pas</h4>
+   <div class="aggrid">${EMSTEP.map(([n,t],i)=>`<article class="agcard"><h5>${i+1}. ${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <h4 class="oh4">Les usages et ce que disent les études</h4>
+   <div class="owrap"><table class="otable"><thead><tr><th>L'utilisation</th><th>Préparation</th><th>Les preuves</th></tr></thead><tbody>${EMUSE.map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <div class="ofarm"><b>De l'expérience du créateur du site (agriculteur bio) :</b> Je pulvérise la solution activée dans les étables et les poulaillers, et il n'y reste aucune odeur. L'engrais de poisson fermenté à l'EM est l'engrais qui me réussit le mieux à la ferme.</div>
+   <h4 class="oh4">L'engrais de poisson fermenté à l'EM</h4>
+   <p class="sub">Le poisson est riche en azote, en acides aminés, en phosphore et en oligo-éléments, et l'engrais de poisson est l'un des engrais organiques les plus anciens et les plus efficaces. La fermentation à l'EM et à la mélasse en fait un liquide facile à absorber et réduit son odeur.</p>
+   <div class="aggrid">${EMFISH.map(([n,t],i)=>`<article class="agcard"><h5>${i+1}. ${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <h4 class="oh4">Le mélange EM‑5 pour la pulvérisation préventive</h4>
+   <div class="ofarm"><ul style="margin:0">${EM5.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <p class="hint">EM est un produit sûr et généralement accepté en agriculture biologique ; ses bienfaits les plus nets sont de réduire les odeurs et de faire fermenter le compost. Il ne remplace ni le compost, ni la propreté, ni l'aération.</p>
+   </section>
    <section class="osoon"><h3>Conseils de l'agriculteur</h3><p style="margin:0">Bientôt, si Dieu le veut : conseils et expériences de la ferme bio du créateur du guide, éprouvés dans le sol et la chaleur des Émirats.</p></section>`}`;
   el.querySelectorAll("[data-og]").forEach(b=>b.onclick=()=>{ ost.id = ost.id===b.dataset.og?null:b.dataset.og; renderOrganic(); });
   el.querySelectorAll("[data-oz]").forEach(b=>b.onclick=()=>{ ost.zone=b.dataset.oz; renderOrganic(); const n=$(`[data-oz="${ost.zone}"]`); n&&n.focus({preventScroll:true}); });
   el.querySelectorAll("[data-ocal]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-cal"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
+  el.querySelectorAll("[data-oem]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-em"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
   el.querySelectorAll("[data-opest]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-pest"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
   el.querySelectorAll("[data-pv]").forEach(b=>b.onclick=()=>{ ost.pv=b.dataset.pv||null; const y=scrollY; renderOrganic(); scrollTo({top:y}); const n=$(`[data-pv="${b.dataset.pv}"]`); n&&n.focus({preventScroll:true}); });
   el.querySelectorAll("[data-ohist]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-and"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
@@ -5454,9 +5496,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-07n",date:"7 novembre 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07o",date:"7 novembre 2026",go:"folk",items:[
  "<b>Nouvelle rubrique : coutumes populaires, ce qui est juste et ce qui nuit.</b> Saler le nouveau-né, le khôl, l'encens, le tahnik, la cautérisation, les rebouteux, les quarante jours, l'eau et les plantes pour le nourrisson et d'autres, avec l'alternative sûre pour chaque coutume.",
  "<b>La rubrique «D'origine animale» :</b> œufs, poulet, viandes, foie, smen, lait de vache et de chamelle, puis graisse de queue de mouton, yaourt et lben, aqit, lait de chèvre, produits de la ruche, criquets, graisse de dhub et huile d'autruche.",
+ "<b>Les microbes utiles EM :</b> leur activation pas à pas, leurs usages réussis dans les étables et le compost, la préparation de l'engrais de poisson fermenté, et le mélange EM‑5, avec ce que disent les études.",
  "<b>Agriculture biologique :</b> une section élargie, «Prévenir les maladies et ravageurs des plantes dans le patrimoine» : de Sumer, de la Chine et d'al-Andalus au Golfe, avec un avis sur chaque méthode, et les ravageurs du figuier et du palmier et leur prévention.",
  "<b>Texte plus grand :</b> les boutons A+ et A− en haut de la page agrandissent ou réduisent tout le texte, et le site retient votre choix.",
  "<b>Agriculture biologique :</b> une nouvelle section, «Du patrimoine agricole arabe et andalou» : Ibn Bassal, Ibn al-Awwam et le Calendrier de Cordoue, leurs méthodes et ce qu'en dit la science, les mots arabes en espagnol, les aflaj et le Tribunal des eaux de Valence.",
