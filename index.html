@@ -515,6 +515,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
     <div class="ngroup"><span class="nlabel">تعلّم وتحقّق</span>
       <button class="tab" id="tabNutri" aria-selected="false">الغذاء والفيتامينات</button>
       <button class="tab" id="tabFolk" aria-selected="false">عادات شعبية</button>
+      <button class="tab" id="tabMind" aria-selected="false">النفس في التراث</button>
       <button class="tab" id="tabSafety" aria-selected="false">فاحص السلامة</button>
       <button class="tab" id="tabGloss" aria-selected="false">معجم الأسماء</button>
       <button class="tab" id="tabAbout" aria-selected="false">عن الدليل</button>
@@ -545,6 +546,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
   <div class="page" id="aid" hidden></div>
   <div class="page" id="nutri" hidden></div>
   <div class="page" id="folk" hidden></div>
+  <div class="page" id="mind" hidden></div>
   <div class="page" id="safety" hidden></div>
   <div class="page" id="gloss" hidden></div>
   <div class="page" id="about" hidden></div>
@@ -3618,17 +3620,17 @@ function renderRecipes(){
 }
 function setView(v){
   state.view=v;
-  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
+  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
   $("#recipes").hidden=v!=="recipes"; $("#wizard").hidden=v!=="wizard";
-  ["home","mom","women","kit","organic","aid","nutri","folk","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
-  const pageView=["home","mom","women","wizard","kit","organic","folk","aid","nutri","safety","gloss","about"].includes(v);
+  ["home","mom","women","kit","organic","aid","nutri","folk","mind","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
+  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","aid","nutri","safety","gloss","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
   render();
 }
 function render(){
   renderAud();
-  if(["home","mom","women","kit","organic","aid","nutri","folk","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
+  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
@@ -4685,6 +4687,68 @@ const FOLK=[
   m:"الأغطية الكثيرة ترفع الحرارة أكثر وتسبب الجفاف، وقد تؤدي إلى تشنّجات عند الأطفال.",
   s:"ملابس خفيفة، وغرفة معتدلة، وسوائل كثيرة، والطبيب عند علامات الخطر.",h:[],rec:"تبريد الحمّى بالماء"}
 ];
+/* ---------- النفس في التراث ---------- */
+const mst={v:null};
+const MHIST=[
+ ["أبو زيد البلخي","القرن الثالث الهجري","في كتابه «مصالح الأبدان والأنفس» فرّق بين الخوف والقلق، والحزن، والوسواس، والغضب، وعالجها بالكلام الهادئ وتغيير الأفكار والعادات. وهذا قريب جدًا من العلاج المعرفي السلوكي اليوم."],
+ ["إسحاق بن عمران (القيروان)","القرن الثالث الهجري","كتب «مقالة في المالنخوليا»، من أقدم ما كُتب في الاكتئاب: وصف أعراضه من الحزن والأرق وسوء الظن، وعدّه مرضًا يُعالج بالغذاء والنوم والرياضة والحديث المؤنس."],
+ ["أبو بكر الرازي","القرن الثالث والرابع الهجري","عالج المرضى النفسيين في بيمارستان بغداد، وعدّ اضطراب النفس مرضًا كمرض البدن، لا مسًّا ولا عيبًا، وأوصى بالرفق بالمريض."],
+ ["ابن سينا","القرن الخامس الهجري","وصف في «القانون» المالنخوليا والوسواس والأرق، واشتهر بتشخيص «العشق» مرضًا بتغيّر نبض المريض عند ذكر اسم المحبوب، وعالجه بتدبير حياته."],
+ ["البيمارستانات","من القرن الثالث إلى الثامن الهجري","كان فيها أجنحة للمرضى النفسيين يُعالجون بالرفق، والحدائق، وخرير الماء، والأصوات الهادئة، والقصص، كما في البيمارستان النوري بدمشق وبيمارستان أرغون في حلب."]
+];
+const MHERB=[
+ ["saffron","«مفرّح» يقوّي القلب ويذهب الحزن","دراسات سريرية جيدة على الاكتئاب الخفيف والمتوسط بجرعات صغيرة (نحو 30 ملغ يوميًا). لا يُزاد عليها، ولا تأخذه الحامل دوائيًا.","ok"],
+ ["lavender","«مكنسة الدماغ» تنقّيه من الأخلاط","أظهر زيت الخزامى المعالج للبلع أثرًا في القلق. ويكفي عمومًا الشاي أو الاستنشاق، ولا يُشرب الزيت العطري الخام.","ok"],
+ ["chamomile","مهدّئ للأعصاب والمعدة","أثر متواضع في القلق الخفيف والنوم، وهو آمن لأغلب الناس.","ok"],
+ ["lemonbalm","يذهب الوسواس ويفرّح القلب","أدلة محدودة على التوتر والنوم، وهو لطيف آمن.","ok"],
+ ["barley","التلبينة تذهب ببعض الحزن","غذاء دافئ مريح للمريض والحزين، ولا دليل على أنه علاج للاكتئاب.","ok"],
+ ["valerian","للأرق والقلق","أثر متفاوت في النوم. يُتجنّب مع المنوّمات والكحول، ولا يُستعمل مع القيادة.","care"],
+ ["ashwagandha","منشّط ومهدّئ في الطب الهندي","دراسات على التوتر والنوم، لكن وردت حالات أذى للكبد، ولا تناسب الحامل ومرضى الغدة الدرقية.","care"],
+ ["stjohns","للحزن والكآبة في أوروبا","أثره في الاكتئاب الخفيف موثّق، لكنه يتداخل بشدة مع أدوية كثيرة: مضادات الاكتئاب، وحبوب منع الحمل، ومميّعات الدم، وأدوية القلب. لا يؤخذ إلا بعد سؤال الطبيب.","care"]
+];
+const MPRAC=[
+ ["الكلام والمشورة","البلخي يعالج الحزن والخوف بالحديث المؤنس وتغيير الأفكار.","العلاج بالكلام (العلاج النفسي) من أنجح علاجات القلق والاكتئاب اليوم.","ok"],
+ ["الحركة والشمس والطبيعة","الرياضة والمشي والحدائق في وصايا الأطباء.","المشي اليومي والتعرّض للشمس والطبيعة يحسّن المزاج والنوم بأدلة جيدة.","ok"],
+ ["تنظيم النوم والغذاء","«تدبير» النوم والأكل أساس العلاج عند ابن سينا.","النوم المنتظم والغذاء المتوازن يحميان من نوبات القلق والحزن.","ok"],
+ ["الصلاة والذكر والرقية الشرعية","الطمأنينة بالذكر والقرآن والأدعية المأثورة.","تريح النفس، ولا بأس بها مع العلاج، لا بدلًا عنه.","ok"],
+ ["صحبة الأهل وعدم العزلة","المريض يُؤنس ولا يُترك وحده.","الدعم الاجتماعي من أقوى ما يحمي من الاكتئاب.","ok"],
+ ["إيقاف دواء الطبيب واستبداله بالأعشاب","«الطبيعي أفضل».","الإيقاف المفاجئ لأدوية النفس قد يعيد المرض بشدة أو يسبب أعراض انسحاب. يُخفَّف الدواء بإشراف الطبيب فقط.","harm"],
+ ["الكيّ","يُكوى الرأس أو الجسد لإخراج المرض.","لا ينفع في المرض النفسي، ويسبب حروقًا والتهابات وألمًا.","harm"],
+ ["الضرب والربط والحبس","بحجة إخراج الجن من المريض.","أذى وتعذيب للمريض، وقد مات بسببه مرضى. والمرض النفسي مرض يُعالج.","harm"],
+ ["المشعوذون والتمائم","دفع المال للدجالين وتعليق الطلاسم.","لا أصل لها، وتؤخر العلاج وتستنزف الأسرة.","harm"],
+ ["إخفاء المريض خوفًا من العيب","«لا يعرف الناس».","التأخير يجعل المرض أشد وأصعب علاجًا. والمرض النفسي كمرض البدن، لا عيب فيه.","harm"]
+];
+const AUT=[
+ ["ما هو التوحد؟","اختلاف في نمو الدماغ يظهر في السنوات الأولى، ويؤثر في التواصل والتفاعل مع الناس، ويصحبه سلوك متكرر واهتمامات ضيقة. ودرجاته متفاوتة جدًا. وليس سببه التربية ولا العين ولا اللقاحات."],
+ ["علامات تستدعي استشارة الطبيب","لا يلتفت لاسمه بعمر سنة، أو لا يشير بإصبعه، أو قليل النظر في العين، أو تأخّر في الكلام، أو حركات متكررة، أو فقدَ كلامًا أو مهارات كان يتقنها. وفقدان المهارات في أي عمر يستدعي الطبيب فورًا."],
+ ["ما ثبت نفعه","التشخيص المبكر، ثم التدخل السلوكي والتعليمي، وعلاج النطق والتخاطب، والعلاج الوظيفي، وتدريب الأهل، ودعم الطفل في المدرسة. وكلما بدأ مبكرًا كان أنفع."],
+ ["الغذاء والنوم","مشكلات الأكل والإمساك والنوم شائعة عند أطفال التوحد، ويعالجها طبيب الأطفال. ولا تُفرض حمية قاسية دون طبيب وأخصائي تغذية."],
+ ["في التراث الشعبي","التوحد لم يكن معروفًا تشخيصًا في الطب القديم، فلا يوجد له علاج في التراث، ولا توجد عشبة أو خلطة شعبية ثبت أنها تعالجه."]
+];
+const AUTNO=["محلول MMS أو «ثاني أكسيد الكلور»: مادة مبيّضة سامة تُسقى للأطفال، وتسبب أذى شديدًا.","«إزالة المعادن» من الجسم (الاستخلاب) دون تسمّم مثبت: خطير، وقد مات بسببه أطفال.","ادّعاء أن حليب الإبل أو عسلًا أو خلطة ما يشفي التوحد: دراسات قليلة صغيرة، ولا يُستبدل به العلاج.","«الخلايا الجذعية» التجارية في العيادات غير المرخّصة.","الكي، والضرب والحبس، والرقاة المحتالون الذين يعدون بالشفاء مقابل المال."];
+function renderMind(){
+  const el=$("#mind"), hl=id=>byId[id]?`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`:"";
+  const ref="عن عائشة رضي الله عنها أنها كانت تأمر بالتلبينة وتقول: سمعت رسول الله ﷺ يقول: «التلبينة مُجِمّة لفؤاد المريض، تذهب ببعض الحزن» (رواه البخاري).";
+  el.innerHTML=`<h2 class="page-h">النفس في التراث</h2>
+   <p class="sub">سبق أطباؤنا إلى عدّ الحزن والقلق والوسواس أمراضًا تُعالج بالرفق والكلام والتدبير، لا عيبًا يُخفى. هنا ما في تراثنا، وما يقوله العلم اليوم، وما يجب الحذر منه.</p>
+   <div class="caution"><b>مهم:</b> إذا راودتك أو راودت أحدًا تعرفه أفكار إيذاء النفس أو الانتحار، فاطلب المساعدة فورًا من الطوارئ أو طبيب أو شخص تثق به. الأعشاب لا تحل محل الطبيب النفسي، ولا يُوقف معها دواء موصوف.</div>
+   <h3 class="oh4">أطباؤنا والنفس</h3>
+   <div class="aggrid">${MHIST.map(([n,w,t])=>`<article class="agcard"><h5>${n}</h5><p class="agmeta">${w}</p><p>${t}</p></article>`).join("")}</div>
+   <h3 class="oh4">أعشاب المزاج والقلق: في التراث واليوم</h3>
+   <div class="owrap"><table class="otable"><thead><tr><th>العشبة</th><th>في التراث</th><th>اليوم</th></tr></thead><tbody>${MHERB.filter(r=>byId[r[0]]).map(([id,b,c,v])=>`<tr><td>${hl(id)}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h3 class="oh4">التلبينة النبوية</h3>
+   <div class="refq">${typeof hgBadge==="function"?hgBadge(ref,"h:barley"):""}${ref}</div>
+   <div class="ofarm"><ul style="margin:0"><li>ملعقتان كبيرتان من دقيق الشعير الكامل تُطبخان في كوب حليب أو ماء على نار هادئة 10 دقائق مع التحريك حتى تصير كالحساء.</li><li>تُحلّى بملعقة عسل بعد أن تفتر، ويُضاف إليها تمر أو قليل من القرفة.</li><li>تؤكل دافئة، وتناسب المريض والحزين والناقه، ومن عمر سنة دون عسل قبلها.</li><li>مرضى السكري ينتبهون لكمية العسل والتمر، ومرضى حساسية القمح (السيلياك) يتجنبون الشعير.</li></ul></div>
+   <h3 class="oh4">عادات وممارسات: ما يصح وما يضر</h3>
+   <div class="sgroups"><div class="opts">${[[null,"الكل"],["ok","يصح"],["harm","يضرّ"]].map(([k,t])=>`<button type="button" class="chip" data-mv="${k||""}" aria-pressed="${mst.v===k}">${k?`<span class="dot ${FV[k][1]}"></span>`:""}${t}</button>`).join("")}</div></div>
+   <div class="owrap"><table class="otable"><thead><tr><th>الممارسة</th><th>في التراث</th><th>اليوم</th></tr></thead><tbody>${MPRAC.filter(r=>!mst.v||r[3]===mst.v).map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h3 class="oh4" id="mind-aut">التوحد</h3>
+   <div class="aggrid">${AUT.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <div class="aidcard sev-e"><div class="aidhead"><h3>احذر هذه «العلاجات»</h3><span class="sevtag sev-e">${FV.harm[0]}</span></div><ul style="margin:0">${AUTNO.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <p class="hint">مكان المساعدة: طبيب الأسرة أو طبيب الأطفال أولًا، ثم الطبيب النفسي أو مراكز تقييم النمو. ولكل أسرة طفل توحدي حق في الدعم، ولا عيب في طلبه.</p>`;
+  el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
+  el.querySelectorAll("[data-mv]").forEach(b=>b.onclick=()=>{ mst.v=b.dataset.mv||null; const y=scrollY; renderMind(); scrollTo({top:y}); });
+}
 function renderFolk(){
   const el=$("#folk"), list=fst.v?FOLK.filter(f=>f.v===fst.v):FOLK;
   const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
@@ -5494,7 +5558,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
-const NEWS={v:"2026-11-07o",date:"7 نوفمبر 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07p",date:"7 نوفمبر 2026",go:"mind",items:[
+ "<b>باب جديد: النفس في التراث.</b> ما سبق إليه البلخي وابن سينا والرازي والبيمارستانات، وأعشاب المزاج والقلق وما يقوله العلم، والتلبينة النبوية، وما يصح وما يضر من الممارسات، وصفحة عن التوحد وما ينفع وما يجب الحذر منه.",
  "<b>باب جديد: عادات شعبية، ما يصح وما يضر.</b> تمليح المولود، والكحل، والتبخير، والتحنيك، والكيّ، والمجبّر، وعادات الأربعين، والماء والأعشاب للرضيع، وغيرها، مع البديل الآمن لكل عادة.",
  "<b>باب «من الحيوان»:</b> البيض والدجاج واللحوم والكبدة والسمن وحليب البقر والإبل، ثم إلية الشاة، والزبادي واللبن، والأقط، وحليب الماعز، ومنتجات النحل، والجراد، ودهن الضبّ وزيت النعام.",
  "<b>البكتيريا النافعة EM:</b> طريقة تنشيطها خطوة بخطوة، واستعمالاتها الناجحة في الحظائر والسماد، وطريقة السماد السمكي المخمّر، وخلطة EM‑5، مع ما تقوله الدراسات.",
@@ -5531,6 +5596,7 @@ $("#tabMom").onclick=()=>setView("mom");
 $("#tabKit").onclick=()=>setView("kit");
 $("#tabOrganic").onclick=()=>{ ost.id=null; setView("organic"); };
 $("#tabFolk").onclick=()=>{ fst.v=null; setView("folk"); };
+$("#tabMind").onclick=()=>{ mst.v=null; setView("mind"); };
 function openFromHash(){ const m=location.hash.match(/^#r=(.+)$/); if(m){ try{ goRecipe(decodeURIComponent(m[1])); }catch(_){} } const mh=location.hash.match(/^#h=([a-z0-9]+)$/); if(mh&&byId[mh[1]]){ setView("herbs"); openPanel(byId[mh[1]]); } }
 window.addEventListener("load",openFromHash); window.addEventListener("hashchange",openFromHash);
 $("#tabWomen").onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); };

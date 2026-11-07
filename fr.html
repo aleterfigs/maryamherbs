@@ -516,6 +516,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
     <div class="ngroup"><span class="nlabel">Apprendre et vérifier</span>
       <button class="tab" id="tabNutri" aria-selected="false">Alimentation et vitamines</button>
       <button class="tab" id="tabFolk" aria-selected="false">Coutumes populaires</button>
+      <button class="tab" id="tabMind" aria-selected="false">L'esprit dans le patrimoine</button>
       <button class="tab" id="tabSafety" aria-selected="false">Vérificateur de sécurité</button>
       <button class="tab" id="tabGloss" aria-selected="false">Glossaire des noms</button>
       <button class="tab" id="tabAbout" aria-selected="false">À propos</button>
@@ -546,6 +547,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
   <div class="page" id="aid" hidden></div>
   <div class="page" id="nutri" hidden></div>
   <div class="page" id="folk" hidden></div>
+  <div class="page" id="mind" hidden></div>
   <div class="page" id="safety" hidden></div>
   <div class="page" id="gloss" hidden></div>
   <div class="page" id="about" hidden></div>
@@ -3620,17 +3622,17 @@ function renderRecipes(){
 }
 function setView(v){
   state.view=v;
-  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
+  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
   $("#recipes").hidden=v!=="recipes"; $("#wizard").hidden=v!=="wizard";
-  ["home","mom","women","kit","organic","aid","nutri","folk","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
-  const pageView=["home","mom","women","wizard","kit","organic","folk","aid","nutri","safety","gloss","about"].includes(v);
+  ["home","mom","women","kit","organic","aid","nutri","folk","mind","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
+  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","aid","nutri","safety","gloss","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
   render();
 }
 function render(){
   renderAud();
-  if(["home","mom","women","kit","organic","aid","nutri","folk","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
+  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
@@ -4687,6 +4689,68 @@ const FOLK=[
   m:"Trop de couvertures font monter la température et causent une déshydratation, et peuvent provoquer des convulsions chez l'enfant.",
   s:"Vêtements légers, pièce modérément fraîche, beaucoup de liquides, et le médecin en cas de signes de danger.",h:[],rec:"Rafraîchir la fièvre avec de l'eau"}
 ];
+/* ---------- L'esprit dans le patrimoine ---------- */
+const mst={v:null};
+const MHIST=[
+ ["Abu Zayd al-Balkhi","IXe siècle","Dans son livre «Les bienfaits pour les corps et les âmes», il distingua la peur et l'anxiété, la tristesse, les obsessions et la colère, et les soigna par une parole apaisante et le changement des pensées et des habitudes. C'est très proche de la thérapie cognitivo-comportementale actuelle."],
+ ["Ishaq ibn Imran (Kairouan)","IXe siècle","Il écrivit le «Traité de la mélancolie», l'un des plus anciens écrits sur la dépression : il en décrivit la tristesse, l'insomnie et la méfiance, et la traita comme une maladie soignée par l'alimentation, le sommeil, l'exercice et une conversation réconfortante."],
+ ["Abu Bakr al-Razi (Rhazès)","IXe–Xe siècle","Il soigna des malades mentaux au bimaristan (hôpital) de Bagdad, considéra les troubles de l'esprit comme une maladie semblable à celle du corps, ni possession ni honte, et recommanda la douceur envers le malade."],
+ ["Ibn Sina (Avicenne)","XIe siècle","Dans le «Canon», il décrivit la mélancolie, les obsessions et l'insomnie, et devint célèbre pour avoir diagnostiqué le «mal d'amour» au changement du pouls du malade à l'évocation du nom de l'être aimé, le soignant en réglant sa vie."],
+ ["Les bimaristans (hôpitaux)","Du IXe au XIVe siècle","Ils avaient des quartiers pour les malades mentaux, soignés avec douceur, par les jardins, le murmure de l'eau, les sons apaisants et les récits, comme au bimaristan Nuri de Damas et au bimaristan Arghun d'Alep."]
+];
+const MHERB=[
+ ["saffron","«Exhilarant» qui fortifie le cœur et chasse la tristesse","De bonnes études cliniques sur la dépression légère à modérée à petites doses (environ 30 mg par jour). Ne pas dépasser, et la femme enceinte ne le prend pas comme remède.","ok"],
+ ["lavender","«Balai du cerveau» qui le purifie des humeurs","L'huile de lavande préparée pour être avalée a montré un effet sur l'anxiété. La tisane ou l'inhalation suffisent en général ; ne jamais boire l'huile essentielle brute.","ok"],
+ ["chamomile","Calme les nerfs et l'estomac","Un effet modeste sur l'anxiété légère et le sommeil, et sûre pour la plupart des gens.","ok"],
+ ["lemonbalm","Chasse les obsessions et réjouit le cœur","Preuves limitées sur le stress et le sommeil ; douce et sûre.","ok"],
+ ["barley","La talbina chasse une part de la tristesse","Un aliment chaud et réconfortant pour le malade et l'affligé, sans preuve qu'il traite la dépression.","ok"],
+ ["valerian","Pour l'insomnie et l'anxiété","Effet variable sur le sommeil. À éviter avec les somnifères et l'alcool, et ne pas conduire après.","care"],
+ ["ashwagandha","Tonique et calmant en médecine indienne","Des études sur le stress et le sommeil, mais des atteintes du foie ont été signalées, et elle ne convient ni à la grossesse ni aux malades de la thyroïde.","care"],
+ ["stjohns","Pour la tristesse et la mélancolie en Europe","Son effet sur la dépression légère est documenté, mais il interagit fortement avec de nombreux médicaments : antidépresseurs, pilule contraceptive, anticoagulants et médicaments du cœur. À ne prendre qu'après avoir demandé au médecin.","care"]
+];
+const MPRAC=[
+ ["La parole et le conseil","Al-Balkhi soignait la tristesse et la peur par une parole réconfortante et le changement des pensées.","La thérapie par la parole (psychothérapie) est l'un des traitements les plus efficaces de l'anxiété et de la dépression aujourd'hui.","ok"],
+ ["Le mouvement, le soleil et la nature","L'exercice, la marche et les jardins dans les conseils des médecins.","La marche quotidienne, le soleil et la nature améliorent l'humeur et le sommeil, avec de bonnes preuves.","ok"],
+ ["Régler le sommeil et l'alimentation","«Régler» le sommeil et l'alimentation est la base du traitement chez Ibn Sina.","Un sommeil régulier et une alimentation équilibrée protègent des crises d'anxiété et de tristesse.","ok"],
+ ["La prière, le dhikr et la roqya","La sérénité par le rappel de Dieu, le Coran et les invocations transmises.","Elles apaisent l'âme et conviennent avec le traitement, non à sa place.","ok"],
+ ["La compagnie de la famille, pas l'isolement","On tient compagnie au malade, on ne le laisse pas seul.","Le soutien social est l'une des meilleures protections contre la dépression.","ok"],
+ ["Arrêter le médicament du médecin pour le remplacer par des plantes","«Le naturel, c'est mieux».","L'arrêt brutal des médicaments psychiatriques peut faire revenir la maladie avec force ou provoquer un sevrage. On ne réduit un médicament que sous le contrôle du médecin.","harm"],
+ ["La cautérisation","On brûle la tête ou le corps pour chasser la maladie.","Inutile contre la maladie mentale, elle cause brûlures, infections et douleur.","harm"],
+ ["Coups, liens et enfermement","Sous prétexte de chasser les djinns du malade.","Maltraitance et torture du malade ; des malades en sont morts. La maladie mentale est une maladie qui se soigne.","harm"],
+ ["Charlatans et amulettes","Payer des escrocs et suspendre des talismans.","Aucun fondement ; ils retardent le traitement et ruinent la famille.","harm"],
+ ["Cacher le malade par peur de la honte","«Que les gens ne sachent pas».","Le retard aggrave la maladie et rend le traitement plus difficile. La maladie mentale est comme celle du corps, sans aucune honte.","harm"]
+];
+const AUT=[
+ ["Qu'est-ce que l'autisme ?","Une différence du développement du cerveau qui apparaît dans les premières années, touchant la communication et les relations avec les autres, avec des comportements répétitifs et des intérêts restreints. Ses degrés varient beaucoup. Il n'est causé ni par l'éducation, ni par le mauvais œil, ni par les vaccins."],
+ ["Signes qui justifient de consulter un médecin","Ne se tourne pas à l'appel de son prénom à un an, ne montre pas du doigt, regarde peu dans les yeux, retard de langage, mouvements répétitifs, ou perte de mots ou de compétences acquises. La perte de compétences à tout âge justifie de voir un médecin aussitôt."],
+ ["Ce qui a fait ses preuves","Le diagnostic précoce, puis l'intervention comportementale et éducative, l'orthophonie, l'ergothérapie, la formation des parents et le soutien de l'enfant à l'école. Plus c'est tôt, mieux c'est."],
+ ["Alimentation et sommeil","Les problèmes d'alimentation, la constipation et les troubles du sommeil sont fréquents chez les enfants autistes, et le pédiatre les traite. Ne pas imposer de régime strict sans médecin ni diététicien."],
+ ["Dans la tradition populaire","L'autisme n'était pas connu comme diagnostic dans la médecine ancienne : il n'existe donc aucun traitement traditionnel, et aucune plante ni mélange populaire n'a prouvé qu'il le soigne."]
+];
+const AUTNO=["La solution MMS ou «dioxyde de chlore» : un javellisant toxique que l'on fait boire aux enfants, causant de graves dommages.","«Éliminer les métaux» du corps (chélation) sans intoxication prouvée : dangereux, des enfants en sont morts.","Prétendre que le lait de chamelle, le miel ou un mélange guérit l'autisme : peu d'études, de petite taille, et cela ne doit pas remplacer le traitement.","«Cellules souches» commerciales dans des cliniques non autorisées.","La cautérisation, les coups et l'enfermement, et les faux guérisseurs qui promettent la guérison contre de l'argent."];
+function renderMind(){
+  const el=$("#mind"), hl=id=>byId[id]?`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`:"";
+  const ref="Aïcha (que Dieu l'agrée) recommandait la talbina en disant : J'ai entendu le Messager de Dieu ﷺ dire : « La talbina repose le cœur du malade et emporte une part du chagrin » (Bukhari).";
+  el.innerHTML=`<h2 class="page-h">L'esprit dans le patrimoine</h2>
+   <p class="sub">Nos médecins ont tôt considéré la tristesse, l'anxiété et les obsessions comme des maladies soignées par la douceur, la parole et une vie réglée, non comme une honte à cacher. Voici ce que contient notre patrimoine, ce qu'en dit la science aujourd'hui, et ce dont il faut se méfier.</p>
+   <div class="caution"><b>Important :</b> Si vous ou un proche avez des pensées d'automutilation ou de suicide, demandez de l'aide immédiatement aux urgences, à un médecin ou à une personne de confiance. Les plantes ne remplacent pas le psychiatre, et on n'arrête pas un médicament prescrit à cause d'elles.</div>
+   <h3 class="oh4">Nos médecins et l'esprit</h3>
+   <div class="aggrid">${MHIST.map(([n,w,t])=>`<article class="agcard"><h5>${n}</h5><p class="agmeta">${w}</p><p>${t}</p></article>`).join("")}</div>
+   <h3 class="oh4">Plantes de l'humeur et de l'anxiété : dans le patrimoine et aujourd'hui</h3>
+   <div class="owrap"><table class="otable"><thead><tr><th>Plante</th><th>Dans le patrimoine</th><th>Aujourd'hui</th></tr></thead><tbody>${MHERB.filter(r=>byId[r[0]]).map(([id,b,c,v])=>`<tr><td>${hl(id)}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h3 class="oh4">La talbina prophétique</h3>
+   <div class="refq">${typeof hgBadge==="function"?hgBadge(ref,"h:barley"):""}${ref}</div>
+   <div class="ofarm"><ul style="margin:0"><li>Cuire deux cuillères à soupe de farine d'orge complète dans une tasse de lait ou d'eau à feu doux 10 minutes en remuant, jusqu'à obtenir une soupe épaisse.</li><li>Sucrer d'une cuillère de miel une fois tiédie, et ajouter des dattes ou un peu de cannelle.</li><li>À manger chaude ; elle convient au malade, à l'affligé et au convalescent, et dès un an, sans miel avant cet âge.</li><li>Les diabétiques surveillent la quantité de miel et de dattes, et les cœliaques évitent l'orge.</li></ul></div>
+   <h3 class="oh4">Habitudes et pratiques : ce qui est juste et ce qui nuit</h3>
+   <div class="sgroups"><div class="opts">${[[null,"Tout"],["ok","Juste"],["harm","Nuisible"]].map(([k,t])=>`<button type="button" class="chip" data-mv="${k||""}" aria-pressed="${mst.v===k}">${k?`<span class="dot ${FV[k][1]}"></span>`:""}${t}</button>`).join("")}</div></div>
+   <div class="owrap"><table class="otable"><thead><tr><th>La pratique</th><th>Dans le patrimoine</th><th>Aujourd'hui</th></tr></thead><tbody>${MPRAC.filter(r=>!mst.v||r[3]===mst.v).map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h3 class="oh4" id="mind-aut">L'autisme</h3>
+   <div class="aggrid">${AUT.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <div class="aidcard sev-e"><div class="aidhead"><h3>Méfiez-vous de ces «traitements»</h3><span class="sevtag sev-e">${FV.harm[0]}</span></div><ul style="margin:0">${AUTNO.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <p class="hint">Où trouver de l'aide : le médecin de famille ou le pédiatre d'abord, puis le psychiatre ou un centre d'évaluation du développement. Toute famille d'un enfant autiste a droit au soutien, et il n'y a aucune honte à le demander.</p>`;
+  el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
+  el.querySelectorAll("[data-mv]").forEach(b=>b.onclick=()=>{ mst.v=b.dataset.mv||null; const y=scrollY; renderMind(); scrollTo({top:y}); });
+}
 function renderFolk(){
   const el=$("#folk"), list=fst.v?FOLK.filter(f=>f.v===fst.v):FOLK;
   const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
@@ -5496,7 +5560,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-07o",date:"7 novembre 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07p",date:"7 novembre 2026",go:"mind",items:[
+ "<b>Nouvelle section : L'esprit dans le patrimoine.</b> ce qu'ont initié al-Balkhi, Ibn Sina, al-Razi et les bimaristans, les plantes de l'humeur et de l'anxiété et ce qu'en dit la science, la talbina prophétique, les pratiques utiles et nuisibles, et une page sur l'autisme : ce qui aide et ce dont il faut se méfier.",
  "<b>Nouvelle rubrique : coutumes populaires, ce qui est juste et ce qui nuit.</b> Saler le nouveau-né, le khôl, l'encens, le tahnik, la cautérisation, les rebouteux, les quarante jours, l'eau et les plantes pour le nourrisson et d'autres, avec l'alternative sûre pour chaque coutume.",
  "<b>La rubrique «D'origine animale» :</b> œufs, poulet, viandes, foie, smen, lait de vache et de chamelle, puis graisse de queue de mouton, yaourt et lben, aqit, lait de chèvre, produits de la ruche, criquets, graisse de dhub et huile d'autruche.",
  "<b>Les microbes utiles EM :</b> leur activation pas à pas, leurs usages réussis dans les étables et le compost, la préparation de l'engrais de poisson fermenté, et le mélange EM‑5, avec ce que disent les études.",
@@ -5533,6 +5598,7 @@ $("#tabMom").onclick=()=>setView("mom");
 $("#tabKit").onclick=()=>setView("kit");
 $("#tabOrganic").onclick=()=>{ ost.id=null; setView("organic"); };
 $("#tabFolk").onclick=()=>{ fst.v=null; setView("folk"); };
+$("#tabMind").onclick=()=>{ mst.v=null; setView("mind"); };
 function openFromHash(){ const m=location.hash.match(/^#r=(.+)$/); if(m){ try{ goRecipe(decodeURIComponent(m[1])); }catch(_){} } const mh=location.hash.match(/^#h=([a-z0-9]+)$/); if(mh&&byId[mh[1]]){ setView("herbs"); openPanel(byId[mh[1]]); } }
 window.addEventListener("load",openFromHash); window.addEventListener("hashchange",openFromHash);
 $("#tabWomen").onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); };

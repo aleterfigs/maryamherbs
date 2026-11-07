@@ -516,6 +516,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
     <div class="ngroup"><span class="nlabel">Learn & check</span>
       <button class="tab" id="tabNutri" aria-selected="false">Food & vitamins</button>
       <button class="tab" id="tabFolk" aria-selected="false">Folk customs</button>
+      <button class="tab" id="tabMind" aria-selected="false">The mind in heritage</button>
       <button class="tab" id="tabSafety" aria-selected="false">Safety checker</button>
       <button class="tab" id="tabGloss" aria-selected="false">Name glossary</button>
       <button class="tab" id="tabAbout" aria-selected="false">About</button>
@@ -546,6 +547,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
   <div class="page" id="aid" hidden></div>
   <div class="page" id="nutri" hidden></div>
   <div class="page" id="folk" hidden></div>
+  <div class="page" id="mind" hidden></div>
   <div class="page" id="safety" hidden></div>
   <div class="page" id="gloss" hidden></div>
   <div class="page" id="about" hidden></div>
@@ -3620,17 +3622,17 @@ function renderRecipes(){
 }
 function setView(v){
   state.view=v;
-  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
+  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
   $("#recipes").hidden=v!=="recipes"; $("#wizard").hidden=v!=="wizard";
-  ["home","mom","women","kit","organic","aid","nutri","folk","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
-  const pageView=["home","mom","women","wizard","kit","organic","folk","aid","nutri","safety","gloss","about"].includes(v);
+  ["home","mom","women","kit","organic","aid","nutri","folk","mind","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
+  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","aid","nutri","safety","gloss","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
   render();
 }
 function render(){
   renderAud();
-  if(["home","mom","women","kit","organic","aid","nutri","folk","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
+  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
@@ -4687,6 +4689,68 @@ const FOLK=[
   m:"Lots of covers raise the temperature further and cause dehydration, and can lead to seizures in children.",
   s:"Light clothing, a moderately cool room, plenty of fluids, and a doctor if there are danger signs.",h:[],rec:"Cooling fever with water"}
 ];
+/* ---------- The mind in heritage ---------- */
+const mst={v:null};
+const MHIST=[
+ ["Abu Zayd al-Balkhi","9th century CE","In his book «Sustenance of Bodies and Souls» he distinguished fear and anxiety, sadness, obsessions and anger, and treated them with calm talk and changing thoughts and habits. This is very close to today's cognitive behavioural therapy."],
+ ["Ishaq ibn Imran (Kairouan)","9th century CE","He wrote «A Treatise on Melancholia», one of the oldest writings on depression: he described its symptoms of sadness, sleeplessness and suspicion, and treated it as an illness cured with food, sleep, exercise and comforting conversation."],
+ ["Abu Bakr al-Razi","9th–10th century CE","He treated mental patients in the Baghdad bimaristan (hospital) and considered disorders of the mind an illness like illness of the body, not possession or shame, and urged gentleness with the patient."],
+ ["Ibn Sina (Avicenna)","11th century CE","In «The Canon» he described melancholia, obsessions and insomnia, and became famous for diagnosing «lovesickness» as an illness from the change in a patient's pulse when the beloved's name was mentioned, treating it by ordering the patient's life."],
+ ["The bimaristans (hospitals)","9th to 14th century CE","They had wards for mental patients, treated with gentleness, gardens, the sound of running water, calm sounds and stories, as in the Nuri bimaristan in Damascus and the Arghun bimaristan in Aleppo."]
+];
+const MHERB=[
+ ["saffron","«Exhilarant» that strengthens the heart and lifts sadness","Good clinical studies on mild to moderate depression at small doses (about 30 mg a day). Do not exceed this, and pregnant women should not take it as a remedy.","ok"],
+ ["lavender","«Broom of the brain» that clears it of humours","Lavender oil prepared for swallowing showed an effect on anxiety. Tea or inhaling is generally enough; never drink raw essential oil.","ok"],
+ ["chamomile","Calms the nerves and the stomach","A modest effect on mild anxiety and sleep, and safe for most people.","ok"],
+ ["lemonbalm","Drives away obsessions and gladdens the heart","Limited evidence on stress and sleep; gentle and safe.","ok"],
+ ["barley","Talbina takes away some sadness","A warm, comforting food for the sick and the sad, with no evidence that it treats depression.","ok"],
+ ["valerian","For insomnia and anxiety","Variable effect on sleep. Avoid with sleeping pills and alcohol, and do not drive after taking it.","care"],
+ ["ashwagandha","Tonic and calming in Indian medicine","Studies on stress and sleep, but cases of liver injury have been reported, and it is not suitable in pregnancy or for thyroid patients.","care"],
+ ["stjohns","For sadness and gloom in Europe","Its effect on mild depression is documented, but it interacts strongly with many medicines: antidepressants, birth-control pills, blood thinners and heart medicines. Take it only after asking the doctor.","care"]
+];
+const MPRAC=[
+ ["Talking and counsel","Al-Balkhi treated sadness and fear with comforting talk and changing thoughts.","Talking therapy (psychotherapy) is one of the most successful treatments for anxiety and depression today.","ok"],
+ ["Movement, sunshine and nature","Exercise, walking and gardens in the physicians' advice.","Daily walking and time in sunlight and nature improve mood and sleep, with good evidence.","ok"],
+ ["Regular sleep and food","«Ordering» sleep and food is the basis of treatment for Ibn Sina.","Regular sleep and balanced food protect against bouts of anxiety and sadness.","ok"],
+ ["Prayer, remembrance of God and ruqya","Peace of heart through remembrance, the Quran and transmitted supplications.","They comfort the soul and are fine alongside treatment, not instead of it.","ok"],
+ ["Family company, not isolation","The patient is kept company, not left alone.","Social support is one of the strongest protections against depression.","ok"],
+ ["Stopping the doctor's medicine and replacing it with herbs","«Natural is better».","Suddenly stopping psychiatric medicines can bring the illness back strongly or cause withdrawal symptoms. Reduce a medicine only under the doctor's supervision.","harm"],
+ ["Cautery","The head or body is burned to drive out the illness.","It does nothing for mental illness, and causes burns, infection and pain.","harm"],
+ ["Beating, tying up and locking away","On the pretext of driving jinn out of the patient.","Harm and torture of the patient; patients have died from it. Mental illness is an illness to be treated.","harm"],
+ ["Charlatans and amulets","Paying money to frauds and hanging up talismans.","They have no basis, delay treatment and drain the family.","harm"],
+ ["Hiding the patient for fear of shame","«So people won't know».","Delay makes the illness more severe and harder to treat. Mental illness is like bodily illness, with no shame in it.","harm"]
+];
+const AUT=[
+ ["What is autism?","A difference in brain development that appears in the early years, affecting communication and interaction with people, with repetitive behaviour and narrow interests. Its degrees vary greatly. It is not caused by upbringing, the evil eye or vaccines."],
+ ["Signs that call for seeing a doctor","Not turning to their name by age one, not pointing with a finger, little eye contact, delayed speech, repetitive movements, or losing words or skills they had mastered. Losing skills at any age calls for a doctor at once."],
+ ["What is proven to help","Early diagnosis, then behavioural and educational intervention, speech and language therapy, occupational therapy, parent training, and support for the child at school. The earlier it starts, the better."],
+ ["Food and sleep","Eating problems, constipation and sleep problems are common in autistic children, and the paediatrician treats them. Do not impose a strict diet without a doctor and a dietitian."],
+ ["In folk tradition","Autism was not known as a diagnosis in old medicine, so there is no treatment for it in the tradition, and no herb or folk mixture has been proven to treat it."]
+];
+const AUTNO=["MMS solution or «chlorine dioxide»: a toxic bleach given to children to drink, causing serious harm.","«Removing metals» from the body (chelation) without proven poisoning: dangerous, and children have died from it.","Claims that camel milk, honey or some mixture cures autism: few small studies, and it must not replace treatment.","«Stem cells» sold in unlicensed clinics.","Cautery, beating and locking away, and fraudulent healers who promise a cure for money."];
+function renderMind(){
+  const el=$("#mind"), hl=id=>byId[id]?`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`:"";
+  const ref="Aisha (may God be pleased with her) used to recommend talbina, saying: I heard the Messenger of God ﷺ say: “Talbina gives rest to the heart of the sick and takes away some of the grief” (Bukhari).";
+  el.innerHTML=`<h2 class="page-h">The mind in heritage</h2>
+   <p class="sub">Our physicians were early to see sadness, anxiety and obsessions as illnesses treated with gentleness, talk and good order, not a shame to hide. Here is what our heritage holds, what science says today, and what to beware of.</p>
+   <div class="caution"><b>Important:</b> If you or someone you know has thoughts of self-harm or suicide, seek help at once from emergency services, a doctor or someone you trust. Herbs do not replace a psychiatrist, and a prescribed medicine is not stopped because of them.</div>
+   <h3 class="oh4">Our physicians and the mind</h3>
+   <div class="aggrid">${MHIST.map(([n,w,t])=>`<article class="agcard"><h5>${n}</h5><p class="agmeta">${w}</p><p>${t}</p></article>`).join("")}</div>
+   <h3 class="oh4">Herbs for mood and anxiety: in heritage and today</h3>
+   <div class="owrap"><table class="otable"><thead><tr><th>Herb</th><th>In heritage</th><th>Today</th></tr></thead><tbody>${MHERB.filter(r=>byId[r[0]]).map(([id,b,c,v])=>`<tr><td>${hl(id)}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h3 class="oh4">The Prophetic talbina</h3>
+   <div class="refq">${typeof hgBadge==="function"?hgBadge(ref,"h:barley"):""}${ref}</div>
+   <div class="ofarm"><ul style="margin:0"><li>Cook two tablespoons of wholegrain barley flour in a cup of milk or water over low heat for 10 minutes, stirring, until it is like a soup.</li><li>Sweeten with a spoon of honey once it has cooled a little, and add dates or a little cinnamon.</li><li>Eat it warm; it suits the sick, the sad and the convalescent, and is fine from age one, without honey before then.</li><li>People with diabetes should watch the honey and dates, and people with coeliac disease avoid barley.</li></ul></div>
+   <h3 class="oh4">Habits and practices: what is right and what harms</h3>
+   <div class="sgroups"><div class="opts">${[[null,"All"],["ok","Sound"],["harm","Harmful"]].map(([k,t])=>`<button type="button" class="chip" data-mv="${k||""}" aria-pressed="${mst.v===k}">${k?`<span class="dot ${FV[k][1]}"></span>`:""}${t}</button>`).join("")}</div></div>
+   <div class="owrap"><table class="otable"><thead><tr><th>Practice</th><th>In heritage</th><th>Today</th></tr></thead><tbody>${MPRAC.filter(r=>!mst.v||r[3]===mst.v).map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h3 class="oh4" id="mind-aut">Autism</h3>
+   <div class="aggrid">${AUT.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <div class="aidcard sev-e"><div class="aidhead"><h3>Beware of these «treatments»</h3><span class="sevtag sev-e">${FV.harm[0]}</span></div><ul style="margin:0">${AUTNO.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <p class="hint">Where to get help: the family doctor or paediatrician first, then a psychiatrist or a child-development assessment centre. Every family with an autistic child has a right to support, and there is no shame in asking for it.</p>`;
+  el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
+  el.querySelectorAll("[data-mv]").forEach(b=>b.onclick=()=>{ mst.v=b.dataset.mv||null; const y=scrollY; renderMind(); scrollTo({top:y}); });
+}
 function renderFolk(){
   const el=$("#folk"), list=fst.v?FOLK.filter(f=>f.v===fst.v):FOLK;
   const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
@@ -5496,7 +5560,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- What's new: shown once to returning visitors after each update ---------- */
-const NEWS={v:"2026-11-07o",date:"7 November 2026",go:"folk",items:[
+const NEWS={v:"2026-11-07p",date:"7 November 2026",go:"mind",items:[
+ "<b>New section: The mind in heritage.</b> what al-Balkhi, Ibn Sina, al-Razi and the bimaristans pioneered, herbs for mood and anxiety and what science says, the Prophetic talbina, practices that help and harm, and a page on autism: what helps and what to beware of.",
  "<b>New section: folk customs, what is sound and what harms.</b> Salting newborns, kohl, incense, tahneek, cautery, bonesetters, the forty days after birth, water and herbs for babies and more, with the safe alternative for each custom.",
  "<b>The «From animals» section:</b> eggs, chicken, meat, liver, ghee, cow's and camel milk, plus sheep tail fat, yogurt and laban, aqit, goat milk, bee products, locusts, dhub fat and ostrich oil.",
  "<b>Beneficial microbes EM:</b> how to activate them step by step, their successful uses in barns and compost, how to make fermented fish fertiliser, and the EM‑5 mix, with what studies say.",
@@ -5533,6 +5598,7 @@ $("#tabMom").onclick=()=>setView("mom");
 $("#tabKit").onclick=()=>setView("kit");
 $("#tabOrganic").onclick=()=>{ ost.id=null; setView("organic"); };
 $("#tabFolk").onclick=()=>{ fst.v=null; setView("folk"); };
+$("#tabMind").onclick=()=>{ mst.v=null; setView("mind"); };
 function openFromHash(){ const m=location.hash.match(/^#r=(.+)$/); if(m){ try{ goRecipe(decodeURIComponent(m[1])); }catch(_){} } const mh=location.hash.match(/^#h=([a-z0-9]+)$/); if(mh&&byId[mh[1]]){ setView("herbs"); openPanel(byId[mh[1]]); } }
 window.addEventListener("load",openFromHash); window.addEventListener("hashchange",openFromHash);
 $("#tabWomen").onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); };
