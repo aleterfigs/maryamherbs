@@ -516,6 +516,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
       <button class="tab" id="tabNutri" aria-selected="false">الغذاء والفيتامينات</button>
       <button class="tab" id="tabFolk" aria-selected="false">عادات شعبية</button>
       <button class="tab" id="tabMind" aria-selected="false">النفس في التراث</button>
+      <button class="tab" id="tabEye" aria-selected="false">العين في التراث</button>
       <button class="tab" id="tabSafety" aria-selected="false">فاحص السلامة</button>
       <button class="tab" id="tabGloss" aria-selected="false">معجم الأسماء</button>
       <button class="tab" id="tabAbout" aria-selected="false">عن الدليل</button>
@@ -547,6 +548,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
   <div class="page" id="nutri" hidden></div>
   <div class="page" id="folk" hidden></div>
   <div class="page" id="mind" hidden></div>
+  <div class="page" id="eye" hidden></div>
   <div class="page" id="safety" hidden></div>
   <div class="page" id="gloss" hidden></div>
   <div class="page" id="about" hidden></div>
@@ -3620,17 +3622,17 @@ function renderRecipes(){
 }
 function setView(v){
   state.view=v;
-  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
+  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabEye","eye"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
   $("#recipes").hidden=v!=="recipes"; $("#wizard").hidden=v!=="wizard";
-  ["home","mom","women","kit","organic","aid","nutri","folk","mind","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
-  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","aid","nutri","safety","gloss","about"].includes(v);
+  ["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
+  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","eye","aid","nutri","safety","gloss","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
   render();
 }
 function render(){
   renderAud();
-  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
+  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,eye:renderEye,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
@@ -4726,6 +4728,73 @@ const AUT=[
  ["في التراث الشعبي","التوحد لم يكن معروفًا تشخيصًا في الطب القديم، فلا يوجد له علاج في التراث، ولا توجد عشبة أو خلطة شعبية ثبت أنها تعالجه."]
 ];
 const AUTNO=["محلول MMS أو «ثاني أكسيد الكلور»: مادة مبيّضة سامة تُسقى للأطفال، وتسبب أذى شديدًا.","«إزالة المعادن» من الجسم (الاستخلاب) دون تسمّم مثبت: خطير، وقد مات بسببه أطفال.","ادّعاء أن حليب الإبل أو عسلًا أو خلطة ما يشفي التوحد: دراسات قليلة صغيرة، ولا يُستبدل به العلاج.","«الخلايا الجذعية» التجارية في العيادات غير المرخّصة.","الكي، والضرب والحبس، والرقاة المحتالون الذين يعدون بالشفاء مقابل المال."];
+/* ---------- العين في التراث ---------- */
+const est={v:null};
+const EHIST=[
+ ["بابل: شريعة حمورابي","نحو 1750 ق.م","من أقدم القوانين المكتوبة: تحدّد أجر الطبيب إذا شفى عينًا بمبضعه، وتعاقبه بقطع يده إذا أفقد المريض عينه. فجراحة العين كانت معروفة وخطيرة منذ ذلك الزمن."],
+ ["مصر القديمة","نحو 1550 ق.م","بردية إيبرس فيها عشرات الوصفات لأمراض العين. واستعمل المصريون الكحل الأخضر (من الملاخيت) والأسود (من الغالينا) زينةً ووقايةً من الشمس والذباب."],
+ ["الهند: سوشروتا","قبل الميلاد","وصف في كتابه عملية «القدح»: دفع عدسة العين المعتمة بإبرة إلى داخل العين، وهي أقدم جراحة معروفة للماء الأبيض."],
+ ["اليونان والروم","القرن الأول والثاني الميلادي","وصف سيلسوس عملية القدح، وكتب جالينوس عن تشريح العين، وظنّ أن العدسة هي موضع الإبصار."],
+ ["حنين بن إسحاق","القرن الثالث الهجري","كتب «العشر مقالات في العين» في بغداد، أقدم كتاب منظّم في طب العيون، وفيه رسم لتشريح العين. وكان المحتسب يمتحن الكحّالين فيه قبل أن يأذن لهم بالعلاج."],
+ ["أبو بكر الرازي","القرن الثالث والرابع الهجري","من أوائل من وصف ضيق حدقة العين عند الضوء واتساعها في الظلام، في كتابه «الحاوي»."],
+ ["عمّار بن علي الموصلي","نحو 400 هـ (القاهرة)","في كتابه «المنتخب في علاج أمراض العين» وصف إبرة مجوّفة يُشفط بها الماء الأبيض من العين، وهي فكرة قريبة من جراحة الساد اليوم."],
+ ["علي بن عيسى الكحّال","القرن الخامس الهجري","كتب «تذكرة الكحّالين» ووصف فيها أكثر من 130 مرضًا للعين وعلاجها. تُرجم إلى اللاتينية وظل مرجعًا في أوروبا قرونًا."],
+ ["ابن الهيثم","القرن الخامس الهجري","أثبت في «كتاب المناظر» أن الرؤية تكون بدخول الضوء إلى العين، لا بخروج شعاع منها كما ظن اليونان، وبنى ذلك على التجربة. وأثّر كتابه في علماء البصريات في أوروبا."],
+ ["خليفة بن أبي المحاسن الحلبي","القرن السابع الهجري","كتب «الكافي في الكحل»، ورسم فيه أدوات جراحة العين، وقال إنه أجرى عمليات الماء الأبيض مرات كثيرة."],
+ ["ابن النفيس","القرن السابع الهجري","كتب «المهذّب في الكحل المجرّب» في القاهرة، يجمع فيه ما جرّبه في علاج العين."],
+ ["صلاح الدين الكحّال الحموي","نحو 696 هـ","كتب «نور العيون وجامع الفنون»، من أوسع كتب طب العيون العربية: تشريح العين وأمراضها وجراحاتها."],
+ ["كلمات بقيت","حتى اليوم","يُقال إن أسماء طبقات العين اللاتينية، كالشبكية (retina) والقرنية (cornea)، ترجمةٌ للأسماء العربية في كتب الكحّالين، وإن الماء الأبيض سُمّي cataract ترجمةً لـ«الماء النازل في العين»."]
+];
+const EPRAC=[
+ ["كمادة دافئة نظيفة","الكمّادات من أقدم علاجات الكحّالين.","لدمّل الجفن (الشحّاذ) والتهاب حواف الجفون: 10 دقائق مرتين أو ثلاثًا يوميًا مع نظافة الجفون.","ok"],
+ ["كمادة باردة","تبريد العين الملتهبة.","تخفف حكة الحساسية وانتفاخ الجفون.","ok"],
+ ["غسل العين بماء نظيف جارٍ","غسل ما دخل العين.","الأهم عند دخول غبار أو مادة كيميائية: 15 دقيقة ماء جارٍ، ثم الطبيب.","ok"],
+ ["حماية العين من الشمس والغبار","العمائم واللثام وظل الخيام.","النظارة الشمسية في الخليج تقي من «اللحمية» (الظفرة) والماء الأبيض.","ok"],
+ ["كمادات البابونج أو الشاي","أكياس الشاي على العين المتعبة.","على الجفن المغلق فقط، بماء مغلي مبرد ونظيف. وقد تسبب حساسية، ولا تفوق الكمادة العادية.","care"],
+ ["قطرات عصير الليمون أو البصل أو الثوم أو أعشاب منزلية","«تُنظّف العين وتقوّي البصر».","تحرق القرنية وقد تنقل جراثيم وفطريات تسبب قرحة وفقدان البصر.","harm"],
+ ["حليب الأم أو البول في العين","لعلاج الرمد والتهاب عين الرضيع.","ليس معقّمًا وقد ينقل العدوى. وعين المولود الملتهبة يراها الطبيب.","harm"],
+ ["عصير الكمأة النيئة في العين","فهمًا لحديث «وماؤها شفاء للعين».","الكمأة من الأرض وتحمل جراثيم وفطريات. والحديث فهمه العلماء على أوجه، ولا يعني التقطير المباشر.","harm"],
+ ["الكحل التقليدي غير المرخّص","الاكتحال سنّة، ويُكحّل المولود.","كثير منه فيه رصاص سام، خاصة للأطفال. يُختار كحل مرخّص خالٍ من الرصاص، ولا يُكحّل المولود.","harm"],
+ ["القدح الشعبي للماء الأبيض","دفع العدسة بإبرة عند غير المختصين.","ما زال يسبب العمى في بعض البلدان. جراحة الساد اليوم آمنة وسريعة.","harm"],
+ ["الكيّ حول العين","لعلاج الرمد أو ضعف البصر.","لا ينفع ويسبب حروقًا وتشوّهًا في الجفن.","harm"]
+];
+const EHERB=[
+ ["fennel","«الرازيانج يحدّ البصر» في كتب العرب، وروى بليني أن الأفاعي تحكّ عيونها به.","لا دليل على أنه يقوّي البصر. يؤكل غذاءً، ولا يُقطّر في العين."],
+ ["egg","غذاء القوة.","صفاره غني باللوتين والزياكسانثين وفيتامين أ، وهي مفيدة للشبكية."],
+ ["goji","يقوّي البصر في الطب الصيني.","غني بالزياكسانثين. ويتداخل مع مميّعات الدم (الوارفارين)."],
+ ["saffron","يجلو البصر عند بعض الأطباء القدماء.","تجارب صغيرة على ضمور البقعة الصفراء (مرض شبكية عند كبار السن)، والنتائج أولية."],
+ ["ithmid","«يجلو البصر ويُنبت الشعر».","يُختار المرخّص الخالي من الرصاص فقط."],
+ ["truffle","«وماؤها شفاء للعين».","تؤكل مطبوخة، ولا يُقطّر عصيرها في العين."]
+];
+const ECOMMON=[
+ ["السكري والشبكية","من أكثر أسباب العمى في الخليج. يتلف الشبكية دون أعراض في البداية، فيلزم فحص قاع العين سنويًا لكل مريض سكري، وضبط السكر والضغط."],
+ ["الماء الأبيض (الساد)","عتامة في العدسة تأتي مع العمر والشمس والسكري. علاجه جراحة سريعة آمنة، ولا تزيله القطرات الشعبية."],
+ ["الماء الأزرق (الزرق)","ارتفاع ضغط العين يتلف العصب بصمت. يُفحص بعد الأربعين، خاصة لمن في عائلته المرض."],
+ ["اللحمية (الظفرة)","لحمية تنمو على بياض العين من الشمس والغبار والريح، وهي شائعة في الخليج. الوقاية بالنظارة الشمسية."],
+ ["جفاف العين","من المكيّفات والشاشات والغبار. يخففه شرب الماء، وأخذ راحة من الشاشة، وتقليل هواء المكيّف المباشر على الوجه."],
+ ["الرمد (التهاب الملتحمة)","احمرار وإفرازات، وأغلبه معدٍ. غسل اليدين، ولا تُشارك المناشف، ويُراجع الطبيب إذا ضعف البصر أو اشتد الألم."],
+ ["الحَوَل وكسل العين عند الأطفال","يُعالج إذا اكتُشف مبكرًا، ويصعب بعد سن السابعة تقريبًا. فحص النظر قبل المدرسة ضروري."]
+];
+const EEMERG=["فقدان مفاجئ للبصر، ولو في عين واحدة.","ألم شديد في العين أو صداع مع غثيان وعين حمراء.","احمرار مع ضعف الرؤية أو حساسية شديدة للضوء.","ومضات ضوء أو «ستارة» تغطي جزءًا من الرؤية.","إصابة في العين أو جسم غريب لا يخرج.","مادة كيميائية في العين: تُغسل بماء جارٍ 15 دقيقة أولًا، ثم إلى الطوارئ."];
+function renderEye(){
+  const el=$("#eye"), hl=id=>byId[id]?`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`:"";
+  el.innerHTML=`<h2 class="page-h">العين في التراث</h2>
+   <p class="sub">كان طبيب العيون عند العرب يُسمّى «الكحّال»، وكانت كتبهم في العين من أرقى ما وصل إليه الطب قبل العصر الحديث. هنا تاريخهم، وما يصح وما يضر من العادات الشعبية، وأمراض العين الشائعة عندنا، وعلامات الطوارئ.</p>
+   <div class="aidcard sev-e"><div class="aidhead"><h3>اذهب للطوارئ فورًا إذا</h3></div><ul style="margin:0">${EEMERG.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <h3 class="oh4">رحلة في تاريخ طب العيون</h3>
+   <div class="aggrid">${EHIST.map(([n,w,t])=>`<article class="agcard"><h5>${n}</h5><p class="agmeta">${w}</p><p>${t}</p></article>`).join("")}</div>
+   <h3 class="oh4">العادات الشعبية: ما يصح وما يضر</h3>
+   <div class="sgroups"><div class="opts">${[[null,"الكل"],["ok","يصح"],["care","بحذر"],["harm","يضرّ"]].map(([k,t])=>`<button type="button" class="chip" data-ev="${k||""}" aria-pressed="${est.v===k}">${k?`<span class="dot ${FV[k][1]}"></span>`:""}${t}</button>`).join("")}</div></div>
+   <div class="owrap"><table class="otable"><thead><tr><th>العادة</th><th>في التراث</th><th>اليوم</th></tr></thead><tbody>${EPRAC.filter(r=>!est.v||r[3]===est.v).map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h3 class="oh4">أعشاب وأغذية للعين: في التراث واليوم</h3>
+   <div class="owrap"><table class="otable"><thead><tr><th>المادة</th><th>في التراث</th><th>اليوم</th></tr></thead><tbody>${EHERB.filter(r=>byId[r[0]]).map(([id,b,c])=>`<tr><td>${hl(id)}</td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <p class="hint">وللعين عمومًا: الخضار الورقية الداكنة كالسبانخ والجرجير، والجزر والبطاطا الحلوة، والسمك مرتين أسبوعيًا، وترك التدخين.</p>
+   <h3 class="oh4">أمراض العين الشائعة عندنا</h3>
+   <div class="aggrid">${ECOMMON.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <p class="hint">لا يوجد عشب ولا قطرة شعبية تعالج الماء الأبيض أو الأزرق أو أمراض الشبكية. طبيب العيون هو المرجع، والفحص الدوري يحفظ البصر.</p>`;
+  el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
+  el.querySelectorAll("[data-ev]").forEach(b=>b.onclick=()=>{ est.v=b.dataset.ev||null; const y=scrollY; renderEye(); scrollTo({top:y}); });
+}
 function renderMind(){
   const el=$("#mind"), hl=id=>byId[id]?`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`:"";
   const ref="عن عائشة رضي الله عنها أنها كانت تأمر بالتلبينة وتقول: سمعت رسول الله ﷺ يقول: «التلبينة مُجِمّة لفؤاد المريض، تذهب ببعض الحزن» (رواه البخاري).";
@@ -5558,7 +5627,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
-const NEWS={v:"2026-11-07p",date:"7 نوفمبر 2026",go:"mind",items:[
+const NEWS={v:"2026-11-07q",date:"7 نوفمبر 2026",go:"eye",items:[
+ "<b>باب جديد: العين في التراث.</b> رحلة من حمورابي ومصر إلى حنين بن إسحاق وابن الهيثم والكحّالين العرب، وما يصح وما يضر من العادات الشعبية للعين، وأمراض العين الشائعة عندنا، وعلامات الطوارئ.",
  "<b>باب جديد: النفس في التراث.</b> ما سبق إليه البلخي وابن سينا والرازي والبيمارستانات، وأعشاب المزاج والقلق وما يقوله العلم، والتلبينة النبوية، وما يصح وما يضر من الممارسات، وصفحة عن التوحد وما ينفع وما يجب الحذر منه.",
  "<b>باب جديد: عادات شعبية، ما يصح وما يضر.</b> تمليح المولود، والكحل، والتبخير، والتحنيك، والكيّ، والمجبّر، وعادات الأربعين، والماء والأعشاب للرضيع، وغيرها، مع البديل الآمن لكل عادة.",
  "<b>باب «من الحيوان»:</b> البيض والدجاج واللحوم والكبدة والسمن وحليب البقر والإبل، ثم إلية الشاة، والزبادي واللبن، والأقط، وحليب الماعز، ومنتجات النحل، والجراد، ودهن الضبّ وزيت النعام.",
@@ -5597,6 +5667,7 @@ $("#tabKit").onclick=()=>setView("kit");
 $("#tabOrganic").onclick=()=>{ ost.id=null; setView("organic"); };
 $("#tabFolk").onclick=()=>{ fst.v=null; setView("folk"); };
 $("#tabMind").onclick=()=>{ mst.v=null; setView("mind"); };
+$("#tabEye").onclick=()=>{ est.v=null; setView("eye"); };
 function openFromHash(){ const m=location.hash.match(/^#r=(.+)$/); if(m){ try{ goRecipe(decodeURIComponent(m[1])); }catch(_){} } const mh=location.hash.match(/^#h=([a-z0-9]+)$/); if(mh&&byId[mh[1]]){ setView("herbs"); openPanel(byId[mh[1]]); } }
 window.addEventListener("load",openFromHash); window.addEventListener("hashchange",openFromHash);
 $("#tabWomen").onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); };

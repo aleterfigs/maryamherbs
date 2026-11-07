@@ -517,6 +517,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
       <button class="tab" id="tabNutri" aria-selected="false">Alimentation et vitamines</button>
       <button class="tab" id="tabFolk" aria-selected="false">Coutumes populaires</button>
       <button class="tab" id="tabMind" aria-selected="false">L'esprit dans le patrimoine</button>
+      <button class="tab" id="tabEye" aria-selected="false">L'œil dans le patrimoine</button>
       <button class="tab" id="tabSafety" aria-selected="false">Vérificateur de sécurité</button>
       <button class="tab" id="tabGloss" aria-selected="false">Glossaire des noms</button>
       <button class="tab" id="tabAbout" aria-selected="false">À propos</button>
@@ -548,6 +549,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
   <div class="page" id="nutri" hidden></div>
   <div class="page" id="folk" hidden></div>
   <div class="page" id="mind" hidden></div>
+  <div class="page" id="eye" hidden></div>
   <div class="page" id="safety" hidden></div>
   <div class="page" id="gloss" hidden></div>
   <div class="page" id="about" hidden></div>
@@ -3622,17 +3624,17 @@ function renderRecipes(){
 }
 function setView(v){
   state.view=v;
-  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
+  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabEye","eye"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
   $("#recipes").hidden=v!=="recipes"; $("#wizard").hidden=v!=="wizard";
-  ["home","mom","women","kit","organic","aid","nutri","folk","mind","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
-  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","aid","nutri","safety","gloss","about"].includes(v);
+  ["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
+  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","eye","aid","nutri","safety","gloss","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
   render();
 }
 function render(){
   renderAud();
-  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
+  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,eye:renderEye,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
@@ -4728,6 +4730,73 @@ const AUT=[
  ["Dans la tradition populaire","L'autisme n'était pas connu comme diagnostic dans la médecine ancienne : il n'existe donc aucun traitement traditionnel, et aucune plante ni mélange populaire n'a prouvé qu'il le soigne."]
 ];
 const AUTNO=["La solution MMS ou «dioxyde de chlore» : un javellisant toxique que l'on fait boire aux enfants, causant de graves dommages.","«Éliminer les métaux» du corps (chélation) sans intoxication prouvée : dangereux, des enfants en sont morts.","Prétendre que le lait de chamelle, le miel ou un mélange guérit l'autisme : peu d'études, de petite taille, et cela ne doit pas remplacer le traitement.","«Cellules souches» commerciales dans des cliniques non autorisées.","La cautérisation, les coups et l'enfermement, et les faux guérisseurs qui promettent la guérison contre de l'argent."];
+/* ---------- L'œil dans le patrimoine ---------- */
+const est={v:null};
+const EHIST=[
+ ["Babylone : le Code d'Hammurabi","vers 1750 av. J.-C.","L'une des plus anciennes lois écrites : elle fixait les honoraires du médecin qui guérissait un œil avec son scalpel, et le punissait en lui coupant la main si le patient perdait l'œil. La chirurgie de l'œil était déjà connue, et dangereuse."],
+ ["L'Égypte ancienne","vers 1550 av. J.-C.","Le papyrus Ebers contient des dizaines de remèdes pour les yeux. Les Égyptiens utilisaient un khôl vert (malachite) et noir (galène) comme parure et protection contre le soleil et les mouches."],
+ ["Inde : Sushruta","Avant notre ère","Son livre décrit l'«abaissement» : repousser à l'aiguille le cristallin opacifié à l'intérieur de l'œil, la plus ancienne chirurgie connue de la cataracte."],
+ ["Grèce et Rome","Ier et IIe siècles","Celse décrivit l'abaissement, et Galien écrivit sur l'anatomie de l'œil, pensant que le cristallin était le siège de la vision."],
+ ["Hunayn ibn Ishaq","IXe siècle","Il écrivit à Bagdad les «Dix traités sur l'œil», le plus ancien livre structuré d'ophtalmologie, avec un dessin de l'anatomie de l'œil. Le muhtasib (inspecteur) y examinait les oculistes avant de les autoriser à soigner."],
+ ["Abu Bakr al-Razi (Rhazès)","IXe–Xe siècle","L'un des premiers à décrire le rétrécissement de la pupille à la lumière et sa dilatation dans l'obscurité, dans son livre «al-Hawi»."],
+ ["Ammar ibn Ali al-Mawsili","vers 1010 (Le Caire)","Dans son livre «Le choix dans le traitement des maladies de l'œil», il décrivit une aiguille creuse pour aspirer la cataracte, idée proche de la chirurgie actuelle."],
+ ["Ali ibn Isa al-Kahhal","XIe siècle","Il écrivit le «Mémorial des oculistes», décrivant plus de 130 maladies de l'œil et leur traitement. Traduit en latin, il resta une référence en Europe pendant des siècles."],
+ ["Ibn al-Haytham (Alhazen)","XIe siècle","Dans son «Traité d'optique», il démontra que la vision se fait par la lumière qui entre dans l'œil, et non par un rayon qui en sort comme le pensaient les Grecs, en s'appuyant sur l'expérience. Son livre influença les savants de l'optique en Europe."],
+ ["Khalifa ibn Abi al-Mahasin d'Alep","XIIIe siècle","Il écrivit «Le livre suffisant en ophtalmologie», avec des dessins d'instruments de chirurgie oculaire, et dit avoir opéré la cataracte de nombreuses fois."],
+ ["Ibn al-Nafis","XIIIe siècle","Il écrivit au Caire «Le livre raffiné de l'ophtalmologie éprouvée», réunissant ce qu'il avait expérimenté."],
+ ["Salah al-Din al-Kahhal de Hama","vers 1296","Il écrivit «La lumière des yeux», l'un des plus vastes livres arabes d'ophtalmologie : anatomie de l'œil, maladies et chirurgie."],
+ ["Des mots restés","Jusqu'à aujourd'hui","On dit que les noms latins des couches de l'œil, comme la rétine et la cornée, traduisent les noms arabes des livres des oculistes, et que la cataracte fut nommée en traduction de «l'eau qui descend dans l'œil»."]
+];
+const EPRAC=[
+ ["Compresse tiède et propre","Les compresses sont parmi les plus anciens soins des oculistes.","Pour l'orgelet et l'inflammation du bord des paupières : 10 minutes deux ou trois fois par jour, avec l'hygiène des paupières.","ok"],
+ ["Compresse froide","Rafraîchir l'œil enflammé.","Calme les démangeaisons allergiques et le gonflement des paupières.","ok"],
+ ["Rincer l'œil à l'eau propre courante","Laver ce qui est entré dans l'œil.","Le plus important en cas de poussière ou de produit chimique : 15 minutes d'eau courante, puis le médecin.","ok"],
+ ["Protéger les yeux du soleil et de la poussière","Turbans, voiles et ombre des tentes.","Les lunettes de soleil dans le Golfe protègent du ptérygion et de la cataracte.","ok"],
+ ["Compresses de camomille ou de thé","Sachets de thé sur les yeux fatigués.","Seulement sur paupières fermées, avec une eau bouillie, refroidie et propre. Elles peuvent donner une allergie et ne font pas mieux qu'une compresse simple.","care"],
+ ["Gouttes de jus de citron, d'oignon ou d'ail ou de plantes maison","«Elles nettoient l'œil et renforcent la vue».","Elles brûlent la cornée et peuvent transmettre microbes et champignons, causant ulcère et perte de la vue.","harm"],
+ ["Lait maternel ou urine dans l'œil","Pour soigner la conjonctivite et l'œil enflammé du bébé.","Non stérile, peut transmettre l'infection. L'œil enflammé d'un nouveau-né doit être vu par un médecin.","harm"],
+ ["Jus de truffe crue dans l'œil","En comprenant le hadith «et son eau est un remède pour l'œil» au pied de la lettre.","La truffe vient du sol et porte microbes et champignons. Les savants ont compris le hadith de plusieurs façons, et il ne signifie pas l'instiller directement.","harm"],
+ ["Khôl traditionnel non autorisé","Se mettre du khôl est une sunna, et on en met au nouveau-né.","Beaucoup en contiennent du plomb toxique, surtout pour les enfants. Choisir un khôl autorisé sans plomb, et ne pas en mettre au nouveau-né.","harm"],
+ ["Abaissement populaire de la cataracte","Repousser le cristallin à l'aiguille par des non-spécialistes.","Il cause encore la cécité dans certains pays. La chirurgie de la cataracte est aujourd'hui sûre et rapide.","harm"],
+ ["Cautérisation autour de l'œil","Pour la conjonctivite ou la vue faible.","Inutile, elle cause brûlures et déformation de la paupière.","harm"]
+];
+const EHERB=[
+ ["fennel","«Le fenouil aiguise la vue» dans les livres arabes, et Pline rapporte que les serpents s'y frottent les yeux.","Aucune preuve qu'il renforce la vue. À manger, jamais à mettre dans l'œil."],
+ ["egg","Aliment de force.","Le jaune est riche en lutéine, zéaxanthine et vitamine A, bénéfiques pour la rétine."],
+ ["goji","Renforce la vue en médecine chinoise.","Riche en zéaxanthine. Interagit avec les anticoagulants (warfarine)."],
+ ["saffron","Éclaircit la vue selon certains médecins anciens.","Petits essais sur la DMLA (maladie de la rétine liée à l'âge) ; résultats préliminaires."],
+ ["ithmid","«Il éclaircit la vue et fait pousser les cils».","Choisir uniquement un khôl autorisé sans plomb."],
+ ["truffle","«Et son eau est un remède pour l'œil».","À manger cuite ; ne jamais mettre son jus dans l'œil."]
+];
+const ECOMMON=[
+ ["Le diabète et la rétine","L'une des premières causes de cécité dans le Golfe. Il abîme la rétine sans symptômes au début : tout diabétique doit faire un fond d'œil chaque année, et bien contrôler sucre et tension."],
+ ["La cataracte","Opacification du cristallin liée à l'âge, au soleil et au diabète. Elle se traite par une chirurgie rapide et sûre ; les gouttes populaires ne l'enlèvent pas."],
+ ["Le glaucome","La pression de l'œil abîme le nerf en silence. Se faire dépister après quarante ans, surtout en cas d'antécédents familiaux."],
+ ["Le ptérygion","Une excroissance charnue sur le blanc de l'œil due au soleil, à la poussière et au vent, fréquente dans le Golfe. Prévention : lunettes de soleil."],
+ ["La sécheresse oculaire","Due à la climatisation, aux écrans et à la poussière. Boire de l'eau, faire des pauses d'écran et éviter le souffle direct du climatiseur sur le visage aident."],
+ ["La conjonctivite","Rougeur et sécrétions, le plus souvent contagieuse. Se laver les mains, ne pas partager les serviettes, et voir un médecin si la vue baisse ou la douleur augmente."],
+ ["Strabisme et œil paresseux chez l'enfant","Se soigne s'il est dépisté tôt, plus difficilement après sept ans environ. Un examen de la vue avant l'école est essentiel."]
+];
+const EEMERG=["Perte soudaine de la vue, même d'un seul œil.","Douleur intense de l'œil, ou mal de tête avec nausée et œil rouge.","Rougeur avec vue trouble ou forte sensibilité à la lumière.","Éclairs lumineux ou «rideau» couvrant une partie de la vision.","Blessure de l'œil ou corps étranger qui ne sort pas.","Produit chimique dans l'œil : rincer d'abord 15 minutes à l'eau courante, puis aux urgences."];
+function renderEye(){
+  const el=$("#eye"), hl=id=>byId[id]?`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`:"";
+  el.innerHTML=`<h2 class="page-h">L'œil dans le patrimoine</h2>
+   <p class="sub">Les oculistes arabes s'appelaient «kahhal», et leurs livres sur l'œil comptaient parmi le meilleur de la médecine avant l'époque moderne. Voici leur histoire, les habitudes populaires utiles et nuisibles, les maladies de l'œil fréquentes chez nous, et les signes d'urgence.</p>
+   <div class="aidcard sev-e"><div class="aidhead"><h3>Allez aux urgences immédiatement si</h3></div><ul style="margin:0">${EEMERG.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <h3 class="oh4">Un voyage dans l'histoire de la médecine de l'œil</h3>
+   <div class="aggrid">${EHIST.map(([n,w,t])=>`<article class="agcard"><h5>${n}</h5><p class="agmeta">${w}</p><p>${t}</p></article>`).join("")}</div>
+   <h3 class="oh4">Habitudes populaires : ce qui est juste et ce qui nuit</h3>
+   <div class="sgroups"><div class="opts">${[[null,"Tout"],["ok","Juste"],["care","Avec prudence"],["harm","Nuisible"]].map(([k,t])=>`<button type="button" class="chip" data-ev="${k||""}" aria-pressed="${est.v===k}">${k?`<span class="dot ${FV[k][1]}"></span>`:""}${t}</button>`).join("")}</div></div>
+   <div class="owrap"><table class="otable"><thead><tr><th>L'habitude</th><th>Dans le patrimoine</th><th>Aujourd'hui</th></tr></thead><tbody>${EPRAC.filter(r=>!est.v||r[3]===est.v).map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h3 class="oh4">Plantes et aliments pour l'œil : dans le patrimoine et aujourd'hui</h3>
+   <div class="owrap"><table class="otable"><thead><tr><th>L'élément</th><th>Dans le patrimoine</th><th>Aujourd'hui</th></tr></thead><tbody>${EHERB.filter(r=>byId[r[0]]).map(([id,b,c])=>`<tr><td>${hl(id)}</td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <p class="hint">Pour les yeux en général : légumes à feuilles foncées comme les épinards et la roquette, carottes et patate douce, poisson deux fois par semaine, et pas de tabac.</p>
+   <h3 class="oh4">Maladies de l'œil fréquentes chez nous</h3>
+   <div class="aggrid">${ECOMMON.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <p class="hint">Aucune plante ni goutte populaire ne soigne la cataracte, le glaucome ou les maladies de la rétine. L'ophtalmologue est la référence, et les contrôles réguliers protègent la vue.</p>`;
+  el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
+  el.querySelectorAll("[data-ev]").forEach(b=>b.onclick=()=>{ est.v=b.dataset.ev||null; const y=scrollY; renderEye(); scrollTo({top:y}); });
+}
 function renderMind(){
   const el=$("#mind"), hl=id=>byId[id]?`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`:"";
   const ref="Aïcha (que Dieu l'agrée) recommandait la talbina en disant : J'ai entendu le Messager de Dieu ﷺ dire : « La talbina repose le cœur du malade et emporte une part du chagrin » (Bukhari).";
@@ -5560,7 +5629,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-07p",date:"7 novembre 2026",go:"mind",items:[
+const NEWS={v:"2026-11-07q",date:"7 novembre 2026",go:"eye",items:[
+ "<b>Nouvelle section : L'œil dans le patrimoine.</b> un voyage d'Hammurabi et l'Égypte à Hunayn ibn Ishaq, Ibn al-Haytham et les oculistes arabes, les habitudes populaires utiles et nuisibles pour l'œil, les maladies fréquentes chez nous, et les signes d'urgence.",
  "<b>Nouvelle section : L'esprit dans le patrimoine.</b> ce qu'ont initié al-Balkhi, Ibn Sina, al-Razi et les bimaristans, les plantes de l'humeur et de l'anxiété et ce qu'en dit la science, la talbina prophétique, les pratiques utiles et nuisibles, et une page sur l'autisme : ce qui aide et ce dont il faut se méfier.",
  "<b>Nouvelle rubrique : coutumes populaires, ce qui est juste et ce qui nuit.</b> Saler le nouveau-né, le khôl, l'encens, le tahnik, la cautérisation, les rebouteux, les quarante jours, l'eau et les plantes pour le nourrisson et d'autres, avec l'alternative sûre pour chaque coutume.",
  "<b>La rubrique «D'origine animale» :</b> œufs, poulet, viandes, foie, smen, lait de vache et de chamelle, puis graisse de queue de mouton, yaourt et lben, aqit, lait de chèvre, produits de la ruche, criquets, graisse de dhub et huile d'autruche.",
@@ -5599,6 +5669,7 @@ $("#tabKit").onclick=()=>setView("kit");
 $("#tabOrganic").onclick=()=>{ ost.id=null; setView("organic"); };
 $("#tabFolk").onclick=()=>{ fst.v=null; setView("folk"); };
 $("#tabMind").onclick=()=>{ mst.v=null; setView("mind"); };
+$("#tabEye").onclick=()=>{ est.v=null; setView("eye"); };
 function openFromHash(){ const m=location.hash.match(/^#r=(.+)$/); if(m){ try{ goRecipe(decodeURIComponent(m[1])); }catch(_){} } const mh=location.hash.match(/^#h=([a-z0-9]+)$/); if(mh&&byId[mh[1]]){ setView("herbs"); openPanel(byId[mh[1]]); } }
 window.addEventListener("load",openFromHash); window.addEventListener("hashchange",openFromHash);
 $("#tabWomen").onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); };

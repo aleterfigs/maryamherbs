@@ -517,6 +517,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
       <button class="tab" id="tabNutri" aria-selected="false">Food & vitamins</button>
       <button class="tab" id="tabFolk" aria-selected="false">Folk customs</button>
       <button class="tab" id="tabMind" aria-selected="false">The mind in heritage</button>
+      <button class="tab" id="tabEye" aria-selected="false">The eye in heritage</button>
       <button class="tab" id="tabSafety" aria-selected="false">Safety checker</button>
       <button class="tab" id="tabGloss" aria-selected="false">Name glossary</button>
       <button class="tab" id="tabAbout" aria-selected="false">About</button>
@@ -548,6 +549,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
   <div class="page" id="nutri" hidden></div>
   <div class="page" id="folk" hidden></div>
   <div class="page" id="mind" hidden></div>
+  <div class="page" id="eye" hidden></div>
   <div class="page" id="safety" hidden></div>
   <div class="page" id="gloss" hidden></div>
   <div class="page" id="about" hidden></div>
@@ -3622,17 +3624,17 @@ function renderRecipes(){
 }
 function setView(v){
   state.view=v;
-  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
+  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabEye","eye"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
   $("#recipes").hidden=v!=="recipes"; $("#wizard").hidden=v!=="wizard";
-  ["home","mom","women","kit","organic","aid","nutri","folk","mind","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
-  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","aid","nutri","safety","gloss","about"].includes(v);
+  ["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
+  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","eye","aid","nutri","safety","gloss","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
   render();
 }
 function render(){
   renderAud();
-  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
+  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,eye:renderEye,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
@@ -4728,6 +4730,73 @@ const AUT=[
  ["In folk tradition","Autism was not known as a diagnosis in old medicine, so there is no treatment for it in the tradition, and no herb or folk mixture has been proven to treat it."]
 ];
 const AUTNO=["MMS solution or «chlorine dioxide»: a toxic bleach given to children to drink, causing serious harm.","«Removing metals» from the body (chelation) without proven poisoning: dangerous, and children have died from it.","Claims that camel milk, honey or some mixture cures autism: few small studies, and it must not replace treatment.","«Stem cells» sold in unlicensed clinics.","Cautery, beating and locking away, and fraudulent healers who promise a cure for money."];
+/* ---------- The eye in heritage ---------- */
+const est={v:null};
+const EHIST=[
+ ["Babylon: the Code of Hammurabi","around 1750 BCE","One of the oldest written laws: it set the physician's fee for healing an eye with his lancet, and punished him by cutting off his hand if the patient lost the eye. Eye surgery was known, and dangerous, even then."],
+ ["Ancient Egypt","around 1550 BCE","The Ebers Papyrus has dozens of remedies for eye diseases. The Egyptians used green kohl (from malachite) and black kohl (from galena) as adornment and protection from sun and flies."],
+ ["India: Sushruta","Before the Common Era","His book describes «couching»: pushing the clouded lens of the eye back inside with a needle, the oldest known surgery for cataract."],
+ ["Greece and Rome","1st and 2nd centuries CE","Celsus described couching, and Galen wrote on the anatomy of the eye, believing the lens was the seat of sight."],
+ ["Hunayn ibn Ishaq","9th century CE","He wrote «Ten Treatises on the Eye» in Baghdad, the oldest systematic book of ophthalmology, with a drawing of the eye's anatomy. The market inspector (muhtasib) examined eye doctors on it before allowing them to practise."],
+ ["Abu Bakr al-Razi","9th–10th century CE","One of the first to describe the pupil narrowing in light and widening in the dark, in his book «al-Hawi»."],
+ ["Ammar ibn Ali al-Mawsili","around 1010 CE (Cairo)","In his book «The Choice in Treating Eye Diseases» he described a hollow needle used to suck the cataract out of the eye, an idea close to cataract surgery today."],
+ ["Ali ibn Isa al-Kahhal","11th century CE","He wrote «Memorandum for Eye Doctors», describing more than 130 eye diseases and their treatment. It was translated into Latin and remained a reference in Europe for centuries."],
+ ["Ibn al-Haytham (Alhazen)","11th century CE","In his «Book of Optics» he proved that sight happens when light enters the eye, not by a ray leaving it as the Greeks thought, basing this on experiment. His book influenced optics scholars in Europe."],
+ ["Khalifa ibn Abi al-Mahasin of Aleppo","13th century CE","He wrote «The Sufficient Book on Ophthalmology», with drawings of eye-surgery instruments, and said he had performed cataract operations many times."],
+ ["Ibn al-Nafis","13th century CE","He wrote «The Refined Book of Tested Ophthalmology» in Cairo, gathering what he had tried in treating the eye."],
+ ["Salah al-Din al-Kahhal of Hama","around 1296 CE","He wrote «Light of the Eyes», one of the most extensive Arabic books of ophthalmology: the anatomy of the eye, its diseases and its surgery."],
+ ["Words that remain","Until today","It is said that the Latin names of the layers of the eye, such as retina and cornea, translate the Arabic names in the eye doctors' books, and that the cataract was named as a translation of «water descending in the eye»."]
+];
+const EPRAC=[
+ ["Clean warm compress","Compresses are among the eye doctors' oldest treatments.","For a stye and inflamed eyelid edges: 10 minutes two or three times a day, with eyelid hygiene.","ok"],
+ ["Cold compress","Cooling an inflamed eye.","Eases allergy itching and swollen eyelids.","ok"],
+ ["Rinsing the eye with clean running water","Washing out what got into the eye.","The most important step when dust or a chemical gets in: 15 minutes of running water, then the doctor.","ok"],
+ ["Protecting the eyes from sun and dust","Turbans, face veils and the shade of tents.","Sunglasses in the Gulf protect against pterygium and cataract.","ok"],
+ ["Chamomile or tea compresses","Tea bags on tired eyes.","Only on closed eyelids, with boiled, cooled, clean water. They can cause allergy and are no better than a plain compress.","care"],
+ ["Drops of lemon, onion or garlic juice or home-made herbal drops","«They clean the eye and strengthen sight».","They burn the cornea and can carry germs and fungi that cause ulcers and loss of sight.","harm"],
+ ["Breast milk or urine in the eye","To treat conjunctivitis and a baby's inflamed eye.","Not sterile and can spread infection. A newborn's inflamed eye should be seen by a doctor.","harm"],
+ ["Raw truffle juice in the eye","Understanding the hadith «and its water is a cure for the eye» literally.","Truffles come from the ground and carry germs and fungi. Scholars understood the hadith in several ways, and it does not mean dropping it directly into the eye.","harm"],
+ ["Unlicensed traditional kohl","Applying kohl is Sunnah, and newborns are given kohl.","Much of it contains toxic lead, especially dangerous for children. Choose licensed lead-free kohl, and do not put kohl on a newborn.","harm"],
+ ["Folk couching of cataract","Pushing the lens back with a needle by unqualified people.","It still causes blindness in some countries. Cataract surgery today is safe and quick.","harm"],
+ ["Cautery around the eye","To treat conjunctivitis or weak sight.","It does not help and causes burns and eyelid deformity.","harm"]
+];
+const EHERB=[
+ ["fennel","«Fennel sharpens the sight» in Arab books, and Pliny reported that snakes rub their eyes on it.","No evidence that it strengthens sight. Eat it as food, and never put it in the eye."],
+ ["egg","Food of strength.","The yolk is rich in lutein, zeaxanthin and vitamin A, which benefit the retina."],
+ ["goji","Strengthens sight in Chinese medicine.","Rich in zeaxanthin. It interacts with blood thinners (warfarin)."],
+ ["saffron","Clears the sight, according to some old physicians.","Small trials on macular degeneration (a retinal disease of older age); results are preliminary."],
+ ["ithmid","«It clears the sight and makes the hair grow».","Choose only licensed, lead-free kohl."],
+ ["truffle","«And its water is a cure for the eye».","Eat it cooked, and never put its juice in the eye."]
+];
+const ECOMMON=[
+ ["Diabetes and the retina","One of the commonest causes of blindness in the Gulf. It damages the retina with no early symptoms, so every diabetic needs a yearly retinal exam, and good control of sugar and blood pressure."],
+ ["Cataract","Clouding of the lens that comes with age, sun and diabetes. It is treated with quick, safe surgery; folk drops do not remove it."],
+ ["Glaucoma","Raised eye pressure silently damages the nerve. Get checked after forty, especially if it runs in the family."],
+ ["Pterygium","A fleshy growth on the white of the eye from sun, dust and wind, common in the Gulf. Prevention: sunglasses."],
+ ["Dry eye","From air conditioning, screens and dust. Drinking water, screen breaks and avoiding air-conditioner draughts on the face help."],
+ ["Conjunctivitis (pink eye)","Redness and discharge, mostly contagious. Wash hands, do not share towels, and see a doctor if sight weakens or pain grows."],
+ ["Squint and lazy eye in children","Treatable if caught early, harder after about age seven. An eye test before school is essential."]
+];
+const EEMERG=["Sudden loss of sight, even in one eye.","Severe eye pain, or headache with nausea and a red eye.","Redness with blurred vision or strong sensitivity to light.","Flashes of light or a «curtain» covering part of the vision.","An eye injury or a foreign body that will not come out.","A chemical in the eye: rinse with running water for 15 minutes first, then go to emergency."];
+function renderEye(){
+  const el=$("#eye"), hl=id=>byId[id]?`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`:"";
+  el.innerHTML=`<h2 class="page-h">The eye in heritage</h2>
+   <p class="sub">Arab eye doctors were called «kahhal», and their books on the eye were among the finest medicine reached before modern times. Here is their history, folk habits that help and harm, the common eye diseases in our region, and emergency signs.</p>
+   <div class="aidcard sev-e"><div class="aidhead"><h3>Go to emergency at once if</h3></div><ul style="margin:0">${EEMERG.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <h3 class="oh4">A journey through the history of eye medicine</h3>
+   <div class="aggrid">${EHIST.map(([n,w,t])=>`<article class="agcard"><h5>${n}</h5><p class="agmeta">${w}</p><p>${t}</p></article>`).join("")}</div>
+   <h3 class="oh4">Folk habits: what is right and what harms</h3>
+   <div class="sgroups"><div class="opts">${[[null,"All"],["ok","Sound"],["care","With care"],["harm","Harmful"]].map(([k,t])=>`<button type="button" class="chip" data-ev="${k||""}" aria-pressed="${est.v===k}">${k?`<span class="dot ${FV[k][1]}"></span>`:""}${t}</button>`).join("")}</div></div>
+   <div class="owrap"><table class="otable"><thead><tr><th>Habit</th><th>In heritage</th><th>Today</th></tr></thead><tbody>${EPRAC.filter(r=>!est.v||r[3]===est.v).map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <h3 class="oh4">Herbs and foods for the eye: in heritage and today</h3>
+   <div class="owrap"><table class="otable"><thead><tr><th>Item</th><th>In heritage</th><th>Today</th></tr></thead><tbody>${EHERB.filter(r=>byId[r[0]]).map(([id,b,c])=>`<tr><td>${hl(id)}</td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <p class="hint">For the eyes in general: dark leafy greens such as spinach and rocket, carrots and sweet potato, fish twice a week, and no smoking.</p>
+   <h3 class="oh4">Common eye diseases in our region</h3>
+   <div class="aggrid">${ECOMMON.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <p class="hint">No herb or folk drop treats cataract, glaucoma or retinal disease. The eye doctor is the reference, and regular check-ups protect sight.</p>`;
+  el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
+  el.querySelectorAll("[data-ev]").forEach(b=>b.onclick=()=>{ est.v=b.dataset.ev||null; const y=scrollY; renderEye(); scrollTo({top:y}); });
+}
 function renderMind(){
   const el=$("#mind"), hl=id=>byId[id]?`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`:"";
   const ref="Aisha (may God be pleased with her) used to recommend talbina, saying: I heard the Messenger of God ﷺ say: “Talbina gives rest to the heart of the sick and takes away some of the grief” (Bukhari).";
@@ -5560,7 +5629,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- What's new: shown once to returning visitors after each update ---------- */
-const NEWS={v:"2026-11-07p",date:"7 November 2026",go:"mind",items:[
+const NEWS={v:"2026-11-07q",date:"7 November 2026",go:"eye",items:[
+ "<b>New section: The eye in heritage.</b> a journey from Hammurabi and Egypt to Hunayn ibn Ishaq, Ibn al-Haytham and the Arab eye doctors, folk eye habits that help and harm, common eye diseases in our region, and emergency signs.",
  "<b>New section: The mind in heritage.</b> what al-Balkhi, Ibn Sina, al-Razi and the bimaristans pioneered, herbs for mood and anxiety and what science says, the Prophetic talbina, practices that help and harm, and a page on autism: what helps and what to beware of.",
  "<b>New section: folk customs, what is sound and what harms.</b> Salting newborns, kohl, incense, tahneek, cautery, bonesetters, the forty days after birth, water and herbs for babies and more, with the safe alternative for each custom.",
  "<b>The «From animals» section:</b> eggs, chicken, meat, liver, ghee, cow's and camel milk, plus sheep tail fat, yogurt and laban, aqit, goat milk, bee products, locusts, dhub fat and ostrich oil.",
@@ -5599,6 +5669,7 @@ $("#tabKit").onclick=()=>setView("kit");
 $("#tabOrganic").onclick=()=>{ ost.id=null; setView("organic"); };
 $("#tabFolk").onclick=()=>{ fst.v=null; setView("folk"); };
 $("#tabMind").onclick=()=>{ mst.v=null; setView("mind"); };
+$("#tabEye").onclick=()=>{ est.v=null; setView("eye"); };
 function openFromHash(){ const m=location.hash.match(/^#r=(.+)$/); if(m){ try{ goRecipe(decodeURIComponent(m[1])); }catch(_){} } const mh=location.hash.match(/^#h=([a-z0-9]+)$/); if(mh&&byId[mh[1]]){ setView("herbs"); openPanel(byId[mh[1]]); } }
 window.addEventListener("load",openFromHash); window.addEventListener("hashchange",openFromHash);
 $("#tabWomen").onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); };
