@@ -4094,7 +4094,7 @@ function renderHome(){
      <p class="hstats">${n(HERBS.length)} plantes · ${n(RECIPES.length)} mélanges · ${n(Object.keys(ORIG).length)} traditions · ${n(PROBS.length)} problèmes de santé</p>
    </section>
    <div class="tiles">${TILES.map(([k,t,d],i)=>`<button type="button" class="tile${i===0?" tile-main":""}" data-go="${k}"><span class="ticon">${tileIcon(k)}</span><span class="ttext"><b>${t}</b><small>${d}</small></span></button>`).join("")}</div>
-   <section class="feat"><h3>Sections détaillées</h3><div class="featrow">${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>Un guide complet : variétés, Sunna, science et sécurité</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>Espace femmes</b><small>Règles, grossesse et post-partum, peau et cheveux, et mises en garde cosmétiques</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>De la mer</b><small>Huile de poisson, eau salée, algues et ambre gris : ce qui aide et ce dont il faut se méfier</small></span></button><button type="button" class="featcard" data-organic="1">${herbIcon(byId.moringa)}<span><b>L'agriculture biologique dans le Golfe</b><small>Sol sableux, compost, lutte naturelle contre les ravageurs et calendrier de plantation pour les Émirats</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>Cultivez votre pharmacie</b><small>Des plantes faciles à cultiver dans le Golfe, et quand et comment les planter</small></span></button></div></section>
+   <section class="feat"><h3>Sections détaillées</h3><div class="featrow">${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>Un guide complet : variétés, Sunna, science et sécurité</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>Espace femmes</b><small>Règles, grossesse et post-partum, peau et cheveux, et mises en garde cosmétiques</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>De la mer</b><small>Huile de poisson, eau salée, algues et ambre gris : ce qui aide et ce dont il faut se méfier</small></span></button><button type="button" class="featcard" data-organic="1">${herbIcon(byId.moringa)}<span><b>Agriculture biologique</b><small>Améliorer le sol, compost, lutte naturelle contre les ravageurs et calendrier de plantation pour le monde arabe</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>Cultivez votre pharmacie</b><small>Des plantes faciles à cultiver dans le Golfe, et quand et comment les planter</small></span></button></div></section>
    <section class="quick"><h3>En cas d'urgence</h3><div class="opts">${["snake","scorpion","dog","burn","heat","poison"].map(id=>{const a=AID.find(x=>x.id===id);return `<button type="button" class="chip urgent" data-aidgo="${id}"><span class="dot ${SEV[a.sev][1]}"></span>${a.n}</button>`;}).join("")}</div></section>`;
   $("#home").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{ if(b.dataset.go==="wizard") Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:null,step:1}); setView(b.dataset.go); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
@@ -4416,7 +4416,7 @@ function renderWomen(){
   el.querySelectorAll("[data-nu]").forEach(b=>b.onclick=()=>{ nst.sym=null; setView("nutri"); const n=$("#n-"+b.dataset.nu); n&&n.scrollIntoView({block:"start"}); });
 }
 /* ---------- Agriculture biologique ---------- */
-const ost={id:null};
+const ost={id:null,zone:"gulf"};
 const OG=[
  {id:"soil",n:"Améliorer le sol sableux",
   intro:"Le sol des Émirats est surtout sableux, pauvre en matière organique, et tend à être alcalin et salé : il ne retient ni l'eau ni les nutriments. La base de l'agriculture biologique, c'est nourrir le sol, pas la plante.",
@@ -4461,19 +4461,53 @@ const OG=[
   farm:"",
   h:[]}
 ];
-const OCAL=[
- ["Août–septembre","Solarisez le sol : humidifiez-le et couvrez-le d'un plastique transparent 4 à 6 semaines pour tuer ravageurs et graines d'adventices. Et préparez le compost.","Semez tomates, poivrons et aubergines en pépinière ombragée fin septembre."],
- ["Octobre–novembre","Début de la saison d'or : courgettes, concombres, haricots et pommes de terre, et herbes à feuilles : menthe, persil, coriandre, aneth, roquette, fenugrec, laitue, épinards, carottes, radis, oignons, ail et camomille.","Repiquez les plants de tomates et de poivrons en pleine terre, et ajoutez du compost."],
- ["Décembre–janvier","Suite des légumes-feuilles, plus pois et fèves. Le meilleur moment pour planter les arbres : figuier, grenadier, vigne et citronnier.","Récoltez régulièrement et protégez les jeunes plants des vents froids."],
- ["Février–mars","Semez les cultures d'été : gombo, mloukhiya, pastèque, melon, courge, maïs et basilic.","Dernière chance pour les légumes d'hiver ; préparez les filets d'ombrage."],
- ["Avril–mai","Les plantes qui supportent la chaleur : moringa, jujubier, henné, gombo et mloukhiya.","Paillez le sol, arrosez le matin et installez les filets d'ombrage."],
- ["Juin–juillet","Plein été : gombo, mloukhiya, moringa et palmiers continuent, et le basilic à mi-ombre.","Récoltez les dattes fraîches, arrosez tôt et gardez les planches vides couvertes."]
-];
+const OZONES={
+ gulf:{n:"Le Golfe et les côtes chaudes",c:"Émirats, Qatar, Bahreïn, Koweït, côte d'Oman, est et côtes de l'Arabie saoudite, sud de l'Irak",rows:[
+  ["Août–septembre","Solarisez le sol : humidifiez-le et couvrez-le d'un plastique transparent 4 à 6 semaines pour tuer ravageurs et graines d'adventices. Et préparez le compost.","Semez tomates, poivrons et aubergines en pépinière ombragée fin septembre."],
+  ["Octobre–novembre","Début de la saison d'or : courgettes, concombres, haricots et pommes de terre, et herbes à feuilles : menthe, persil, coriandre, aneth, roquette, fenugrec, laitue, épinards, carottes, radis, oignons, ail et camomille.","Repiquez les plants de tomates et de poivrons en pleine terre, et ajoutez du compost."],
+  ["Décembre–janvier","Suite des légumes-feuilles, plus pois et fèves. Le meilleur moment pour planter les arbres : figuier, grenadier, vigne et citronnier.","Récoltez régulièrement et protégez les jeunes plants des vents froids."],
+  ["Février–mars","Semez les cultures d'été : gombo, mloukhiya, pastèque, melon, courge, maïs et basilic.","Dernière chance pour les légumes d'hiver ; préparez les filets d'ombrage."],
+  ["Avril–mai","Les plantes qui supportent la chaleur : moringa, jujubier, henné, gombo et mloukhiya.","Paillez le sol, arrosez le matin et installez les filets d'ombrage."],
+  ["Juin–juillet","Plein été : gombo, mloukhiya, moringa et palmiers continuent, et le basilic à mi-ombre.","Récoltez les dattes fraîches, arrosez tôt et gardez les planches vides couvertes."]],
+  note:"À l'intérieur, comme le Najd, le Qassim et Al Aïn : l'été ressemble à la côte, mais les nuits d'hiver peuvent geler de décembre à février ; protégez les jeunes plants la nuit."},
+ high:{n:"Hauts plateaux et montagnes",c:"Asir, Al Baha et Taëf, hauts plateaux du Yémen, Djebel Akhdar à Oman",rows:[
+  ["Janvier–février","Planter et tailler les arbres à feuilles caduques : grenadier, abricotier, pêcher, vigne, amandier et rosier.","Protéger les jeunes plants du gel sur les sommets, et préparer le compost."],
+  ["Mars–avril","Avec les pluies de printemps : pommes de terre, tomates, haricots et courgettes, et blé et maïs au Yémen. C'est aussi la cueillette de la rose de Taëf.","Pailler le sol et recueillir l'eau de pluie sur les terrasses."],
+  ["Mai–juin","Légumes d'été : concombre, poivron et aubergine, et herbes comme le basilic, la menthe et la rue.","Arrosage régulier les jours chauds, et cueillir les herbes pour les sécher à l'ombre."],
+  ["Juillet–août","Avec les pluies d'été au Yémen et dans l'Asir : sorgho, mil et légumineuses.","La récolte des grenades du Djebel Akhdar commence à la fin de l'été ; entretenir les terrasses."],
+  ["Septembre–octobre","Légumes d'hiver : ail, oignons, carottes, laitue, coriandre, fenugrec et persil.","Récolter les céréales et ajouter du compost."],
+  ["Novembre–décembre","Les légumes d'hiver continuent. Et la récolte du café au Yémen.","Protéger les jeunes plants du froid, et conserver les semences."]],
+  note:"Les dates varient beaucoup avec l'altitude : plus on monte, plus le printemps est tardif et le froid précoce."},
+ levant:{n:"Le Levant et l'Irak",c:"Jordanie, Palestine, Liban, Syrie, centre et nord de l'Irak",rows:[
+  ["Janvier–février","Planter et tailler les arbres à feuilles caduques : figuier, vigne, grenadier, amandier et olivier. Et semer tomates, poivrons et aubergines en pépinière protégée fin février.","Protéger les plantes du gel, et préparer le compost."],
+  ["Mars–avril","Semis de printemps : pommes de terre, petits pois, laitue, radis, carottes, épinards, persil et menthe. Repiquer tomates et poivrons une fois le risque de gel passé.","Pailler le sol avant la chaleur, et cueillir les herbes sauvages comme le thym et la sauge."],
+  ["Mai–juin","Cultures d'été : courgettes, concombres, haricots, gombo, mloukhiya, pastèque et basilic.","Goutte-à-goutte, et moisson du blé et de l'orge."],
+  ["Juillet–août","L'été sec : récolter les légumes d'été. Semer choux et choux-fleurs en pépinière fin juillet.","Arroser le matin, solariser les planches vides et sécher les herbes."],
+  ["Septembre–octobre","Semis d'automne : ail, oignons, fèves, épinards, laitue, roquette, coriandre, aneth et fenugrec, et repiquer choux et choux-fleurs.","Ajouter du compost et se préparer aux premières pluies."],
+  ["Novembre–décembre","Avec les premières pluies : blé, orge et lentilles, et légumineuses en engrais vert.","Récolter les olives, conserver les semences et nettoyer les planches."]],
+  note:"Dans la vallée du Jourdain et le sud chaud de l'Irak, le calendrier se rapproche de celui du Golfe ; en montagne, le printemps est plus tardif."},
+ nile:{n:"L'Égypte et le Soudan",c:"Égypte, nord et centre du Soudan",rows:[
+  ["Septembre–octobre","La saison d'automne (nili) : plants de tomates, poivrons, aubergines et courgettes.","Ajouter du compost et préparer la terre pour les cultures d'hiver."],
+  ["Novembre–décembre","Cultures d'hiver : blé, fèves, trèfle, oignons, ail, fenugrec, coriandre, aneth, persil, laitue, roquette, épinards, carottes, camomille et carvi.","Arrosage modéré, et lutter tôt contre les pucerons."],
+  ["Janvier–février","Les cultures d'hiver continuent, et l'on plante les pommes de terre. Début de la pépinière de la saison d'été.","Protéger les plants des nuits froides en Haute-Égypte, et cueillir la camomille."],
+  ["Mars–avril","La saison d'été : gombo, mloukhiya, courgettes, concombres, pastèque, melon, maïs et basilic, et hibiscus en Haute-Égypte et au Soudan.","Récolter fèves et blé, et pailler le sol."],
+  ["Mai–juin","La chaleur : gombo, mloukhiya et hibiscus continuent.","Arroser tôt, et ombrer les légumes tendres."],
+  ["Juillet–août","Au centre du Soudan, avec la saison des pluies : sorgho, sésame, arachide et hibiscus. En Égypte commence la pépinière de la saison nili.","Évacuer l'excès d'eau de pluie, et arroser le matin en Égypte."]],
+  note:"Dans le désert du nord du Soudan, le calendrier se rapproche de celui de la Haute-Égypte ; dans le sud plus pluvieux, il suit la saison des pluies."},
+ maghreb:{n:"Maghreb",c:"Maroc, Algérie, Tunisie, côte libyenne",rows:[
+  ["Septembre–octobre","Avec les premières pluies : fèves, petits pois, ail, oignons, épinards, laitue, carottes, persil, coriandre et menthe.","Ajouter du compost et préparer la terre."],
+  ["Novembre–décembre","Blé, orge et lentilles, et légumineuses en engrais vert.","Récolter les olives et commencer à planter les arbres."],
+  ["Janvier–février","Planter arbres, vignes et figuiers. Planter les pommes de terre et lancer une pépinière de tomates et de poivrons.","Protéger les jeunes plants du gel à l'intérieur et en montagne."],
+  ["Mars–avril","Repiquer tomates, poivrons et aubergines, et semer courgettes, concombres, haricots, pastèques et pois chiches.","Pailler le sol avant l'été."],
+  ["Mai–juin","Moisson du blé et récolte des fèves. Dans le sud chaud : gombo et mloukhiya.","Cueillir et sécher les herbes : thym, romarin et armoise."],
+  ["Juillet–août","L'été sec : récolter les légumes d'été, et lancer une pépinière de choux et choux-fleurs fin août.","Arroser le matin, et solariser les planches vides."]],
+  note:"Dans les oasis et le Sahara, le calendrier se rapproche de celui de l'intérieur du Golfe, avec du gel les nuits d'hiver."}
+};
 function renderOrganic(){
   const el=$("#organic"), cur=ost.id&&OG.find(t=>t.id===ost.id), list=cur?[cur]:OG;
   const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
-  el.innerHTML=`<h2 class="page-h">L'agriculture biologique dans le Golfe</h2>
-   <p class="sub">Cultivez vos herbes et vos légumes sans pesticides ni engrais chimiques, avec des méthodes adaptées à la chaleur du Golfe, à son sol sableux et à son eau salée. D'abord pour la maison et les bacs, avec des conseils pour ceux qui ont une ferme.</p>
+  el.innerHTML=`<h2 class="page-h">Agriculture biologique</h2>
+   <p class="sub">Cultivez vos herbes et vos légumes sans pesticides ni engrais chimiques, avec des méthodes adaptées à la chaleur de nos pays arabes, avec un soin particulier pour le sol sableux et l'eau salée du Golfe. D'abord pour la maison et les bacs, avec des conseils pour ceux qui ont une ferme, et un calendrier de plantation pour chaque région arabe.</p>
    <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Calendrier de plantation</button><button type="button" class="chip" data-ogrow="1">Plantes faciles à cultiver</button></div></div>
    <div class="aidgrid${cur?" one":""}">${list.map(t=>`<article class="aidcard wcard" id="og-${t.id}">
      <div class="aidhead"><h3>${t.n}</h3></div>
@@ -4483,11 +4517,15 @@ function renderOrganic(){
      <div class="adont"><h4>À éviter</h4><ul>${t.dont.map(x=>`<li>${x}</li>`).join("")}</ul></div></div>
      ${t.farm?`<div class="ofarm"><h4>Si vous avez une ferme</h4><p style="margin:0">${t.farm}</p></div>`:""}
    </article>`).join("")}</div>
-   ${cur?"":`<section id="og-cal"><h3 class="page-h" style="font-size:1.4rem;margin-top:22px">Calendrier de plantation aux Émirats</h3>
-   <p class="sub">Approximatif ; il varie un peu entre la côte, l'intérieur et les montagnes.</p>
-   <div class="owrap"><table class="otable"><thead><tr><th>Mois</th><th>Quoi planter</th><th>Entretien</th></tr></thead><tbody>${OCAL.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div></section>
+   ${cur?"":`<section id="og-cal"><h3 class="page-h" style="font-size:1.4rem;margin-top:22px">Calendrier de plantation pour le monde arabe</h3>
+   <p class="sub">Choisissez votre région. Le calendrier est approximatif et varie selon l'altitude, la distance à la mer et les pluies de chaque année.</p>
+   <div class="opts" role="radiogroup" style="margin-bottom:8px">${Object.entries(OZONES).map(([k,z])=>`<button type="button" class="chip" role="radio" data-oz="${k}" aria-checked="${ost.zone===k}" aria-pressed="${ost.zone===k}">${z.n}</button>`).join("")}</div>
+   <p class="hint" style="margin:0 0 4px"><b>${OZONES[ost.zone].n}:</b> ${OZONES[ost.zone].c}</p>
+   <div class="owrap"><table class="otable"><thead><tr><th>Mois</th><th>Quoi planter</th><th>Entretien</th></tr></thead><tbody>${OZONES[ost.zone].rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>
+   ${OZONES[ost.zone].note?`<p class="hint">${OZONES[ost.zone].note}</p>`:""}</section>
    <section class="osoon"><h3>Conseils de l'agriculteur</h3><p style="margin:0">Bientôt, si Dieu le veut : conseils et expériences de la ferme bio du créateur du guide, éprouvés dans le sol et la chaleur des Émirats.</p></section>`}`;
   el.querySelectorAll("[data-og]").forEach(b=>b.onclick=()=>{ ost.id = ost.id===b.dataset.og?null:b.dataset.og; renderOrganic(); });
+  el.querySelectorAll("[data-oz]").forEach(b=>b.onclick=()=>{ ost.zone=b.dataset.oz; renderOrganic(); const n=$(`[data-oz="${ost.zone}"]`); n&&n.focus({preventScroll:true}); });
   el.querySelectorAll("[data-ocal]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-cal"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
   el.querySelectorAll("[data-ogrow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
@@ -4982,8 +5020,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-07f",date:"7 novembre 2026",go:"organic",items:[
- "<b>Nouvelle rubrique : l'agriculture biologique dans le Golfe.</b> Améliorer le sol sableux, faire son compost, lutter naturellement contre les ravageurs, arroser dans la chaleur, et un calendrier de plantation pour les Émirats.",
+const NEWS={v:"2026-11-07g",date:"7 novembre 2026",go:"organic",items:[
+ "<b>Nouvelle rubrique : l'agriculture biologique.</b> Améliorer le sol, faire son compost, lutter naturellement contre les ravageurs, arroser dans la chaleur, et un calendrier de plantation pour cinq régions arabes : le Golfe, les hauts plateaux, le Levant et l'Irak, l'Égypte et le Soudan, et le Maghreb.",
  "<b>Nouvelles plantes de chez nous :</b> Figue, pollen de palmier, eau de pollen de palmier, et ghaf, l'arbre national des Émirats, avec deux recettes de figue.",
  "Dans «Les recettes de maman», la première expérience d'un abonné : le latex de figuier contre l'eczéma, avec des conseils de sécurité."
 ]};

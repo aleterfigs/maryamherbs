@@ -4094,7 +4094,7 @@ function renderHome(){
      <p class="hstats">${n(HERBS.length)} herbs · ${n(RECIPES.length)} blends · ${n(Object.keys(ORIG).length)} traditions · ${n(PROBS.length)} health problems</p>
    </section>
    <div class="tiles">${TILES.map(([k,t,d],i)=>`<button type="button" class="tile${i===0?" tile-main":""}" data-go="${k}"><span class="ticon">${tileIcon(k)}</span><span class="ttext"><b>${t}</b><small>${d}</small></span></button>`).join("")}</div>
-   <section class="feat"><h3>Extended sections</h3><div class="featrow">${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>A complete guide: kinds, Sunnah, science and safety</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>Women's corner</b><small>Periods, pregnancy and postpartum, skin and hair, and cosmetic warnings</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>From the sea</b><small>Fish oil, salt water, seaweed and ambergris: what helps and what to beware of</small></span></button><button type="button" class="featcard" data-organic="1">${herbIcon(byId.moringa)}<span><b>Organic farming in the Gulf</b><small>Sandy soil, compost, natural pest control, and a planting calendar for the UAE</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>Grow your own pharmacy</b><small>Herbs that are easy to grow in the Gulf, and when and how to plant them</small></span></button></div></section>
+   <section class="feat"><h3>Extended sections</h3><div class="featrow">${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>A complete guide: kinds, Sunnah, science and safety</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>Women's corner</b><small>Periods, pregnancy and postpartum, skin and hair, and cosmetic warnings</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>From the sea</b><small>Fish oil, salt water, seaweed and ambergris: what helps and what to beware of</small></span></button><button type="button" class="featcard" data-organic="1">${herbIcon(byId.moringa)}<span><b>Organic farming</b><small>Improving soil, compost, natural pest control, and a planting calendar for the Arab world</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>Grow your own pharmacy</b><small>Herbs that are easy to grow in the Gulf, and when and how to plant them</small></span></button></div></section>
    <section class="quick"><h3>In emergencies</h3><div class="opts">${["snake","scorpion","dog","burn","heat","poison"].map(id=>{const a=AID.find(x=>x.id===id);return `<button type="button" class="chip urgent" data-aidgo="${id}"><span class="dot ${SEV[a.sev][1]}"></span>${a.n}</button>`;}).join("")}</div></section>`;
   $("#home").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{ if(b.dataset.go==="wizard") Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:null,step:1}); setView(b.dataset.go); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
@@ -4416,7 +4416,7 @@ function renderWomen(){
   el.querySelectorAll("[data-nu]").forEach(b=>b.onclick=()=>{ nst.sym=null; setView("nutri"); const n=$("#n-"+b.dataset.nu); n&&n.scrollIntoView({block:"start"}); });
 }
 /* ---------- Organic farming ---------- */
-const ost={id:null};
+const ost={id:null,zone:"gulf"};
 const OG=[
  {id:"soil",n:"Improving sandy soil",
   intro:"UAE soil is mostly sandy, poor in organic matter and tends to be alkaline and salty, so it holds neither water nor nutrients. The basis of organic farming is feeding the soil, not the plant.",
@@ -4461,19 +4461,53 @@ const OG=[
   farm:"",
   h:[]}
 ];
-const OCAL=[
- ["August–September","Solarise the soil: wet it and cover it with clear plastic for 4–6 weeks to kill pests and weed seeds. And prepare compost.","Sow tomato, pepper and aubergine seeds in a shaded nursery at the end of September."],
- ["October–November","The start of the golden season: courgettes, cucumbers, green beans and potatoes, and leafy herbs: mint, parsley, coriander, dill, rocket, fenugreek, lettuce, spinach, carrots, radishes, onions, garlic and chamomile.","Move tomato and pepper seedlings into the ground, and add compost."],
- ["December–January","More leafy vegetables, plus peas and broad beans. The best time to plant trees: fig, pomegranate, grape and lemon.","Keep harvesting, and protect seedlings from cold winds."],
- ["February–March","Sow summer crops: okra, mulukhiyah, watermelon, melon, squash, maize and basil.","Last chance for winter vegetables; get shade nets ready."],
- ["April–May","Heat-tolerant plants: moringa, sidr, henna, okra and mulukhiyah.","Mulch the soil with straw, water in the morning, and put up shade nets."],
- ["June–July","High summer: okra, mulukhiyah, moringa and palms carry on, and basil in partial shade.","Harvest fresh dates, water early, and keep empty beds covered."]
-];
+const OZONES={
+ gulf:{n:"The Gulf and hot coasts",c:"UAE, Qatar, Bahrain, Kuwait, coastal Oman, eastern and coastal Saudi Arabia, southern Iraq",rows:[
+  ["August–September","Solarise the soil: wet it and cover it with clear plastic for 4–6 weeks to kill pests and weed seeds. And prepare compost.","Sow tomato, pepper and aubergine seeds in a shaded nursery at the end of September."],
+  ["October–November","The start of the golden season: courgettes, cucumbers, green beans and potatoes, and leafy herbs: mint, parsley, coriander, dill, rocket, fenugreek, lettuce, spinach, carrots, radishes, onions, garlic and chamomile.","Move tomato and pepper seedlings into the ground, and add compost."],
+  ["December–January","More leafy vegetables, plus peas and broad beans. The best time to plant trees: fig, pomegranate, grape and lemon.","Keep harvesting, and protect seedlings from cold winds."],
+  ["February–March","Sow summer crops: okra, mulukhiyah, watermelon, melon, squash, maize and basil.","Last chance for winter vegetables; get shade nets ready."],
+  ["April–May","Heat-tolerant plants: moringa, sidr, henna, okra and mulukhiyah.","Mulch the soil with straw, water in the morning, and put up shade nets."],
+  ["June–July","High summer: okra, mulukhiyah, moringa and palms carry on, and basil in partial shade.","Harvest fresh dates, water early, and keep empty beds covered."]],
+  note:"Inland areas such as Najd, Qassim and Al Ain: summer is like the coast, but winter nights can bring frost from December to February, so protect seedlings at night."},
+ high:{n:"Mountain highlands",c:"Asir, Al Baha and Taif, the Yemeni highlands, Jebel Akhdar in Oman",rows:[
+  ["January–February","Plant and prune deciduous trees: pomegranate, apricot, peach, grape, almond and rose.","Protect seedlings from frost on the peaks, and prepare compost."],
+  ["March–April","With the spring rains: potatoes, tomatoes, green beans and courgettes, and wheat and maize in Yemen. And the Taif rose harvest.","Mulch the soil, and collect rainwater on the terraces."],
+  ["May–June","Summer vegetables: cucumber, pepper and aubergine, and herbs such as basil, mint and rue.","Regular watering on hot days, and pick herbs and dry them in the shade."],
+  ["July–August","With the summer rains in Yemen and Asir: sorghum, millet and pulses.","The pomegranate harvest on Jebel Akhdar begins in late summer; maintain the terraces."],
+  ["September–October","Winter vegetables: garlic, onions, carrots, lettuce, coriander, fenugreek and parsley.","Harvest grain, and add compost."],
+  ["November–December","Winter vegetables continue. And the coffee harvest in Yemen.","Protect seedlings from the cold, and save seeds."]],
+  note:"Dates vary a lot with altitude: the higher the area, the later spring comes and the earlier the cold."},
+ levant:{n:"The Levant and Iraq",c:"Jordan, Palestine, Lebanon, Syria, central and northern Iraq",rows:[
+  ["January–February","Plant and prune deciduous trees: fig, grape, pomegranate, almond and olive. And sow tomato, pepper and aubergine seeds in a protected nursery in late February.","Protect plants from frost, and prepare compost."],
+  ["March–April","Spring sowing: potatoes, peas, lettuce, radishes, carrots, spinach, parsley and mint. Move tomato and pepper seedlings out once the risk of frost has passed.","Mulch the soil before the heat, and pick wild herbs such as thyme and sage."],
+  ["May–June","Summer crops: courgettes, cucumbers, green beans, okra, mulukhiyah, watermelon and basil.","Drip irrigation, and harvest wheat and barley."],
+  ["July–August","The dry summer: pick summer vegetables. Sow cabbage and cauliflower seeds in a nursery in late July.","Water in the morning, solarise empty beds, and dry herbs."],
+  ["September–October","Autumn sowing: garlic, onions, broad beans, spinach, lettuce, rocket, coriander, dill and fenugreek, and plant out cabbage and cauliflower seedlings.","Add compost, and get ready for the first rain."],
+  ["November–December","With the first rain: wheat, barley and lentils, and legumes as green manure.","Harvest olives, save seeds and clear the beds."]],
+  note:"In the Jordan Valley and hot southern Iraq the calendar is close to the Gulf's, and in the mountains spring comes later."},
+ nile:{n:"Egypt and Sudan",c:"Egypt, northern and central Sudan",rows:[
+  ["September–October","The autumn (Nili) season: tomato, pepper, aubergine and courgette seedlings.","Add compost, and prepare the land for winter crops."],
+  ["November–December","Winter crops: wheat, broad beans, clover, onions, garlic, fenugreek, coriander, dill, parsley, lettuce, rocket, spinach, carrots, chamomile and caraway.","Moderate watering, and tackle aphids early."],
+  ["January–February","Winter crops continue, and potatoes are planted. Start the nursery for the summer season.","Protect seedlings from cold nights in Upper Egypt, and pick chamomile."],
+  ["March–April","The summer season: okra, mulukhiyah, courgettes, cucumbers, watermelon, melon, maize and basil, and hibiscus in Upper Egypt and Sudan.","Harvest broad beans and wheat, and mulch the soil."],
+  ["May–June","The heat: okra, mulukhiyah and hibiscus carry on.","Water early, and shade tender vegetables."],
+  ["July–August","In central Sudan, with the rainy season: sorghum, sesame, groundnuts and hibiscus. In Egypt the nursery for the Nili season begins.","Drain excess rainwater, and water in the morning in Egypt."]],
+  note:"In the desert of northern Sudan the calendar is close to Upper Egypt's, and in the rainier south it follows the rainy season."},
+ maghreb:{n:"The Maghreb",c:"Morocco, Algeria, Tunisia, coastal Libya",rows:[
+  ["September–October","With the first rain: broad beans, peas, garlic, onions, spinach, lettuce, carrots, parsley, coriander and mint.","Add compost, and prepare the land."],
+  ["November–December","Wheat, barley and lentils, and legumes as green manure.","Harvest olives, and start planting trees."],
+  ["January–February","Plant trees, vines and figs. Plant potatoes, and start a tomato and pepper nursery.","Protect seedlings from frost inland and in the mountains."],
+  ["March–April","Plant out tomato, pepper and aubergine seedlings, and sow courgettes, cucumbers, green beans, watermelon and chickpeas.","Mulch the soil before summer."],
+  ["May–June","Harvest wheat and broad beans. In the hot south: okra and mulukhiyah.","Pick herbs and dry them: thyme, rosemary and wormwood."],
+  ["July–August","The dry summer: pick summer vegetables, and start a cabbage and cauliflower nursery in late August.","Water in the morning, and solarise empty beds."]],
+  note:"In the oases and the Sahara the calendar is close to the inland Gulf's, with frost on winter nights."}
+};
 function renderOrganic(){
   const el=$("#organic"), cur=ost.id&&OG.find(t=>t.id===ost.id), list=cur?[cur]:OG;
   const hl=ids=>ids.filter(id=>byId[id]).map(id=>`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`).join("");
-  el.innerHTML=`<h2 class="page-h">Organic farming in the Gulf</h2>
-   <p class="sub">Grow your herbs and vegetables clean, without pesticides or chemical fertilisers, using methods suited to the Gulf's heat, sandy soil and salty water. For homes and beds first, with tips for those with a farm.</p>
+  el.innerHTML=`<h2 class="page-h">Organic farming</h2>
+   <p class="sub">Grow your herbs and vegetables clean, without pesticides or chemical fertilisers, using methods suited to the heat of our Arab lands, with special care for the Gulf's sandy soil and salty water. For homes and beds first, with tips for those with a farm, and a planting calendar for each Arab region.</p>
    <div class="sgroups"><div class="opts">${OG.map(t=>`<button type="button" class="chip" data-og="${t.id}" aria-pressed="${ost.id===t.id}">${t.n}</button>`).join("")}<button type="button" class="chip" data-ocal="1">Planting calendar</button><button type="button" class="chip" data-ogrow="1">Easy herbs to grow</button></div></div>
    <div class="aidgrid${cur?" one":""}">${list.map(t=>`<article class="aidcard wcard" id="og-${t.id}">
      <div class="aidhead"><h3>${t.n}</h3></div>
@@ -4483,11 +4517,15 @@ function renderOrganic(){
      <div class="adont"><h4>Avoid</h4><ul>${t.dont.map(x=>`<li>${x}</li>`).join("")}</ul></div></div>
      ${t.farm?`<div class="ofarm"><h4>If you have a farm</h4><p style="margin:0">${t.farm}</p></div>`:""}
    </article>`).join("")}</div>
-   ${cur?"":`<section id="og-cal"><h3 class="page-h" style="font-size:1.4rem;margin-top:22px">Planting calendar for the UAE</h3>
-   <p class="sub">Approximate; it varies a little between the coast, inland areas and the mountains.</p>
-   <div class="owrap"><table class="otable"><thead><tr><th>Month</th><th>What to plant</th><th>Care</th></tr></thead><tbody>${OCAL.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div></section>
+   ${cur?"":`<section id="og-cal"><h3 class="page-h" style="font-size:1.4rem;margin-top:22px">Planting calendar for the Arab world</h3>
+   <p class="sub">Choose your region. The calendar is approximate and varies with altitude, distance from the sea and each year's rains.</p>
+   <div class="opts" role="radiogroup" style="margin-bottom:8px">${Object.entries(OZONES).map(([k,z])=>`<button type="button" class="chip" role="radio" data-oz="${k}" aria-checked="${ost.zone===k}" aria-pressed="${ost.zone===k}">${z.n}</button>`).join("")}</div>
+   <p class="hint" style="margin:0 0 4px"><b>${OZONES[ost.zone].n}:</b> ${OZONES[ost.zone].c}</p>
+   <div class="owrap"><table class="otable"><thead><tr><th>Month</th><th>What to plant</th><th>Care</th></tr></thead><tbody>${OZONES[ost.zone].rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>
+   ${OZONES[ost.zone].note?`<p class="hint">${OZONES[ost.zone].note}</p>`:""}</section>
    <section class="osoon"><h3>Farmer's tips</h3><p style="margin:0">Coming soon, God willing: tips and experience from the guide owner's organic farm, tested in the UAE's soil and heat.</p></section>`}`;
   el.querySelectorAll("[data-og]").forEach(b=>b.onclick=()=>{ ost.id = ost.id===b.dataset.og?null:b.dataset.og; renderOrganic(); });
+  el.querySelectorAll("[data-oz]").forEach(b=>b.onclick=()=>{ ost.zone=b.dataset.oz; renderOrganic(); const n=$(`[data-oz="${ost.zone}"]`); n&&n.focus({preventScroll:true}); });
   el.querySelectorAll("[data-ocal]").forEach(b=>b.onclick=()=>{ ost.id=null; renderOrganic(); const c=$("#og-cal"); c&&c.scrollIntoView({behavior:"smooth",block:"start"}); });
   el.querySelectorAll("[data-ogrow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
@@ -4982,8 +5020,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- What's new: shown once to returning visitors after each update ---------- */
-const NEWS={v:"2026-11-07f",date:"7 November 2026",go:"organic",items:[
- "<b>New section: organic farming in the Gulf.</b> Improving sandy soil, making compost at home, natural pest control, watering in the heat, and a planting calendar for the UAE.",
+const NEWS={v:"2026-11-07g",date:"7 November 2026",go:"organic",items:[
+ "<b>New section: organic farming.</b> Improving soil, making compost at home, natural pest control, watering in the heat, and a planting calendar for five Arab regions: the Gulf, the highlands, the Levant and Iraq, Egypt and Sudan, and the Maghreb.",
  "<b>New herbs from our land:</b> Fig, date palm pollen, palm pollen water, and ghaf, the UAE's national tree, with two fig recipes.",
  "In «Mum's recipes», the first experience shared by a follower: fig sap for eczema, with safety notes."
 ]};
