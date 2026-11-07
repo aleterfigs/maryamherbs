@@ -3613,7 +3613,7 @@ const RED={
  meno:["Saignement après un an sans règles","Fortes palpitations ou douleur thoracique","Des bouffées intenses qui perturbent le sommeil et la vie : il existe des traitements efficaces chez le médecin"]
 };
 const BANDS=[...AGES,[18,"18–39 ans"],[40,"40–59 ans"],[60,"60 ans et plus"]];
-const w={pre:null,preQ:"",step:1,g:null,band:null,more:false,sex:"girl",who:"woman",age:4,preg:false,lact:false,prob:null,conds:new Set(),meds:new Set(),alg:new Set(),orig:new Set()};
+const w={gFixed:false,pre:null,preQ:"",step:1,g:null,band:null,more:false,sex:"girl",who:"woman",age:4,preg:false,lact:false,prob:null,conds:new Set(),meds:new Set(),alg:new Set(),orig:new Set()};
 function chip(key,label,on,multi){return `<button type="button" class="chip" data-k="${key}" aria-pressed="${on}" ${multi?"":'role="radio" aria-checked="'+on+'"'}>${label}</button>`;}
 function probsFor(){
   const kidSmall=w.who==="kid"&&w.age<12;
@@ -3628,15 +3628,18 @@ function probsFromQuery(q){
   if(!out.length) for(const t of ts){ const c=synonyms[t]; if(!c) continue; if(C2P[c]) C2P[c].forEach(add); else add(c); }
   return out;
 }
-function wNextAfterAge(){ if(w.pre){ const av=probsFor().map(p=>p[0]).filter(k=>w.pre.includes(k)); if(av.length===1){ w.prob=av[0]; return 4; } } return 3; }
+/* Si tous les problèmes recherchés concernent seulement les femmes ou les hommes, le sexe est fixé automatiquement */
+function preSex(pr){ const r=pr.map(k=>(PROBS.find(p=>p[0]===k)||[])[2]); return r.length&&r.every(x=>x==="woman")?"f":r.length&&r.every(x=>x==="man")?"m":null; }
+function bandOk(a){ if(!w.pre) return true; const sv={band:w.band,who:w.who,age:w.age,sex:w.sex}; w.band=a; wSync(); const ok=probsFor().some(p=>w.pre.includes(p[0])); Object.assign(w,sv); return ok; }
+function wNextAfterAge(){ wSync(); if(w.pre){ const av=probsFor().map(p=>p[0]).filter(k=>w.pre.includes(k)); if(av.length===1){ w.prob=av[0]; return 4; } } return 3; }
 function wReady(){ return !!w.g && w.band!=null; }
 function wSync(){ if(w.band==null) return; if(w.band<18){ w.who="kid"; w.age=w.band; w.sex=w.g==="m"?"boy":"girl"; } else { w.who=w.g==="m"?"man":"woman"; w.age=w.band; } if(w.who!=="woman"){ w.preg=false; w.lact=false; } }
 function renderWForm(){
   wSync();
   const ready=wReady(), kidSmall=ready&&w.who==="kid"&&w.age<12, infant=ready&&w.band===0;
   if(!ready||infant||!probsFor().some(p=>p[0]===w.prob)) w.prob=null;
-  if(w.step>=2&&!w.g) w.step=1; if(w.step>=3&&!ready) w.step=2; if(w.step===3&&infant) w.step=4; if(w.step===4&&!w.prob&&!infant) w.step=ready?3:1;
-  const prog=n=>`<p class="wprog">${[1,2,3].map(i=>`<i class="${i<=n?"on":""}"></i>`).join("")}<span>Étape ${n.toLocaleString("fr-FR")}/${(3).toLocaleString("fr-FR")}</span></p>`;
+  if(w.step===1&&w.gFixed&&w.g) w.step=2; if(w.step>=2&&!w.g) w.step=1; if(w.step>=3&&!ready) w.step=2; if(w.step===3&&infant) w.step=4; if(w.step===4&&!w.prob&&!infant) w.step=ready?3:1;
+  const prog=n=>{ const T=w.gFixed?2:3, m=w.gFixed?n-1:n; return `<p class="wprog">${Array.from({length:T},(_,i)=>`<i class="${i<m?"on":""}"></i>`).join("")}<span>Étape ${m.toLocaleString("fr-FR")}/${T.toLocaleString("fr-FR")}</span></p>`; };
   const back=n=>`<button type="button" class="wlink" data-k="step:${n}">Retour</button>`;
   let h="";
   const preBar=w.pre&&w.step<4?`<p class="wsum">Vous cherchez : <b>${esc(w.preQ)}</b> · <button type="button" class="wlink" data-k="clearpre">Annuler</button></p>`:"";
@@ -3644,9 +3647,9 @@ function renderWForm(){
     h=`<div class="q" id="wq1">${prog(1)}${preBar}<h3 class="wq-title">Pour qui cherchez-vous un remède ?</h3><p class="hint">Pour vous-même ou un proche.</p><div class="opts wbig" role="radiogroup">${chip("g:f","Féminin",w.g==="f")}${chip("g:m","Masculin",w.g==="m")}</div></div>`;
   } else if(w.step===2){
     const askPreg=w.g==="f"&&w.band!=null&&w.band>=18;
-    h=`<div class="q" id="wq1">${prog(2)}${preBar}<h3 class="wq-title">Quel âge ?</h3><div class="opts wbig" role="radiogroup">${BANDS.map(([a,t])=>chip("band:"+a,t,w.band===a)).join("")}</div>
+    h=`<div class="q" id="wq1">${prog(2)}${preBar}<h3 class="wq-title">Quel âge ?</h3><div class="opts wbig" role="radiogroup">${BANDS.filter(([a])=>bandOk(a)).map(([a,t])=>chip("band:"+a,t,w.band===a)).join("")}</div>
       ${askPreg?`<h3 class="wq-title" style="margin-top:14px">Êtes-vous enceinte ou allaitante ?</h3><div class="opts wbig" role="radiogroup">${chip("pl:no","Non",w.plDone&&!w.preg&&!w.lact)}${chip("pl:preg","Enceinte",w.preg)}${chip("pl:lact","Allaitante",w.lact)}</div>`:""}
-      <div class="wstepbtns">${back(1)}</div></div>`;
+      <div class="wstepbtns">${w.gFixed?"":back(1)}</div></div>`;
   } else if(w.step===3){
     let avail=probsFor(), preNote="";
     if(w.pre){ const f=avail.filter(p=>w.pre.includes(p[0])); if(f.length){ avail=f; preNote=`<p class="hint">Choisissez le plus proche de votre cas, ou <button type="button" class="wlink" data-k="clearpre">afficher tous les problèmes</button>.</p>`; } else preNote=`<p class="hint">Aucun remède pour votre recherche ne convient à ce sexe et à cet âge ; choisissez parmi tous les problèmes.</p>`; }
@@ -3654,7 +3657,7 @@ function renderWForm(){
   } else {
     const plabel=(PROBS.find(p=>p[0]===w.prob)||[,""])[1], blabel=(BANDS.find(b=>b[0]===w.band)||[,""])[1];
     h=`<div class="q" id="wq2"><p class="wsum"><b>${w.g==="m"?"Masculin":"Féminin"}</b> · ${blabel}${w.preg?" · Enceinte":""}${w.lact?" · Allaitante":""}${plabel?` · <b>${plabel}</b>`:""}</p>
-      <div class="wstepbtns">${infant?"":`<button type="button" class="wlink" data-k="step:3">Changer de problème</button>`}<button type="button" class="wlink" data-k="step:1">Changer le sexe ou l'âge</button><button type="button" class="wlink" data-k="reset">Nouvelle recherche</button></div></div>`;
+      <div class="wstepbtns">${infant?"":`<button type="button" class="wlink" data-k="step:3">Changer de problème</button>`}<button type="button" class="wlink" data-k="step:${w.gFixed?2:1}">${w.gFixed?"Changer l'âge":"Changer le sexe ou l'âge"}</button><button type="button" class="wlink" data-k="reset">Nouvelle recherche</button></div></div>`;
     if(!infant){
       const conds=kidSmall?WCONDS.filter(c=>KIDCONDS.includes(c[0])):WCONDS;
       const open=w.more||w.conds.size||w.meds.size||w.alg.size||w.orig.size;
@@ -3814,8 +3817,8 @@ $("#wform").addEventListener("toggle",e=>{ if(e.target.id==="wmore") w.more=e.ta
 function wGo(el){ if(!el) return; const r=el.getBoundingClientRect(); if(window.matchMedia("(max-width:780px)").matches || r.top<0 || r.top>innerHeight*0.5) el.scrollIntoView({behavior:"smooth",block:"start"}); }
 $("#wform").addEventListener("click",e=>{
   const b=e.target.closest("[data-k]"); if(!b) return; const k=b.dataset.k, [t,v]=k.split(":"); const st=w.step;
-  if(k==="clearpre"){ w.pre=null; w.preQ=""; }
-  else if(k==="reset"){ Object.assign(w,{pre:null,preQ:"",step:1,g:null,band:null,more:false,plDone:false,who:"woman",age:4,preg:false,lact:false,prob:null}); w.conds.clear(); w.meds.clear(); w.alg.clear(); w.orig.clear(); }
+  if(k==="clearpre"){ w.pre=null; w.preQ=""; w.gFixed=false; }
+  else if(k==="reset"){ Object.assign(w,{gFixed:false,pre:null,preQ:"",step:1,g:null,band:null,more:false,plDone:false,who:"woman",age:4,preg:false,lact:false,prob:null}); w.conds.clear(); w.meds.clear(); w.alg.clear(); w.orig.clear(); }
   else if(t==="step") w.step=+v;
   else if(t==="g"){ if(w.g!==v){ w.band=null; w.preg=w.lact=false; w.plDone=false; } w.g=v; w.step=2; }
   else if(t==="band"){ w.band=+v; w.preg=w.lact=false; w.plDone=false; if(!(w.g==="f"&&w.band>=18)) w.step=w.band===0?4:wNextAfterAge(); }
@@ -4027,7 +4030,7 @@ function renderHome(){
    <div class="tiles">${TILES.map(([k,t,d],i)=>`<button type="button" class="tile${i===0?" tile-main":""}" data-go="${k}"><span class="ticon">${tileIcon(k)}</span><span class="ttext"><b>${t}</b><small>${d}</small></span></button>`).join("")}</div>
    <section class="feat"><h3>Sections détaillées</h3><div class="featrow">${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>Un guide complet : variétés, Sunna, science et sécurité</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>Espace femmes</b><small>Règles, grossesse et post-partum, peau et cheveux, et mises en garde cosmétiques</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>De la mer</b><small>Huile de poisson, eau salée, algues et ambre gris : ce qui aide et ce dont il faut se méfier</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>Cultivez votre pharmacie</b><small>Des plantes faciles à cultiver dans le Golfe, et quand et comment les planter</small></span></button></div></section>
    <section class="quick"><h3>En cas d'urgence</h3><div class="opts">${["snake","scorpion","dog","burn","heat","poison"].map(id=>{const a=AID.find(x=>x.id===id);return `<button type="button" class="chip urgent" data-aidgo="${id}"><span class="dot ${SEV[a.sev][1]}"></span>${a.n}</button>`;}).join("")}</div></section>`;
-  $("#home").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{ setView(b.dataset.go); window.scrollTo({top:0}); });
+  $("#home").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{ if(b.dataset.go==="wizard") Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:null,step:1}); setView(b.dataset.go); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
   $("#home").querySelectorAll("[data-grow]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="grow"; setView("herbs"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-women]").forEach(b=>b.onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); });
@@ -4036,7 +4039,7 @@ function renderHome(){
   $("#hsearch").onsubmit=e=>{ e.preventDefault(); const q=$("#hq").value.trim(); if(!q) return;
     const nq=norm(q), herbHit=HERBS.some(h=>norm(h.ar).includes(nq)||(ALIAS[h.id]&&[ALIAS[h.id].en,...ALIAS[h.id].alt].some(a=>a&&norm(a).includes(nq))));
     const pr=probsFromQuery(q);
-    if(pr.length && !herbHit){ Object.assign(w,{pre:pr,preQ:q,prob:null,step:1,more:false}); setView("wizard"); window.scrollTo({top:0}); return; }
+    if(pr.length && !herbHit){ const fs=preSex(pr); Object.assign(w,{pre:pr,preQ:q,prob:null,more:false,gFixed:!!fs,step:fs?2:1}); if(fs&&w.g!==fs){ w.g=fs; w.band=null; w.preg=w.lact=false; w.plDone=false; } if(fs&&w.band!=null&&!bandOk(w.band)) w.band=null; setView("wizard"); window.scrollTo({top:0}); return; }
     state.q=q; $("#q").value=q; state.cond=null; setView("herbs"); window.scrollTo({top:0}); };
 }
 /* ---------- Pharmacie familiale ---------- */
@@ -4823,7 +4826,7 @@ function closePanel(){ $("#panel").hidden=true; $("#scrim").hidden=true; documen
 $("#scrim").onclick=closePanel;
 $("#tabHome").onclick=()=>setView("home");
 $("#goHome").onclick=()=>setView("home");
-$("#tabWiz").onclick=()=>setView("wizard");
+$("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:null,step:1}); setView("wizard"); };
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
 const NEWS={v:"2026-11-07c",date:"7 novembre 2026",go:"wizard",items:[
  "<b>Trouver un remède est plus simple :</b> choisissez le sexe et l'âge, puis le problème, et tous les remèdes adaptés s'affichent directement.",
