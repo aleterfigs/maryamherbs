@@ -363,7 +363,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .hsearch{display:flex;gap:8px}
 .hsearch input{flex:1 1 0;min-width:0;font:inherit;padding:12px 16px;border-radius:8px;border:0;background:var(--sheet);color:var(--ink)}
 .hsearch button{font:inherit;font-weight:600;padding:12px 22px;border-radius:8px;border:0;background:var(--clay);color:var(--sheet);cursor:pointer}
-.sitesh{display:flex;width:max-content;max-width:100%;align-items:center;gap:8px;margin:12px auto 8px;padding:10px 18px;border-radius:999px;border:0;background:#25d366;color:#fff;font:inherit;font-weight:600;cursor:pointer}.sitesh:hover{filter:brightness(.95)}.instb{display:flex;width:max-content;max-width:100%;align-items:center;gap:8px;margin:0 auto 8px;padding:8px 16px;border-radius:999px;border:1px solid var(--leaf);background:transparent;color:var(--leaf);font:inherit;font-weight:600;cursor:pointer}.instb[hidden]{display:none}.gutlist{list-style:none;padding:0;margin:0 0 8px}.gutlist li{margin:0 0 8px;line-height:1.7}.gutsrc{margin:0 0 8px;padding-inline-start:20px}.gutsrc a{color:var(--leaf)}.hero .instb{border-color:rgba(255,255,255,.75);color:#fff}a.chanb{text-decoration:none}.hidx{text-align:center;margin:0;font-size:.88rem}.hidx a{color:var(--leaf)}
+.sitesh{display:flex;width:max-content;max-width:100%;align-items:center;gap:8px;margin:12px auto 8px;padding:10px 18px;border-radius:999px;border:0;background:#25d366;color:#fff;font:inherit;font-weight:600;cursor:pointer}.sitesh:hover{filter:brightness(.95)}.instb{display:flex;width:max-content;max-width:100%;align-items:center;gap:8px;margin:0 auto 8px;padding:8px 16px;border-radius:999px;border:1px solid var(--leaf);background:transparent;color:var(--leaf);font:inherit;font-weight:600;cursor:pointer}.instb[hidden]{display:none}.relp{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 12px;padding:10px 12px;border-radius:10px;background:var(--sheet);border:1px solid var(--leaf)}.relp[hidden]{display:none}.relp>span{font-weight:600;color:var(--leaf)}.gutlist{list-style:none;padding:0;margin:0 0 8px}.gutlist li{margin:0 0 8px;line-height:1.7}.gutsrc{margin:0 0 8px;padding-inline-start:20px}.gutsrc a{color:var(--leaf)}.hero .instb{border-color:rgba(255,255,255,.75);color:#fff}a.chanb{text-decoration:none}.hidx{text-align:center;margin:0;font-size:.88rem}.hidx a{color:var(--leaf)}
 .hstats{margin:0;font-size:.85rem;opacity:.85;font-variant-numeric:tabular-nums}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
 @media (min-width:860px){.tiles{grid-template-columns:repeat(3,1fr)}}
@@ -546,6 +546,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
     <div class="count" id="count"></div>
   </div>
 
+  <div class="relp" id="relp" hidden></div>
   <div class="grid" id="grid"></div>
   <div class="recipes" id="recipes" hidden></div>
   <div class="wiz" id="wizard" hidden><div class="wform" id="wform"></div><div class="res" id="wres" aria-live="polite"></div></div>
@@ -3773,8 +3774,52 @@ function setView(v){
   if(GC_V[v]) gcEv(GC_X.sec+": "+GC_V[v]);
   render();
 }
+const PAGEKW_K={
+ gut:["قولون","انتفاخ","نفخة","نفخه","غازات","امساك","هضم","بطن","مغص","فودماب","سيلياك","لاكتوز","عسر هضم"], /*HGRX*/
+ ker:["كيرلا","كيرالا","ايورفيدا","ايورفيدي","كانجي","بانشاكارما","جوز الهند","بهسما"], /*HGRX*/
+ skin:["جلد","بشرة","بشره","اكزيما","حب الشباب","كلف","بهاق","صدفية","صدفيه","حروق","شامة","شامه","طفح","فطريات","ثاليل"], /*HGRX*/
+ uae:["امارات","الخليج","خليجي","نباتات برية","صحراء","غاف","سدر","اراك"], /*HGRX*/
+ women:["حمل","حامل","دورة","دوره","رضاعة","رضاعه","مرضع","نفاس","ولادة","ولاده","حيض","تكيس","مبايض","سن الياس"], /*HGRX*/
+ aid:["لدغة","لدغه","عقرب","ثعبان","افعى","اختناق","تسمم","ضربة شمس","اسعاف","اسعافات","كسر","نزيف"], /*HGRX*/
+ safety:["دواء","ادوية","ادويه","تداخل","تعارض","سلامة","سلامه"], /*HGRX*/
+ folk:["تحنيك","تمليح","كحل","تبخير","مجبر","مجبّر","الاربعين","عادات","كي"], /*HGRX*/
+ nutri:["فيتامين","فيتامينات","نقص","حديد","انيميا","فقر دم","كالسيوم","غذاء"], /*HGRX*/
+ mind:["ارق","نفسية","نفسيه","اكتئاب","قلق","حزن","وسواس","توتر"], /*HGRX*/
+ eye:["عين","عيون","رمد","نظر"], /*HGRX*/
+ organic:["زراعة","زراعه","عضوي","عضوية","كمبوست","سماد","افات","تربة","تربه"], /*HGRX*/
+ sch:["ابن سينا","الرازي","ابن البيطار","مؤلفات","علماء"], /*HGRX*/
+};
+const PAGEKW_T=[
+ ["gut","Colon and bloating"],
+ ["ker","Kerala medicine (Ayurveda)"],
+ ["skin","Skin in Tradition"],
+ ["uae","UAE & Gulf plants"],
+ ["women","Women's health"],
+ ["aid","First aid"],
+ ["safety","Safety checker"],
+ ["folk","Folk customs"],
+ ["nutri","Food & vitamins"],
+ ["mind","The mind in heritage"],
+ ["eye","The eye in heritage"],
+ ["organic","Organic farming"],
+ ["sch","Masters of medicine and herbs"],
+];
+const PAGEKW=PAGEKW_T.map(([v,t])=>[v,t,PAGEKW_K[v].map(x=>norm(x))]);
+function pageHits(q){
+  const nq=norm(q||"").trim(); if(nq.length<2) return [];
+  const toks=nq.split(/\s+/).map(t=>t.replace(/^(و|ب|ل|ف)?ال(?=..)/,"")); /*HGRX*/
+  return PAGEKW.filter(([v,t,ks])=>ks.some(k=>k.includes(" ")?nq.includes(k):toks.some(x=>x===k||(k.length>=4&&x.startsWith(k))))).slice(0,3);
+}
+function updRel(){
+  const el=$("#relp"); if(!el) return;
+  const q=state.view==="wizard"?(w.preQ||""):(["herbs","recipes"].includes(state.view)?state.q:"");
+  const hits=pageHits(q);
+  el.hidden=!hits.length; if(!hits.length){ el.innerHTML=""; return; }
+  el.innerHTML=`<span>Pages that may help you:</span> ${hits.map(([v,t])=>`<button type="button" class="chip" data-relgo="${v}">${t} ←</button>`).join(" ")}`;
+  el.querySelectorAll("[data-relgo]").forEach(b=>b.onclick=()=>{ const v=b.dataset.relgo; if(v==="gut") gst.v=null; if(v==="ker") kerst.v=null; if(v==="skin") kst.v=null; setView(v); scrollTo({top:0}); });
+}
 function render(){
-  renderAud();
+  renderAud(); updRel();
   if(["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","gut","ker","skin","uae","safety","gloss","faq","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,eye:renderEye,sch:renderSch,gut:renderGut,ker:renderKer,skin:renderSkin,uae:renderUae,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,faq:renderFaq,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
