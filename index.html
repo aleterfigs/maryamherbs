@@ -183,7 +183,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(2.2rem,6vw,3.2re
 .sbox{border-radius:6px;padding:14px 16px;border:1px solid var(--line);background:var(--sheet)}
 .sbox h3{margin:0 0 8px;font-size:1rem}
 .sbox.bad{border-color:var(--warn)}.sbox.bad h3{color:var(--warn)}
-.sbox.warn h3{color:var(--mid)}.sbox.ok{border-color:var(--leaf)}.upd{margin:0;color:var(--muted);font-size:.8rem}.rbtn.say.speaking{background:var(--leaf);color:var(--sheet)}.rbtn.rep{opacity:.85}.sbox.ok h3{color:var(--leaf)}.ixbox{background:var(--sheet);border:1px solid var(--leaf);border-radius:8px;padding:14px 16px;margin:8px 0 14px;display:flex;flex-direction:column;gap:10px}.ixpick input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}.ixpick .opts{margin-top:6px}.ixact{display:flex;justify-content:center}#ixres{display:flex;flex-direction:column;gap:10px}
+.sbox.warn h3{color:var(--mid)}.sbox.ok{border-color:var(--leaf)}.upd{margin:0;color:var(--muted);font-size:.8rem}.faqlist{display:flex;flex-direction:column;gap:8px}.faq summary{font-weight:600}.faq p{margin:8px 0}.rbtn.say.speaking{background:var(--leaf);color:var(--sheet)}.rbtn.rep{opacity:.85}.sbox.ok h3{color:var(--leaf)}.ixbox{background:var(--sheet);border:1px solid var(--leaf);border-radius:8px;padding:14px 16px;margin:8px 0 14px;display:flex;flex-direction:column;gap:10px}.ixpick input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}.ixpick .opts{margin-top:6px}.ixact{display:flex;justify-content:center}#ixres{display:flex;flex-direction:column;gap:10px}
 .sbox ul,.dlist{margin:0;padding-inline-start:20px;font-size:.9rem}
 .sbox li,.dlist li{margin-bottom:6px}.sbox li span{color:var(--muted)}
 .about{display:flex;flex-direction:column;gap:22px;max-width:760px}
@@ -524,6 +524,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
       <button class="tab" id="tabUae" aria-selected="false">نباتات الإمارات والخليج</button>
       <button class="tab" id="tabSafety" aria-selected="false">فاحص السلامة</button>
       <button class="tab" id="tabGloss" aria-selected="false">معجم الأسماء</button>
+      <button class="tab" id="tabFaq" aria-selected="false">أسئلة شائعة</button>
       <button class="tab" id="tabAbout" aria-selected="false">عن الدليل</button>
     </div>
   </nav>
@@ -559,6 +560,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
   <div class="page" id="uae" hidden></div>
   <div class="page" id="safety" hidden></div>
   <div class="page" id="gloss" hidden></div>
+  <div class="page" id="faq" hidden></div>
   <div class="page" id="about" hidden></div>
 
   <footer><span class="dedic-f">هذا الدليل صدقة جارية عن روح والدتي مريم رحمها الله. من انتفع به فليدعُ لها بالرحمة والمغفرة.</span><br>مستوى الدليل: <span class="ev s">قوي نسبيًا</span> تجارب سريرية متعددة متّسقة · <span class="ev m">متوسط</span> دراسات صغيرة أو متباينة · <span class="ev l">محدود</span> استخدام تقليدي ودراسات مخبرية غالبًا.</footer>
@@ -3738,18 +3740,18 @@ function renderRecipes(){
 function setView(v){
   ttsStop();
   state.view=v;
-  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabEye","eye"],["tabSch","sch"],["tabSkin","skin"],["tabUae","uae"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
+  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabEye","eye"],["tabSch","sch"],["tabSkin","skin"],["tabUae","uae"],["tabSafety","safety"],["tabGloss","gloss"],["tabFaq","faq"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
   $("#recipes").hidden=v!=="recipes"; $("#wizard").hidden=v!=="wizard";
-  ["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","skin","uae","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
-  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","eye","sch","skin","uae","aid","nutri","safety","gloss","about"].includes(v);
+  ["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","skin","uae","safety","gloss","faq","about"].forEach(p=>$("#"+p).hidden=v!==p);
+  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","eye","sch","skin","uae","aid","nutri","safety","gloss","faq","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
   if(GC_V[v]) gcEv(GC_X.sec+": "+GC_V[v]);
   render();
 }
 function render(){
   renderAud();
-  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","skin","uae","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,eye:renderEye,sch:renderSch,skin:renderSkin,uae:renderUae,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
+  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","skin","uae","safety","gloss","faq","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,eye:renderEye,sch:renderSch,skin:renderSkin,uae:renderUae,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,faq:renderFaq,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
@@ -4195,7 +4197,7 @@ function renderWRes(){
 /* إحصاءات مجهولة الهوية في GoatCounter: الجنس والعمر والمشكلة فقط (النصوص بترميز \u لتبقى عربية في كل اللغات) */
 const GC_AR={"p:digest":"\u0627\u0644\u0647\u0636\u0645 \u0648\u0627\u0644\u0627\u0646\u062a\u0641\u0627\u062e","p:sleep":"\u0627\u0644\u0646\u0648\u0645 \u0648\u0627\u0644\u062a\u0648\u062a\u0631","p:cold":"\u0627\u0644\u0633\u0639\u0627\u0644 \u0648\u0627\u0644\u0632\u0643\u0627\u0645","p:throat":"\u0627\u0644\u062a\u0647\u0627\u0628 \u0627\u0644\u062d\u0644\u0642","p:nausea":"\u0627\u0644\u063a\u062b\u064a\u0627\u0646 \u0648\u062f\u0648\u0627\u0631 \u0627\u0644\u0633\u0641\u0631","p:skin":"\u0627\u0644\u062c\u0644\u062f \u0648\u0627\u0644\u062d\u0631\u0648\u0642","p:mouth":"\u0631\u0627\u0626\u062d\u0629 \u0627\u0644\u0641\u0645 \u0648\u0627\u0644\u0644\u062b\u0629","p:fatigue":"\u0627\u0644\u062a\u0639\u0628 \u0648\u0627\u0644\u0646\u0642\u0627\u0647\u0629","p:diarrhea":"\u0627\u0644\u0625\u0633\u0647\u0627\u0644","p:allergy":"\u0627\u0644\u062d\u0633\u0627\u0633\u064a\u0629 \u0627\u0644\u0645\u0648\u0633\u0645\u064a\u0629","p:urinary":"\u0627\u0644\u0645\u0633\u0627\u0644\u0643 \u0627\u0644\u0628\u0648\u0644\u064a\u0629","p:chol":"\u0627\u0644\u0643\u0648\u0644\u064a\u0633\u062a\u0631\u0648\u0644","p:hemo":"\u0627\u0644\u0628\u0648\u0627\u0633\u064a\u0631","p:focus":"\u0627\u0644\u062a\u0631\u0643\u064a\u0632 \u0648\u0627\u0644\u0630\u0627\u0643\u0631\u0629","p:lactation":"\u0627\u0644\u0625\u0631\u0636\u0627\u0639","p:labor":"\u0627\u0644\u0623\u0633\u0627\u0628\u064a\u0639 \u0627\u0644\u0623\u062e\u064a\u0631\u0629 \u0645\u0646 \u0627\u0644\u062d\u0645\u0644","p:postpartum":"\u0627\u0644\u0646\u0641\u0627\u0633 \u0648\u0627\u0644\u062a\u0639\u0627\u0641\u064a \u0628\u0639\u062f \u0627\u0644\u0648\u0644\u0627\u062f\u0629","p:heart":"\u0635\u062d\u0629 \u0627\u0644\u0642\u0644\u0628","p:liver":"\u0627\u0644\u0643\u0628\u062f \u0627\u0644\u062f\u0647\u0646\u064a","p:gout":"\u0627\u0644\u0646\u0642\u0631\u0633","p:resp":"\u0627\u0644\u0631\u0628\u0648 \u0648\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062a\u0646\u0641\u0651\u0633","p:thyroid":"\u0627\u0644\u063a\u062f\u0629 \u0627\u0644\u062f\u0631\u0642\u064a\u0629","p:stones":"\u062d\u0635\u0649 \u0627\u0644\u0643\u0644\u0649 \u0648\u0627\u0644\u0648\u0642\u0627\u064a\u0629 \u0645\u0646\u0647\u0627","p:kidney":"\u0635\u062d\u0629 \u0627\u0644\u0643\u0644\u0649 \u0648\u0645\u0631\u0636\u0649 \u0627\u0644\u0643\u0644\u0649","p:immune":"\u062a\u0642\u0648\u064a\u0629 \u0627\u0644\u0645\u0646\u0627\u0639\u0629","p:antibiotic":"\u0628\u0639\u062f \u0627\u0644\u0645\u0636\u0627\u062f\u0627\u062a \u0627\u0644\u062d\u064a\u0648\u064a\u0629","p:chemo":"\u062f\u0639\u0645 \u0645\u0631\u064a\u0636 \u0627\u0644\u0633\u0631\u0637\u0627\u0646 \u0623\u062b\u0646\u0627\u0621 \u0627\u0644\u0639\u0644\u0627\u062c","p:wloss":"\u0625\u0646\u0642\u0627\u0635 \u0627\u0644\u0648\u0632\u0646","p:wgain":"\u0632\u064a\u0627\u062f\u0629 \u0627\u0644\u0648\u0632\u0646","p:libido":"\u0627\u0644\u0631\u063a\u0628\u0629 \u0648\u0627\u0644\u0636\u0639\u0641 \u0627\u0644\u062c\u0646\u0633\u064a","p:heavy":"\u063a\u0632\u0627\u0631\u0629 \u0627\u0644\u062f\u0648\u0631\u0629","p:irregular":"\u0639\u062f\u0645 \u0627\u0646\u062a\u0638\u0627\u0645 \u0627\u0644\u062f\u0648\u0631\u0629","p:pms":"\u0623\u0639\u0631\u0627\u0636 \u0645\u0627 \u0642\u0628\u0644 \u0627\u0644\u062f\u0648\u0631\u0629","p:constip":"\u0627\u0644\u0625\u0645\u0633\u0627\u0643","p:headache":"\u0627\u0644\u0635\u062f\u0627\u0639","p:pain":"\u0622\u0644\u0627\u0645 \u0627\u0644\u0645\u0641\u0627\u0635\u0644 \u0648\u0627\u0644\u0639\u0636\u0644\u0627\u062a","p:bp":"\u0636\u063a\u0637 \u0645\u0631\u062a\u0641\u0639 \u0642\u0644\u064a\u0644\u064b\u0627","p:sugar":"\u062f\u0639\u0645 \u0633\u0643\u0631 \u0627\u0644\u062f\u0645","p:hair":"\u0641\u0631\u0648\u0629 \u0627\u0644\u0631\u0623\u0633 \u0648\u0627\u0644\u0634\u0639\u0631","p:period":"\u0622\u0644\u0627\u0645 \u0627\u0644\u062f\u0648\u0631\u0629 \u0627\u0644\u0634\u0647\u0631\u064a\u0629","p:meno":"\u0627\u0644\u0647\u0628\u0651\u0627\u062a \u0627\u0644\u0633\u0627\u062e\u0646\u0629","p:prostate":"\u0627\u0644\u0628\u0631\u0648\u0633\u062a\u0627\u062a\u0627","g:f":"\u0623\u0646\u062b\u0649","g:m":"\u0630\u0643\u0631","b:0":"\u0623\u0642\u0644 \u0645\u0646 \u0633\u0646\u0629","b:1":"1\u20133 \u0633\u0646\u0648\u0627\u062a","b:4":"4\u20135 \u0633\u0646\u0648\u0627\u062a","b:6":"6\u201311 \u0633\u0646\u0629","b:12":"12\u201317 \u0633\u0646\u0629","b:18":"18\u201339 \u0633\u0646\u0629","b:40":"40\u201359 \u0633\u0646\u0629","b:60":"60 \u0633\u0646\u0629 \u0641\u0623\u0643\u062b\u0631","x:visitor":"\u0632\u0627\u0626\u0631","x:prob":"\u0645\u0631\u0636","x:detail":"\u062a\u0641\u0635\u064a\u0644","x:lang":"\u0644\u063a\u0629 \u0627\u0644\u0635\u0641\u062d\u0629"};
 /* أحداث مجهولة الهوية: الأقسام والأعشاب المفتوحة والمشاركة (مرة واحدة لكل زيارة) */
-const GC_V={"wizard": "\u0627\u0644\u0628\u062d\u062b \u0628\u0627\u0644\u0645\u0631\u0636", "herbs": "\u0627\u0644\u0623\u0639\u0634\u0627\u0628", "recipes": "\u0627\u0644\u0648\u0635\u0641\u0627\u062a", "mom": "\u0648\u0635\u0641\u0627\u062a \u0623\u0645\u064a", "women": "\u0635\u062d\u0629 \u0627\u0644\u0645\u0631\u0623\u0629", "kit": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u0628\u064a\u062a", "organic": "\u0627\u0644\u0632\u0631\u0627\u0639\u0629 \u0627\u0644\u0639\u0636\u0648\u064a\u0629", "aid": "\u0627\u0644\u0625\u0633\u0639\u0627\u0641\u0627\u062a", "nutri": "\u0627\u0644\u063a\u0630\u0627\u0621 \u0648\u0627\u0644\u0641\u064a\u062a\u0627\u0645\u064a\u0646\u0627\u062a", "folk": "\u0639\u0627\u062f\u0627\u062a \u0634\u0639\u0628\u064a\u0629", "mind": "\u0627\u0644\u0646\u0641\u0633 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "eye": "\u0627\u0644\u0639\u064a\u0646 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "safety": "\u0627\u0644\u0633\u0644\u0627\u0645\u0629", "gloss": "\u0627\u0644\u0645\u0635\u0637\u0644\u062d\u0627\u062a", "about": "\u0639\u0646 \u0627\u0644\u0645\u0648\u0642\u0639", "sch": "\u0623\u0639\u0644\u0627\u0645 \u0627\u0644\u0637\u0628 \u0648\u0627\u0644\u0623\u0639\u0634\u0627\u0628", "skin": "\u0627\u0644\u062c\u0644\u062f \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "uae": "\u0646\u0628\u0627\u062a\u0627\u062a \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062a \u0648\u0627\u0644\u062e\u0644\u064a\u062c"}, GC_X={"sec": "\u0642\u0633\u0645", "herb": "\u0639\u0634\u0628\u0629", "share": "\u0645\u0634\u0627\u0631\u0643\u0629", "site": "\u0627\u0644\u0645\u0648\u0642\u0639", "recipe": "\u0648\u0635\u0641\u0629", "copy": "\u0646\u0633\u062e"};
+const GC_V={"wizard": "\u0627\u0644\u0628\u062d\u062b \u0628\u0627\u0644\u0645\u0631\u0636", "herbs": "\u0627\u0644\u0623\u0639\u0634\u0627\u0628", "recipes": "\u0627\u0644\u0648\u0635\u0641\u0627\u062a", "mom": "\u0648\u0635\u0641\u0627\u062a \u0623\u0645\u064a", "women": "\u0635\u062d\u0629 \u0627\u0644\u0645\u0631\u0623\u0629", "kit": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u0628\u064a\u062a", "organic": "\u0627\u0644\u0632\u0631\u0627\u0639\u0629 \u0627\u0644\u0639\u0636\u0648\u064a\u0629", "aid": "\u0627\u0644\u0625\u0633\u0639\u0627\u0641\u0627\u062a", "nutri": "\u0627\u0644\u063a\u0630\u0627\u0621 \u0648\u0627\u0644\u0641\u064a\u062a\u0627\u0645\u064a\u0646\u0627\u062a", "folk": "\u0639\u0627\u062f\u0627\u062a \u0634\u0639\u0628\u064a\u0629", "mind": "\u0627\u0644\u0646\u0641\u0633 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "eye": "\u0627\u0644\u0639\u064a\u0646 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "safety": "\u0627\u0644\u0633\u0644\u0627\u0645\u0629", "gloss": "\u0627\u0644\u0645\u0635\u0637\u0644\u062d\u0627\u062a", "about": "\u0639\u0646 \u0627\u0644\u0645\u0648\u0642\u0639", "sch": "\u0623\u0639\u0644\u0627\u0645 \u0627\u0644\u0637\u0628 \u0648\u0627\u0644\u0623\u0639\u0634\u0627\u0628", "skin": "\u0627\u0644\u062c\u0644\u062f \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "uae": "\u0646\u0628\u0627\u062a\u0627\u062a \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062a \u0648\u0627\u0644\u062e\u0644\u064a\u062c", "faq": "\u0623\u0633\u0626\u0644\u0629 \u0634\u0627\u0626\u0639\u0629"}, GC_X={"sec": "\u0642\u0633\u0645", "herb": "\u0639\u0634\u0628\u0629", "share": "\u0645\u0634\u0627\u0631\u0643\u0629", "site": "\u0627\u0644\u0645\u0648\u0642\u0639", "recipe": "\u0648\u0635\u0641\u0629", "copy": "\u0646\u0633\u062e"};
 const gcSeen=new Set();
 function gcEv(path,title){ try{ const gc=window.goatcounter; if(!gc||typeof gc.count!=="function"||gcSeen.has(path)) return; gcSeen.add(path); gc.count({path:path.slice(0,250),title:(title||path).slice(0,250),event:true}); }catch(e){} }
 let wSentProf="";
@@ -4914,6 +4916,32 @@ const ECOMMON=[
  ["الحَوَل وكسل العين عند الأطفال","علاجه أنجح قبل سن السابعة، وقد يتحسن الأكبر سنًا لكن بدرجة أقل. فحص النظر قبل المدرسة ضروري."]
 ];
 const EEMERG=["فقدان مفاجئ للبصر، ولو في عين واحدة.","ألم شديد واحمرار في العين مع ضعف الرؤية.","حساسية شديدة للضوء مع احمرار العين.","رؤية مزدوجة مع تدلّي الجفن.","ومضات ضوء أو «ستارة» تغطي جزءًا من الرؤية.","إصابة في العين أو جسم غريب لا يخرج.","مادة كيميائية في العين: تُغسل بماء جارٍ 15 دقيقة أولًا، ثم إلى الطوارئ."];
+/* ---------- أسئلة شائعة ---------- */
+const FAQ=[
+ ["هل الأعشاب آمنة لأنها طبيعية؟","لا. بعض النباتات سامة ولو بكمية صغيرة، كالحنظل والدفلة، وكثير من الأعشاب تتداخل مع الأدوية أو تُمنع في الحمل. لذلك تجد مع كل عشبة محاذيرها وتداخلاتها، وفي «فاحص السلامة» قائمة بما يُتجنّب.","safety"],
+ ["هل أترك دوائي وأستعمل الأعشاب بدلًا منه؟","لا. لا توقف دواءك ولا تغيّر جرعته من نفسك. الأعشاب في «مريم» للعناية الخفيفة إلى جانب علاج الطبيب، وأخبر طبيبك والصيدلي بكل عشبة تأخذها.",null],
+ ["كيف أعرف إن كانت العشبة تتداخل مع دوائي؟","في «فاحص السلامة» اختر الأدوية التي وصفها لك طبيبك، وأضف الأعشاب التي تفكر فيها، فترى لكل عشبة: تجنّبها أو بحذر، مع السبب. وانسخ النتيجة واعرضها على الصيدلي.","safety"],
+ ["هل تُستعمل الأعشاب في الحمل والرضاعة؟","كثير منها يُمنع أو يحتاج حذرًا. في «فاحص السلامة» اختر «الحمل» أو «الرضاعة» لترى ما يُتجنّب وما يحتاج استشارة الطبيب.","safety"],
+ ["هل أعطي طفلي أو رضيعي أعشابًا؟","لا تُعطى أي مشروبات عشبية للرضّع دون 6 أشهر، ولا العسل دون السنة. وللأطفال الأكبر اختر «الأطفال» في صفحة الأعشاب لترى الألطف منها، واستشر طبيب الأطفال قبل أي عشبة.","herbs"],
+ ["كم مدة استعمال الخلطة؟","تحت كل خلطة قسم «كم ومتى؟» يذكر الكمية والمدة، وزر «كم أشتري؟» يحسب ما تحتاجه للمدة التي تختارها. وإذا استمرت الأعراض أكثر من أسبوع أو اشتدّت، راجع الطبيب.","recipes"],
+ ["ما معنى «قوة الدليل»؟","هي مقدار ما يدعم استعمال العشبة من أبحاث على البشر: «قوي نسبيًا» إذا كانت التجارب متعددة ومتّسقة، و«متوسط» إذا كانت صغيرة أو متباينة، و«محدود» إذا كان الاستعمال تقليديًا والدراسات مخبرية أو على الحيوانات غالبًا، و«غير آمن» إذا كانت مخاطرها تفوق فائدتها. التفاصيل في صفحة «عن الدليل».","about"],
+ ["هل كل أحاديث الطب النبوي في الموقع صحيحة؟","لا. نذكر بجانب كل حديث مصدره ودرجته، وننبّه على ما لا يصح منه. واختلف العلماء في فهم بعض الأحاديث الصحيحة، والتداوي بها لا يعني ترك الطبيب.","recipes"],
+ ["من أين أشتري الأعشاب؟","من صيدلية أو عطّار موثوق ومصدر مرخّص. وتجنّب الخلطات المجهولة المستوردة، فقد وُجد في بعضها رصاص أو زئبق، وتجنّب الكحل غير المرخّص لأن كثيرًا منه فيه رصاص.",null],
+ ["من أعدّ هذا المحتوى؟","«مريم» صدقة جارية عن روح الوالدة مريم رحمها الله. أُعدّ المحتوى بمساعدة الذكاء الصناعي، ثم رُوجع على مصادر علمية ورسمية تجدها تحت كل عشبة.","about"],
+ ["وجدت خطأ، ماذا أفعل؟","تحت كل عشبة وكل خلطة زر «أبلغ عن خطأ»، يفتح نموذج الملاحظات وفيه اسمها. نراجع الملاحظة ونصحّح.",null],
+ ["هل يعمل الموقع دون إنترنت؟","نعم، بعد تثبيته على شاشة جوالك. اضغط «ثبّت مريم على جوالك» في الصفحة الرئيسية واتبع الخطوات.","home"],
+ ["لماذا لا يقرأ زر «اقرأ لي»؟","الزر يستعمل صوت الجوال نفسه، فيحتاج الجوال صوتًا عربيًا مثبّتًا في إعدادات «تحويل النص إلى كلام». بعض الجوالات، ومنها جوالات هواوي الحديثة، ليس فيها صوت عربي إلا بتطبيق إضافي.",null]
+];
+function renderFaq(){
+  const el=$("#faq");
+  el.innerHTML=`<h2 class="page-h">أسئلة شائعة</h2>
+   <p class="sub">أكثر ما يسأل عنه الزوار، بإجابات مختصرة. ولم تجد سؤالك؟ أرسله لنا.</p>
+   <div class="faqlist">${FAQ.map(([q,a,go],i)=>`<details class="conv faq"${i===0?" open":""}><summary>${q}</summary><p>${a}</p>${go?`<button type="button" class="wlink" data-fgo="${go}">اذهب إلى الصفحة ←</button>`:""}</details>`).join("")}</div>
+   <div class="ixact" style="margin-top:12px"><button type="button" class="rbtn" id="faqAsk"><span>أرسل سؤالك على واتساب</span></button></div>
+   <p class="hint">نجيب عن الأسئلة بما في الدليل من معلومات مراجَعة، ولا نشخّص الأمراض ولا نصف الأدوية. للحالات الطارئة اتصل بالإسعاف.</p>`;
+  el.querySelectorAll("[data-fgo]").forEach(b=>b.onclick=()=>{ const v=b.dataset.fgo; if(v==="herbs"){ state.q=""; $("#q").value=""; } setView(v); scrollTo({top:0}); });
+  $("#faqAsk").onclick=()=>{ gcEv("faq-ask","faq-ask"); waSend("سؤال لدليل «مريم»: "); };
+}
 /* ---------- نباتات الإمارات والخليج ---------- */
 const ust={v:null};
 const UAEW="https://www.emiratesnaturewwf.ae/sites/default/files/doc-2021-03/Beginners-guide-to-wild-plants-of-the-UAE.pdf";
@@ -6086,7 +6114,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
-const NEWS={v:"2026-11-08l",date:"8 نوفمبر 2026",go:"herbs",items:[
+const NEWS={v:"2026-11-08m",date:"8 نوفمبر 2026",go:"faq",items:[
+ "<b>أسئلة شائعة:</b> صفحة جديدة تجيب باختصار عن أكثر ما يسأل عنه الزوار، كسلامة الأعشاب مع الأدوية والحمل والأطفال، ومدة استعمال الخلطات. ولم تجد سؤالك؟ أرسله لنا على واتساب.",
  "<b>اقرأ لي:</b> زر جديد في كل عشبة وكل خلطة يقرأ لك المعلومات بصوت عالٍ، لمن يصعب عليه القراءة أو يطبخ ويداه مشغولتان. اضغطه مرة ثانية للإيقاف.",
  "<b>نباتات الإمارات والخليج:</b> صفحة جديدة لاثني عشر نباتًا من بيئتنا، منها الغاف والسدر والسمر والشوع والأراك والقرم والمرخ، مع ما تقوله دائرة الصحة في أبوظبي عن سلامتها. وفي «فاحص السلامة» قسم للنباتات التي تتشابه أو تسمّم.",
  "<b>هل تتداخل الأعشاب مع أدويتي؟</b> في «فاحص السلامة» صار بإمكانك اختيار كل أدويتك معًا (17 نوعًا، منها الصرع والكورتيزون والمضادات الحيوية وأدوية السرطان)، وإضافة الأعشاب التي تفكر فيها، فترى لكل عشبة: تجنّبها، أو بحذر، مع السبب. وزر لنسخ النتيجة لعرضها على الصيدلي.",
@@ -6149,6 +6178,7 @@ $("#tabAid").onclick=()=>setView("aid");
 $("#tabNutri").onclick=()=>setView("nutri");
 $("#tabSafety").onclick=()=>setView("safety");
 $("#tabGloss").onclick=()=>setView("gloss");
+$("#tabFaq").onclick=()=>setView("faq");
 $("#tabAbout").onclick=()=>setView("about");
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!$("#panel").hidden) closePanel(); });
 $("#q").addEventListener("input",e=>{state.q=e.target.value; render()});
