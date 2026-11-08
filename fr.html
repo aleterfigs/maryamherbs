@@ -3629,19 +3629,38 @@ for(const [id,x] of Object.entries(GROW)){ const h=byId[id]; if(h&&x.g==="e"&&!h
 try{ state.favs = new Set(JSON.parse(localStorage.getItem("herb-favs")||"[]")); }catch(e){}
 const saveFavs = () => { try{ localStorage.setItem("herb-favs", JSON.stringify([...state.favs])); }catch(e){} };
 
-const norm = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[ً-ْ]/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي").toLowerCase();
-const synonyms = {"ارق":"sleep","نوم":"sleep","قلق":"sleep","توتر":"sleep","سعال":"cold","كحه":"cold","زكام":"cold","برد":"cold","انتفاخ":"digest","غازات":"digest","معده":"digest","هضم":"digest","قولون":"digest","غثيان":"nausea","دوار":"nausea","مفاصل":"pain","الم":"pain","صداع":"pain","حروق":"skin","جلد":"skin","سكر":"meta","كوليسترول":"meta","ضغط":"bp","دوره":"women","حلق":"mouth","لثه":"mouth","بروستاتا":"men","بروستات":"men","تبول":"urinary","ولاده":"postpartum","نفاس":"postpartum","نفساء":"postpartum","والوالده":"postpartum","ارضاع":"lactation","رضاعه":"lactation","حليب":"lactation","در":"lactation","تنحيف":"weight","رجيم":"weight","سمنه":"weight","وزن":"weight","نحافه":"weight","زياده":"weight","جنس":"libido","جنسيه":"libido","رغبه":"libido","انتصاب":"libido","كلي":"urinary","كلى":"urinary","حصي":"urinary","حصوه":"urinary","مثانه":"urinary","حرقان":"urinary","شعر":"hair","تساقط":"hair","قشره":"hair","امساك":"constip","اسهال":"diarrhea","بواسير":"hemo","حساسيه":"allergy","عطاس":"allergy","ذاكره":"focus","تركيز":"focus","تعب":"fatigue","ارهاق":"fatigue","نقاهه":"fatigue","خمول":"fatigue","صداع":"headache","شقيقه":"headache","حيض":"women","طمث":"women","عاده":"women","تقلصات":"women","حمل":"women","ياس":"women","اكتئاب":"sleep","عصبيه":"sleep","حموضه":"digest","حرقه":"digest","قرحه":"digest","مغص":"digest","التهاب":"pain","روماتيزم":"pain","ظهر":"pain","عضلات":"pain","اكزيما":"skin","حب":"skin","شباب":"skin","بشره":"skin","جروح":"skin","دمامل":"skin","فم":"mouth","اسنان":"mouth","ضرس":"mouth","سكري":"meta","دهون":"chol","قلب":"bp","insomnie":"sleep","sommeil":"sleep","anxiete":"sleep","stress":"sleep","toux":"cold","rhume":"cold","grippe":"cold","ballonnement":"digest","ballonnements":"digest","gaz":"digest","digestion":"digest","indigestion":"digest","brulures":"digest","nausee":"nausea","nausees":"nausea","vomissement":"nausea","vomissements":"nausea","articulation":"pain","articulations":"pain","arthrose":"pain","inflammation":"pain","brulure":"skin","peau":"skin","acne":"skin","eczema":"skin","plaie":"skin","plaies":"skin","sucre":"meta","glycemie":"meta","diabete":"meta","cholesterol":"chol","tension":"bp","hypertension":"bp","regles":"women","menstruations":"women","menopause":"women","grossesse":"women","gorge":"mouth","gencives":"mouth","dents":"mouth","dent":"mouth","prostate":"men","urine":"urinary","urinaire":"urinary","reins":"urinary","rein":"urinary","calculs":"urinary","accouchement":"postpartum","allaitement":"lactation","lait":"lactation","poids":"weight","maigrir":"weight","minceur":"weight","libido":"libido","desir":"libido","sexuel":"libido","erection":"libido","cheveux":"hair","pellicules":"hair","constipation":"constip","diarrhee":"diarrhea","hemorroides":"hemo","allergie":"allergy","memoire":"focus","concentration":"focus","fatigue":"fatigue","epuisement":"fatigue","migraine":"headache","tete":"headache"};
+const norm = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[ً-ْ]/g,"").replace(/[أإآ]/g,"ا").replace(/ة/g,"ه").replace(/ى/g,"ي").replace(/ؤ/g,"و").replace(/ئ/g,"ي").replace(/ـ/g,"").replace(/ک/g,"ك").replace(/ی/g,"ي").replace(/(.)\1{2,}/g,"$1").toLowerCase();
+const synonyms = {"ارق":"sleep","نوم":"sleep","قلق":"sleep","توتر":"sleep","سعال":"cold","كحه":"cold","زكام":"cold","برد":"cold","انتفاخ":"digest","غازات":"digest","معده":"digest","هضم":"digest","قولون":"digest","غثيان":"nausea","دوار":"nausea","مفاصل":"pain","الم":"pain","صداع":"pain","حروق":"skin","جلد":"skin","سكر":"meta","كوليسترول":"meta","ضغط":"bp","دوره":"women","حلق":"mouth","لثه":"mouth","بروستاتا":"men","بروستات":"men","تبول":"urinary","ولاده":"postpartum","نفاس":"postpartum","نفساء":"postpartum","والوالده":"postpartum","ارضاع":"lactation","رضاعه":"lactation","حليب":"lactation","در":"lactation","تنحيف":"weight","رجيم":"weight","سمنه":"weight","وزن":"weight","نحافه":"weight","زياده":"weight","جنس":"libido","جنسيه":"libido","رغبه":"libido","انتصاب":"libido","كلي":"urinary","كلى":"urinary","حصي":"urinary","حصوه":"urinary","مثانه":"urinary","حرقان":"urinary","شعر":"hair","تساقط":"hair","قشره":"hair","امساك":"constip","اسهال":"diarrhea","بواسير":"hemo","حساسيه":"allergy","عطاس":"allergy","ذاكره":"focus","تركيز":"focus","تعب":"fatigue","ارهاق":"fatigue","نقاهه":"fatigue","خمول":"fatigue","صداع":"headache","شقيقه":"headache","حيض":"women","طمث":"women","عاده":"women","تقلصات":"women","حمل":"women","ياس":"women","اكتئاب":"sleep","عصبيه":"sleep","حموضه":"digest","حرقه":"digest","قرحه":"digest","مغص":"digest","التهاب":"pain","روماتيزم":"pain","ظهر":"pain","عضلات":"pain","اكزيما":"skin","حب":"skin","شباب":"skin","بشره":"skin","جروح":"skin","دمامل":"skin","فم":"mouth","اسنان":"mouth","ضرس":"mouth","سكري":"meta","نفخه":"digest","نفخ":"digest","بطن":"digest","بطني":"digest","تلبك":"digest","تخمه":"digest","مصارين":"digest","استفراغ":"nausea","ترجيع":"nausea","قيء":"nausea","لوعه":"nausea","دوخه":"nausea","زكمه":"cold","رشح":"cold","سخونه":"cold","حراره":"cold","حمي":"cold","انفلونزا":"cold","بلغم":"cold","نزله":"cold","لوز":"mouth","لوزتين":"mouth","بحه":"mouth","قلاع":"mouth","تسنين":"mouth","جيوب":"allergy","عطس":"allergy","سهر":"sleep","انام":"sleep","ضيقه":"sleep","خوف":"sleep","حزن":"sleep","وسواس":"sleep","كابه":"sleep","نفسيه":"sleep","مزاج":"sleep","راس":"headache","وجع":"pain","ركبه":"pain","ركب":"pain","ركبتي":"pain","ركبتين":"pain","رقبه":"pain","نقرس":"pain","كتف":"pain","فقرات":"pain","ديسك":"pain","عظام":"pain","تشنج":"pain","شد":"pain","نسا":"pain","حبوب":"skin","بثور":"skin","هرش":"skin","حكه":"skin","تشقق":"skin","تشققات":"skin","كعب":"skin","كلف":"skin","نمش":"skin","بهاق":"skin","صدفيه":"skin","فطريات":"skin","طفح":"skin","حرق":"skin","جرح":"skin","ثاليل":"skin","دمل":"skin","صلع":"hair","شيب":"hair","قمل":"hair","كولسترول":"chol","كرش":"weight","تخسيس":"weight","ريجيم":"weight","دايت":"weight","تسمين":"weight","انيميا":"fatigue","فقر":"fatigue","ضعف":"fatigue","مناعه":"fatigue","هزال":"fatigue","نسيان":"focus","قبض":"constip","قبضه":"constip","تكيس":"women","مبايض":"women","بول":"urinary","مسالك":"urinary","جنسي":"libido","دهون":"chol","قلب":"bp","estomac":"digest","ventre":"digest","vomir":"nausea","vertige":"nausea","vertiges":"nausea","fievre":"cold","demangeaison":"skin","demangeaisons":"skin","eruption":"skin","boutons":"skin","champignons":"skin","mycose":"skin","anemie":"fatigue","genou":"pain","genoux":"pain","dos":"pain","cou":"pain","goutte":"pain","sinus":"allergy","sinusite":"allergy","amygdales":"mouth","triste":"sleep","depression":"sleep","calvitie":"hair","poux":"hair","coliques":"digest","insomnie":"sleep","sommeil":"sleep","anxiete":"sleep","stress":"sleep","toux":"cold","rhume":"cold","grippe":"cold","ballonnement":"digest","ballonnements":"digest","gaz":"digest","digestion":"digest","indigestion":"digest","brulures":"digest","nausee":"nausea","nausees":"nausea","vomissement":"nausea","vomissements":"nausea","articulation":"pain","articulations":"pain","arthrose":"pain","inflammation":"pain","brulure":"skin","peau":"skin","acne":"skin","eczema":"skin","plaie":"skin","plaies":"skin","sucre":"meta","glycemie":"meta","diabete":"meta","cholesterol":"chol","tension":"bp","hypertension":"bp","regles":"women","menstruations":"women","menopause":"women","grossesse":"women","gorge":"mouth","gencives":"mouth","dents":"mouth","dent":"mouth","prostate":"men","urine":"urinary","urinaire":"urinary","reins":"urinary","rein":"urinary","calculs":"urinary","accouchement":"postpartum","allaitement":"lactation","lait":"lactation","poids":"weight","maigrir":"weight","minceur":"weight","libido":"libido","desir":"libido","sexuel":"libido","erection":"libido","cheveux":"hair","pellicules":"hair","constipation":"constip","diarrhee":"diarrhea","hemorroides":"hemo","allergie":"allergy","memoire":"focus","concentration":"focus","fatigue":"fatigue","epuisement":"fatigue","migraine":"headache","tete":"headache"};
 const C2P={weight:["wloss","wgain"],women:["period","pms","irregular","meno","heavy","labor"],kidney:["kidney","stones"],urinary:["urinary","stones","kidney"],meta:["sugar"],bp:["bp","heart"],mouth:["mouth","throat"],men:["prostate"],fatigue:["fatigue","immune"],cold:["cold","resp","throat"],pain:["pain","gout"]};
 const STOP=new Set(["pour","le","la","les","de","des","du","et","avec","apres","remede","traitement","plante","plantes","melange","un","une","a","au","aux","en","mon","ma","mes","douleur","mal","contre"].concat(["بعد","قبل","علاج","دواء","وصفه","وصفات","خلطه","خلطات","عشبه","اعشاب","في","من","عند","على","الى","مع","او","و","ل","عن","ضد","حاله","مشكله","مشاكل","للنساء","للرجال","للاطفال","الام","ام"]));
 const qTokens=q=>q.split(/\s+/).map(t=>t.replace(/^(وال|بال|لل|فال|كال)/,"").replace(/^ال/,"")).filter(t=>t.length>=2&&!STOP.has(t));
+const SYNGEN=new Set(["وجع","الم","التهاب","ضعف","راس","بطن","بطني"]); /*HGRX*/
+const synOf=t=>synonyms[t]?t:[t.replace(/^(وال|بال|لل|فال|كال)/,""),t.replace(/^(ال|و|ب|ل)/,"")].find(x=>synonyms[x])||null; /*HGRX*/
+const SCQ={}, PHR={"دهون البطن":"weight","شد البطن":"weight","فقر الدم":"fatigue","عرق النسا":"pain","قشره الراس":"hair","حب الشباب":"skin","سن الياس":"women","حرقه البول":"urinary","حرقان المعده":"digest","ريحه الفم":"mouth","دوار السفر":"nausea","الم الدوره":"women","ضعف جنسي":"libido","ضعف الانتصاب":"libido","وجع راس":"headache","وجع الراس":"headache","الم راس":"headache","الم الراس":"headache","وجع بطن":"digest","وجع البطن":"digest","الم بطن":"digest","الم البطن":"digest"}; /*HGRX*/
+const kidQ=q=>/(^|\s)(ال|لل)?(رضيع|رضع|طفل|طفلي|طفله|اطفال|بيبي|مولود|مواليد|صغار|bebe|bebes|nourrisson|nourrissons|enfant|enfants)(\s|$)/.test(norm(q)); /*HGRX*/
+function synCats(q){ if(SCQ[q]) return SCQ[q]; const ph=Object.keys(PHR).filter(k=>q.includes(k)); if(ph.length) return SCQ[q]=[...new Set(ph.map(k=>PHR[k]))]; const ks=q.split(/\s+/).map(synOf).filter(Boolean), sp=ks.filter(k=>!SYNGEN.has(k)); return SCQ[q]=[...new Set((sp.length?sp:ks).map(k=>synonyms[k]))]; }
 function qMatch(q,hay,cats){
-  const tok=t=>t.length<=3?hay.split(/[\s،,.:()«»]+/).some(x=>x===t||x==="ال"+t||x==="و"+t||x==="بال"+t||x==="لل"+t):hay.includes(t);
+  const tok=t=>t.length<=3?hay.split(/[\s،,.:()«»]+/).some(x=>x===t||x==="ال"+t||x==="و"+t||x==="بال"+t||x==="لل"+t):hay.includes(t); /*HGRX*/
   if(tok(q)) return true;
-  if(Object.entries(synonyms).some(([w,c])=>synHit(q,w)&&cats(c))) return true;
+  if(synCats(q).some(cats)) return true;
   const ts=qTokens(q); if(!ts.length) return false;
-  if(ts.length>1&&ts.every(tok)) return true;
-  return ts.some(t=>Object.entries(synonyms).some(([w,c])=>(t===w||t===w.replace(/^ال/,""))&&cats(c)));
+  return ts.length>1&&ts.every(tok);
 }
+/* Correction orthographique en l’absence de résultats */
+let VOCW=null;
+const VOC=()=>VOCW||(VOCW=[...new Set([...HERBS.flatMap(h=>[h.ar,...((ALIAS[h.id]||{}).alt||[])]),...Object.keys(synonyms),...PROBS.map(p=>p[1])].flatMap(x=>norm(String(x)).split(/[\s()،,«»\/.:-]+/)).map(t=>t.replace(/^ال/,"")).filter(t=>t.length>=3))]); /*HGRX*/
+const loose=x=>x.replace(/ظ/g,"ض").replace(/ذ/g,"ز").replace(/ث/g,"س").replace(/[ءؤئ]/g,""); /*HGRX*/
+function osa(a,b){ const d=[]; for(let i=0;i<=a.length;i++){ d[i]=[i]; for(let j=1;j<=b.length;j++) d[i][j]=i?Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1),(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1])?d[i-2][j-2]+1:99):j; } return d[a.length][b.length]; }
+function fixQuery(q){
+  const ts=norm(q).trim().split(/\s+/).filter(Boolean); let ch=false;
+  const out=ts.map(t=>{ const b=t.replace(/^ال/,""); if(b.length<3||STOP.has(b)||synonyms[b]||VOC().includes(b)) return t; /*HGRX*/
+    const lim=b.length>=6?2:1, lb=loose(b); let best=null,bd=lim+1;
+    for(const v of VOC()){ if(Math.abs(v.length-b.length)>lim) continue; const dd=osa(lb,loose(v)); if(dd<bd||(dd===bd&&best&&v[0]===b[0]&&best[0]!==b[0])){ bd=dd; best=v; } }
+    if(best){ ch=true; return best; } return t; });
+  return ch?out.join(" "):null;
+}
+const KIDNOTE=`<p class="sub fixq" style="grid-column:1/-1;margin:0">Votre recherche concerne un enfant : nous n’affichons que ce qui convient aux enfants.</p>`;
+const fixNote=(a,b)=>`<p class="sub fixq" style="grid-column:1/-1;margin:0">Aucun résultat pour «${esc(a)}» ; voici les résultats pour «${esc(b)}».</p>`;
 
 function renderChips(){
   const el=$("#chips"); el.innerHTML="";
@@ -3690,14 +3709,18 @@ function renderRecipes(){
     n.innerHTML="La médecine a fleuri en al-Andalus entre le Xe et le XVe siècle : al-Zahrawi (Abulcasis) à Cordoue, auteur d'«al-Tasrif» ; Ibn Zuhr (Avenzoar) à Séville, auteur d'«al-Taysir» et du «Kitab al-Aghdhiya» (Le Livre des aliments) ; Ibn al-Baytar de Málaga, auteur du «Traité des simples», qui réunit plus de 1 400 remèdes simples ; Ibn Rushd (Averroès), auteur d'«al-Kulliyyat» ; et Maïmonide de Cordoue, auteur du «Traité de l'asthme». Les recettes présentées ici s'inspirent des boissons et des aliments cités dans leurs livres et dans les livres de cuisine andalous comme «Fudalat al-Khiwan» d'Ibn Razin al-Tujibi, avec des quantités adaptées à la cuisine moderne."; el.append(n); }
   if(state.origin==="india"){ const n=document.createElement("div"); n.className="refq"; n.style.gridColumn="1/-1";
     n.innerHTML="L'ayurvéda est une médecine traditionnelle indienne vieille de milliers d'années. Attention : des études ont trouvé que certains produits ayurvédiques importés, surtout les mélanges minéraux et les poudres, contiennent du plomb, du mercure ou de l'arsenic ; achetez en pharmacie ou auprès d'une source agréée."; el.append(n); }
-  const rText=r=>norm([r.name,r.for,...r.ing.map(i=>(i[0]?byId[i[0]].ar:"")+" "+i[1])].join(" "));
-  let list=RECIPES.filter(r=>state.origin==="all"||r.o===state.origin).filter(r=>state.aud==="all"||r.a.includes(state.aud)).filter(r=>!q||qMatch(q,rText(r),c=>(r.p||[]).some(k=>k===c||(C2P[c]||[]).includes(k))));
-  if(q&&!list.length) list=RECIPES.filter(r=>state.origin==="all"||r.o===state.origin).filter(r=>state.aud==="all"||r.a.includes(state.aud)).filter(r=>qMatch(q,rText(r),c=>r.ing.some(i=>i[0]&&byId[i[0]].c.includes(c))));
+  const rText=r=>norm([r.name,r.for,...r.ing.map(i=>(i[0]?byId[i[0]].ar+" "+((ALIAS[i[0]]||{}).alt||[]).join(" "):"")+" "+i[1])].join(" "));
+  const kq=state.aud==="all"&&!!q&&kidQ(state.q), ra=kq?"kids":state.aud;
+  const rfil=q=>{ let l=RECIPES.filter(r=>state.origin==="all"||r.o===state.origin).filter(r=>ra==="all"||r.a.includes(ra)).filter(r=>!q||qMatch(q,rText(r),c=>(r.p||[]).some(k=>k===c||(C2P[c]||[]).includes(k))));
+  if(q&&!l.length) l=RECIPES.filter(r=>state.origin==="all"||r.o===state.origin).filter(r=>ra==="all"||r.a.includes(ra)).filter(r=>qMatch(q,rText(r),c=>r.ing.some(i=>i[0]&&byId[i[0]].c.includes(c)))); return l; };
+  let list=rfil(q), fixQ=null; if(q&&!list.length){ const fq=fixQuery(state.q); if(fq){ const l2=rfil(norm(fq)); if(l2.length){ list=l2; fixQ=fq; } } }
   if(state.rsort!=="orig") list=list.map((r,i)=>[r,i]).sort((a,b)=>(state.origin==="nabawi"?((relOf(b[0]).hg??-1)-(relOf(a[0]).hg??-1)):0)||relOf(b[0]).score-relOf(a[0]).score||a[1]-b[1]).map(x=>x[0]);
   const so=document.createElement("label"); so.className="rsort"; so.innerHTML=`Trier les mélanges : <select><option value="rel">Les plus fiables d'abord</option><option value="orig">Par tradition</option></select>`;
   const sel=so.querySelector("select"); sel.value=state.rsort==="orig"?"orig":"rel"; sel.onchange=()=>{state.rsort=sel.value; render();}; el.append(so);
   $("#count").textContent=`${list.length.toLocaleString("fr-FR")} sur ${RECIPES.length.toLocaleString("fr-FR")} mélanges`;
   if(!list.length){ el.insertAdjacentHTML("beforeend",`<div class="empty">Aucun mélange correspondant.</div>`); return; }
+  if(fixQ) el.insertAdjacentHTML("beforeend",fixNote(state.q.trim(),fixQ));
+  if(kq){ el.insertAdjacentHTML("beforeend",KIDNOTE); $("#kidsNotice").hidden=false; }
   const intro=document.createElement("p"); intro.className="sub"; intro.style.gridColumn="1/-1"; intro.style.margin="0";
   intro.textContent="Ce sont des mélanges maison courants. Les preuves scientifiques portent généralement sur chaque plante séparément ; le mélange lui-même n'a pas été testé en tant que combinaison. Touchez le nom d'une plante pour voir ses précautions.";
   el.append(intro);
@@ -3730,12 +3753,17 @@ function render(){
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
   const qq=norm(state.q.trim()), score=h=>{ if(!qq) return 0; const nm=norm(h.ar); if(nm.includes(qq)) return 0; const al=ALIAS[h.id]; if(al&&[al.en,...al.alt].some(a=>norm(a).includes(qq))) return 1; if(norm(h.lat).includes(qq)) return 1; return 2; };
+  const kq=state.aud==="all"&&!!qq&&kidQ(state.q); if(kq) state.aud="kids";
   let audFall=false, base=HERBS.filter(matches);
   if(!base.length && qq && (state.aud!=="all"||state.cond||state.favOnly)){ const sa=state.aud, sc=state.cond, sf=state.favOnly; state.aud="all"; state.cond=null; state.favOnly=false; base=HERBS.filter(matches); state.aud=sa; state.cond=sc; state.favOnly=sf; audFall=base.length>0; }
+  let fixQ=null; if(!base.length&&qq){ const fq=fixQuery(state.q); if(fq){ const sq=state.q; state.q=fq; base=HERBS.filter(matches); state.q=sq; if(base.length) fixQ=fq; } }
+  if(kq){ state.aud="all"; $("#kidsNotice").hidden=false; }
   const list=base.map((h,i)=>[h,i]).sort((a,b)=>score(a[0])-score(b[0])||a[1]-b[1]).map(x=>x[0]), g=$("#grid"); g.innerHTML="";
   $("#count").textContent = `${list.length.toLocaleString("fr-FR")} sur ${HERBS.length.toLocaleString("fr-FR")} plantes`;
   if(!list.length){ g.innerHTML=`<div class="empty">Aucun résultat. Essayez un autre mot ou choisissez «Tout».</div>`; return; }
   if(state.cond==="grow"&&!qq) g.insertAdjacentHTML("beforeend",GROW_TIPS);
+  if(fixQ) g.insertAdjacentHTML("beforeend",fixNote(state.q.trim(),fixQ));
+  if(kq) g.insertAdjacentHTML("beforeend",KIDNOTE);
   if(audFall) g.insertAdjacentHTML("beforeend",`<p class="sub" style="grid-column:1/-1;margin:0">Aucun résultat dans la section ou la catégorie choisie ; voici donc les résultats de recherche parmi toutes les plantes.</p>`);
   for(const h of list){
     const b=document.createElement("button"); b.className="card"; b.type="button";
@@ -3983,8 +4011,9 @@ function probsFromQuery(q){
   const ts=qTokens(norm(q)); if(!ts.length) return [];
   const keys=new Set(PROBS.map(p=>p[0])), out=[];
   const add=k=>{ if(keys.has(k)&&!out.includes(k)) out.push(k); };
+  if(Object.keys(PHR).some(k=>norm(q).includes(k))){ for(const c of synCats(norm(q))){ if(C2P[c]) C2P[c].forEach(add); else add(c); } return out; }
   for(const [k,t] of PROBS){ const lt=qTokens(norm(t)).filter(x=>x.length>=3); if(ts.some(x=>x.length>=3&&lt.some(y=>y===x||y.startsWith(x)||x.startsWith(y)))) add(k); }
-  if(!out.length) for(const t of ts){ const c=synonyms[t]; if(!c) continue; if(C2P[c]) C2P[c].forEach(add); else add(c); }
+  if(!out.length) for(const c of synCats(norm(q))){ if(C2P[c]) C2P[c].forEach(add); else add(c); }
   return out;
 }
 /* Si tous les problèmes recherchés concernent seulement les femmes ou les hommes, le sexe est fixé automatiquement */
@@ -5862,7 +5891,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-08g",date:"8 novembre 2026",go:"skin",items:[
+const NEWS={v:"2026-11-08h",date:"8 novembre 2026",go:"herbs",items:[
+ "<b>Recherche plus intelligente :</b> la recherche comprend désormais les mots courants comme « ventre », « mal de dos » ou « démangeaisons », corrige les fautes de frappe comme « gimgembre », et si vous mentionnez un bébé ou un enfant, elle n’affiche que ce qui convient aux enfants.",
  "<b>Nouvelle page : La peau dans la tradition.</b> L’histoire des maladies de peau, du papyrus Ebers au livre d’al-Razi sur la variole et la rougeole, 15 pratiques populaires classées entre ce qui aide et ce qui nuit, les affections de peau courantes dans la chaleur du Golfe, et les signes qui exigent un médecin sans attendre.",
  "<b>Copier et partager la liste d'achats :</b> dans «Combien acheter ?», deux boutons permettent de copier ou partager la liste, et copier ou partager une recette inclut désormais les quantités pour la durée choisie.",
  "<b>Combien acheter ?</b> sous chaque recette, un bouton calcule la quantité de chaque plante à acheter selon la durée choisie : 3 jours, une semaine, 2 semaines ou un mois.",
