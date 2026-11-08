@@ -5868,6 +5868,31 @@ function ixSection(){
    <div class="ixpick"><input id="ixq" type="search" autocomplete="off" placeholder="Ajouter une plante… ex. : gingembre, fenugrec, curcuma" aria-label="Ajouter une plante"><div class="opts" id="ixsug"></div><div class="opts" id="ixsel"></div></div>
    <div class="sres" id="ixres"></div></section>`;
 }
+/* ---------- Plantes sosies et toxiques ---------- */
+const CPH=l=>`https://commons.wikimedia.org/w/index.php?search=${encodeURIComponent(l)}&title=Special:MediaSearch&type=image`;
+const LOOK=[
+ ["La grande ciguë et la famille du persil",[["parsley","Petroselinum crispum"],["anise","Pimpinella anisum"],["fennel","Foeniculum vulgare"]],["La grande ciguë","Conium maculatum"],"La grande ciguë est une plante sauvage toxique de la même famille que le persil, la carotte, le fenouil et l’anis, et leur ressemble par ses feuilles finement découpées et ses ombelles de fleurs blanches. Sa tige est lisse, sans poils, tachée de rouge ou de pourpre, et elle peut atteindre deux mètres. Des intoxications sont survenues chez des personnes qui l’avaient prise pour du persil sauvage. Ne cueillez pas les plantes de cette famille dans la nature, achetez vos herbes chez une source connue, et portez des gants si vous la touchez."],
+ ["La badiane : chinoise et japonaise",[[null,"Illicium verum","Badiane chinoise"]],["Badiane japonaise","Illicium anisatum"],"La badiane chinoise est une épice sûre, mais la japonaise est toxique et purement décorative, et on ne peut pas les distinguer à l’œil une fois séchées. En 2003, l’Agence américaine des produits alimentaires et médicamenteux a mis en garde contre le thé de badiane après une quarantaine d’intoxications, dont 15 nourrissons, avec convulsions et vomissements. Ne donnez jamais de thé de badiane à un bébé contre les coliques. Elle est différente de l’anis vert, les petites graines présentes dans ce guide."],
+ ["Truffes du désert et champignons sauvages",[["truffle","Terfezia"]],["Amanites","Amanita"],"Les truffes du désert (fagaa) poussent sous terre et se déterrent. Les champignons blancs qui apparaissent en surface après la pluie peuvent être des amanites, pour la plupart toxiques, et l’Autorité publique de l’environnement du Koweït a mis en garde contre eux. Ne mangez pas un champignon sauvage poussé en surface."]
+];
+const TOXW=[
+ ["oleander","Laurier-rose (difla)","Nerium oleander","Plante ornementale courante dans les rues et les jardins. Toutes ses parties sont toxiques, surtout les feuilles, et elle agit sur le rythme cardiaque. En cas d’ingestion : urgences immédiatement."],
+ ["colocynth","Coloquinte (handhal)","Citrullus colocynthis","Pousse dans le désert. Le Département de la santé d’Abou Dhabi indique que toutes ses parties sont dangereuses et peuvent tuer même en petite quantité."],
+ [null,"Le datura (pomme épineuse)","Datura stramonium","Pousse à l’état sauvage dans de nombreuses régions d’Arabie saoudite. Manger ses graines provoque agitation, hallucinations et dilatation des pupilles, et les enfants y sont plus sensibles."],
+ ["harmal","Harmal (rue de Syrie)","Peganum harmala","Brûlé comme encens, mais ses graines sont toxiques pour les nerfs et le cœur : hallucinations, tremblements, vomissements, chute de tension, et risque de fausse couche."]
+];
+function lookSection(){
+  const hn=id=>byId[id]?`<button type="button" class="herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`:"";
+  const ph=(l,t)=>`<a class="photos" style="font-size:.8rem" href="${CPH(l)}" target="_blank" rel="noopener">${t} ↗</a>`;
+  return `<h3 class="oh4">Plantes sosies et toxiques</h3>
+   <p class="hint" style="margin:0 0 8px">Comparez vous-même : chaque plante a un lien vers de vraies photos de la bibliothèque libre Wikimedia.</p>
+   <div class="aggrid">${LOOK.map(([t,safe,[tn,tl],txt])=>`<article class="agcard"><h5>${t}</h5>
+     <p class="agmeta">${safe.map(([id,l,nm])=>`${id?hn(id):nm} ${ph(l,"Photos")}`).join(" · ")}</p>
+     <p class="agmeta" style="color:var(--warn)">⚠ ${tn} ${ph(tl,"Photos")}</p><p>${txt}</p></article>`).join("")}</div>
+   <h4 class="oh4" style="font-size:1rem">Plantes sauvages toxiques autour de nous</h4>
+   <div class="aggrid">${TOXW.map(([id,n,l,txt])=>`<article class="agcard"><h5>${id?hn(id):n}</h5><p class="agmeta"><i>${l}</i> ${ph(l,"Photos")}</p><p>${txt}</p></article>`).join("")}</div>
+   <p class="hint">Si quelqu’un avale une plante inconnue : n’attendez pas les symptômes. Appelez une ambulance ou allez aux urgences, en emportant un morceau de la plante ou sa photo.</p>`;
+}
 function renderSafety(){
   const el=$("#safety");
   const groups=[["Situation particulière",[["preg","Grossesse"],["lact","Allaitement"]]],["Maladies chroniques",WCONDS.map(([k,t])=>["c:"+k,t])],["Allergie",WALG.map(([k,t])=>["a:"+k,t])]];
@@ -5884,6 +5909,7 @@ function renderSafety(){
       <div class="sbox warn"><h3>Avec prudence et avis médical (${c.length.toLocaleString("fr-FR")})</h3>${c.length?`<ul>${li(c)}</ul>`:"<p>Aucune.</p>"}</div></div>
       <p class="hint" style="margin:0">Qu'une plante n'apparaisse pas ici ne veut pas dire qu'elle est totalement sûre pour vous ; dites toujours à votre médecin ou pharmacien ce que vous prenez.</p>`;
   } else h+=`<div class="empty-res">Choisissez ci-dessus pour voir les résultats.</div>`;
+  h+=lookSection();
   const dangerous=HERBS.filter(x=>x.ev==="x");
   h+=`<details class="conv" open><summary>Plantes dangereuses que nous ne recommandons à personne (${dangerous.length.toLocaleString("fr-FR")})</summary><ul class="dlist">${dangerous.map(x=>`<li><button class="herb-link" data-h="${x.id}">${x.ar}</button> — ${x.warn[0]}</li>`).join("")}</ul></details>
    <details class="conv"><summary>Plantes adaptées aux enfants (${Object.keys(KIDS).filter(id=>byId[id]).length.toLocaleString("fr-FR")})</summary>

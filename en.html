@@ -5868,6 +5868,31 @@ function ixSection(){
    <div class="ixpick"><input id="ixq" type="search" autocomplete="off" placeholder="Add a herb… e.g. ginger, fenugreek, turmeric" aria-label="Add a herb"><div class="opts" id="ixsug"></div><div class="opts" id="ixsel"></div></div>
    <div class="sres" id="ixres"></div></section>`;
 }
+/* ---------- Look-alike and poisonous plants ---------- */
+const CPH=l=>`https://commons.wikimedia.org/w/index.php?search=${encodeURIComponent(l)}&title=Special:MediaSearch&type=image`;
+const LOOK=[
+ ["Poison hemlock and the parsley family",[["parsley","Petroselinum crispum"],["anise","Pimpinella anisum"],["fennel","Foeniculum vulgare"]],["Poison hemlock","Conium maculatum"],"Poison hemlock is a wild, poisonous plant of the same family as parsley, carrot, fennel and anise, and looks like them with its finely divided leaves and umbrella-shaped clusters of white flowers. Its stem is smooth and hairless, with red or purple spots, and it can grow to two metres. Poisonings have occurred in people who mistook it for wild parsley. Don't pick plants of this family from the wild, buy your herbs from a known source, and wear gloves if you touch it."],
+ ["Star anise: Chinese and Japanese",[[null,"Illicium verum","Chinese star anise"]],["Japanese star anise","Illicium anisatum"],"The Chinese kind is a safe spice, but the Japanese kind is toxic and used only for decoration, and the two cannot be told apart by eye once dried. In 2003 the US Food and Drug Administration warned against star anise tea after about 40 poisonings, 15 of them infants, with seizures and vomiting. Never give star anise tea to a baby for colic. It is different from ordinary anise, the small seeds in this guide."],
+ ["Desert truffles and wild mushrooms",[["truffle","Terfezia"]],["Amanita mushrooms","Amanita"],"Desert truffles (fagaa) grow underground and are dug up. White mushrooms that appear above ground after rain may be Amanita, most of which are poisonous, and Kuwait's Environment Public Authority has warned against them. Don't eat a wild mushroom that grew above ground."]
+];
+const TOXW=[
+ ["oleander","Oleander (difla)","Nerium oleander","A common ornamental in streets and gardens. All parts are poisonous, especially the leaves, and it affects the heartbeat. If any part is swallowed: emergency department immediately."],
+ ["colocynth","Colocynth (handhal)","Citrullus colocynthis","Grows in the desert. The Abu Dhabi Department of Health says all its parts are unsafe and can kill even in small amounts."],
+ [null,"Thorn apple (Datura)","Datura stramonium","Grows wild in many parts of Saudi Arabia. Eating its seeds causes agitation, hallucinations and dilated pupils, and children are more affected."],
+ ["harmal","Harmal (Syrian rue)","Peganum harmala","Burned as incense, but its seeds are toxic to the nerves and heart: they cause hallucinations, tremor, vomiting and low blood pressure, and can cause miscarriage."]
+];
+function lookSection(){
+  const hn=id=>byId[id]?`<button type="button" class="herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`:"";
+  const ph=(l,t)=>`<a class="photos" style="font-size:.8rem" href="${CPH(l)}" target="_blank" rel="noopener">${t} ↗</a>`;
+  return `<h3 class="oh4">Look-alike and poisonous plants</h3>
+   <p class="hint" style="margin:0 0 8px">Compare for yourself: each plant has a link to real photos from the free Wikimedia library.</p>
+   <div class="aggrid">${LOOK.map(([t,safe,[tn,tl],txt])=>`<article class="agcard"><h5>${t}</h5>
+     <p class="agmeta">${safe.map(([id,l,nm])=>`${id?hn(id):nm} ${ph(l,"Photos")}`).join(" · ")}</p>
+     <p class="agmeta" style="color:var(--warn)">⚠ ${tn} ${ph(tl,"Photos")}</p><p>${txt}</p></article>`).join("")}</div>
+   <h4 class="oh4" style="font-size:1rem">Wild poisonous plants around us</h4>
+   <div class="aggrid">${TOXW.map(([id,n,l,txt])=>`<article class="agcard"><h5>${id?hn(id):n}</h5><p class="agmeta"><i>${l}</i> ${ph(l,"Photos")}</p><p>${txt}</p></article>`).join("")}</div>
+   <p class="hint">If someone swallows an unknown plant: don't wait for symptoms. Call an ambulance or go to the emergency department, and take a piece of the plant or a photo of it with you.</p>`;
+}
 function renderSafety(){
   const el=$("#safety");
   const groups=[["Special situation",[["preg","Pregnancy"],["lact","Breastfeeding"]]],["Chronic conditions",WCONDS.map(([k,t])=>["c:"+k,t])],["Allergy",WALG.map(([k,t])=>["a:"+k,t])]];
@@ -5884,6 +5909,7 @@ function renderSafety(){
       <div class="sbox warn"><h3>With caution and a doctor's advice (${c.length.toLocaleString("en-GB")})</h3>${c.length?`<ul>${li(c)}</ul>`:"<p>None.</p>"}</div></div>
       <p class="hint" style="margin:0">A herb not appearing here does not mean it is completely safe for you; always tell your doctor or pharmacist what you take.</p>`;
   } else h+=`<div class="empty-res">Choose from above to see the results.</div>`;
+  h+=lookSection();
   const dangerous=HERBS.filter(x=>x.ev==="x");
   h+=`<details class="conv" open><summary>Dangerous herbs we recommend for no one (${dangerous.length.toLocaleString("en-GB")})</summary><ul class="dlist">${dangerous.map(x=>`<li><button class="herb-link" data-h="${x.id}">${x.ar}</button> — ${x.warn[0]}</li>`).join("")}</ul></details>
    <details class="conv"><summary>Herbs suitable for children (${Object.keys(KIDS).filter(id=>byId[id]).length.toLocaleString("en-GB")})</summary>
