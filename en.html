@@ -3804,9 +3804,25 @@ const PAGEKW_T=[
  ["organic","Organic farming"],
  ["sch","Masters of medicine and herbs"],
 ];
-const PAGEKW=PAGEKW_T.map(([v,t])=>[v,t,PAGEKW_K[v].map(x=>norm(x))]);
+const latn=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").normalize("NFC");
+const PAGEKW_X={
+ gut:["colon","ibs","irritable bowel","bloat","bloating","gas","flatulence","constipation","digestion","indigestion","stomach","belly","cramp","fodmap","coeliac","celiac","lactose","côlon","ballonnement","ballonnements","constipation","digestion","ventre","intestin","lactose","maladie coeliaque"],
+ ker:["kerala","ayurveda","ayurvedic","kanji","panchakarma","coconut","bhasma","ayurvédique","coco"],
+ skin:["skin","eczema","acne","melasma","vitiligo","psoriasis","burn","burns","mole","rash","fungal","wart","peau","eczéma","mélasma","brûlure","grain de beauté","éruption","verrue","mycose"],
+ uae:["uae","emirates","gulf","desert","ghaf","sidr","arak","émirats","golfe","désert"],
+ women:["pregnant","pregnancy","period","menstrual","breastfeeding","postpartum","pcos","menopause","enceinte","grossesse","règles","allaitement","ménopause","sopk"],
+ aid:["first aid","sting","scorpion","snake","snakebite","choking","poisoning","heatstroke","fracture","bleeding","premiers secours","piqûre","serpent","morsure","étouffement","intoxication","coup de chaleur","saignement"],
+ safety:["medicine","medication","drug","interaction","safety","médicament","sécurité"],
+ folk:["kohl","cautery","incense","bonesetter","custom","traditions","khôl","encens","coutume"],
+ nutri:["vitamin","vitamins","deficiency","iron","anemia","anaemia","calcium","nutrition","vitamine","carence","fer","anémie"],
+ mind:["insomnia","depression","anxiety","stress","grief","sadness","insomnie","dépression","anxiété","tristesse"],
+ eye:["eye","eyes","vision","conjunctivitis","œil","yeux","conjonctivite"],
+ organic:["farming","organic","compost","fertilizer","pests","soil","agriculture","bio","engrais","ravageurs","sol"],
+ sch:["avicenna","ibn sina","razi","rhazes","scholars","avicenne"]
+};
+const PAGEKW=PAGEKW_T.map(([v,t])=>[v,t,[...PAGEKW_K[v],...(PAGEKW_X[v]||[])].map(x=>latn(norm(x)))]);
 function pageHits(q){
-  const nq=norm(q||"").trim(); if(nq.length<2) return [];
+  const nq=latn(norm(q||"")).trim(); if(nq.length<2) return [];
   const toks=nq.split(/\s+/).map(t=>t.replace(/^(و|ب|ل|ف)?ال(?=..)/,"")); /*HGRX*/
   return PAGEKW.filter(([v,t,ks])=>ks.some(k=>k.includes(" ")?nq.includes(k):toks.some(x=>x===k||(k.length>=4&&x.startsWith(k))))).slice(0,3);
 }
