@@ -3525,20 +3525,39 @@ function shopOf(r){ /*HGRX*/
   return {per,days,sv,batch:batch?1:0,items,max}; /*HGRX*/
 } /*HGRX*/
 const shopSel={};
-function shopBox(r){
-  const o=shopOf(r); if(!o) return "";
+function shopCalc(r){
+  const o=shopOf(r); if(!o) return null;
   const days=shopSel[r.name]||o.days, n=o.batch?1:Math.max(1,Math.ceil(o.per*days/o.sv));
   const fmt=x=>{ const v=Math.round(x*10)/10; return (v%1?v.toFixed(1):String(v)); };
   const pack=g=>[25,50,100,250,500,1000].find(p=>p>=g*1.1)||Math.ceil(g/500)*500;
-  const rows=o.items.map(([i,q,u,g])=>{ const [id,t]=r.ing[i], nm=id&&byId[id]?byId[id].ar.split(" (")[0]:t;
-    const tot=q*n, w=g?Math.ceil(g*tot):null;
-    return `<li><b>${nm}</b>: ${fmt(tot)} × ${SU[u]}${w?` ≈ ${w} غ${(u==="tsp"||u==="tbsp")&&id&&byId[id]&&!byId[id].animal?` <small>(تكفي عبوة ${pack(w)} غ)</small>`:""}`:""}</li>`; }).join("");
+  const items=o.items.map(([i,q,u,g])=>{ const [id,t]=r.ing[i], nm=id&&byId[id]?byId[id].ar.split(" (")[0]:t, tot=q*n, w=g?Math.ceil(g*tot):null;
+    return {nm, txt:`${fmt(tot)} × ${SU[u]}`, w, pk:w&&(u==="tsp"||u==="tbsp")&&id&&byId[id]&&!byId[id].animal?pack(w):null}; });
+  const dw=days<=10?"أيام":"يومًا";
+  const head=o.batch?"هذه الوصفة تُحضّر دفعة واحدة تكفي عدة أيام، فهذه كمية دفعة واحدة.":`لمدة ${days} ${dw} تحتاج ${n===1?"تحضيرًا واحدًا":n===2?"تحضيرين":n<=10?n+" تحضيرات":n+" تحضيرًا"} تقريبًا، حسب الجرعة المذكورة.`;
+  const lim=o.max?`لا تتجاوز ${o.max===2?"يومين":o.max+" أيام"}.`:"";
+  return {o,days,dw,n,items,head,lim};
+}
+function shopText(r,full){
+  const c=shopCalc(r); if(!c) return "";
+  const L=c.items.map(x=>`• ${x.nm}: ${x.txt}${x.w?` ≈ ${x.w} غ`:""}${x.pk?` (تكفي عبوة ${x.pk} غ)`:""}`).join("\n");
+  return [ "*كم أشتري؟ ("+(c.o.batch?"دفعة واحدة":c.days+" "+c.dw)+")*", c.head+(c.lim?" "+c.lim:""), L, "الأوزان تقريبية." ].concat(full?["", "*"+r.name+"*", "من دليل «مريم» للأعشاب:", recipeLink(r)]:[]).join("\n");
+}
+function shopBox(r){
+  const c=shopCalc(r); if(!c) return ""; const o=c.o, days=c.days;
+  const rows=c.items.map(x=>`<li><b>${x.nm}</b>: ${x.txt}${x.w?` ≈ ${x.w} غ${x.pk?` <small>(تكفي عبوة ${x.pk} غ)</small>`:""}`:""}</li>`).join("");
   return `<details class="shop"><summary>كم أشتري؟</summary>
    <div class="opts" role="group">${[...new Set([3,7,14,30,o.days])].filter(dv=>!o.max||dv<=o.max).sort((a,b)=>a-b).map(dv=>`<button type="button" class="chip" data-sd="${dv}" data-sr="${encodeURIComponent(r.name)}" aria-pressed="${dv===days}">${dv===30?"شهر":dv===14?"أسبوعان":dv===7?"أسبوع":dv===2?"يومان":dv+" أيام"}</button>`).join("")}</div>
-   <p class="hint" style="margin:6px 0">${o.batch?"هذه الوصفة تُحضّر دفعة واحدة تكفي عدة أيام، فهذه كمية دفعة واحدة.":`لمدة ${days} ${days<=10?"أيام":"يومًا"} تحتاج ${n===1?"تحضيرًا واحدًا":n===2?"تحضيرين":n<=10?n+" تحضيرات":n+" تحضيرًا"} تقريبًا، حسب الجرعة المذكورة.`}${o.max?` <b>لا تتجاوز ${o.max===2?"يومين":o.max+" أيام"}.</b>`:""}</p>
+   <p class="hint" style="margin:6px 0">${c.head}${c.lim?` <b>${c.lim}</b>`:""}</p>
    <ul>${rows}</ul>
+   <div class="ract" style="margin-top:6px"><button type="button" class="rbtn" data-scopy="${encodeURIComponent(r.name)}">${IC_COPY}<span>نسخ القائمة</span></button><button type="button" class="rbtn" data-sshare="${encodeURIComponent(r.name)}">${IC_SHARE}<span>مشاركة القائمة</span></button></div>
    <p class="hint" style="margin:4px 0 0">الأوزان تقريبية. اشترِ من عطّار أو صيدلية موثوقة، وخزّن الأعشاب المجففة في وعاء محكم بعيدًا عن الضوء والرطوبة، فأغلبها يحتفظ بقوته نحو سنة.</p></details>`;
 }
+document.addEventListener("click",async e=>{ const c=e.target.closest("[data-scopy]"), sh=e.target.closest("[data-sshare]"); if(!c&&!sh) return;
+  const r=RECIPES.find(x=>x.name===decodeURIComponent((c||sh).dataset.scopy||(c||sh).dataset.sshare)); if(!r) return;
+  const t=shopText(r,true); gcEv((c?GC_X.copy:GC_X.share)+": "+GC_X.recipe+" · "+r.name+" · list");
+  if(c){ flashBtn(c,(await copyText(t))?"تم النسخ ✓":"تعذّر النسخ"); return; }
+  if(navigator.share){ try{ await navigator.share({title:r.name,text:t}); }catch(_){} return; }
+  const u="https://wa.me/?text="+encodeURIComponent(t); const w=window.open(u,"_blank","noopener"); if(!w) location.href=u; });
 document.addEventListener("click",e=>{ const b=e.target.closest("[data-sd]"); if(!b) return; const nm=decodeURIComponent(b.dataset.sr); shopSel[nm]=+b.dataset.sd; const box=b.closest("details.shop"); const r=RECIPES.find(x=>x.name===nm); if(box&&r){ const t=document.createElement("div"); t.innerHTML=shopBox(r); const nb=t.firstElementChild; nb.open=true; box.replaceWith(nb); } });
 const doseBox = r => `<div class="dose"><b>كم ومتى؟</b> ${doseOf(r)}</div>${shopBox(r)}`;
 const convBox = () => `<details class="conv"><summary>جدول تحويل المقادير المنزلية</summary>
@@ -5438,7 +5457,7 @@ const recipeLink=r=>SITE_URL+"?utm_source=share#r="+encodeURIComponent(r.name);
 function recipeText(r){
   const ing=r.ing.map(([id,t])=>"• "+(id?byId[id].ar.split(" (")[0]+": ":"")+t).join("\n");
   const st=r.steps.map((x,i)=>(i+1)+". "+x).join("\n");
-  return ["*"+r.name+"*", r.for, "", "*المكوّنات* ("+(r.yield||"لكوب واحد")+"):", ing, "", "*الطريقة:*", st, "", "*الكمية والمدة:* "+doseOf(r), "*تنبيه:* "+r.note, "", "🌿 "+TRAD_NOTE, "", "من دليل «مريم» للأعشاب:", recipeLink(r)].join("\n");
+  return ["*"+r.name+"*", r.for, "", "*المكوّنات* ("+(r.yield||"لكوب واحد")+"):", ing, "", "*الطريقة:*", st, "", "*الكمية والمدة:* "+doseOf(r), ...(shopCalc(r)?["", shopText(r,false), ""]:[]), "*تنبيه:* "+r.note, "", "🌿 "+TRAD_NOTE, "", "من دليل «مريم» للأعشاب:", recipeLink(r)].join("\n");
 }
 const herbLink=h=>SITE_URL+"?utm_source=share#h="+h.id;
 function herbText(h){
@@ -5786,7 +5805,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
-const NEWS={v:"2026-11-08e",date:"8 نوفمبر 2026",go:"sch",items:[
+const NEWS={v:"2026-11-08f",date:"8 نوفمبر 2026",go:"sch",items:[
+ "<b>نسخ ومشاركة قائمة الشراء:</b> في «كم أشتري؟» زرّان لنسخ القائمة أو مشاركتها، وصار نسخ الوصفة ومشاركتها يتضمّن الكمية اللازمة للمدة التي اخترتها.",
  "<b>كم أشتري؟</b> تحت كل وصفة صار زر يحسب كمية كل عشبة تحتاج شراءها حسب مدة العلاج التي تختارها: 3 أيام أو أسبوع أو أسبوعان أو شهر.",
  "<b>أعلام الطب والأعشاب: حضارات العالم.</b> أضفنا إمحوتب وبردية كاهون، وبابل وآشور، وكتب الصين من «الإمبراطور الأصفر» إلى لي شي تشن، وجنديسابور وأطباء فارس، والهنود الحمر والإنكا والأزتيك. وراجعنا بطاقات الأندلس على المصادر وصحّحنا بعض التفاصيل.",
  "<b>أعلام الطب والأعشاب: قسم الأندلس.</b> 24 بطاقة من ترجمة ديسقوريدس في قرطبة إلى مارستان غرناطة: ابن جلجل وعريب بن سعد والزهراوي وابن زهر وطبيبات آل زهر وابن العوّام والنباتي وابن البيطار وابن الخطيب وابن خاتمة وغيرهم.",

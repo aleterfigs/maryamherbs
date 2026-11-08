@@ -3527,20 +3527,39 @@ function shopOf(r){ /*HGRX*/
   return {per,days,sv,batch:batch?1:0,items,max}; /*HGRX*/
 } /*HGRX*/
 const shopSel={};
-function shopBox(r){
-  const o=shopOf(r); if(!o) return "";
+function shopCalc(r){
+  const o=shopOf(r); if(!o) return null;
   const days=shopSel[r.name]||o.days, n=o.batch?1:Math.max(1,Math.ceil(o.per*days/o.sv));
   const fmt=x=>{ const v=Math.round(x*10)/10; return (v%1?v.toFixed(1):String(v)); };
   const pack=g=>[25,50,100,250,500,1000].find(p=>p>=g*1.1)||Math.ceil(g/500)*500;
-  const rows=o.items.map(([i,q,u,g])=>{ const [id,t]=r.ing[i], nm=id&&byId[id]?byId[id].ar.split(" (")[0]:t;
-    const tot=q*n, w=g?Math.ceil(g*tot):null;
-    return `<li><b>${nm}</b>: ${fmt(tot)} × ${SU[u]}${w?` ≈ ${w} g${(u==="tsp"||u==="tbsp")&&id&&byId[id]&&!byId[id].animal?` <small>(a pack of ${pack(w)} g will do)</small>`:""}`:""}</li>`; }).join("");
+  const items=o.items.map(([i,q,u,g])=>{ const [id,t]=r.ing[i], nm=id&&byId[id]?byId[id].ar.split(" (")[0]:t, tot=q*n, w=g?Math.ceil(g*tot):null;
+    return {nm, txt:`${fmt(tot)} × ${SU[u]}`, w, pk:w&&(u==="tsp"||u==="tbsp")&&id&&byId[id]&&!byId[id].animal?pack(w):null}; });
+  const dw=days<=10?"days":"days";
+  const head=o.batch?"This recipe is made in one batch that lasts several days, so these are the amounts for one batch.":`For ${days} ${dw} you need ${n===1?"one preparation":n===2?"two preparations":n<=10?n+" preparations":n+" preparations"} approximately, based on the stated dose.`;
+  const lim=o.max?`Do not exceed ${o.max===2?"2 days":o.max+" days"}.`:"";
+  return {o,days,dw,n,items,head,lim};
+}
+function shopText(r,full){
+  const c=shopCalc(r); if(!c) return "";
+  const L=c.items.map(x=>`• ${x.nm}: ${x.txt}${x.w?` ≈ ${x.w} g`:""}${x.pk?` (a pack of ${x.pk} g will do)`:""}`).join("\n");
+  return [ "*How much should I buy? ("+(c.o.batch?"one batch":c.days+" "+c.dw)+")*", c.head+(c.lim?" "+c.lim:""), L, "Weights are approximate." ].concat(full?["", "*"+r.name+"*", "From the «Maryam» herbal guide:", recipeLink(r)]:[]).join("\n");
+}
+function shopBox(r){
+  const c=shopCalc(r); if(!c) return ""; const o=c.o, days=c.days;
+  const rows=c.items.map(x=>`<li><b>${x.nm}</b>: ${x.txt}${x.w?` ≈ ${x.w} g${x.pk?` <small>(a pack of ${x.pk} g will do)</small>`:""}`:""}</li>`).join("");
   return `<details class="shop"><summary>How much should I buy?</summary>
    <div class="opts" role="group">${[...new Set([3,7,14,30,o.days])].filter(dv=>!o.max||dv<=o.max).sort((a,b)=>a-b).map(dv=>`<button type="button" class="chip" data-sd="${dv}" data-sr="${encodeURIComponent(r.name)}" aria-pressed="${dv===days}">${dv===30?"month":dv===14?"2 weeks":dv===7?"week":dv===2?"2 days":dv+" days"}</button>`).join("")}</div>
-   <p class="hint" style="margin:6px 0">${o.batch?"This recipe is made in one batch that lasts several days, so these are the amounts for one batch.":`For ${days} ${days<=10?"days":"days"} you need ${n===1?"one preparation":n===2?"two preparations":n<=10?n+" preparations":n+" preparations"} approximately, based on the stated dose.`}${o.max?` <b>Do not exceed ${o.max===2?"2 days":o.max+" days"}.</b>`:""}</p>
+   <p class="hint" style="margin:6px 0">${c.head}${c.lim?` <b>${c.lim}</b>`:""}</p>
    <ul>${rows}</ul>
+   <div class="ract" style="margin-top:6px"><button type="button" class="rbtn" data-scopy="${encodeURIComponent(r.name)}">${IC_COPY}<span>Copy list</span></button><button type="button" class="rbtn" data-sshare="${encodeURIComponent(r.name)}">${IC_SHARE}<span>Share list</span></button></div>
    <p class="hint" style="margin:4px 0 0">Weights are approximate. Buy from a reliable herbalist or pharmacy, and store dried herbs in an airtight container away from light and moisture; most keep their strength for about a year.</p></details>`;
 }
+document.addEventListener("click",async e=>{ const c=e.target.closest("[data-scopy]"), sh=e.target.closest("[data-sshare]"); if(!c&&!sh) return;
+  const r=RECIPES.find(x=>x.name===decodeURIComponent((c||sh).dataset.scopy||(c||sh).dataset.sshare)); if(!r) return;
+  const t=shopText(r,true); gcEv((c?GC_X.copy:GC_X.share)+": "+GC_X.recipe+" · "+r.name+" · list");
+  if(c){ flashBtn(c,(await copyText(t))?"Copied ✓":"Couldn't copy"); return; }
+  if(navigator.share){ try{ await navigator.share({title:r.name,text:t}); }catch(_){} return; }
+  const u="https://wa.me/?text="+encodeURIComponent(t); const w=window.open(u,"_blank","noopener"); if(!w) location.href=u; });
 document.addEventListener("click",e=>{ const b=e.target.closest("[data-sd]"); if(!b) return; const nm=decodeURIComponent(b.dataset.sr); shopSel[nm]=+b.dataset.sd; const box=b.closest("details.shop"); const r=RECIPES.find(x=>x.name===nm); if(box&&r){ const t=document.createElement("div"); t.innerHTML=shopBox(r); const nb=t.firstElementChild; nb.open=true; box.replaceWith(nb); } });
 const doseBox = r => `<div class="dose"><b>How much and when?</b> ${doseOf(r)}</div>${shopBox(r)}`;
 const convBox = () => `<details class="conv"><summary>Household measures conversion table</summary>
@@ -5440,7 +5459,7 @@ const recipeLink=r=>SITE_URL+"?utm_source=share#r="+encodeURIComponent(r.name);
 function recipeText(r){
   const ing=r.ing.map(([id,t])=>"• "+(id?byId[id].ar.split(" (")[0]+": ":"")+t).join("\n");
   const st=r.steps.map((x,i)=>(i+1)+". "+x).join("\n");
-  return ["*"+r.name+"*", r.for, "", "*Ingredients* ("+(r.yield||"For one cup")+"):", ing, "", "*Method:*", st, "", "*How much and how long:* "+doseOf(r), "*Caution:* "+r.note, "", "🌿 "+TRAD_NOTE, "", "From the «Maryam» herbal guide:", recipeLink(r)].join("\n");
+  return ["*"+r.name+"*", r.for, "", "*Ingredients* ("+(r.yield||"For one cup")+"):", ing, "", "*Method:*", st, "", "*How much and how long:* "+doseOf(r), ...(shopCalc(r)?["", shopText(r,false), ""]:[]), "*Caution:* "+r.note, "", "🌿 "+TRAD_NOTE, "", "From the «Maryam» herbal guide:", recipeLink(r)].join("\n");
 }
 const herbLink=h=>SITE_URL+"?utm_source=share#h="+h.id;
 function herbText(h){
@@ -5788,7 +5807,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- What's new: shown once to returning visitors after each update ---------- */
-const NEWS={v:"2026-11-08e",date:"8 November 2026",go:"sch",items:[
+const NEWS={v:"2026-11-08f",date:"8 November 2026",go:"sch",items:[
+ "<b>Copy and share the shopping list:</b> in «How much should I buy?» there are two buttons to copy or share the list, and copying or sharing a recipe now includes the amounts needed for the length you chose.",
  "<b>How much should I buy?</b> under every recipe there is now a button that calculates how much of each herb to buy for the treatment length you choose: 3 days, a week, 2 weeks or a month.",
  "<b>Masters of medicine and herbs: world civilisations.</b> We added Imhotep and the Kahun Papyrus, Babylon and Assyria, Chinese books from the «Yellow Emperor» to Li Shizhen, Gondishapur and the physicians of Persia, and the Native Americans, Inca and Aztecs. We also checked the al-Andalus cards against sources and corrected some details.",
  "<b>Masters of medicine and herbs: al-Andalus.</b> 24 cards from the translation of Dioscorides in Cordoba to the Maristan of Granada: Ibn Juljul, Arib ibn Sa'd, al-Zahrawi, Ibn Zuhr and the women physicians of his family, Ibn al-Awwam, al-Nabati, Ibn al-Baytar, Ibn al-Khatib, Ibn Khatima and more.",

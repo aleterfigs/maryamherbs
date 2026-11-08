@@ -3527,20 +3527,39 @@ function shopOf(r){ /*HGRX*/
   return {per,days,sv,batch:batch?1:0,items,max}; /*HGRX*/
 } /*HGRX*/
 const shopSel={};
-function shopBox(r){
-  const o=shopOf(r); if(!o) return "";
+function shopCalc(r){
+  const o=shopOf(r); if(!o) return null;
   const days=shopSel[r.name]||o.days, n=o.batch?1:Math.max(1,Math.ceil(o.per*days/o.sv));
   const fmt=x=>{ const v=Math.round(x*10)/10; return (v%1?v.toFixed(1):String(v)); };
   const pack=g=>[25,50,100,250,500,1000].find(p=>p>=g*1.1)||Math.ceil(g/500)*500;
-  const rows=o.items.map(([i,q,u,g])=>{ const [id,t]=r.ing[i], nm=id&&byId[id]?byId[id].ar.split(" (")[0]:t;
-    const tot=q*n, w=g?Math.ceil(g*tot):null;
-    return `<li><b>${nm}</b>: ${fmt(tot)} × ${SU[u]}${w?` ≈ ${w} g${(u==="tsp"||u==="tbsp")&&id&&byId[id]&&!byId[id].animal?` <small>(un paquet de ${pack(w)} g suffit)</small>`:""}`:""}</li>`; }).join("");
+  const items=o.items.map(([i,q,u,g])=>{ const [id,t]=r.ing[i], nm=id&&byId[id]?byId[id].ar.split(" (")[0]:t, tot=q*n, w=g?Math.ceil(g*tot):null;
+    return {nm, txt:`${fmt(tot)} × ${SU[u]}`, w, pk:w&&(u==="tsp"||u==="tbsp")&&id&&byId[id]&&!byId[id].animal?pack(w):null}; });
+  const dw=days<=10?"jours":"jours";
+  const head=o.batch?"Cette recette se prépare en une fois et dure plusieurs jours : voici les quantités pour une préparation.":`Pour ${days} ${dw} il faut ${n===1?"une préparation":n===2?"deux préparations":n<=10?n+" préparations":n+" préparations"} environ, selon la dose indiquée.`;
+  const lim=o.max?`Ne pas dépasser ${o.max===2?"2 jours":o.max+" jours"}.`:"";
+  return {o,days,dw,n,items,head,lim};
+}
+function shopText(r,full){
+  const c=shopCalc(r); if(!c) return "";
+  const L=c.items.map(x=>`• ${x.nm}: ${x.txt}${x.w?` ≈ ${x.w} g`:""}${x.pk?` (un paquet de ${x.pk} g suffit)`:""}`).join("\n");
+  return [ "*Combien acheter ? ("+(c.o.batch?"une préparation":c.days+" "+c.dw)+")*", c.head+(c.lim?" "+c.lim:""), L, "Les poids sont approximatifs." ].concat(full?["", "*"+r.name+"*", "Extrait du guide des plantes «Maryam» :", recipeLink(r)]:[]).join("\n");
+}
+function shopBox(r){
+  const c=shopCalc(r); if(!c) return ""; const o=c.o, days=c.days;
+  const rows=c.items.map(x=>`<li><b>${x.nm}</b>: ${x.txt}${x.w?` ≈ ${x.w} g${x.pk?` <small>(un paquet de ${x.pk} g suffit)</small>`:""}`:""}</li>`).join("");
   return `<details class="shop"><summary>Combien acheter ?</summary>
    <div class="opts" role="group">${[...new Set([3,7,14,30,o.days])].filter(dv=>!o.max||dv<=o.max).sort((a,b)=>a-b).map(dv=>`<button type="button" class="chip" data-sd="${dv}" data-sr="${encodeURIComponent(r.name)}" aria-pressed="${dv===days}">${dv===30?"mois":dv===14?"2 semaines":dv===7?"semaine":dv===2?"2 jours":dv+" jours"}</button>`).join("")}</div>
-   <p class="hint" style="margin:6px 0">${o.batch?"Cette recette se prépare en une fois et dure plusieurs jours : voici les quantités pour une préparation.":`Pour ${days} ${days<=10?"jours":"jours"} il faut ${n===1?"une préparation":n===2?"deux préparations":n<=10?n+" préparations":n+" préparations"} environ, selon la dose indiquée.`}${o.max?` <b>Ne pas dépasser ${o.max===2?"2 jours":o.max+" jours"}.</b>`:""}</p>
+   <p class="hint" style="margin:6px 0">${c.head}${c.lim?` <b>${c.lim}</b>`:""}</p>
    <ul>${rows}</ul>
+   <div class="ract" style="margin-top:6px"><button type="button" class="rbtn" data-scopy="${encodeURIComponent(r.name)}">${IC_COPY}<span>Copier la liste</span></button><button type="button" class="rbtn" data-sshare="${encodeURIComponent(r.name)}">${IC_SHARE}<span>Partager la liste</span></button></div>
    <p class="hint" style="margin:4px 0 0">Les poids sont approximatifs. Achetez chez un herboriste ou une pharmacie fiable, et conservez les plantes séchées dans un bocal hermétique, à l'abri de la lumière et de l'humidité ; la plupart gardent leur force environ un an.</p></details>`;
 }
+document.addEventListener("click",async e=>{ const c=e.target.closest("[data-scopy]"), sh=e.target.closest("[data-sshare]"); if(!c&&!sh) return;
+  const r=RECIPES.find(x=>x.name===decodeURIComponent((c||sh).dataset.scopy||(c||sh).dataset.sshare)); if(!r) return;
+  const t=shopText(r,true); gcEv((c?GC_X.copy:GC_X.share)+": "+GC_X.recipe+" · "+r.name+" · list");
+  if(c){ flashBtn(c,(await copyText(t))?"Copié ✓":"Copie impossible"); return; }
+  if(navigator.share){ try{ await navigator.share({title:r.name,text:t}); }catch(_){} return; }
+  const u="https://wa.me/?text="+encodeURIComponent(t); const w=window.open(u,"_blank","noopener"); if(!w) location.href=u; });
 document.addEventListener("click",e=>{ const b=e.target.closest("[data-sd]"); if(!b) return; const nm=decodeURIComponent(b.dataset.sr); shopSel[nm]=+b.dataset.sd; const box=b.closest("details.shop"); const r=RECIPES.find(x=>x.name===nm); if(box&&r){ const t=document.createElement("div"); t.innerHTML=shopBox(r); const nb=t.firstElementChild; nb.open=true; box.replaceWith(nb); } });
 const doseBox = r => `<div class="dose"><b>Combien et quand ?</b> ${doseOf(r)}</div>${shopBox(r)}`;
 const convBox = () => `<details class="conv"><summary>Tableau de conversion des mesures ménagères</summary>
@@ -5440,7 +5459,7 @@ const recipeLink=r=>SITE_URL+"?utm_source=share#r="+encodeURIComponent(r.name);
 function recipeText(r){
   const ing=r.ing.map(([id,t])=>"• "+(id?byId[id].ar.split(" (")[0]+": ":"")+t).join("\n");
   const st=r.steps.map((x,i)=>(i+1)+". "+x).join("\n");
-  return ["*"+r.name+"*", r.for, "", "*Ingrédients* ("+(r.yield||"Pour une tasse")+"):", ing, "", "*Préparation :*", st, "", "*Quantité et durée :* "+doseOf(r), "*Attention :* "+r.note, "", "🌿 "+TRAD_NOTE, "", "Extrait du guide des plantes «Maryam» :", recipeLink(r)].join("\n");
+  return ["*"+r.name+"*", r.for, "", "*Ingrédients* ("+(r.yield||"Pour une tasse")+"):", ing, "", "*Préparation :*", st, "", "*Quantité et durée :* "+doseOf(r), ...(shopCalc(r)?["", shopText(r,false), ""]:[]), "*Attention :* "+r.note, "", "🌿 "+TRAD_NOTE, "", "Extrait du guide des plantes «Maryam» :", recipeLink(r)].join("\n");
 }
 const herbLink=h=>SITE_URL+"?utm_source=share#h="+h.id;
 function herbText(h){
@@ -5788,7 +5807,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-08e",date:"8 novembre 2026",go:"sch",items:[
+const NEWS={v:"2026-11-08f",date:"8 novembre 2026",go:"sch",items:[
+ "<b>Copier et partager la liste d'achats :</b> dans «Combien acheter ?», deux boutons permettent de copier ou partager la liste, et copier ou partager une recette inclut désormais les quantités pour la durée choisie.",
  "<b>Combien acheter ?</b> sous chaque recette, un bouton calcule la quantité de chaque plante à acheter selon la durée choisie : 3 jours, une semaine, 2 semaines ou un mois.",
  "<b>Les maîtres de la médecine et des plantes : civilisations du monde.</b> Nous avons ajouté Imhotep et le papyrus Kahun, Babylone et l'Assyrie, les livres chinois de l'«Empereur jaune» à Li Shizhen, Gundishapur et les médecins de Perse, et les Amérindiens, les Incas et les Aztèques. Nous avons aussi vérifié les fiches d'al-Andalus et corrigé certains détails.",
  "<b>Les maîtres de la médecine et des plantes : al-Andalus.</b> 24 fiches, de la traduction de Dioscoride à Cordoue au Maristan de Grenade : Ibn Juljul, Arib ibn Sa'd, al-Zahrawi, Ibn Zuhr et les femmes médecins de sa famille, Ibn al-Awwam, al-Nabati, Ibn al-Baytar, Ibn al-Khatib, Ibn Khatima et d'autres.",
