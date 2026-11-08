@@ -5854,7 +5854,7 @@ function ixWire(el){
 }
 function ixSection(){
   return `<section class="ixbox" id="ixbox"><h3 class="oh4" style="margin-top:0">Les plantes interagissent-elles avec mes médicaments ?</h3>
-   <p class="hint" style="margin:0 0 8px">1. Choisissez tous les médicaments que vous prenez. 2. Ajoutez les plantes que vous envisagez. Si vous n’ajoutez aucune plante, nous affichons toutes les plantes du guide qui demandent de la prudence avec vos médicaments.</p>
+   <p class="hint" style="margin:0 0 8px">1. Choisissez les médicaments prescrits par votre médecin que vous prenez actuellement. 2. Ajoutez les plantes que vous envisagez. Si vous n’ajoutez aucune plante, nous affichons toutes les plantes du guide qui demandent de la prudence avec vos médicaments.</p>
    <div class="opts">${MEDX.map(([k])=>`<button type="button" class="chip" data-ixm="${k}" aria-pressed="${ixs.m.includes(k)}">${medLabel(k)}</button>`).join("")}</div>
    <div class="ixpick"><input id="ixq" type="search" autocomplete="off" placeholder="Ajouter une plante… ex. : gingembre, fenugrec, curcuma" aria-label="Ajouter une plante"><div class="opts" id="ixsug"></div><div class="opts" id="ixsel"></div></div>
    <div class="sres" id="ixres"></div></section>`;

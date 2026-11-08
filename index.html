@@ -5852,7 +5852,7 @@ function ixWire(el){
 }
 function ixSection(){
   return `<section class="ixbox" id="ixbox"><h3 class="oh4" style="margin-top:0">هل تتداخل الأعشاب مع أدويتي؟</h3>
-   <p class="hint" style="margin:0 0 8px">١. اختر كل الأدوية التي تأخذها. ٢. أضف الأعشاب التي تفكر فيها. وإن لم تضف عشبة، نعرض لك كل أعشاب الدليل التي تحتاج حذرًا مع أدويتك.</p>
+   <p class="hint" style="margin:0 0 8px">١. اختر الأدوية التي وصفها لك طبيبك وتأخذها الآن. ٢. أضف الأعشاب التي تفكر فيها. وإن لم تضف عشبة، نعرض لك كل أعشاب الدليل التي تحتاج حذرًا مع أدويتك.</p>
    <div class="opts">${MEDX.map(([k])=>`<button type="button" class="chip" data-ixm="${k}" aria-pressed="${ixs.m.includes(k)}">${medLabel(k)}</button>`).join("")}</div>
    <div class="ixpick"><input id="ixq" type="search" autocomplete="off" placeholder="أضف عشبة… مثل: زنجبيل، حلبة، كركم" aria-label="أضف عشبة"><div class="opts" id="ixsug"></div><div class="opts" id="ixsel"></div></div>
    <div class="sres" id="ixres"></div></section>`;

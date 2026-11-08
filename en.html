@@ -5854,7 +5854,7 @@ function ixWire(el){
 }
 function ixSection(){
   return `<section class="ixbox" id="ixbox"><h3 class="oh4" style="margin-top:0">Do herbs interact with my medicines?</h3>
-   <p class="hint" style="margin:0 0 8px">1. Choose all the medicines you take. 2. Add the herbs you are considering. If you add no herb, we show every herb in the guide that needs caution with your medicines.</p>
+   <p class="hint" style="margin:0 0 8px">1. Choose the medicines your doctor prescribed that you are taking now. 2. Add the herbs you are considering. If you add no herb, we show every herb in the guide that needs caution with your medicines.</p>
    <div class="opts">${MEDX.map(([k])=>`<button type="button" class="chip" data-ixm="${k}" aria-pressed="${ixs.m.includes(k)}">${medLabel(k)}</button>`).join("")}</div>
    <div class="ixpick"><input id="ixq" type="search" autocomplete="off" placeholder="Add a herb… e.g. ginger, fenugreek, turmeric" aria-label="Add a herb"><div class="opts" id="ixsug"></div><div class="opts" id="ixsel"></div></div>
    <div class="sres" id="ixres"></div></section>`;
