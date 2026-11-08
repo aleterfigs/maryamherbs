@@ -5603,16 +5603,23 @@ const TTS={on:null,lbl:""};
 const ttsOK=()=>{ try{ return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window; }catch(e){ return false; } };
 const ttsLang=()=>{ const L=(document.documentElement.lang||"ar").slice(0,2); return L; };
 function ttsVoice(){ const L=ttsLang(), vs=speechSynthesis.getVoices()||[]; const m=vs.filter(v=>(v.lang||"").toLowerCase().startsWith(L)); return m.find(v=>/SA|AE|EG/i.test(v.lang))||m.find(v=>v.localService)||m[0]||null; }
-function ttsStop(){ try{ if(ttsOK()) speechSynthesis.cancel(); }catch(e){} const b=TTS.on; TTS.on=null; if(b&&b.isConnected){ b.classList.remove("speaking"); const sp=b.querySelector("span"); if(sp) sp.textContent=TTS.lbl; } }
+function ttsStop(){ const b=TTS.on; TTS.on=null; try{ if(ttsOK()&&(speechSynthesis.speaking||speechSynthesis.pending)) speechSynthesis.cancel(); }catch(e){} if(b&&b.isConnected){ b.classList.remove("speaking"); const sp=b.querySelector("span"); if(sp) sp.textContent=TTS.lbl; } }
 function ttsChunks(t){ const out=[]; t.replace(/[*•🌿]/g," ").split(/\n+/).forEach(line=>{ let x=line.trim(); while(x.length>180){ let i=x.lastIndexOf("،",180); if(i<60) i=x.lastIndexOf(" ",180); if(i<60) i=180; out.push(x.slice(0,i+1)); x=x.slice(i+1).trim(); } if(x) out.push(x); }); return out; }
+function ttsFail(btn,why){ if(TTS.on===btn) ttsStop(); flashBtn(btn,why==="lang"?"لا يوجد صوت بهذه اللغة في جهازك":"تعذّرت القراءة على هذا المتصفح"); }
 function ttsSay(btn,text){
-  if(TTS.on===btn){ ttsStop(); return; } ttsStop();
+  if(TTS.on===btn){ ttsStop(); return; } if(TTS.on) ttsStop();
+  try{ speechSynthesis.resume(); }catch(e){}
   const vs=speechSynthesis.getVoices()||[], v=ttsVoice();
   if(vs.length&&!v){ flashBtn(btn,"لا يوجد صوت بهذه اللغة في جهازك"); return; }
   const parts=ttsChunks(text); if(!parts.length) return;
   TTS.on=btn; const sp=btn.querySelector("span"); TTS.lbl=sp?sp.textContent:""; if(sp) sp.textContent="إيقاف القراءة"; btn.classList.add("speaking");
+  let started=false;
   parts.forEach((p,i)=>{ const u=new SpeechSynthesisUtterance(p); u.lang=v?v.lang:({ar:"ar-SA",en:"en-GB",fr:"fr-FR"}[ttsLang()]||"ar-SA"); if(v) u.voice=v; u.rate=.95;
-    if(i===parts.length-1){ u.onend=()=>{ if(TTS.on===btn) ttsStop(); }; } u.onerror=()=>{ if(TTS.on===btn) ttsStop(); }; speechSynthesis.speak(u); });
+    u.onstart=()=>{ started=true; };
+    if(i===parts.length-1){ u.onend=()=>{ if(TTS.on===btn) ttsStop(); }; }
+    u.onerror=ev=>{ if(TTS.on!==btn) return; const er=ev&&ev.error; if(er==="interrupted"||er==="canceled") return; ttsFail(btn,(er==="language-unavailable"||er==="voice-unavailable")?"lang":"x"); };
+    speechSynthesis.speak(u); });
+  setTimeout(()=>{ if(TTS.on===btn&&!started&&!speechSynthesis.speaking) ttsFail(btn,"x"); },3000);
   gcEv("tts","tts");
 }
 function sayHerb(h){ return [h.ar.split(" (")[0]+".", h.use, "الاستخدامات الشائعة: "+h.uses.join("، ")+".", "طريقة التحضير المعتادة: "+h.prep, "محاذير: "+h.warn.join("، ")+".", "تداخلات دوائية محتملة: "+h.inter.join("، ")+"."].join("\n"); }
