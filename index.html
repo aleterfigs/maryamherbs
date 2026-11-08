@@ -4373,6 +4373,7 @@ async function submitMom(e){
 const FB={sending:false,msg:""};
 const WA_NUM="971502900333";
 const WA_CH="https://whatsapp.com/channel/0029VbDgRPU6GcGNaYMxLO2O";
+document.addEventListener("click",e=>{ const a=e.target.closest&&e.target.closest('a[href^="https://whatsapp.com/channel"]'); if(a) gcEv("channel-"+(a.closest("#faq")?"faq":"home"),"قناة واتساب"); },true);
 function waSend(text){ const u="https://wa.me/"+WA_NUM+"?text="+encodeURIComponent(text); const w=window.open(u,"_blank","noopener"); if(!w) location.href=u; }
 function renderFeedback(){
   const box=document.getElementById("fbBox"); if(!box) return;
