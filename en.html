@@ -184,7 +184,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(2.2rem,6vw,3.2re
 .sbox{border-radius:6px;padding:14px 16px;border:1px solid var(--line);background:var(--sheet)}
 .sbox h3{margin:0 0 8px;font-size:1rem}
 .sbox.bad{border-color:var(--warn)}.sbox.bad h3{color:var(--warn)}
-.sbox.warn h3{color:var(--mid)}.sbox.ok{border-color:var(--leaf)}.upd{margin:0;color:var(--muted);font-size:.8rem}.rbtn.rep{opacity:.85}.sbox.ok h3{color:var(--leaf)}.ixbox{background:var(--sheet);border:1px solid var(--leaf);border-radius:8px;padding:14px 16px;margin:8px 0 14px;display:flex;flex-direction:column;gap:10px}.ixpick input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}.ixpick .opts{margin-top:6px}.ixact{display:flex;justify-content:center}#ixres{display:flex;flex-direction:column;gap:10px}
+.sbox.warn h3{color:var(--mid)}.sbox.ok{border-color:var(--leaf)}.upd{margin:0;color:var(--muted);font-size:.8rem}.rbtn.say.speaking{background:var(--leaf);color:var(--sheet)}.rbtn.rep{opacity:.85}.sbox.ok h3{color:var(--leaf)}.ixbox{background:var(--sheet);border:1px solid var(--leaf);border-radius:8px;padding:14px 16px;margin:8px 0 14px;display:flex;flex-direction:column;gap:10px}.ixpick input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}.ixpick .opts{margin-top:6px}.ixact{display:flex;justify-content:center}#ixres{display:flex;flex-direction:column;gap:10px}
 .sbox ul,.dlist{margin:0;padding-inline-start:20px;font-size:.9rem}
 .sbox li,.dlist li{margin-bottom:6px}.sbox li span{color:var(--muted)}
 .about{display:flex;flex-direction:column;gap:22px;max-width:760px}
@@ -3738,6 +3738,7 @@ function renderRecipes(){
   }
 }
 function setView(v){
+  ttsStop();
   state.view=v;
   [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabEye","eye"],["tabSch","sch"],["tabSkin","skin"],["tabUae","uae"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
@@ -5598,6 +5599,28 @@ const NUTR = [
 const NSYM = [["Tiredness and exhaustion",["iron","b12","vitd","folate","mg","protein"]],["Muscle weakness and weight loss",["protein","vitd"]],["Paleness and shortness of breath",["iron","b12","folate"]],["Hair loss",["iron","zinc","vitd","protein"]],["Numbness and tingling in the limbs",["b12"]],["Bone and muscle pain",["vitd","calcium"]],["Muscle cramps",["mg","calcium"]],["Mouth ulcers and cracked mouth corners",["b12","iron","folate"]],["Bleeding gums and slow wound healing",["vitc","zinc","protein"]],["Poor vision in the dark",["vita"]],["Frequent infections",["vitd","zinc","vitc","vita"]],["Brittle nails",["iron"]]];
 const nst={sym:null};
 const SITE_URL="https://maryamherbs.com/en.html";
+const IC_SAY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+/* ---------- Read aloud ---------- */
+const TTS={on:null,lbl:""};
+const ttsOK=()=>{ try{ return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window; }catch(e){ return false; } };
+const ttsLang=()=>{ const L=(document.documentElement.lang||"ar").slice(0,2); return L; };
+function ttsVoice(){ const L=ttsLang(), vs=speechSynthesis.getVoices()||[]; const m=vs.filter(v=>(v.lang||"").toLowerCase().startsWith(L)); return m.find(v=>/SA|AE|EG/i.test(v.lang))||m.find(v=>v.localService)||m[0]||null; }
+function ttsStop(){ try{ if(ttsOK()) speechSynthesis.cancel(); }catch(e){} const b=TTS.on; TTS.on=null; if(b&&b.isConnected){ b.classList.remove("speaking"); const sp=b.querySelector("span"); if(sp) sp.textContent=TTS.lbl; } }
+function ttsChunks(t){ const out=[]; t.replace(/[*•🌿]/g," ").split(/\n+/).forEach(line=>{ let x=line.trim(); while(x.length>180){ let i=x.lastIndexOf(",",180); if(i<60) i=x.lastIndexOf(" ",180); if(i<60) i=180; out.push(x.slice(0,i+1)); x=x.slice(i+1).trim(); } if(x) out.push(x); }); return out; }
+function ttsSay(btn,text){
+  if(TTS.on===btn){ ttsStop(); return; } ttsStop();
+  const vs=speechSynthesis.getVoices()||[], v=ttsVoice();
+  if(vs.length&&!v){ flashBtn(btn,"No voice for this language on your device"); return; }
+  const parts=ttsChunks(text); if(!parts.length) return;
+  TTS.on=btn; const sp=btn.querySelector("span"); TTS.lbl=sp?sp.textContent:""; if(sp) sp.textContent="Stop reading"; btn.classList.add("speaking");
+  parts.forEach((p,i)=>{ const u=new SpeechSynthesisUtterance(p); u.lang=v?v.lang:({ar:"ar-SA",en:"en-GB",fr:"fr-FR"}[ttsLang()]||"ar-SA"); if(v) u.voice=v; u.rate=.95;
+    if(i===parts.length-1){ u.onend=()=>{ if(TTS.on===btn) ttsStop(); }; } u.onerror=()=>{ if(TTS.on===btn) ttsStop(); }; speechSynthesis.speak(u); });
+  gcEv("tts","tts");
+}
+function sayHerb(h){ return [h.ar.split(" (")[0]+".", h.use, "Common uses: "+h.uses.join(", ")+".", "Usual preparation: "+h.prep, "Cautions: "+h.warn.join(", ")+".", "Possible drug interactions: "+h.inter.join(", ")+"."].join("\n"); }
+function sayRecipe(r){ return [r.name+".", r.for, "Ingredients:", ...r.ing.map(([id,t])=>(id?byId[id].ar.split(" (")[0]+": ":"")+t+"."), "Method:", ...r.steps.map(x=>x), "How much and when? "+doseOf(r), "Warning: "+r.note].join("\n"); }
+if(ttsOK()){ try{ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>{}; }catch(e){} }
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-hsay],[data-rsay]"); if(!b) return; if(b.dataset.hsay){ const h=byId[b.dataset.hsay]; if(h) ttsSay(b,sayHerb(h)); } else { const r=RECIPES.find(x=>x.name===b.dataset.rsay); if(r) ttsSay(b,sayRecipe(r)); } });
 const IC_COPY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>';
 const IC_SHARE='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>';
 const TRAD_NOTE="From traditional medicine; most of its recipes have not been tested in large studies. Choose organic or clean local ingredients from a trusted source where you can, and if you do not improve, see a doctor.";
@@ -5605,7 +5628,7 @@ const UPD={"h":{"chamomile":"2026-11-08","mint":"2026-11-08","ginger":"2026-11-0
 const updDate=d=>{ try{ const L=document.documentElement.lang||"ar"; return new Date(d+"T12:00:00").toLocaleDateString(L==="ar"?"en-GB":L,{year:"numeric",month:"long",day:"numeric"}); }catch(e){ return d; } };
 const updLine=d=>d?`<p class="upd">This information was last updated on ${updDate(d)}</p>`:"";
 function goReport(label){ closePanel&&!$("#panel").hidden&&closePanel(); setView("about"); setTimeout(()=>{ const k=$("#fb-kind")||$("#fw-kind"), t=$("#fb-text")||$("#fw-text"); if(k) k.selectedIndex=0; if(t){ t.value=label+" — "; t.scrollIntoView({block:"center"}); t.focus(); } },150); }
-const ractBox=r=>`<p class="tradnote">🌿 ${TRAD_NOTE} <button type="button" class="wlink" data-goorg="1">Grow your herbs organically</button></p><div class="ract"><button type="button" class="rbtn" data-rcopy="${esc(r.name)}">${IC_COPY}<span>Copy recipe</span></button><button type="button" class="rbtn" data-rshare="${esc(r.name)}">${IC_SHARE}<span>Share</span></button><button type="button" class="rbtn rep" data-rrep="${esc(r.name)}"><span>Report a mistake</span></button></div>`;
+const ractBox=r=>`<p class="tradnote">🌿 ${TRAD_NOTE} <button type="button" class="wlink" data-goorg="1">Grow your herbs organically</button></p><div class="ract">${ttsOK()?`<button type="button" class="rbtn say" data-rsay="${esc(r.name)}">${IC_SAY}<span>Read aloud</span></button>`:""}<button type="button" class="rbtn" data-rcopy="${esc(r.name)}">${IC_COPY}<span>Copy recipe</span></button><button type="button" class="rbtn" data-rshare="${esc(r.name)}">${IC_SHARE}<span>Share</span></button><button type="button" class="rbtn rep" data-rrep="${esc(r.name)}"><span>Report a mistake</span></button></div>`;
 const GUIDE=SITE_URL.endsWith(".html")?SITE_URL.replace(/\.html$/,"/"):SITE_URL;
 const recipeLink=r=>SITE_URL+"?utm_source=share#r="+encodeURIComponent(r.name);
 function recipeText(r){
@@ -6013,7 +6036,7 @@ function openPanel(h){
   p.innerHTML=`<div class="panel-top"><div style="display:flex;gap:14px;align-items:center">${herbIcon(h,"hicon big")}<div><h2 id="pTitle">${h.ar}</h2><div class="lat">${h.lat}</div></div></div>
     <div style="display:flex;gap:6px"><button class="icon-btn" id="favIt">${fav?"★ Remove":"☆ Save"}</button><button class="icon-btn" id="closeIt">Close</button></div></div>
     <a class="photos" href="https://commons.wikimedia.org/w/index.php?search=${latinQ(h)}&title=Special:MediaSearch&type=image" target="_blank" rel="noopener">${h.sea||h.animal?"See real photos":"See real photos of the plant"} ↗</a>
-    <div class="ract"><button type="button" class="rbtn" data-hcopy="${h.id}">${IC_COPY}<span>Copy info</span></button><button type="button" class="rbtn" data-hshare="${h.id}">${IC_SHARE}<span>Share</span></button></div>
+    <div class="ract">${ttsOK()?`<button type="button" class="rbtn say" data-hsay="${h.id}">${IC_SAY}<span>Read aloud</span></button>`:""}<button type="button" class="rbtn" data-hcopy="${h.id}">${IC_COPY}<span>Copy info</span></button><button type="button" class="rbtn" data-hshare="${h.id}">${IC_SHARE}<span>Share</span></button></div>
     <dl class="facts">${ALIAS[h.id]?`<dt>Other names</dt><dd>${ALIAS[h.id].alt.join(", ")} · <span dir="ltr">${ALIAS[h.id].en}</span></dd>`:""}<dt>Part used</dt><dd>${h.part}</dd><dt>Strength of evidence</dt><dd><span class="ev ${h.ev}">${EV[h.ev]}</span></dd>
     <dt>For children</dt><dd>${KIDS[h.id]||"Not recommended for children except as prescribed by a doctor."}</dd></dl>
     <div class="tags">${h.c.map(c=>`<span class="tag">${CONDS[c]}</span>`).join("")}</div>
@@ -6035,7 +6058,7 @@ function openPanel(h){
   $("#closeIt").onclick=closePanel; $("#closeIt").focus();
   $("#favIt").onclick=()=>{ state.favs.has(h.id)?state.favs.delete(h.id):state.favs.add(h.id); saveFavs(); render(); openPanel(h); };
 }
-function closePanel(){ $("#panel").hidden=true; $("#scrim").hidden=true; document.body.style.overflow=""; lastFocus&&lastFocus.focus&&lastFocus.focus(); }
+function closePanel(){ ttsStop(); $("#panel").hidden=true; $("#scrim").hidden=true; document.body.style.overflow=""; lastFocus&&lastFocus.focus&&lastFocus.focus(); }
 $("#scrim").onclick=closePanel;
 $("#tabHome").onclick=()=>setView("home");
 $("#goHome").onclick=()=>setView("home");
@@ -6058,7 +6081,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- What's new: shown once to returning visitors after each update ---------- */
-const NEWS={v:"2026-11-08k",date:"8 November 2026",go:"uae",items:[
+const NEWS={v:"2026-11-08l",date:"8 November 2026",go:"herbs",items:[
+ "<b>Read aloud:</b> a new button on every herb and blend reads the information out loud, for anyone who finds reading hard or is cooking with busy hands. Tap it again to stop.",
  "<b>UAE & Gulf plants:</b> a new page on twelve plants of our environment, including ghaf, sidr, samr, shua, arak, qurm and markh, with what the Abu Dhabi Department of Health says about their safety. And in the «Safety checker», a section on look-alike and poisonous plants.",
  "<b>Do herbs interact with my medicines?</b> in the «Safety checker» you can now select all your medicines at once (17 types, including epilepsy, cortisone, antibiotics and cancer medicines) and add the herbs you are considering, to see for each herb: avoid, or use with caution, with the reason. A button copies the result to show your pharmacist.",
  "<b>Farming books:</b> a new section in «Masters of medicine and herbs» on the best-known farming books, from Cato and the Chinese farming classic to Ibn Wahshiyya, al-Tighnari, Ibn Luyun and the Rasulid sultans of Yemen, then Albert Howard, Rachel Carson, Fukuoka and Teruo Higa, creator of EM. And a section «Europe and modern times» for herbal books from Fuchs to Germany's Commission E.",

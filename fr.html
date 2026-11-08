@@ -184,7 +184,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(2.2rem,6vw,3.2re
 .sbox{border-radius:6px;padding:14px 16px;border:1px solid var(--line);background:var(--sheet)}
 .sbox h3{margin:0 0 8px;font-size:1rem}
 .sbox.bad{border-color:var(--warn)}.sbox.bad h3{color:var(--warn)}
-.sbox.warn h3{color:var(--mid)}.sbox.ok{border-color:var(--leaf)}.upd{margin:0;color:var(--muted);font-size:.8rem}.rbtn.rep{opacity:.85}.sbox.ok h3{color:var(--leaf)}.ixbox{background:var(--sheet);border:1px solid var(--leaf);border-radius:8px;padding:14px 16px;margin:8px 0 14px;display:flex;flex-direction:column;gap:10px}.ixpick input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}.ixpick .opts{margin-top:6px}.ixact{display:flex;justify-content:center}#ixres{display:flex;flex-direction:column;gap:10px}
+.sbox.warn h3{color:var(--mid)}.sbox.ok{border-color:var(--leaf)}.upd{margin:0;color:var(--muted);font-size:.8rem}.rbtn.say.speaking{background:var(--leaf);color:var(--sheet)}.rbtn.rep{opacity:.85}.sbox.ok h3{color:var(--leaf)}.ixbox{background:var(--sheet);border:1px solid var(--leaf);border-radius:8px;padding:14px 16px;margin:8px 0 14px;display:flex;flex-direction:column;gap:10px}.ixpick input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}.ixpick .opts{margin-top:6px}.ixact{display:flex;justify-content:center}#ixres{display:flex;flex-direction:column;gap:10px}
 .sbox ul,.dlist{margin:0;padding-inline-start:20px;font-size:.9rem}
 .sbox li,.dlist li{margin-bottom:6px}.sbox li span{color:var(--muted)}
 .about{display:flex;flex-direction:column;gap:22px;max-width:760px}
@@ -3738,6 +3738,7 @@ function renderRecipes(){
   }
 }
 function setView(v){
+  ttsStop();
   state.view=v;
   [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabEye","eye"],["tabSch","sch"],["tabSkin","skin"],["tabUae","uae"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
@@ -5598,6 +5599,28 @@ const NUTR = [
 const NSYM = [["Fatigue et épuisement",["iron","b12","vitd","folate","mg","protein"]],["Faiblesse musculaire et perte de poids",["protein","vitd"]],["Pâleur et essoufflement",["iron","b12","folate"]],["Chute de cheveux",["iron","zinc","vitd","protein"]],["Engourdissements et fourmillements des membres",["b12"]],["Douleurs osseuses et musculaires",["vitd","calcium"]],["Crampes musculaires",["mg","calcium"]],["Aphtes et gerçures aux coins de la bouche",["b12","iron","folate"]],["Gencives qui saignent et cicatrisation lente",["vitc","zinc","protein"]],["Mauvaise vision dans l'obscurité",["vita"]],["Infections fréquentes",["vitd","zinc","vitc","vita"]],["Ongles cassants",["iron"]]];
 const nst={sym:null};
 const SITE_URL="https://maryamherbs.com/fr.html";
+const IC_SAY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+/* ---------- Lecture à voix haute ---------- */
+const TTS={on:null,lbl:""};
+const ttsOK=()=>{ try{ return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window; }catch(e){ return false; } };
+const ttsLang=()=>{ const L=(document.documentElement.lang||"ar").slice(0,2); return L; };
+function ttsVoice(){ const L=ttsLang(), vs=speechSynthesis.getVoices()||[]; const m=vs.filter(v=>(v.lang||"").toLowerCase().startsWith(L)); return m.find(v=>/SA|AE|EG/i.test(v.lang))||m.find(v=>v.localService)||m[0]||null; }
+function ttsStop(){ try{ if(ttsOK()) speechSynthesis.cancel(); }catch(e){} const b=TTS.on; TTS.on=null; if(b&&b.isConnected){ b.classList.remove("speaking"); const sp=b.querySelector("span"); if(sp) sp.textContent=TTS.lbl; } }
+function ttsChunks(t){ const out=[]; t.replace(/[*•🌿]/g," ").split(/\n+/).forEach(line=>{ let x=line.trim(); while(x.length>180){ let i=x.lastIndexOf(",",180); if(i<60) i=x.lastIndexOf(" ",180); if(i<60) i=180; out.push(x.slice(0,i+1)); x=x.slice(i+1).trim(); } if(x) out.push(x); }); return out; }
+function ttsSay(btn,text){
+  if(TTS.on===btn){ ttsStop(); return; } ttsStop();
+  const vs=speechSynthesis.getVoices()||[], v=ttsVoice();
+  if(vs.length&&!v){ flashBtn(btn,"Aucune voix pour cette langue sur votre appareil"); return; }
+  const parts=ttsChunks(text); if(!parts.length) return;
+  TTS.on=btn; const sp=btn.querySelector("span"); TTS.lbl=sp?sp.textContent:""; if(sp) sp.textContent="Arrêter la lecture"; btn.classList.add("speaking");
+  parts.forEach((p,i)=>{ const u=new SpeechSynthesisUtterance(p); u.lang=v?v.lang:({ar:"ar-SA",en:"en-GB",fr:"fr-FR"}[ttsLang()]||"ar-SA"); if(v) u.voice=v; u.rate=.95;
+    if(i===parts.length-1){ u.onend=()=>{ if(TTS.on===btn) ttsStop(); }; } u.onerror=()=>{ if(TTS.on===btn) ttsStop(); }; speechSynthesis.speak(u); });
+  gcEv("tts","tts");
+}
+function sayHerb(h){ return [h.ar.split(" (")[0]+".", h.use, "Usages courants : "+h.uses.join(", ")+".", "Préparation habituelle : "+h.prep, "Précautions : "+h.warn.join(", ")+".", "Interactions médicamenteuses possibles : "+h.inter.join(", ")+"."].join("\n"); }
+function sayRecipe(r){ return [r.name+".", r.for, "Ingrédients :", ...r.ing.map(([id,t])=>(id?byId[id].ar.split(" (")[0]+": ":"")+t+"."), "Préparation :", ...r.steps.map(x=>x), "Combien et quand ? "+doseOf(r), "Attention : "+r.note].join("\n"); }
+if(ttsOK()){ try{ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>{}; }catch(e){} }
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-hsay],[data-rsay]"); if(!b) return; if(b.dataset.hsay){ const h=byId[b.dataset.hsay]; if(h) ttsSay(b,sayHerb(h)); } else { const r=RECIPES.find(x=>x.name===b.dataset.rsay); if(r) ttsSay(b,sayRecipe(r)); } });
 const IC_COPY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>';
 const IC_SHARE='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>';
 const TRAD_NOTE="Issu de la médecine traditionnelle ; la plupart de ses recettes n'ont pas été testées dans de grandes études. Choisissez si possible des ingrédients bio ou locaux et propres, d'une source fiable, et si vous n'allez pas mieux, consultez un médecin.";
@@ -5605,7 +5628,7 @@ const UPD={"h":{"chamomile":"2026-11-08","mint":"2026-11-08","ginger":"2026-11-0
 const updDate=d=>{ try{ const L=document.documentElement.lang||"ar"; return new Date(d+"T12:00:00").toLocaleDateString(L==="ar"?"fr-FR":L,{year:"numeric",month:"long",day:"numeric"}); }catch(e){ return d; } };
 const updLine=d=>d?`<p class="upd">Dernière mise à jour de ces informations : ${updDate(d)}</p>`:"";
 function goReport(label){ closePanel&&!$("#panel").hidden&&closePanel(); setView("about"); setTimeout(()=>{ const k=$("#fb-kind")||$("#fw-kind"), t=$("#fb-text")||$("#fw-text"); if(k) k.selectedIndex=0; if(t){ t.value=label+" — "; t.scrollIntoView({block:"center"}); t.focus(); } },150); }
-const ractBox=r=>`<p class="tradnote">🌿 ${TRAD_NOTE} <button type="button" class="wlink" data-goorg="1">Cultivez vos plantes en bio</button></p><div class="ract"><button type="button" class="rbtn" data-rcopy="${esc(r.name)}">${IC_COPY}<span>Copier la recette</span></button><button type="button" class="rbtn" data-rshare="${esc(r.name)}">${IC_SHARE}<span>Partager</span></button><button type="button" class="rbtn rep" data-rrep="${esc(r.name)}"><span>Signaler une erreur</span></button></div>`;
+const ractBox=r=>`<p class="tradnote">🌿 ${TRAD_NOTE} <button type="button" class="wlink" data-goorg="1">Cultivez vos plantes en bio</button></p><div class="ract">${ttsOK()?`<button type="button" class="rbtn say" data-rsay="${esc(r.name)}">${IC_SAY}<span>Lire à voix haute</span></button>`:""}<button type="button" class="rbtn" data-rcopy="${esc(r.name)}">${IC_COPY}<span>Copier la recette</span></button><button type="button" class="rbtn" data-rshare="${esc(r.name)}">${IC_SHARE}<span>Partager</span></button><button type="button" class="rbtn rep" data-rrep="${esc(r.name)}"><span>Signaler une erreur</span></button></div>`;
 const GUIDE=SITE_URL.endsWith(".html")?SITE_URL.replace(/\.html$/,"/"):SITE_URL;
 const recipeLink=r=>SITE_URL+"?utm_source=share#r="+encodeURIComponent(r.name);
 function recipeText(r){
@@ -6013,7 +6036,7 @@ function openPanel(h){
   p.innerHTML=`<div class="panel-top"><div style="display:flex;gap:14px;align-items:center">${herbIcon(h,"hicon big")}<div><h2 id="pTitle">${h.ar}</h2><div class="lat">${h.lat}</div></div></div>
     <div style="display:flex;gap:6px"><button class="icon-btn" id="favIt">${fav?"★ Retirer":"☆ Enregistrer"}</button><button class="icon-btn" id="closeIt">Fermer</button></div></div>
     <a class="photos" href="https://commons.wikimedia.org/w/index.php?search=${latinQ(h)}&title=Special:MediaSearch&type=image" target="_blank" rel="noopener">${h.sea||h.animal?"Voir de vraies photos":"Voir de vraies photos de la plante"} ↗</a>
-    <div class="ract"><button type="button" class="rbtn" data-hcopy="${h.id}">${IC_COPY}<span>Copier les infos</span></button><button type="button" class="rbtn" data-hshare="${h.id}">${IC_SHARE}<span>Partager</span></button></div>
+    <div class="ract">${ttsOK()?`<button type="button" class="rbtn say" data-hsay="${h.id}">${IC_SAY}<span>Lire à voix haute</span></button>`:""}<button type="button" class="rbtn" data-hcopy="${h.id}">${IC_COPY}<span>Copier les infos</span></button><button type="button" class="rbtn" data-hshare="${h.id}">${IC_SHARE}<span>Partager</span></button></div>
     <dl class="facts">${ALIAS[h.id]?`<dt>Autres noms</dt><dd>${ALIAS[h.id].alt.join(", ")} · <span dir="ltr">${ALIAS[h.id].en}</span></dd>`:""}<dt>Partie utilisée</dt><dd>${h.part}</dd><dt>Niveau de preuve</dt><dd><span class="ev ${h.ev}">${EV[h.ev]}</span></dd>
     <dt>Pour les enfants</dt><dd>${KIDS[h.id]||"Déconseillé aux enfants sauf prescription médicale."}</dd></dl>
     <div class="tags">${h.c.map(c=>`<span class="tag">${CONDS[c]}</span>`).join("")}</div>
@@ -6035,7 +6058,7 @@ function openPanel(h){
   $("#closeIt").onclick=closePanel; $("#closeIt").focus();
   $("#favIt").onclick=()=>{ state.favs.has(h.id)?state.favs.delete(h.id):state.favs.add(h.id); saveFavs(); render(); openPanel(h); };
 }
-function closePanel(){ $("#panel").hidden=true; $("#scrim").hidden=true; document.body.style.overflow=""; lastFocus&&lastFocus.focus&&lastFocus.focus(); }
+function closePanel(){ ttsStop(); $("#panel").hidden=true; $("#scrim").hidden=true; document.body.style.overflow=""; lastFocus&&lastFocus.focus&&lastFocus.focus(); }
 $("#scrim").onclick=closePanel;
 $("#tabHome").onclick=()=>setView("home");
 $("#goHome").onclick=()=>setView("home");
@@ -6058,7 +6081,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-08k",date:"8 novembre 2026",go:"uae",items:[
+const NEWS={v:"2026-11-08l",date:"8 novembre 2026",go:"herbs",items:[
+ "<b>Lecture à voix haute :</b> un nouveau bouton sur chaque plante et chaque mélange lit les informations à voix haute, pour ceux qui ont du mal à lire ou qui cuisinent les mains occupées. Touchez-le à nouveau pour arrêter.",
  "<b>Plantes des Émirats et du Golfe :</b> une nouvelle page sur douze plantes de notre environnement, dont le ghaf, le sidr, le samr, le shua, l’arak, le qurm et le markh, avec l’avis du Département de la santé d’Abou Dhabi sur leur sécurité. Et dans le «Vérificateur de sécurité», une section sur les plantes sosies et toxiques.",
  "<b>Les plantes interagissent-elles avec mes médicaments ?</b> dans le « Vérificateur de sécurité », vous pouvez désormais choisir tous vos médicaments à la fois (17 types, dont l’épilepsie, la cortisone, les antibiotiques et les médicaments du cancer) et ajouter les plantes envisagées, pour voir pour chacune : à éviter, ou avec prudence, avec la raison. Un bouton copie le résultat pour le montrer au pharmacien.",
  "<b>Livres d’agriculture :</b> une nouvelle section dans « Les maîtres de la médecine et des plantes » sur les livres d’agriculture les plus connus, de Caton et du classique agricole chinois à Ibn Wahshiyya, al-Tighnari, Ibn Luyun et aux sultans rasoulides du Yémen, puis Albert Howard, Rachel Carson, Fukuoka et Teruo Higa, créateur de l’EM. Et une section « L’Europe et l’époque moderne » pour les herbiers, de Fuchs à la Commission E allemande.",
