@@ -1478,7 +1478,7 @@ HERBS.push(
 /* من الحيوان: البيض والدواجن واللحوم والألبان (إضافة) */
 HERBS.push(
  {id:"egg", animal:true, ar:"البيض", lat:"Ovum gallinae", part:"بيض الدجاج", ev:"m", c:["fatigue","land"],
-  use:"من أكمل الأطعمة وأرخصها: بروتين عالي الجودة، وفيتامين ب١٢ ود، والكولين المهم لدماغ الجنين والطفل.",
+  use:"من أكمل الأطعمة وأرخصها: بروتين عالي الجودة، وفيتامين ب12 ود، والكولين المهم لدماغ الجنين والطفل.",
   uses:["غذاء للأطفال والناقه والحامل وكبار السن","البيض البلدي بالعسل شعبيًا للقوة: غذاء جيد، لكن لا دليل على أثر خاص","صفار البيض من المصادر الغذائية القليلة لفيتامين د"],
   prep:"يُؤكل مسلوقًا جيدًا، أو مطبوخًا بقليل من الزيت حتى يتماسك الصفار.",
   warn:["البيض النيء أو نصف المطبوخ قد ينقل السالمونيلا: يُطبخ جيدًا للحامل والأطفال وكبار السن ومن مناعته ضعيفة","لا يوضع بياض البيض على الحروق: يحبس الحرارة وقد يسبب التهابًا؛ الصحيح الماء الجاري 20 دقيقة","حساسية البيض شائعة عند الأطفال: يُقدَّم أول مرة بكمية صغيرة مطبوخة جيدًا","مرضى الكوليسترول: بيضة في اليوم مقبولة لأغلب الناس ضمن غذاء صحي، ويُسأل الطبيب"],
@@ -1490,7 +1490,7 @@ HERBS.push(
   warn:["يُطبخ جيدًا حتى لا يبقى أحمر عند العظم، وتُغسل الأيدي والألواح بعد لمس الدجاج النيء","مرضى الضغط يقلّلون الملح ومكعبات المرق الجاهزة","لا يُترك المرق المطبوخ خارج الثلاجة أكثر من ساعتين"],
   inter:["لا تداخلات دوائية مهمة"]},
  {id:"mutton", animal:true, ar:"لحم الضأن والغنم", lat:"Ovis aries", part:"اللحم والمرق", ev:"m", c:["fatigue","postpartum","land"],
-  use:"أكثر اللحوم حضورًا في المائدة العربية، غني بالحديد سهل الامتصاص والزنك وفيتامين ب١٢.",
+  use:"أكثر اللحوم حضورًا في المائدة العربية، غني بالحديد سهل الامتصاص والزنك وفيتامين ب12.",
   uses:["فقر الدم: الحديد في اللحم أسهل امتصاصًا من حديد النبات","مرق اللحم للنفساء والضعيف في التراث","الثريد واللحم للمريض والصائم"],
   prep:"يُطبخ مرقًا أو يُشوى، والأفضل القطع الأقل دهنًا.",
   warn:["مرضى النقرس يقلّلون اللحوم الحمراء والأحشاء، فهي ترفع حمض اليوريك","مرضى القلب والكوليسترول: لحم أحمر قليل الدهن مرتين إلى ثلاث في الأسبوع، مع إزالة الشحوم","الإكثار من اللحوم المصنّعة كالنقانق واللحم المدخّن يرتبط بزيادة سرطان القولون"],
@@ -1511,8 +1511,8 @@ HERBS.push(
   inter:["مع أدوية السكري: قد يزيد خفض السكر قليلًا"],
   ref:"في حديث العُرنيين أن النبي ﷺ أمرهم أن يلحقوا بإبل الصدقة فيشربوا من ألبانها وأبوالها فصحّوا (متفق عليه). والأطباء اليوم يحذّرون من شرب الأبوال لما ثبت من نقلها للأمراض."},
  {id:"liver", animal:true, ar:"الكبدة", lat:"Hepar (ovis, bos, gallus)", part:"كبد الضأن أو البقر أو الدجاج", ev:"s", c:["fatigue","land"],
-  use:"من أغنى الأطعمة بالحديد وفيتامين ب١٢ وفيتامين أ، وطبق شعبي في كل البلاد العربية.",
-  uses:["فقر الدم بنقص الحديد: من أقوى المصادر الغذائية","نقص فيتامين ب١٢"],
+  use:"من أغنى الأطعمة بالحديد وفيتامين ب12 وفيتامين أ، وطبق شعبي في كل البلاد العربية.",
+  uses:["فقر الدم بنقص الحديد: من أقوى المصادر الغذائية","نقص فيتامين ب12"],
   prep:"تُطبخ جيدًا مع البصل، وتكفي مرة في الأسبوع غالبًا.",
   warn:["الحامل لا تُكثر منها: فيتامين أ الزائد قد يضر الجنين، فتسأل طبيبتها عن الكمية","لا تُؤكل نيئة ولا وردية من الداخل","مرضى النقرس والكوليسترول يقلّلون منها"],
   inter:["لا تداخلات دوائية مهمة"]},
@@ -1663,15 +1663,15 @@ RECIPES.push(
 );
 /* ===== من البحر ===== */
 HERBS.push(
- {id:"fishoil", sea:true, ar:"زيت السمك (أوميغا ٣)", lat:"Omega-3 fatty acids (EPA, DHA)", part:"زيت من الأسماك الدهنية", ev:"s", c:["sea","chol","bp","pain"],
+ {id:"fishoil", sea:true, ar:"زيت السمك (أوميغا 3)", lat:"Omega-3 fatty acids (EPA, DHA)", part:"زيت من الأسماك الدهنية", ev:"s", c:["sea","chol","bp","pain"],
   use:"أكثر المنتجات البحرية دراسةً. يخفض الدهون الثلاثية المرتفعة بوضوح، وأفضل مصدر له أكل السمك الدهني كالسردين والماكريل والسلمون والكنعد مرتين أسبوعيًا.",
   uses:["خفض الدهون الثلاثية المرتفعة (بجرعات يحدّدها الطبيب)","تخفيف تيبّس المفاصل في الروماتويد (دراسات متوسطة)","جزء من غذاء القلب: السمك مرتين أسبوعيًا"],
   prep:"الأفضل من الطعام: وجبتا سمك دهني أسبوعيًا. المكمّل: كبسولة إلى كبسولتين يوميًا مع الأكل حسب العبوة، والجرعات العالية بإشراف الطبيب.",
   warn:["الجرعات العالية (أكثر من 3 غرامات يوميًا) تزيد النزف وقد تزيد اضطراب نبض القلب (الرجفان الأذيني)","يُوقف قبل العمليات الجراحية بأسبوع","طعم السمك والتجشّؤ: يُؤخذ مع الأكل أو يُحفظ في الثلاجة","ممنوع لمن لديه حساسية من السمك"],
   inter:["مميّعات الدم ومضادّات الصفائح","أدوية الضغط (تأثير مضاف بسيط)"]},
  {id:"codliver", sea:true, ar:"زيت كبد الحوت (زيت كبد سمك القد)", lat:"Cod liver oil", part:"زيت من كبد السمك", ev:"m", c:["sea","fatigue"],
-  use:"كان ملعقة الصباح في بيوت الأجداد للأطفال قبل المدرسة. غني بفيتامين د وفيتامين أ وأوميغا ٣، وكان يُعطى للوقاية من الكُساح ولين العظام.",
-  uses:["مصدر لفيتامين د وأ، خاصة لمن لا يتعرّض للشمس","مصدر لأوميغا ٣"],
+  use:"كان ملعقة الصباح في بيوت الأجداد للأطفال قبل المدرسة. غني بفيتامين د وفيتامين أ وأوميغا 3، وكان يُعطى للوقاية من الكُساح ولين العظام.",
+  uses:["مصدر لفيتامين د وأ، خاصة لمن لا يتعرّض للشمس","مصدر لأوميغا 3"],
   prep:"حسب العبوة فقط: غالبًا ملعقة صغيرة يوميًا للكبار، وأقل للأطفال حسب العمر المكتوب. لا تُجمع مع مكمّل آخر فيه فيتامين أ أو د.",
   warn:["فيتامين أ يتراكم في الجسم: الإكثار منه يسبب تسمّمًا (صداع، تقشّر الجلد، ضرر الكبد والعظام)","<b>الحامل لا تأخذه إلا بإذن الطبيب</b>: زيادة فيتامين أ قد تسبب تشوّهات للجنين","لا يُعطى للطفل أكثر من المكتوب على العبوة","ممنوع لمن لديه حساسية من السمك"],
   inter:["مميّعات الدم","مكمّلات فيتامين أ ود الأخرى","أدوية حب الشباب من مشتقّات فيتامين أ (الأيزوتريتينوين)"]},
@@ -1700,8 +1700,8 @@ HERBS.push(
   warn:["يُشرب معه ماء كثير، وإلا قد يسبب انسداد المريء أو الأمعاء","لا يُستعمل مع صعوبة البلع"],
   inter:["يُفصل عن الأدوية بساعتين (قد يقلّل امتصاصها)"]},
  {id:"oyster", sea:true, ar:"المحار والقشريات (والسردين الصغير)", lat:"Shellfish & small fish", part:"لحم بحري", ev:"s", c:["sea","fatigue","libido"],
-  use:"المحار أغنى طعام بالزنك، وفيه حديد وفيتامين ب١٢. والزنك مهم للمناعة ولخصوبة الرجل، ونقصه يضعف الشهية والتئام الجروح.",
-  uses:["تعويض نقص الزنك والحديد وب١٢","غذاء للنقاهة"],
+  use:"المحار أغنى طعام بالزنك، وفيه حديد وفيتامين ب12. والزنك مهم للمناعة ولخصوبة الرجل، ونقصه يضعف الشهية والتئام الجروح.",
+  uses:["تعويض نقص الزنك والحديد وب12","غذاء للنقاهة"],
   prep:"يُؤكل مطبوخًا جيدًا من مصدر موثوق، مرة أو مرتين أسبوعيًا.",
   warn:["<b>المحار النيّء خطر</b>: قد ينقل التهاب الكبد والبكتيريا، خاصة لمرضى الكبد والسكري ونقص المناعة والحامل","حساسية القشريات من أشهر الحساسيات الغذائية وقد تكون شديدة","يُتجنّب مع النقرس (غني بالبيورينات)"],
   inter:["مكمّلات الزنك والحديد (لا داعي لها مع الأكل المنتظم)"]},
@@ -2788,15 +2788,15 @@ RECIPES.push(
   "لمريض السكري: كمية أقل.",K(GF,{minAge:1}))
 );
 RECIPES.push(
- X("سلطة السردين بالليمون والكمّون","سمك صغير رخيص غني بفيتامين د والكالسيوم (من عظمه) وأوميغا ٣ وب١٢.",A,["fatigue","pain"],
+ X("سلطة السردين بالليمون والكمّون","سمك صغير رخيص غني بفيتامين د والكالسيوم (من عظمه) وأوميغا 3 وب12.",A,["fatigue","pain"],
   [[null,"علبة سردين بزيت الزيتون أو الماء (بعظمه)"],["cumin","رشّة كمّون"],[null,"عصير ليمونة وبصل أخضر وبقدونس"],["olive","ملعقة زيت زيتون"]],
   ["افتح العلبة واهرس السردين بعظمه الطري بالشوكة.","أضف الليمون والكمّون والبصل والبقدونس والزيت.","يُؤكل مع الخبز أو السلطة."],
   "السردين المعلّب مالح؛ مريض الضغط يختار قليل الملح.",K(MG,{dose:"مرة إلى مرتين أسبوعيًا."})),
- X("بيض بالسبانخ والزعتر","فطور غني بفيتامين د (الصفار) وب١٢ والفولات والحديد.",["adults","kids"],["fatigue"],
+ X("بيض بالسبانخ والزعتر","فطور غني بفيتامين د (الصفار) وب12 والفولات والحديد.",["adults","kids"],["fatigue"],
   [["egg","بيضتان"],[null,"حفنة سبانخ مفرومة"],["thyme","رشّة زعتر"],["olive","ملعقة زيت زيتون"]],
   ["اقلِ السبانخ في الزيت حتى تذبل.","اكسر البيض فوقها واتركه حتى ينضج جيدًا.","رشّ الزعتر والملح."],
   "يُطهى البيض جيدًا للأطفال والحوامل.",K(LV,{minAge:1,dose:"عدة مرات أسبوعيًا مع الفطور."})),
- X("كبدة الدجاج بدبس الرمّان","طبق شامي من أغنى الأطعمة بالحديد وب١٢ وفيتامين أ.",A,["fatigue","heavy"],
+ X("كبدة الدجاج بدبس الرمّان","طبق شامي من أغنى الأطعمة بالحديد وب12 وفيتامين أ.",A,["fatigue","heavy"],
   [["liver","ربع كيلو كبدة دجاج منظّفة"],[null,"ثوم وفلفل حار حسب الرغبة"],["pomegranate","ملعقة كبيرة دبس رمّان"],["olive","ملعقة زيت زيتون"]],
   ["اقلِ الثوم في الزيت، ثم أضف الكبدة وقلّبها على نار عالية حتى تنضج تمامًا.","أضف دبس الرمّان والملح والفلفل.","تُقدّم مع الخبز والليمون."],
   "الحامل لا تُكثر من الكبدة لغناها بفيتامين أ. تُطهى جيدًا.",K(LV,{yield:"لشخصين",dose:"مرة أسبوعيًا."}))
@@ -2984,8 +2984,8 @@ RECIPES.push(
   [["deadsea","كوب إلى كوبين من ملح البحر الميت"],[null,"حوض ماء دافئ"],["olive","زيت زيتون أو مرطّب بعد الحمّام"]],
   ["أذب الملح في ماء الحوض الدافئ.","انقع جسمك 15–20 دقيقة.","اشطف جسمك بماء عادي.","جفّف بالتربيت ورطّب الجلد فورًا."],
   "مرتين إلى ثلاث أسبوعيًا. يلسع الجروح والتشقّقات المفتوحة. يكمّل علاج طبيب الجلدية ولا يغني عنه.",{topical:true,o:"levant"}),
- X("شوربة السمك باللومي","وجبة نقاهة خليجية دافئة غنية بالبروتين وأوميغا ٣.",["adults","kids"],["fatigue","immune","postpartum"],
-  [["fishoil","نصف كيلو سمك أبيض أو كنعد مقطّع (الكنعد غني بأوميغا ٣)"],["loomi","لومية مثقوبة"],["turmeric","ربع ملعقة صغيرة كركم"],["cumin","نصف ملعقة صغيرة كمّون"],[null,"بصلة وحبّة طماطم وفص ثوم"],[null,"لتر ماء وملح قليل"]],
+ X("شوربة السمك باللومي","وجبة نقاهة خليجية دافئة غنية بالبروتين وأوميغا 3.",["adults","kids"],["fatigue","immune","postpartum"],
+  [["fishoil","نصف كيلو سمك أبيض أو كنعد مقطّع (الكنعد غني بأوميغا 3)"],["loomi","لومية مثقوبة"],["turmeric","ربع ملعقة صغيرة كركم"],["cumin","نصف ملعقة صغيرة كمّون"],[null,"بصلة وحبّة طماطم وفص ثوم"],[null,"لتر ماء وملح قليل"]],
   ["شوّح البصل والثوم في قليل من الزيت، ثم أضف الطماطم والبهارات.","أضف الماء واللومية واتركها تغلي 10 دقائق.","أضف السمك واطبخه على نار هادئة 10–15 دقيقة حتى ينضج.","أخرج العظام بعناية قبل تقديمها للأطفال."],
   "يُنتبه للعظام مع الأطفال وكبار السن. لمن لديه حساسية من السمك: لا تناسب.",{minAge:1,o:"gulf",yield:"لـ4 أشخاص",dose:"صحن مرتين أو ثلاث أسبوعيًا"}),
  X("هلام الأجار بعصير البرقوق","حلوى يابانية خفيفة (الكانتن) للإمساك الخفيف.",A,["constip"],
@@ -3744,7 +3744,7 @@ function renderRecipes(){
   if(state.rsort!=="orig") list=list.map((r,i)=>[r,i]).sort((a,b)=>(state.origin==="nabawi"?((relOf(b[0]).hg??-1)-(relOf(a[0]).hg??-1)):0)||relOf(b[0]).score-relOf(a[0]).score||a[1]-b[1]).map(x=>x[0]);
   const so=document.createElement("label"); so.className="rsort"; so.innerHTML=`ترتيب الخلطات: <select><option value="rel">الأوثق أولًا</option><option value="orig">حسب المصدر</option></select>`;
   const sel=so.querySelector("select"); sel.value=state.rsort==="orig"?"orig":"rel"; sel.onchange=()=>{state.rsort=sel.value; render();}; el.append(so);
-  $("#count").textContent=`${list.length.toLocaleString("ar-EG")} من ${RECIPES.length.toLocaleString("ar-EG")} خلطة`;
+  $("#count").textContent=`${list.length.toLocaleString("ar-EG-u-nu-latn")} من ${RECIPES.length.toLocaleString("ar-EG-u-nu-latn")} خلطة`;
   if(!list.length){ el.insertAdjacentHTML("beforeend",`<div class="empty">لا توجد خلطات مطابقة.</div>`); return; }
   if(fixQ) el.insertAdjacentHTML("beforeend",fixNote(state.q.trim(),fixQ));
   if(kq){ el.insertAdjacentHTML("beforeend",KIDNOTE); $("#kidsNotice").hidden=false; }
@@ -3850,7 +3850,7 @@ function render(){
   let fixQ=null; if(!base.length&&qq){ const fq=fixQuery(state.q); if(fq){ const sq=state.q; state.q=fq; base=HERBS.filter(matches); state.q=sq; if(base.length) fixQ=fq; } }
   if(kq){ state.aud="all"; $("#kidsNotice").hidden=false; }
   const list=base.map((h,i)=>[h,i]).sort((a,b)=>score(a[0])-score(b[0])||a[1]-b[1]).map(x=>x[0]), g=$("#grid"); g.innerHTML="";
-  $("#count").textContent = `${list.length.toLocaleString("ar-EG")} من ${HERBS.length.toLocaleString("ar-EG")} عشبة`;
+  $("#count").textContent = `${list.length.toLocaleString("ar-EG-u-nu-latn")} من ${HERBS.length.toLocaleString("ar-EG-u-nu-latn")} عشبة`;
   if(!list.length){ g.innerHTML=`<div class="empty">لا توجد نتائج. جرّب كلمة أخرى أو اختر «الكل».</div>`; return; }
   if(state.cond==="grow"&&!qq) g.insertAdjacentHTML("beforeend",GROW_TIPS);
   if(fixQ) g.insertAdjacentHTML("beforeend",fixNote(state.q.trim(),fixQ));
@@ -4125,7 +4125,7 @@ function renderWForm(){
   const ready=wReady(), kidSmall=ready&&w.who==="kid"&&w.age<12, infant=ready&&w.band===0;
   if(!ready||infant||!probsFor().some(p=>p[0]===w.prob)) w.prob=null;
   if(w.step===1&&w.gFixed&&w.g) w.step=2; if(w.step>=2&&!w.g) w.step=1; if(w.step>=3&&!ready) w.step=2; if(w.step===3&&infant) w.step=4; if(w.step===4&&!w.prob&&!infant) w.step=ready?3:1;
-  const prog=n=>{ const T=w.gFixed?2:3, m=w.gFixed?n-1:n; return `<p class="wprog">${Array.from({length:T},(_,i)=>`<i class="${i<m?"on":""}"></i>`).join("")}<span>الخطوة ${m.toLocaleString("ar-EG")}/${T.toLocaleString("ar-EG")}</span></p>`; };
+  const prog=n=>{ const T=w.gFixed?2:3, m=w.gFixed?n-1:n; return `<p class="wprog">${Array.from({length:T},(_,i)=>`<i class="${i<m?"on":""}"></i>`).join("")}<span>الخطوة ${m.toLocaleString("ar-EG-u-nu-latn")}/${T.toLocaleString("ar-EG-u-nu-latn")}</span></p>`; };
   const back=n=>`<button type="button" class="wlink" data-k="step:${n}">رجوع</button>`;
   let h="";
   const preBar=w.pre&&w.step<4?`<p class="wsum">تبحث عن: <b>${esc(w.preQ)}</b> · <button type="button" class="wlink" data-k="clearpre">إلغاء</button></p>`:"";
@@ -4273,7 +4273,7 @@ function renderWRes(){
   const ok=[], bad=[];
   for(const r of cands){ const e=evalRecipe(r); (e.ex.length?bad:ok).push([r,e]); }
   ok.sort((a,b)=>((b[0].top?1:0)-(a[0].top?1:0))||(relOf(b[0]).score-relOf(a[0]).score)||(b[1].c.length?0:1)-(a[1].c.length?0:1));
-  const n=ok.length, cnt = n===1?"خلطة واحدة مناسبة":n===2?"خلطتان مناسبتان":n<=10?`${n.toLocaleString("ar-EG")} خلطات مناسبة`:`${n.toLocaleString("ar-EG")} خلطة مناسبة`;
+  const n=ok.length, cnt = n===1?"خلطة واحدة مناسبة":n===2?"خلطتان مناسبتان":n<=10?`${n.toLocaleString("ar-EG-u-nu-latn")} خلطات مناسبة`:`${n.toLocaleString("ar-EG-u-nu-latn")} خلطة مناسبة`;
   const plabel=(PROBS.find(p=>p[0]===w.prob)||[,""])[1], blabel=(BANDS.find(b=>b[0]===w.band)||[,""])[1];
   let h=`${PROBNOTE[w.prob]?`<div class="refq">${PROBNOTE[w.prob]}</div>`:""}${PROBGUIDE[w.prob]?`<div class="guide pguide">${PROBGUIDE[w.prob].map((s,i)=>`<details ${i===0?"open":""}><summary>${s.t}</summary><div>${s.h}</div></details>`).join("")}</div>`:""}<h2 class="res-head">${n?cnt:"لا توجد خلطة مناسبة"}</h2>`;
   if(!ok.length) h+=`<div class="empty-res">${cands.length?"كل الخلطات المتاحة لهذه المشكلة لا تناسب حالتك. الأفضل استشارة الطبيب أو الصيدلي.":kidSmall?"لا توجد خلطة مناسبة لهذا العمر وهذه المشكلة. استشر طبيب الأطفال.":"لا توجد خلطات لهذه المشكلة بعد."}</div>`;
@@ -4281,7 +4281,7 @@ function renderWRes(){
     h+=`<article class="rcard">${badge(r)}<h4 class="t">${r.name}</h4><p class="for">${r.for}</p>${relBox(r)}${refBox(r)}
       ${doseBox(r)}${e.c.length?`<div class="caution"><ul>${e.c.map(x=>`<li>${x}</li>`).join("")}</ul></div>`:""}${recipeDetails(r)}${ractBox(r)}</article>`;
   }
-  if(bad.length) h+=`<details class="exl"><summary>خلطات مستبعدة لحالتك (${bad.length.toLocaleString("ar-EG")})</summary><ul>${bad.map(([r,e])=>`<li><b>${r.name}</b><br><span>${e.ex.join("، ")}</span></li>`).join("")}</ul></details>`;
+  if(bad.length) h+=`<details class="exl"><summary>خلطات مستبعدة لحالتك (${bad.length.toLocaleString("ar-EG-u-nu-latn")})</summary><ul>${bad.map(([r,e])=>`<li><b>${r.name}</b><br><span>${e.ex.join("، ")}</span></li>`).join("")}</ul></details>`;
   h+=`<div class="red"><h4>اذهب إلى الطبيب بدل الأعشاب إذا ظهر:</h4><ul>${RED[w.prob].map(x=>`<li>${x}</li>`).join("")}${w.who==="kid"?"<li>عند الأطفال: خمول شديد، أو رفض الأكل والشرب، أو صعوبة تنفّس.</li>":""}</ul></div>`;
   h+=convBox();
   el.innerHTML=h;
@@ -4368,7 +4368,7 @@ async function momCards(list,live){
         const danger=herbs.filter(x=>x.ev==="x");
         const who=d.byName||(d.by&&ps[d.by]&&ps[d.by].name)||"أحد أفراد العائلة";
         const canDel = live && MOM.db && !d.static && (MOM.isAdmin || (d.by && d.by===MOM.myId));
-        const date=d.createdAt?new Date(d.createdAt).toLocaleDateString("ar-EG",{year:"numeric",month:"long",day:"numeric"}):"";
+        const date=d.createdAt?new Date(d.createdAt).toLocaleDateString("ar-EG-u-nu-latn",{year:"numeric",month:"long",day:"numeric"}):"";
         return `<article class="momcard">
           ${d.photo?`<img class="momimg" src="/_blob/${esc(d.photo)}" alt="${esc(d.title)}" onerror="this.remove()">`:""}
           <div class="mombody"><span class="orig o-andalus">من وصفات أمي</span>
@@ -4480,7 +4480,7 @@ function renderFeedback(){
       <label for="fw-text">الملاحظة</label><textarea id="fw-text" rows="3" maxlength="1500" required></textarea>
       <div class="momactions"><button type="submit" class="mombtn wabtn">أرسل على واتساب</button><span class="hint">تصل الملاحظة لصاحب الدليل على واتساب.</span></div></form>`;
   if(MOM.isAdmin){
-    h+=`<h3>الملاحظات المرسلة (${MOM.notes.length.toLocaleString("ar-EG")})</h3>${MOM.notes.length?`<ul class="fblist">${MOM.notes.map(n=>`<li><b>${esc(n.kind)}</b> — ${esc(n.text)}<small>${n.createdAt?new Date(n.createdAt).toLocaleDateString("ar-EG"):""}</small><button type="button" class="reset" data-fdoc="${esc(n.doc)}" data-fat="${n.createdAt}">حذف</button></li>`).join("")}</ul>`:`<p class="hint">لا توجد ملاحظات بعد.</p>`}`;
+    h+=`<h3>الملاحظات المرسلة (${MOM.notes.length.toLocaleString("ar-EG-u-nu-latn")})</h3>${MOM.notes.length?`<ul class="fblist">${MOM.notes.map(n=>`<li><b>${esc(n.kind)}</b> — ${esc(n.text)}<small>${n.createdAt?new Date(n.createdAt).toLocaleDateString("ar-EG-u-nu-latn"):""}</small><button type="button" class="reset" data-fdoc="${esc(n.doc)}" data-fat="${n.createdAt}">حذف</button></li>`).join("")}</ul>`:`<p class="hint">لا توجد ملاحظات بعد.</p>`}`;
   }
   box.innerHTML=h;
   const f=document.getElementById("fbForm");
@@ -4518,7 +4518,7 @@ const TILES=[
 ];
 const tileIcon=k=>`<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${TILE_ICONS[k]}</svg>`;
 function renderHome(){
-  const n=x=>x.toLocaleString("ar-EG");
+  const n=x=>x.toLocaleString("ar-EG-u-nu-latn");
   const feat=["honey","dates","nigella","moringa"].map(id=>byId[id]);
   $("#home").innerHTML=`
    <section class="hero">
@@ -4590,7 +4590,7 @@ function renderKit(){
   const item=(k,name,use,hid,q)=>`<li class="kitem"><label><input type="checkbox" id="kit-${k}" data-kit="${k}" ${kitHave[k]?"checked":""}><span><b>${name}</b><em class="kq">الكمية: ${q}</em><small>${use}</small></span></label>${hid?`<button type="button" class="herb-link" data-h="${hid}">الصفحة</button>`:""}</li>`;
   el.innerHTML=`<h2 class="page-h">الصيدلية المنزلية</h2>
    <p class="sub">مكوّنات قليلة تكفي أغلب المشكلات البسيطة في البيت. الكميات المقترحة تكفي أسرة من 4–5 أفراد لعدة أشهر. ضع علامة على ما عندك، ويحفظ التطبيق اختيارك على هذا الجهاز.</p>
-   <div class="kitbar"><div class="kitprog"><span style="width:${Math.round(have/all.length*100)}%"></span></div><b>${have.toLocaleString("ar-EG")} من ${all.length.toLocaleString("ar-EG")} جاهز</b>${have?`<button type="button" class="reset" id="kitReset">مسح العلامات</button>`:""}</div>
+   <div class="kitbar"><div class="kitprog"><span style="width:${Math.round(have/all.length*100)}%"></span></div><b>${have.toLocaleString("ar-EG-u-nu-latn")} من ${all.length.toLocaleString("ar-EG-u-nu-latn")} جاهز</b>${have?`<button type="button" class="reset" id="kitReset">مسح العلامات</button>`:""}</div>
    <div class="kitgrid">
     <section class="kitbox"><h3>رفّ الأعشاب (من المطبخ)</h3><ul>${KIT_HERB.map((x,i)=>item("h"+i,x[1],x[2],x[0],KIT_HQ[i])).join("")}</ul></section>
     <section class="kitbox"><h3>علبة الإسعاف الأساسية (من الصيدلية)</h3><ul>${KIT_MED.map((x,i)=>item("m"+i,x[0],x[1],null,KIT_MQ[i])).join("")}</ul></section>
@@ -5847,7 +5847,7 @@ const NUTR = [
   tips:["الطعام وحده نادرًا ما يكفي؛ كثيرون يحتاجون مكمّلًا بعد تحليل الدم.","يُمتص أفضل مع وجبة فيها دهون.","زجاج النوافذ يحجب الأشعة التي تصنع فيتامين د."],
   warn:"الجرعات العالية جدًا لفترات طويلة دون متابعة قد ترفع الكالسيوم في الدم وتضرّ الكلى. حدّد الجرعة مع الطبيب حسب التحليل.",
   rec:["سلطة السردين بالليمون والكمّون","بيض بالسبانخ والزعتر","البيض المسلوق للأطفال"]},
- {id:"b12", n:"فيتامين ب١٢", need:"2.4 مكغ يوميًا للبالغين",
+ {id:"b12", n:"فيتامين ب12", need:"2.4 مكغ يوميًا للبالغين",
   risk:["النباتيون الذين لا يأكلون منتجات حيوانية","كبار السن","من يتناول الميتفورمين لعلاج السكري","من يتناول أدوية الحموضة لفترات طويلة","بعد عمليات المعدة والتكميم"],
   sym:["خدر ووخز في اليدين والقدمين","تعب وشحوب","ضعف الذاكرة والتركيز","تقرّحات الفم واحمرار اللسان","عدم الاتزان"],
   food:[["ممتاز","الكبدة والمحار",["liver"]],["جيد","اللحوم والسمك والسردين والتونة"],["جيد","البيض والحليب واللبن والجبن",["egg", "milk", "yogurt"]],["متوسط","الأغذية المدعّمة (حبوب الإفطار)"]],
@@ -5903,7 +5903,7 @@ const NUTR = [
   tips:["المصادر النباتية الملوّنة آمنة ولا تسبب زيادة."],
   warn:"الحامل لا تُكثر من الكبدة ولا تأخذ مكمّلات فيتامين أ فوق الفيتامينات المخصّصة للحمل، لأن زيادته تضرّ الجنين.",
   rec:["حساء ورق المورينغا (تينولا)","المورينغا مع الزبادي","كبدة الدجاج بدبس الرمّان","البيض المسلوق للأطفال"]},
- {id:"omega", n:"أوميغا ٣", need:"حصتان من السمك الدهني أسبوعيًا",
+ {id:"omega", n:"أوميغا 3", need:"حصتان من السمك الدهني أسبوعيًا",
   risk:["من لا يأكل السمك"],
   sym:["لا أعراض واضحة لنقصه، لكنه مهم لصحة القلب والدماغ والعين"],
   food:[["ممتاز","السردين والماكريل (الكنعد) والسلمون والتونة"],["جيد (نباتي)","بذر الكتان والجوز وبذور الشيا"]],
@@ -5947,7 +5947,7 @@ const IC_COPY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="c
 const IC_SHARE='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>';
 const TRAD_NOTE="من الطب التقليدي، وأغلب وصفاته لم تُختبر بدراسات كبيرة. اختر مكوّنات عضوية أو بلدية نظيفة من مصدر موثوق ما استطعت، وإن لم تتحسّن فراجع الطبيب.";
 const UPD={"h":{"chamomile":"2026-11-08","mint":"2026-11-08","ginger":"2026-11-08","turmeric":"2026-11-08","nigella":"2026-11-08","sage":"2026-11-08","anise":"2026-11-08","fennel":"2026-11-08","thyme":"2026-11-08","cinnamon":"2026-11-08","rosemary":"2026-11-08","fenugreek":"2026-11-08","hibiscus":"2026-11-08","lemonbalm":"2026-11-08","licorice":"2026-11-08","aloe":"2026-11-08","garlic":"2026-11-08","cumin":"2026-11-08","clove":"2026-11-08","marjoram":"2026-11-08","cardamom":"2026-11-08","frankincense":"2026-11-08","lavender":"2026-11-08","linden":"2026-11-08","valerian":"2026-11-08","senna":"2026-11-08","pumpkin":"2026-11-08","sawpalmetto":"2026-11-08","honey":"2026-11-08","dates":"2026-11-08","barley":"2026-11-08","olive":"2026-11-08","miswak":"2026-11-08","rose":"2026-11-08","costus":"2026-11-08","greentea":"2026-11-08","jujube":"2026-11-08","chrysanthemum":"2026-11-08","goji":"2026-11-08","elderberry":"2026-11-08","nettle":"2026-11-08","calendula":"2026-11-08","echinacea":"2026-11-08","tulsi":"2026-11-08","ashwagandha":"2026-11-08","amla":"2026-11-08","triphala":"2026-11-08","neem":"2026-11-08","ajwain":"2026-11-08","coriander":"2026-11-08","moringa":"2026-11-08","saffron":"2026-11-08","loomi":"2026-11-08","myrrh":"2026-11-08","sidr":"2026-11-08","tamarind":"2026-11-08","zahr":"2026-11-08","verbena":"2026-11-08","argan":"2026-11-08","quince":"2026-11-08","khakshir":"2026-11-08","wormwood":"2026-11-08","pennyroyal":"2026-11-08","harmal":"2026-11-08","flaxseed":"2026-11-08","psyllium":"2026-11-08","caraway":"2026-11-08","parsley":"2026-11-08","sumac":"2026-11-08","pomegranate":"2026-11-08","guava":"2026-11-08","carob":"2026-11-08","cranberry":"2026-11-08","cornsilk":"2026-11-08","dandelion":"2026-11-08","milkthistle":"2026-11-08","hawthorn":"2026-11-08","passionflower":"2026-11-08","lemongrass":"2026-11-08","bay":"2026-11-08","basil":"2026-11-08","marshmallow":"2026-11-08","mallow":"2026-11-08","ivy":"2026-11-08","nutmeg":"2026-11-08","henna":"2026-11-08","eucalyptus":"2026-11-08","teatree":"2026-11-08","oats":"2026-11-08","ginseng":"2026-11-08","shih":"2026-11-08","colocynth":"2026-11-08","oleander":"2026-11-08","jaadah":"2026-11-08","rooibos":"2026-11-08","baobab":"2026-11-08","doum":"2026-11-08","coffeehusk":"2026-11-08","rosehip":"2026-11-08","yerbamate":"2026-11-08","dill":"2026-11-08","witchhazel":"2026-11-08","horsechestnut":"2026-11-08","blackcohosh":"2026-11-08","eveningprimrose":"2026-11-08","chasteberry":"2026-11-08","feverfew":"2026-11-08","ginkgo":"2026-11-08","bacopa":"2026-11-08","maca":"2026-11-08","artichoke":"2026-11-08","hyssop":"2026-11-08","gardencress":"2026-11-08","stjohns":"2026-11-08","propolis":"2026-11-08","vinegar":"2026-11-08","cherrystem":"2026-11-08","bitteralmond":"2026-11-08","violet":"2026-11-08","myrtle":"2026-11-08","qaraz":"2026-11-08","baitheran":"2026-11-08","tribulus":"2026-11-08","mugat":"2026-11-08","garcinia":"2026-11-08","bitterorange":"2026-11-08","yohimbe":"2026-11-08","starfruit":"2026-11-08","indigo":"2026-11-08","truffle":"2026-11-08","ithmid":"2026-11-08","milk":"2026-11-08","zamzam":"2026-11-08","tailfat":"2026-11-08","yogurt":"2026-11-08","aqit":"2026-11-08","goatmilk":"2026-11-08","royaljelly":"2026-11-08","beevenom":"2026-11-08","locust":"2026-11-08","dhub":"2026-11-08","ostrichoil":"2026-11-08","egg":"2026-11-08","chicken":"2026-11-08","mutton":"2026-11-08","camel":"2026-11-08","camelmilk":"2026-11-08","liver":"2026-11-08","ghee":"2026-11-08","pigeon":"2026-11-08","bonebroth":"2026-11-08","fig":"2026-11-08","palmpollen":"2026-11-08","liqahwater":"2026-11-08","ghaf":"2026-11-08","fishoil":"2026-11-08","codliver":"2026-11-08","seasalt":"2026-11-08","deadsea":"2026-11-08","seaweed":"2026-11-08","agar":"2026-11-08","oyster":"2026-11-08","ambergris":"2026-11-08","cuttlebone":"2026-11-08","pearlcoral":"2026-11-08","seacucumber":"2026-11-08","sharkcart":"2026-11-08","chitosan":"2026-11-08"},"r":{"0":"2026-11-08","1":"2026-11-08","2":"2026-11-08","3":"2026-11-08","4":"2026-11-08","5":"2026-11-08","6":"2026-11-08","7":"2026-11-08","8":"2026-11-08","9":"2026-11-08","10":"2026-11-08","11":"2026-11-08","12":"2026-11-08","13":"2026-11-08","14":"2026-11-08","15":"2026-11-08","16":"2026-11-08","17":"2026-11-08","18":"2026-11-08","19":"2026-11-08","20":"2026-11-08","21":"2026-11-08","22":"2026-11-08","23":"2026-11-08","24":"2026-11-08","25":"2026-11-08","26":"2026-11-08","27":"2026-11-08","28":"2026-11-08","29":"2026-11-08","30":"2026-11-08","31":"2026-11-08","32":"2026-11-08","33":"2026-11-08","34":"2026-11-08","35":"2026-11-08","36":"2026-11-08","37":"2026-11-08","38":"2026-11-08","39":"2026-11-08","40":"2026-11-08","41":"2026-11-08","42":"2026-11-08","43":"2026-11-08","44":"2026-11-08","45":"2026-11-08","46":"2026-11-08","47":"2026-11-08","48":"2026-11-08","49":"2026-11-08","50":"2026-11-08","51":"2026-11-08","52":"2026-11-08","53":"2026-11-08","54":"2026-11-08","55":"2026-11-08","56":"2026-11-08","57":"2026-11-08","58":"2026-11-08","59":"2026-11-08","60":"2026-11-08","61":"2026-11-08","62":"2026-11-08","63":"2026-11-08","64":"2026-11-08","65":"2026-11-08","66":"2026-11-08","67":"2026-11-08","68":"2026-11-08","69":"2026-11-08","70":"2026-11-08","71":"2026-11-08","72":"2026-11-08","73":"2026-11-08","74":"2026-11-08","75":"2026-11-08","76":"2026-11-08","77":"2026-11-08","78":"2026-11-08","79":"2026-11-08","80":"2026-11-08","81":"2026-11-08","82":"2026-11-08","83":"2026-11-08","84":"2026-11-08","85":"2026-11-08","86":"2026-11-08","87":"2026-11-08","88":"2026-11-08","89":"2026-11-08","90":"2026-11-08","91":"2026-11-08","92":"2026-11-08","93":"2026-11-08","94":"2026-11-08","95":"2026-11-08","96":"2026-11-08","97":"2026-11-08","98":"2026-11-08","99":"2026-11-08","100":"2026-11-08","101":"2026-11-08","102":"2026-11-08","103":"2026-11-08","104":"2026-11-08","105":"2026-11-08","106":"2026-11-08","107":"2026-11-08","108":"2026-11-08","109":"2026-11-08","110":"2026-11-08","111":"2026-11-08","112":"2026-11-08","113":"2026-11-08","114":"2026-11-08","115":"2026-11-08","116":"2026-11-08","117":"2026-11-08","118":"2026-11-08","119":"2026-11-08","120":"2026-11-08","121":"2026-11-08","122":"2026-11-08","123":"2026-11-08","124":"2026-11-08","125":"2026-11-08","126":"2026-11-08","127":"2026-11-08","128":"2026-11-08","129":"2026-11-08","130":"2026-11-08","131":"2026-11-08","132":"2026-11-08","133":"2026-11-08","134":"2026-11-08","135":"2026-11-08","136":"2026-11-08","137":"2026-11-08","138":"2026-11-08","139":"2026-11-08","140":"2026-11-08","141":"2026-11-08","142":"2026-11-08","143":"2026-11-08","144":"2026-11-08","145":"2026-11-08","146":"2026-11-08","147":"2026-11-08","148":"2026-11-08","149":"2026-11-08","150":"2026-11-08","151":"2026-11-08","152":"2026-11-08","153":"2026-11-08","154":"2026-11-08","155":"2026-11-08","156":"2026-11-08","157":"2026-11-08","158":"2026-11-08","159":"2026-11-08","160":"2026-11-08","161":"2026-11-08","162":"2026-11-08","163":"2026-11-08","164":"2026-11-08","165":"2026-11-08","166":"2026-11-08","167":"2026-11-08","168":"2026-11-08","169":"2026-11-08","170":"2026-11-08","171":"2026-11-08","172":"2026-11-08","173":"2026-11-08","174":"2026-11-08","175":"2026-11-08","176":"2026-11-08","177":"2026-11-08","178":"2026-11-08","179":"2026-11-08","180":"2026-11-08","181":"2026-11-08","182":"2026-11-08","183":"2026-11-08","184":"2026-11-08","185":"2026-11-08","186":"2026-11-08","187":"2026-11-08","188":"2026-11-08","189":"2026-11-08","190":"2026-11-08","191":"2026-11-08","192":"2026-11-08","193":"2026-11-08","194":"2026-11-08","195":"2026-11-08","196":"2026-11-08","197":"2026-11-08","198":"2026-11-08","199":"2026-11-08","200":"2026-11-08","201":"2026-11-08","202":"2026-11-08","203":"2026-11-08","204":"2026-11-08","205":"2026-11-08","206":"2026-11-08","207":"2026-11-08","208":"2026-11-08","209":"2026-11-08","210":"2026-11-08","211":"2026-11-08","212":"2026-11-08","213":"2026-11-08","214":"2026-11-08","215":"2026-11-08","216":"2026-11-08","217":"2026-11-08","218":"2026-11-08","219":"2026-11-08","220":"2026-11-08","221":"2026-11-08","222":"2026-11-08","223":"2026-11-08","224":"2026-11-08","225":"2026-11-08","226":"2026-11-08","227":"2026-11-08","228":"2026-11-08","229":"2026-11-08","230":"2026-11-08","231":"2026-11-08","232":"2026-11-08","233":"2026-11-08","234":"2026-11-08","235":"2026-11-08","236":"2026-11-08","237":"2026-11-08","238":"2026-11-08","239":"2026-11-08","240":"2026-11-08","241":"2026-11-08","242":"2026-11-08","243":"2026-11-08","244":"2026-11-08","245":"2026-11-08","246":"2026-11-08","247":"2026-11-08","248":"2026-11-08","249":"2026-11-08","250":"2026-11-08","251":"2026-11-08","252":"2026-11-08","253":"2026-11-08","254":"2026-11-08","255":"2026-11-08","256":"2026-11-08","257":"2026-11-08","258":"2026-11-08","259":"2026-11-08","260":"2026-11-08","261":"2026-11-08","262":"2026-11-08","263":"2026-11-08","264":"2026-11-08","265":"2026-11-08","266":"2026-11-08","267":"2026-11-08","268":"2026-11-08","269":"2026-11-08","270":"2026-11-08","271":"2026-11-08","272":"2026-11-08","273":"2026-11-08","274":"2026-11-08","275":"2026-11-08","276":"2026-11-08","277":"2026-11-08","278":"2026-11-08","279":"2026-11-08","280":"2026-11-08","281":"2026-11-08","282":"2026-11-08","283":"2026-11-08","284":"2026-11-08","285":"2026-11-08","286":"2026-11-08","287":"2026-11-08","288":"2026-11-08","289":"2026-11-08","290":"2026-11-08","291":"2026-11-08","292":"2026-11-08","293":"2026-11-08","294":"2026-11-08","295":"2026-11-08","296":"2026-11-08","297":"2026-11-08","298":"2026-11-08","299":"2026-11-08","300":"2026-11-08","301":"2026-11-08","302":"2026-11-08","303":"2026-11-08","304":"2026-11-08","305":"2026-11-08","306":"2026-11-08","307":"2026-11-08","308":"2026-11-08","309":"2026-11-08","310":"2026-11-08","311":"2026-11-08","312":"2026-11-08","313":"2026-11-08","314":"2026-11-08","315":"2026-11-08","316":"2026-11-08","317":"2026-11-08","318":"2026-11-08","319":"2026-11-08","320":"2026-11-08","321":"2026-11-08","322":"2026-11-08","323":"2026-11-08","324":"2026-11-08","325":"2026-11-08","326":"2026-11-08","327":"2026-11-08","328":"2026-11-08","329":"2026-11-08","330":"2026-11-08","331":"2026-11-08","332":"2026-11-08","333":"2026-11-08","334":"2026-11-08","335":"2026-11-08","336":"2026-11-08","337":"2026-11-08"}};
-const updDate=d=>{ try{ const L=document.documentElement.lang||"ar"; return new Date(d+"T12:00:00").toLocaleDateString(L==="ar"?"ar-EG":L,{year:"numeric",month:"long",day:"numeric"}); }catch(e){ return d; } };
+const updDate=d=>{ try{ const L=document.documentElement.lang||"ar"; return new Date(d+"T12:00:00").toLocaleDateString(L==="ar"?"ar-EG-u-nu-latn":L,{year:"numeric",month:"long",day:"numeric"}); }catch(e){ return d; } };
 const updLine=d=>d?`<p class="upd">آخر تحديث لهذه المعلومات: ${updDate(d)}</p>`:"";
 function goReport(label){ closePanel&&!$("#panel").hidden&&closePanel(); setView("about"); setTimeout(()=>{ const k=$("#fb-kind")||$("#fw-kind"), t=$("#fb-text")||$("#fw-text"); if(k) k.selectedIndex=0; if(t){ t.value=label+" — "; t.scrollIntoView({block:"center"}); t.focus(); } },150); }
 const ractBox=r=>`<p class="tradnote">🌿 ${TRAD_NOTE} <button type="button" class="wlink" data-goorg="1">ازرع أعشابك عضويًا</button></p><div class="ract">${ttsOK()?`<button type="button" class="rbtn say" data-rsay="${esc(r.name)}">${IC_SAY}<span>اقرأ لي</span></button>`:""}<button type="button" class="rbtn" data-rcopy="${esc(r.name)}">${IC_COPY}<span>نسخ الوصفة</span></button><button type="button" class="rbtn" data-rshare="${esc(r.name)}">${IC_SHARE}<span>مشاركة</span></button><button type="button" class="rbtn rep" data-rrep="${esc(r.name)}"><span>أبلغ عن خطأ</span></button></div>`;
@@ -6129,7 +6129,7 @@ mugat|Mughat|مغات
 garcinia|Garcinia cambogia|الجارسينيا
 bitterorange|Bitter orange extract|النارنج المرّ
 yohimbe|Yohimbe|يوهمبين
-fishoil|Fish oil, Omega-3|أوميغا ٣، أوميغا 3، زيت الأسماك، زيت السمك
+fishoil|Fish oil, Omega-3|أوميغا 3، أوميغا 3، زيت الأسماك، زيت السمك
 codliver|Cod liver oil|زيت كبد الحوت، زيت كبد السمك، زيت السمك للأطفال
 fig|Fig|التينة، الكرموس، الحماط، البلس
 palmpollen|Date palm pollen|لقاح النخيل، طلع النخل، دقيق اللقاح
@@ -6215,8 +6215,8 @@ function ixResults(){
   } else {
     const all=HERBS.map(x=>[x.id,ixHerb(x.id)]), av=all.filter(([,r])=>r.avoid.length), ca=all.filter(([,r])=>!r.avoid.length&&r.care.length);
     const row=([id,r])=>`<li><button type="button" class="herb-link" data-h="${id}">${hname(id)}</button> <span>${[...r.avoid,...r.care].map(x=>x[1]).filter((x,i,a)=>a.indexOf(x)===i).join("؛ ")}</span></li>`;
-    h+=`<div class="sbox bad"><h3>تجنّبها مع أدويتك (${av.length.toLocaleString("ar-EG")})</h3>${av.length?`<ul>${av.map(row).join("")}</ul>`:"<p>لا توجد في الدليل.</p>"}</div>
-      <div class="sbox warn"><h3>بحذر ومراجعة الطبيب أو الصيدلي (${ca.length.toLocaleString("ar-EG")})</h3>${ca.length?`<ul>${ca.map(row).join("")}</ul>`:"<p>لا توجد.</p>"}</div>`;
+    h+=`<div class="sbox bad"><h3>تجنّبها مع أدويتك (${av.length.toLocaleString("ar-EG-u-nu-latn")})</h3>${av.length?`<ul>${av.map(row).join("")}</ul>`:"<p>لا توجد في الدليل.</p>"}</div>
+      <div class="sbox warn"><h3>بحذر ومراجعة الطبيب أو الصيدلي (${ca.length.toLocaleString("ar-EG-u-nu-latn")})</h3>${ca.length?`<ul>${ca.map(row).join("")}</ul>`:"<p>لا توجد.</p>"}</div>`;
   }
   h+=`<div class="ixact"><button type="button" class="rbtn" id="ixcopy">${IC_COPY}<span>نسخ النتيجة لعرضها على الصيدلي</span></button></div>
    <p class="hint" style="margin:0">عدم ظهور تحذير لا يعني أن العشبة آمنة لك. أخبر طبيبك والصيدلي بكل عشبة ومكمّل تأخذه، ولا توقف دواءك أو تغيّر جرعته من نفسك.</p>`;
@@ -6243,7 +6243,7 @@ function ixWire(el){
 }
 function ixSection(){
   return `<section class="ixbox" id="ixbox"><h3 class="oh4" style="margin-top:0">هل تتداخل الأعشاب مع أدويتي؟</h3>
-   <p class="hint" style="margin:0 0 8px">١. اختر الأدوية التي وصفها لك طبيبك وتأخذها الآن. ٢. أضف الأعشاب التي تفكر فيها. وإن لم تضف عشبة، نعرض لك كل أعشاب الدليل التي تحتاج حذرًا مع أدويتك.</p>
+   <p class="hint" style="margin:0 0 8px">1. اختر الأدوية التي وصفها لك طبيبك وتأخذها الآن. 2. أضف الأعشاب التي تفكر فيها. وإن لم تضف عشبة، نعرض لك كل أعشاب الدليل التي تحتاج حذرًا مع أدويتك.</p>
    <div class="opts">${MEDX.map(([k])=>`<button type="button" class="chip" data-ixm="${k}" aria-pressed="${ixs.m.includes(k)}">${medLabel(k)}</button>`).join("")}</div>
    <div class="ixpick"><input id="ixq" type="search" autocomplete="off" placeholder="أضف عشبة… مثل: زنجبيل، حلبة، كركم" aria-label="أضف عشبة"><div class="opts" id="ixsug"></div><div class="opts" id="ixsel"></div></div>
    <div class="sres" id="ixres"></div></section>`;
@@ -6285,14 +6285,14 @@ function renderSafety(){
     const rule=RULES[sstate.k]||{}, ex=Object.entries(rule.ex||{}).filter(([id])=>byId[id]), c=Object.entries(rule.c||{}).filter(([id])=>byId[id]&&!(rule.ex||{})[id]);
     const label=groups.flatMap(g=>g[1]).find(x=>x[0]===sstate.k)[1];
     const li=list=>list.map(([id,why])=>`<li><button class="herb-link" data-h="${id}">${byId[id].ar}</button> <span>${why}</span></li>`).join("");
-    h+=`<div class="sres"><div class="sbox bad"><h3>تجنّبها مع: ${label} (${ex.length.toLocaleString("ar-EG")})</h3>${ex.length?`<ul>${li(ex)}</ul>`:"<p>لا توجد أعشاب ممنوعة في الدليل لهذا الاختيار.</p>"}</div>
-      <div class="sbox warn"><h3>بحذر ومراجعة الطبيب (${c.length.toLocaleString("ar-EG")})</h3>${c.length?`<ul>${li(c)}</ul>`:"<p>لا توجد.</p>"}</div></div>
+    h+=`<div class="sres"><div class="sbox bad"><h3>تجنّبها مع: ${label} (${ex.length.toLocaleString("ar-EG-u-nu-latn")})</h3>${ex.length?`<ul>${li(ex)}</ul>`:"<p>لا توجد أعشاب ممنوعة في الدليل لهذا الاختيار.</p>"}</div>
+      <div class="sbox warn"><h3>بحذر ومراجعة الطبيب (${c.length.toLocaleString("ar-EG-u-nu-latn")})</h3>${c.length?`<ul>${li(c)}</ul>`:"<p>لا توجد.</p>"}</div></div>
       <p class="hint" style="margin:0">عدم ظهور عشبة هنا لا يعني أنها آمنة تمامًا لحالتك؛ أخبر طبيبك أو الصيدلي دائمًا بما تتناوله.</p>`;
   } else h+=`<div class="empty-res">اختر من الأعلى لتظهر النتائج.</div>`;
   h+=lookSection();
   const dangerous=HERBS.filter(x=>x.ev==="x");
-  h+=`<details class="conv" open><summary>أعشاب خطرة لا ننصح بها لأحد (${dangerous.length.toLocaleString("ar-EG")})</summary><ul class="dlist">${dangerous.map(x=>`<li><button class="herb-link" data-h="${x.id}">${x.ar}</button> — ${x.warn[0]}</li>`).join("")}</ul></details>
-   <details class="conv"><summary>ما يناسب الأطفال من الأعشاب (${Object.keys(KIDS).filter(id=>byId[id]).length.toLocaleString("ar-EG")})</summary>
+  h+=`<details class="conv" open><summary>أعشاب خطرة لا ننصح بها لأحد (${dangerous.length.toLocaleString("ar-EG-u-nu-latn")})</summary><ul class="dlist">${dangerous.map(x=>`<li><button class="herb-link" data-h="${x.id}">${x.ar}</button> — ${x.warn[0]}</li>`).join("")}</ul></details>
+   <details class="conv"><summary>ما يناسب الأطفال من الأعشاب (${Object.keys(KIDS).filter(id=>byId[id]).length.toLocaleString("ar-EG-u-nu-latn")})</summary>
    <div class="conv-wrap"><table><thead><tr><th>العشبة</th><th>للأطفال</th></tr></thead><tbody>${Object.entries(KIDS).filter(([id])=>byId[id]).map(([id,t])=>`<tr><td><button class="herb-link" data-h="${id}">${byId[id].ar}</button></td><td>${t}</td></tr>`).join("")}</tbody></table></div>
    <p>كل الأعشاب الأخرى في الدليل لا يُنصح بها للأطفال إلا بوصف من الطبيب. ولا تُعطى أي مشروبات عشبية للرضّع دون 6 أشهر، ولا العسل دون السنة.</p></details>`;
   el.innerHTML=h; ixWire(el);
@@ -6301,7 +6301,7 @@ function renderSafety(){
 }
 /* ---------- عن الدليل ---------- */
 function renderAbout(){ setTimeout(renderFeedback,0);
-  const n=x=>x.toLocaleString("ar-EG");
+  const n=x=>x.toLocaleString("ar-EG-u-nu-latn");
   $("#about").innerHTML=`<div class="about">
   <section class="dedic-box"><h2>إهداء</h2><p>هذا الدليل صدقة جارية عن روح والدتي <b>مريم</b> رحمها الله، وسمّيته باسمها.</p>
    <p class="dua">اللهم اغفر لها وارحمها، وعافها واعفُ عنها، وأكرم نُزُلها، ووسّع مدخلها، واغسلها بالماء والثلج والبَرَد، ونقّها من الخطايا كما يُنقّى الثوب الأبيض من الدنس، واجعل قبرها روضة من رياض الجنة، واجعل هذا العمل في ميزان حسناتها.</p>
