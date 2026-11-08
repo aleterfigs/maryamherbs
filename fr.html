@@ -363,7 +363,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .hsearch{display:flex;gap:8px}
 .hsearch input{flex:1 1 0;min-width:0;font:inherit;padding:12px 16px;border-radius:8px;border:0;background:var(--sheet);color:var(--ink)}
 .hsearch button{font:inherit;font-weight:600;padding:12px 22px;border-radius:8px;border:0;background:var(--clay);color:var(--sheet);cursor:pointer}
-.sitesh{display:flex;width:max-content;max-width:100%;align-items:center;gap:8px;margin:12px auto 8px;padding:10px 18px;border-radius:999px;border:0;background:#25d366;color:#fff;font:inherit;font-weight:600;cursor:pointer}.sitesh:hover{filter:brightness(.95)}
+.sitesh{display:flex;width:max-content;max-width:100%;align-items:center;gap:8px;margin:12px auto 8px;padding:10px 18px;border-radius:999px;border:0;background:#25d366;color:#fff;font:inherit;font-weight:600;cursor:pointer}.sitesh:hover{filter:brightness(.95)}.instb{display:flex;width:max-content;max-width:100%;align-items:center;gap:8px;margin:0 auto 8px;padding:8px 16px;border-radius:999px;border:1px solid var(--leaf);background:transparent;color:var(--leaf);font:inherit;font-weight:600;cursor:pointer}.instb[hidden]{display:none}
 .hstats{margin:0;font-size:.85rem;opacity:.85;font-variant-numeric:tabular-nums}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
 @media (min-width:860px){.tiles{grid-template-columns:repeat(3,1fr)}}
@@ -4423,6 +4423,7 @@ function renderHome(){
      <h2>Comment pouvons-nous vous aider aujourd'hui ?</h2>
      <form class="hsearch" id="hsearch" role="search"><input id="hq" type="search" placeholder="Rechercher une plante ou un symptôme… ex. gingembre, insomnie, toux" aria-label="Rechercher"><button type="submit">Rechercher</button></form>
      <button type="button" class="sitesh" id="siteShare"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.8-1.1-4.6-4-4.8-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1 1 2 1.3 2.3 1.4.3.2.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.7-.1 1.3z"/></svg><span>Partagez «Maryam» avec vos proches</span></button>
+     <button type="button" class="instb" id="instBtn" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M12 7v7m-3-3 3 3 3-3"/></svg>Installer Maryam sur votre téléphone</button>
      <p class="hstats">${n(HERBS.length)} plantes · ${n(RECIPES.length)} mélanges · ${n(Object.keys(ORIG).length)} traditions · ${n(PROBS.length)} problèmes de santé</p>
    </section>
    <div class="tiles">${TILES.map(([k,t,d],i)=>`<button type="button" class="tile${i===0?" tile-main":""}" data-go="${k}"><span class="ticon">${tileIcon(k)}</span><span class="ttext"><b>${t}</b><small>${d}</small></span></button>`).join("")}</div>
@@ -4437,6 +4438,7 @@ function renderHome(){
   $("#home").querySelectorAll("[data-land]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="land"; setView("herbs"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-sea]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="sea"; setView("herbs"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-aidgo]").forEach(b=>b.onclick=()=>{ ast.id=b.dataset.aidgo; setView("aid"); window.scrollTo({top:0}); });
+  { const ib=$("#instBtn"); if(ib&&window.maryamInstall){ ib.hidden=false; ib.onclick=()=>window.maryamInstall(); } }
   $("#siteShare").onclick=async()=>{ const t="«Maryam» : un guide gratuit des plantes et remèdes naturels, avec ce que dit la science et ce dont il faut se méfier. Une aumône continue (sadaqa jariya) à la mémoire de la défunte mère Maryam, que Dieu lui fasse miséricorde."; gcEv(GC_X.share+": "+GC_X.site);
     if(navigator.share){ try{ await navigator.share({title:"Maryam", text:t, url:SITE_URL+"?utm_source=share"}); }catch(_){} return; }
     const u="https://wa.me/?text="+encodeURIComponent(t+"\n"+SITE_URL+"?utm_source=whatsapp"); const wn=window.open(u,"_blank","noopener"); if(!wn) location.href=u; };
@@ -5969,13 +5971,14 @@ initShared();
 #ib button{font:inherit;font-weight:600;border-radius:999px;padding:7px 16px;cursor:pointer;border:1px solid var(--leaf,#3f6b3a)}
 #ib .go{background:var(--leaf,#3f6b3a);color:var(--sheet,#fff)}
 #ib .no{background:transparent;color:var(--leaf,#3f6b3a)}
+#ib .how ol{margin:4px 0;padding-inline-start:20px}#ib .how li{margin:3px 0}#ib .how p{margin:4px 0}#ib .cp{background:var(--sheet,#fff);color:var(--leaf,#3f6b3a);margin-top:6px}
 #ib .x{position:absolute;inset-block-start:4px;inset-inline-end:6px;border:0;background:none;color:var(--muted,#5d6a57);font-size:1.2rem;padding:2px 8px}
 @media (prefers-reduced-motion:reduce){#ib{transition:none}}
 </style>
 <div id="ib" role="dialog" aria-label="Installez Maryam sur votre téléphone" hidden>
  <button class="x" type="button" aria-label="Fermer">×</button>
  <img src="icon-192.png" alt="">
- <div class="tx"><b class="h">Installez Maryam sur votre téléphone</b><small>S’ouvre comme une appli en un geste, même hors ligne</small><div class="how" hidden></div>
+ <div class="tx"><b class="h">Installez Maryam sur votre téléphone</b><small>S’ouvre comme une appli en un geste, même hors ligne</small><div class="how" hidden></div><button class="cp" type="button" hidden>Copier le lien du site</button>
   <div class="act"><button class="go" type="button" hidden>Installer</button><button class="no" type="button">Plus tard</button></div></div>
 </div>
 <script>
@@ -5986,16 +5989,22 @@ initShared();
  function snoozed(){ try{var t=+localStorage.getItem(KEY)||0; return t&&Date.now()-t<10*864e5;}catch(e){return false;} }
  function snooze(){ try{localStorage.setItem(KEY,String(Date.now()));}catch(e){} hide(); }
  function hide(){ el.classList.remove("on"); setTimeout(function(){el.hidden=true;},400); }
- if(standalone||!phone||snoozed()) return;
+ if(standalone||!phone) return;
  var ua=navigator.userAgent, ios=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
- var iosSafari=ios&&/Safari/.test(ua)&&!/CriOS|FxiOS|EdgiOS|FBAN|FBAV|Instagram|Line[/]/.test(ua);
- var how=el.querySelector(".how"), go=el.querySelector(".go"), deferred=null;
+ var inapp=/FBAN|FBAV|Instagram|Line[/]|Snapchat|TikTok|musical_ly|BytedanceWebview/.test(ua)||(ios&&!/Safari/.test(ua));
+ var iosOther=ios&&/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+ var how=el.querySelector(".how"), go=el.querySelector(".go"), cp=el.querySelector(".cp"), deferred=null;
  function show(){ if(window.maryamNewsOpen){ setTimeout(show,1500); return; } el.hidden=false; requestAnimationFrame(function(){el.classList.add("on");}); }
- window.addEventListener("beforeinstallprompt",function(e){ e.preventDefault(); deferred=e; go.hidden=false; how.hidden=true; show(); });
+ function guide(){ how.innerHTML= inapp ? (ios?"<p><b>Vous êtes dans le navigateur d’Instagram (ou d’une autre appli), qui ne permet pas l’installation.</b></p><ol><li>Touchez <b>⋯</b> en haut et choisissez d’ouvrir dans Safari ou votre navigateur.</li><li>Ou copiez le lien ci-dessous, ouvrez Safari et collez-le.</li><li>Puis installez depuis Safari.</li></ol>":"<p><b>Vous êtes dans le navigateur d’une autre appli.</b> Touchez <b>⋮</b> en haut, ouvrez dans Chrome, puis installez depuis le menu de Chrome.</p>") : ios ? (iosOther?"<p>Dans Chrome ou un autre navigateur : touchez Partager <svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" style=\"vertical-align:-3px\" aria-hidden=\"true\"><path d=\"M12 3v12M8 7l4-4 4 4\"/><path d=\"M6 11H5v10h14V11h-1\"/></svg> dans la barre d’adresse, puis « Sur l’écran d’accueil ». Sinon, copiez le lien et ouvrez-le dans Safari.</p>":"<ol><li>Touchez <b>•••</b> à côté de la barre d’adresse, ou le bouton Partager <svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" style=\"vertical-align:-3px\" aria-hidden=\"true\"><path d=\"M12 3v12M8 7l4-4 4 4\"/><path d=\"M6 11H5v10h14V11h-1\"/></svg> s’il apparaît en bas.</li><li>Si vous avez touché <b>•••</b>, choisissez « Partager ».</li><li>Faites défiler, touchez « Sur l’écran d’accueil », puis « Ajouter ».</li></ol><p>L’icône Maryam apparaît sur votre écran d’accueil et s’ouvre comme une appli.</p>") : "Dans le menu du navigateur <b>⋮</b>, choisissez « Ajouter à l’écran d’accueil » ou « Installer l’application »."; how.hidden=false; cp.hidden=!(ios&&(inapp||iosOther)); }
+ cp.onclick=function(){ var u=location.href.split("#")[0].split("?")[0]; function ok(){ cp.textContent="✓"; how.insertAdjacentHTML("beforeend","<p><b>Copié. Ouvrez Safari et collez le lien dans la barre d’adresse.</b></p>"); }
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(u).then(ok,function(){ window.prompt("",u); }); } else { window.prompt("",u); } };
+ window.addEventListener("beforeinstallprompt",function(e){ e.preventDefault(); deferred=e; go.hidden=false; how.hidden=true; cp.hidden=true; if(!snoozed()) show(); });
  window.addEventListener("appinstalled",function(){ snooze(); });
  go.onclick=function(){ if(!deferred) return; deferred.prompt(); deferred.userChoice.then(function(c){ if(c&&c.outcome==="accepted") snooze(); deferred=null; go.hidden=true; }); };
  el.querySelector(".no").onclick=snooze; el.querySelector(".x").onclick=snooze;
- setTimeout(function(){ if(deferred) return; how.innerHTML= ios ? (iosSafari?"Touchez le bouton Partager <b>⬆︎</b> du navigateur, puis « Sur l’écran d’accueil ».":"Ouvrez le site dans Safari, touchez Partager <b>⬆︎</b>, puis « Sur l’écran d’accueil ».") : "Dans le menu du navigateur <b>⋮</b>, choisissez « Ajouter à l’écran d’accueil » ou « Installer l’application »."; how.hidden=false; show(); },4000);
+ window.maryamInstall=function(){ if(deferred){ deferred.prompt(); deferred.userChoice.then(function(){ deferred=null; }); return; } guide(); show(); };
+ var ib=document.getElementById("instBtn"); if(ib){ ib.hidden=false; ib.onclick=window.maryamInstall; }
+ if(!snoozed()) setTimeout(function(){ if(deferred) return; guide(); show(); },4000);
 })();
 </script>
 
