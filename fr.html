@@ -184,7 +184,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(2.2rem,6vw,3.2re
 .sbox{border-radius:6px;padding:14px 16px;border:1px solid var(--line);background:var(--sheet)}
 .sbox h3{margin:0 0 8px;font-size:1rem}
 .sbox.bad{border-color:var(--warn)}.sbox.bad h3{color:var(--warn)}
-.sbox.warn h3{color:var(--mid)}
+.sbox.warn h3{color:var(--mid)}.sbox.ok{border-color:var(--leaf)}.sbox.ok h3{color:var(--leaf)}.ixbox{background:var(--sheet);border:1px solid var(--leaf);border-radius:8px;padding:14px 16px;margin:8px 0 14px;display:flex;flex-direction:column;gap:10px}.ixpick input{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink)}.ixpick .opts{margin-top:6px}.ixact{display:flex;justify-content:center}#ixres{display:flex;flex-direction:column;gap:10px}
 .sbox ul,.dlist{margin:0;padding-inline-start:20px;font-size:.9rem}
 .sbox li,.dlist li{margin-bottom:6px}.sbox li span{color:var(--muted)}
 .about{display:flex;flex-direction:column;gap:22px;max-width:760px}
@@ -5794,11 +5794,78 @@ function renderGloss(){
 }
 /* ---------- Vérificateur de sécurité ---------- */
 const sstate={k:null};
+/* ---------- Vérificateur plantes–médicaments ---------- */
+const INTX={"chamomile":[[0,["blood"],""],[1,["sed"],""]],"mint":[[0,[],"g"],[1,["immune"],""]],"ginger":[[0,["blood"],""],[1,["diab"],""]],"turmeric":[[0,["blood"],""],[1,["diab"],""],[2,["cancer"],""]],"nigella":[[0,["diab","bp"],""],[1,["blood"],""],[2,["sed"],""]],"sage":[[0,["epil"],""],[1,["diab"],""],[2,["sed"],""]],"anise":[[0,["hormone"],""],[1,["hormone","cancer"],""]],"fennel":[[0,["antib"],"g"],[1,["hormone"],""]],"thyme":[[0,["blood","supp"],""]],"cinnamon":[[0,["diab"],""],[1,["liver"],""]],"rosemary":[[0,["blood"],""],[1,["diur"],""],[2,["psych"],""]],"fenugreek":[[0,["diab"],""],[1,["blood"],""],[2,[],"g"]],"hibiscus":[[0,["bp","diur"],""],[1,["liver"],""],[2,["malaria"],""]],"lemonbalm":[[0,["sed"],""]],"licorice":[[0,["bp","diur"],""],[1,["bp"],""],[2,["steroid"],""],[3,["blood"],""]],"aloe":[[0,["diab","bp","diur"],""]],"garlic":[[0,["blood"],""],[1,["hiv"],""],[2,["bp"],""]],"cumin":[[0,["diab"],""],[1,["blood"],""]],"clove":[[0,["blood"],""],[1,["diab"],""]],"marjoram":[[0,["blood"],""],[1,["diab"],""],[2,["psych"],""]],"frankincense":[[0,["blood"],""],[1,["pain"],""]],"lavender":[[0,["sed"],""]],"linden":[[0,["psych"],""],[1,["sed"],""],[2,["diur"],""]],"valerian":[[0,["sed"],""],[2,["sed"],""]],"senna":[[0,["diur","steroid"],""],[1,["bp"],""],[2,["blood"],""]],"sawpalmetto":[[0,["blood"],""],[1,["hormone"],""]],"honey":[[0,["diab"],""]],"barley":[[0,["diab"],""]],"olive":[[0,["diab","bp"],""]],"costus":[[0,[],"u"]],"greentea":[[0,["blood"],""],[1,["bp"],""],[2,["stim"],""]],"jujube":[[0,["sed"],""]],"chrysanthemum":[[0,[],"u"]],"goji":[[0,["blood"],""],[1,["diab"],""],[2,["bp"],""]],"elderberry":[[0,["immune"],""],[1,["diur"],""],[2,["diab"],""]],"nettle":[[0,["bp","diur"],""],[1,["diab"],""],[2,["blood"],""],[3,["psych"],""]],"calendula":[[0,["sed"],""]],"echinacea":[[0,["immune"],""],[1,["liver"],""]],"tulsi":[[0,["blood"],""],[1,["diab"],""]],"ashwagandha":[[0,["sed"],""],[1,["thyroid"],""],[2,["immune"],""],[3,["diab","bp"],""]],"amla":[[0,["blood"],""],[1,["diab"],""]],"triphala":[[0,[],"g"],[1,["blood"],""]],"neem":[[0,["diab","immune"],""]],"ajwain":[[0,["blood"],""]],"coriander":[[0,["diab"],""]],"moringa":[[0,["diab","bp"],""],[1,["thyroid"],""]],"saffron":[[0,["bp"],""],[1,["sed"],""],[2,["blood"],""]],"myrrh":[[0,["diab"],""],[1,["blood"],""]],"tamarind":[[0,["blood","pain"],"g"],[1,["diab"],""]],"khakshir":[[0,[],"u"]],"wormwood":[[0,["epil"],""]],"pennyroyal":[[0,["liver"],""]],"harmal":[[0,["psych"],"s"]],"flaxseed":[[0,[],"g"],[1,["blood","diab"],""]],"psyllium":[[0,[],"g"],[1,["diab"],""]],"caraway":[[0,["diab"],""]],"parsley":[[0,["blood"],""],[1,["bp","diur"],""],[2,["psych"],""]],"sumac":[[0,["diab"],""]],"pomegranate":[[0,["blood"],""],[1,["bp"],""]],"guava":[[0,["diab"],""]],"carob":[[0,[],"g"]],"cranberry":[[0,["blood"],""]],"cornsilk":[[0,["bp","diur"],""],[1,["diab"],""],[2,["blood"],""]],"dandelion":[[0,["diur","psych"],""],[1,["antib"],""],[2,["diab"],""]],"milkthistle":[[0,["diab"],""],[1,["liver"],""]],"hawthorn":[[0,["bp"],""],[1,["bp"],""],[2,["bp"],""],[3,["sed"],""]],"passionflower":[[0,["sed"],""],[1,["blood"],""]],"lemongrass":[[0,["sed"],""]],"bay":[[0,["diab","sed"],""]],"basil":[[0,["blood"],""]],"marshmallow":[[0,[],"g"],[1,["diab"],""]],"mallow":[[0,[],"g"]],"nutmeg":[[0,["sed"],""]],"oats":[[0,["diab"],""]],"ginseng":[[0,["blood"],""],[1,["diab"],""],[2,["psych"],""],[3,["stim"],""]],"shih":[[0,["epil"],""],[1,["diab"],""]],"colocynth":[[0,["diab","diur"],"s"]],"oleander":[[0,["bp"],"s"]],"jaadah":[[0,["liver"],""],[1,["diab"],""]],"doum":[[0,["bp"],""]],"coffeehusk":[[0,["stim"],""]],"rosehip":[[0,["blood"],""]],"yerbamate":[[0,["stim"],""],[1,["bp"],""]],"dill":[[0,["psych"],""],[1,["diab"],""]],"horsechestnut":[[0,["blood"],""],[1,["diab"],""]],"blackcohosh":[[0,["liver"],""],[1,["hormone"],""]],"eveningprimrose":[[0,["blood"],""],[1,["psych"],""]],"chasteberry":[[0,["hormone"],""],[1,["psych"],""]],"feverfew":[[0,["blood"],""]],"ginkgo":[[0,["blood"],""],[1,["epil"],""],[2,["psych"],""]],"bacopa":[[0,["sed"],""],[1,["thyroid"],""]],"maca":[[0,["hormone"],""]],"artichoke":[[0,["diab"],""]],"hyssop":[[0,["epil"],""]],"gardencress":[[0,["thyroid"],""],[1,["blood"],""],[2,["diab"],""]],"stjohns":[[0,["hormone"],""],[1,["psych"],""],[2,["blood"],""],[3,["bp"],""],[4,["immune"],""],[5,["hiv"],""],[6,["cancer"],""]],"propolis":[[0,["blood"],""]],"vinegar":[[0,["diab"],""],[1,["bp","diur"],""]],"cherrystem":[[0,["bp","diur"],""]],"baitheran":[[0,["epil"],""]],"tribulus":[[0,["diab"],""],[1,["bp"],""],[2,["psych"],""]],"garcinia":[[0,["psych"],""],[1,["diab"],""],[2,["blood"],""]],"bitterorange":[[0,["bp"],""],[1,["psych"],""],[2,["stim"],""]],"yohimbe":[[0,["bp"],""],[1,["psych"],""],[2,["stim"],""]],"starfruit":[[0,["liver"],""]],"milk":[[0,["thyroid","antib","supp"],"g"]],"yogurt":[[0,["antib"],"g"]],"goatmilk":[[0,["antib","supp"],"g"]],"royaljelly":[[0,["blood"],""]],"beevenom":[[0,["bp"],""]],"dhub":[[0,[],"u"]],"camelmilk":[[0,["diab"],""]],"fig":[[0,["blood"],""],[1,["diab"],""]],"palmpollen":[[0,["hormone"],""]],"ghaf":[[0,[],"u"]],"fishoil":[[0,["blood"],""],[1,["bp"],""]],"codliver":[[0,["blood"],""],[1,["vita","supp"],""],[2,["vita"],""]],"seaweed":[[0,["thyroid"],""],[1,["blood"],""],[2,["bp"],""]],"agar":[[0,[],"g"]],"oyster":[[0,["supp"],""]],"cuttlebone":[[0,["thyroid","antib"],"g"]],"pearlcoral":[[0,["thyroid","antib"],"g"]],"seacucumber":[[0,["blood"],""]],"sharkcart":[[0,["cancer"],""],[1,["supp"],""]],"chitosan":[[0,["blood"],""],[1,[],"g"]]};
+const MEDX=[["thin",["blood"]],["diab",["diab"]],["bp",["bp","diur"]],["heartmed",["bp"]],["sed",["sed","psych"]],["horm",["hormone"]],["thyroid",["thyroid"]],["immuno",["immune"]],["epil",["epil"]],["cancer",["cancer"]],["liver",["liver"]],["antib",["antib"]],["steroid",["steroid"]],["hiv",["hiv"]],["pain",["pain"]],["vita",["vita"]],["supp",["supp"]]];
+const MEDXL={epil:"Médicaments antiépileptiques",cancer:"Médicaments contre le cancer ou chimiothérapie",liver:"Médicaments agissant sur le foie, ou paracétamol régulier",antib:"Antibiotiques",steroid:"Cortisone",hiv:"Médicaments contre le VIH",pain:"Antidouleurs et anti-inflammatoires réguliers",vita:"Médicament contre l’acné (isotrétinoïne)",supp:"Compléments de fer, de zinc ou de calcium"};
+const medLabel=k=>(WMEDS.find(x=>x[0]===k)||[])[1]||MEDXL[k]||k;
+const ixs={m:[],h:[]};
+try{ const v=JSON.parse(localStorage.getItem("maryam-ix")||"null"); if(v&&Array.isArray(v.m)){ ixs.m=v.m.filter(k=>MEDX.some(x=>x[0]===k)); ixs.h=(v.h||[]).filter(id=>byId[id]); } }catch(e){}
+const ixSave=()=>{ try{ localStorage.setItem("maryam-ix",JSON.stringify(ixs)); }catch(e){} };
+function ixHerb(id){
+  const h=byId[id], r={avoid:[],care:[],gen:[],unk:false}, seen=new Set();
+  for(const k of ixs.m){ const ru=RULES["m:"+k]||{}, lab=medLabel(k);
+    if(ru.ex&&ru.ex[id]){ r.avoid.push([lab,ru.ex[id]]); continue; }
+    if(ru.c&&ru.c[id]){ r.care.push([lab,ru.c[id]]); continue; }
+    const cats=(MEDX.find(x=>x[0]===k)||[0,[]])[1];
+    for(const [i,cs,f] of (INTX[id]||[])) if(cs.some(c=>cats.includes(c))&&!seen.has(i)){ seen.add(i); (f.includes("s")?r.avoid:r.care).push([lab,h.inter[i]]); }
+  }
+  if(ixs.m.length) for(const [i,cs,f] of (INTX[id]||[])){ if(f.includes("g")&&!seen.has(i)) r.gen.push(h.inter[i]); if(f.includes("u")) r.unk=true; }
+  return r;
+}
+const hname=id=>byId[id].ar.split(" (")[0];
+function ixResults(){
+  if(!ixs.m.length) return `<div class="empty-res">Choisissez au moins un médicament ci-dessus.</div>`;
+  const li=(lab,why)=>`<li><b>${lab}:</b> <span>${why}</span></li>`;
+  let h="";
+  if(ixs.h.length){
+    h+=ixs.h.map(id=>{ const r=ixHerb(id), cls=r.avoid.length?"bad":r.care.length?"warn":"ok";
+      const v=r.avoid.length?"À éviter avec vos médicaments":r.care.length?"Avec prudence, et demandez à un médecin ou un pharmacien":"Maryam n’a aucun avertissement à son sujet avec vos médicaments";
+      const items=[...r.avoid.map(x=>li(...x)),...r.care.map(x=>li(...x)),...r.gen.map(x=>`<li><b>Avec tout médicament par voie orale :</b> <span>${x}</span></li>`),...(r.unk?[`<li><span>Ses interactions médicamenteuses sont mal connues.</span></li>`]:[])];
+      return `<div class="sbox ${cls}"><h3><button type="button" class="herb-link" data-h="${id}">${hname(id)}</button>: ${v}</h3>${items.length?`<ul>${items.join("")}</ul>`:""}</div>`; }).join("");
+  } else {
+    const all=HERBS.map(x=>[x.id,ixHerb(x.id)]), av=all.filter(([,r])=>r.avoid.length), ca=all.filter(([,r])=>!r.avoid.length&&r.care.length);
+    const row=([id,r])=>`<li><button type="button" class="herb-link" data-h="${id}">${hname(id)}</button> <span>${[...r.avoid,...r.care].map(x=>x[1]).filter((x,i,a)=>a.indexOf(x)===i).join(" ;  ")}</span></li>`;
+    h+=`<div class="sbox bad"><h3>À éviter avec vos médicaments (${av.length.toLocaleString("fr-FR")})</h3>${av.length?`<ul>${av.map(row).join("")}</ul>`:"<p>Aucune dans le guide.</p>"}</div>
+      <div class="sbox warn"><h3>Avec prudence et avis d’un médecin ou d’un pharmacien (${ca.length.toLocaleString("fr-FR")})</h3>${ca.length?`<ul>${ca.map(row).join("")}</ul>`:"<p>Aucune.</p>"}</div>`;
+  }
+  h+=`<div class="ixact"><button type="button" class="rbtn" id="ixcopy">${IC_COPY}<span>Copier le résultat pour le montrer au pharmacien</span></button></div>
+   <p class="hint" style="margin:0">L’absence d’avertissement ne signifie pas que la plante est sans danger pour vous. Informez votre médecin et votre pharmacien de toute plante ou complément que vous prenez, et n’arrêtez jamais un médicament ni ne changez sa dose de vous-même.</p>`;
+  return h;
+}
+function ixText(){
+  const box=$("#ixres"); if(!box) return "";
+  const lines=["«Maryam » : "+$("#ixbox h3").textContent, "Médicaments : "+ixs.m.map(medLabel).join(", "), ""];
+  box.querySelectorAll(".sbox").forEach(b=>{ lines.push("• "+b.querySelector("h3").textContent); b.querySelectorAll("li").forEach(l=>lines.push("  - "+l.textContent.trim())); lines.push(""); });
+  lines.push(box.querySelector(".hint").textContent, SITE_URL); return lines.join("\n");
+}
+function ixWire(el){
+  const res=el.querySelector("#ixres"), sel=el.querySelector("#ixsel"), sug=el.querySelector("#ixsug"), q=el.querySelector("#ixq");
+  const paint=()=>{ res.innerHTML=ixResults(); sel.innerHTML=ixs.h.map(id=>`<button type="button" class="chip" data-ixdel="${id}" aria-label="Retirer ${hname(id)}">${hname(id)} ×</button>`).join("");
+    res.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
+    sel.querySelectorAll("[data-ixdel]").forEach(b=>b.onclick=()=>{ ixs.h=ixs.h.filter(x=>x!==b.dataset.ixdel); ixSave(); paint(); });
+    const c=res.querySelector("#ixcopy"); if(c) c.onclick=async()=>{ if(await copyText(ixText())){ c.querySelector("span").textContent="✓"; } gcEv(GC_X.copy+": ix",GC_X.copy+": ix"); }; };
+  el.querySelectorAll("[data-ixm]").forEach(b=>b.onclick=()=>{ const k=b.dataset.ixm; ixs.m=ixs.m.includes(k)?ixs.m.filter(x=>x!==k):[...ixs.m,k]; b.setAttribute("aria-pressed",String(ixs.m.includes(k))); ixSave(); paint(); });
+  const find=v=>{ const n=norm(v.trim()); if(!n) return []; let l=HERBS.filter(h=>!ixs.h.includes(h.id)&&(norm(h.ar).includes(n)||[...((ALIAS[h.id]||{}).alt||[]),(ALIAS[h.id]||{}).en||"",h.lat].some(a=>norm(a).includes(n))));
+    if(!l.length){ const fq=fixQuery(v); if(fq){ const m=norm(fq); l=HERBS.filter(h=>!ixs.h.includes(h.id)&&(norm(h.ar).includes(m)||((ALIAS[h.id]||{}).alt||[]).some(a=>norm(a).includes(m)))); } } return l.slice(0,10); };
+  q.oninput=()=>{ sug.innerHTML=find(q.value).map(h=>`<button type="button" class="chip" data-ixadd="${h.id}">+ ${hname(h.id)}</button>`).join("");
+    sug.querySelectorAll("[data-ixadd]").forEach(b=>b.onclick=()=>{ ixs.h.push(b.dataset.ixadd); ixSave(); q.value=""; sug.innerHTML=""; paint(); q.focus(); }); };
+  paint();
+}
+function ixSection(){
+  return `<section class="ixbox" id="ixbox"><h3 class="oh4" style="margin-top:0">Les plantes interagissent-elles avec mes médicaments ?</h3>
+   <p class="hint" style="margin:0 0 8px">1. Choisissez tous les médicaments que vous prenez. 2. Ajoutez les plantes que vous envisagez. Si vous n’ajoutez aucune plante, nous affichons toutes les plantes du guide qui demandent de la prudence avec vos médicaments.</p>
+   <div class="opts">${MEDX.map(([k])=>`<button type="button" class="chip" data-ixm="${k}" aria-pressed="${ixs.m.includes(k)}">${medLabel(k)}</button>`).join("")}</div>
+   <div class="ixpick"><input id="ixq" type="search" autocomplete="off" placeholder="Ajouter une plante… ex. : gingembre, fenugrec, curcuma" aria-label="Ajouter une plante"><div class="opts" id="ixsug"></div><div class="opts" id="ixsel"></div></div>
+   <div class="sres" id="ixres"></div></section>`;
+}
 function renderSafety(){
   const el=$("#safety");
-  const groups=[["Situation particulière",[["preg","Grossesse"],["lact","Allaitement"]]],["Médicaments que vous prenez",WMEDS.map(([k,t])=>["m:"+k,t])],["Maladies chroniques",WCONDS.map(([k,t])=>["c:"+k,t])],["Allergie",WALG.map(([k,t])=>["a:"+k,t])]];
+  const groups=[["Situation particulière",[["preg","Grossesse"],["lact","Allaitement"]]],["Maladies chroniques",WCONDS.map(([k,t])=>["c:"+k,t])],["Allergie",WALG.map(([k,t])=>["a:"+k,t])]];
   let h=`<h2 class="page-h">Vérificateur de sécurité</h2>
-   <p class="sub">Choisissez un médicament ou une situation pour voir les plantes à éviter et celles qui demandent de la prudence. La liste se base uniquement sur les plantes de ce guide.</p>
+   <p class="sub">Vérifiez les plantes avec vos médicaments, ou choisissez une situation pour voir les plantes à éviter et celles qui demandent de la prudence. Les résultats ne concernent que les plantes de ce guide.</p>
+   ${ixSection()}
+   <h3 class="oh4">Grossesse, allaitement, maladies chroniques et allergies</h3>
    <div class="sgroups">${groups.map(([g,items])=>`<div class="q"><h3>${g}</h3><div class="opts">${items.map(([k,t])=>`<button type="button" class="chip" data-sk="${k}" aria-pressed="${sstate.k===k}">${t}</button>`).join("")}</div></div>`).join("")}</div>`;
   if(sstate.k){
     const rule=RULES[sstate.k]||{}, ex=Object.entries(rule.ex||{}).filter(([id])=>byId[id]), c=Object.entries(rule.c||{}).filter(([id])=>byId[id]&&!(rule.ex||{})[id]);
@@ -5813,7 +5880,7 @@ function renderSafety(){
    <details class="conv"><summary>Plantes adaptées aux enfants (${Object.keys(KIDS).filter(id=>byId[id]).length.toLocaleString("fr-FR")})</summary>
    <div class="conv-wrap"><table><thead><tr><th>Plante</th><th>Pour les enfants</th></tr></thead><tbody>${Object.entries(KIDS).filter(([id])=>byId[id]).map(([id,t])=>`<tr><td><button class="herb-link" data-h="${id}">${byId[id].ar}</button></td><td>${t}</td></tr>`).join("")}</tbody></table></div>
    <p>Toutes les autres plantes du guide sont déconseillées aux enfants sauf prescription médicale. Aucune boisson à base de plantes avant 6 mois, et pas de miel avant un an.</p></details>`;
-  el.innerHTML=h;
+  el.innerHTML=h; ixWire(el);
   el.querySelectorAll("[data-sk]").forEach(b=>b.onclick=()=>{ sstate.k = sstate.k===b.dataset.sk?null:b.dataset.sk; renderSafety(); const a=$(`[data-sk="${CSS.escape(b.dataset.sk)}"]`); a&&a.focus(); });
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
 }
@@ -5916,7 +5983,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-08i",date:"8 novembre 2026",go:"sch",items:[
+const NEWS={v:"2026-11-08j",date:"8 novembre 2026",go:"safety",items:[
+ "<b>Les plantes interagissent-elles avec mes médicaments ?</b> dans le « Vérificateur de sécurité », vous pouvez désormais choisir tous vos médicaments à la fois (17 types, dont l’épilepsie, la cortisone, les antibiotiques et les médicaments du cancer) et ajouter les plantes envisagées, pour voir pour chacune : à éviter, ou avec prudence, avec la raison. Un bouton copie le résultat pour le montrer au pharmacien.",
  "<b>Livres d’agriculture :</b> une nouvelle section dans « Les maîtres de la médecine et des plantes » sur les livres d’agriculture les plus connus, de Caton et du classique agricole chinois à Ibn Wahshiyya, al-Tighnari, Ibn Luyun et aux sultans rasoulides du Yémen, puis Albert Howard, Rachel Carson, Fukuoka et Teruo Higa, créateur de l’EM. Et une section « L’Europe et l’époque moderne » pour les herbiers, de Fuchs à la Commission E allemande.",
  "<b>Recherche plus intelligente :</b> la recherche comprend désormais les mots courants comme « ventre », « mal de dos » ou « démangeaisons », corrige les fautes de frappe comme « gimgembre », et si vous mentionnez un bébé ou un enfant, elle n’affiche que ce qui convient aux enfants.",
  "<b>Nouvelle page : La peau dans la tradition.</b> L’histoire des maladies de peau, du papyrus Ebers au livre d’al-Razi sur la variole et la rougeole, 15 pratiques populaires classées entre ce qui aide et ce qui nuit, les affections de peau courantes dans la chaleur du Golfe, et les signes qui exigent un médecin sans attendre.",
