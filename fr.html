@@ -5979,15 +5979,16 @@ initShared();
  <button class="x" type="button" aria-label="Fermer">×</button>
  <img src="icon-192.png" alt="">
  <div class="tx"><b class="h">Installez Maryam sur votre téléphone</b><small>S’ouvre comme une appli en un geste, même hors ligne</small><div class="how" hidden></div><button class="cp" type="button" hidden>Copier le lien du site</button>
-  <div class="act"><button class="go" type="button" hidden>Installer</button><button class="no" type="button">Plus tard</button></div></div>
+  <div class="act"><button class="go" type="button" hidden>Installer</button><button class="no" type="button">Plus tard</button><button class="no dn" type="button">Déjà installée</button></div></div>
 </div>
 <script>
 (function(){
  var KEY="maryam-install-later", el=document.getElementById("ib"); if(!el) return;
  var standalone=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
  var phone=(window.matchMedia&&matchMedia("(pointer:coarse)").matches)&&Math.min(screen.width,screen.height)<900;
- function snoozed(){ try{var t=+localStorage.getItem(KEY)||0; return t&&Date.now()-t<10*864e5;}catch(e){return false;} }
- function snooze(){ try{localStorage.setItem(KEY,String(Date.now()));}catch(e){} hide(); }
+ function snoozed(){ try{ return localStorage.getItem("maryam-installed")==="1"||sessionStorage.getItem(KEY)==="1"; }catch(e){return false;} }
+ function snooze(){ try{ sessionStorage.setItem(KEY,"1"); localStorage.setItem(KEY,String(Date.now())); }catch(e){} hide(); }
+ function done(){ try{ localStorage.setItem("maryam-installed","1"); localStorage.setItem(KEY,String(Date.now())); }catch(e){} hide(); }
  function hide(){ el.classList.remove("on"); setTimeout(function(){el.hidden=true;},400); }
  if(standalone||!phone) return;
  var ua=navigator.userAgent, ios=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
@@ -5999,12 +6000,12 @@ initShared();
  cp.onclick=function(){ var u=location.href.split("#")[0].split("?")[0]; function ok(){ cp.textContent="✓"; how.insertAdjacentHTML("beforeend","<p><b>Copié. Ouvrez Safari et collez le lien dans la barre d’adresse.</b></p>"); }
   if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(u).then(ok,function(){ window.prompt("",u); }); } else { window.prompt("",u); } };
  window.addEventListener("beforeinstallprompt",function(e){ e.preventDefault(); deferred=e; go.hidden=false; how.hidden=true; cp.hidden=true; if(!snoozed()) show(); });
- window.addEventListener("appinstalled",function(){ snooze(); });
- go.onclick=function(){ if(!deferred) return; deferred.prompt(); deferred.userChoice.then(function(c){ if(c&&c.outcome==="accepted") snooze(); deferred=null; go.hidden=true; }); };
- el.querySelector(".no").onclick=snooze; el.querySelector(".x").onclick=snooze;
+ window.addEventListener("appinstalled",function(){ done(); });
+ go.onclick=function(){ if(!deferred) return; deferred.prompt(); deferred.userChoice.then(function(c){ if(c&&c.outcome==="accepted") done(); deferred=null; go.hidden=true; }); };
+ el.querySelector(".no:not(.dn)").onclick=snooze; el.querySelector(".dn").onclick=done; el.querySelector(".x").onclick=snooze;
  window.maryamInstall=function(){ if(deferred){ deferred.prompt(); deferred.userChoice.then(function(){ deferred=null; }); return; } guide(); show(); };
  var ib=document.getElementById("instBtn"); if(ib){ ib.hidden=false; ib.onclick=window.maryamInstall; }
- if(!snoozed()) setTimeout(function(){ if(deferred) return; guide(); show(); },4000);
+ if(!snoozed()) setTimeout(function(){ if(deferred) return; guide(); show(); },1500);
 })();
 </script>
 
