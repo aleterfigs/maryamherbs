@@ -521,6 +521,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
       <button class="tab" id="tabMind" aria-selected="false">The mind in heritage</button>
       <button class="tab" id="tabEye" aria-selected="false">The eye in heritage</button>
       <button class="tab" id="tabSch" aria-selected="false">Masters of medicine and herbs</button>
+      <button class="tab" id="tabSkin" aria-selected="false">Skin in Tradition</button>
       <button class="tab" id="tabSafety" aria-selected="false">Safety checker</button>
       <button class="tab" id="tabGloss" aria-selected="false">Name glossary</button>
       <button class="tab" id="tabAbout" aria-selected="false">About</button>
@@ -554,6 +555,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
   <div class="page" id="mind" hidden></div>
   <div class="page" id="eye" hidden></div>
   <div class="page" id="sch" hidden></div>
+  <div class="page" id="skin" hidden></div>
   <div class="page" id="safety" hidden></div>
   <div class="page" id="gloss" hidden></div>
   <div class="page" id="about" hidden></div>
@@ -3712,18 +3714,18 @@ function renderRecipes(){
 }
 function setView(v){
   state.view=v;
-  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabEye","eye"],["tabSch","sch"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
+  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabEye","eye"],["tabSch","sch"],["tabSkin","skin"],["tabSafety","safety"],["tabGloss","gloss"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
   $("#recipes").hidden=v!=="recipes"; $("#wizard").hidden=v!=="wizard";
-  ["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
-  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","eye","sch","aid","nutri","safety","gloss","about"].includes(v);
+  ["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","skin","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
+  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","eye","sch","skin","aid","nutri","safety","gloss","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
   if(GC_V[v]) gcEv(GC_X.sec+": "+GC_V[v]);
   render();
 }
 function render(){
   renderAud();
-  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,eye:renderEye,sch:renderSch,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
+  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","skin","safety","gloss","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,eye:renderEye,sch:renderSch,skin:renderSkin,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
@@ -4159,7 +4161,7 @@ function renderWRes(){
 /* Anonymous statistics in GoatCounter: sex, age and problem only (texts \u escaped so they stay Arabic in every language) */
 const GC_AR={"p:digest":"\u0627\u0644\u0647\u0636\u0645 \u0648\u0627\u0644\u0627\u0646\u062a\u0641\u0627\u062e","p:sleep":"\u0627\u0644\u0646\u0648\u0645 \u0648\u0627\u0644\u062a\u0648\u062a\u0631","p:cold":"\u0627\u0644\u0633\u0639\u0627\u0644 \u0648\u0627\u0644\u0632\u0643\u0627\u0645","p:throat":"\u0627\u0644\u062a\u0647\u0627\u0628 \u0627\u0644\u062d\u0644\u0642","p:nausea":"\u0627\u0644\u063a\u062b\u064a\u0627\u0646 \u0648\u062f\u0648\u0627\u0631 \u0627\u0644\u0633\u0641\u0631","p:skin":"\u0627\u0644\u062c\u0644\u062f \u0648\u0627\u0644\u062d\u0631\u0648\u0642","p:mouth":"\u0631\u0627\u0626\u062d\u0629 \u0627\u0644\u0641\u0645 \u0648\u0627\u0644\u0644\u062b\u0629","p:fatigue":"\u0627\u0644\u062a\u0639\u0628 \u0648\u0627\u0644\u0646\u0642\u0627\u0647\u0629","p:diarrhea":"\u0627\u0644\u0625\u0633\u0647\u0627\u0644","p:allergy":"\u0627\u0644\u062d\u0633\u0627\u0633\u064a\u0629 \u0627\u0644\u0645\u0648\u0633\u0645\u064a\u0629","p:urinary":"\u0627\u0644\u0645\u0633\u0627\u0644\u0643 \u0627\u0644\u0628\u0648\u0644\u064a\u0629","p:chol":"\u0627\u0644\u0643\u0648\u0644\u064a\u0633\u062a\u0631\u0648\u0644","p:hemo":"\u0627\u0644\u0628\u0648\u0627\u0633\u064a\u0631","p:focus":"\u0627\u0644\u062a\u0631\u0643\u064a\u0632 \u0648\u0627\u0644\u0630\u0627\u0643\u0631\u0629","p:lactation":"\u0627\u0644\u0625\u0631\u0636\u0627\u0639","p:labor":"\u0627\u0644\u0623\u0633\u0627\u0628\u064a\u0639 \u0627\u0644\u0623\u062e\u064a\u0631\u0629 \u0645\u0646 \u0627\u0644\u062d\u0645\u0644","p:postpartum":"\u0627\u0644\u0646\u0641\u0627\u0633 \u0648\u0627\u0644\u062a\u0639\u0627\u0641\u064a \u0628\u0639\u062f \u0627\u0644\u0648\u0644\u0627\u062f\u0629","p:heart":"\u0635\u062d\u0629 \u0627\u0644\u0642\u0644\u0628","p:liver":"\u0627\u0644\u0643\u0628\u062f \u0627\u0644\u062f\u0647\u0646\u064a","p:gout":"\u0627\u0644\u0646\u0642\u0631\u0633","p:resp":"\u0627\u0644\u0631\u0628\u0648 \u0648\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062a\u0646\u0641\u0651\u0633","p:thyroid":"\u0627\u0644\u063a\u062f\u0629 \u0627\u0644\u062f\u0631\u0642\u064a\u0629","p:stones":"\u062d\u0635\u0649 \u0627\u0644\u0643\u0644\u0649 \u0648\u0627\u0644\u0648\u0642\u0627\u064a\u0629 \u0645\u0646\u0647\u0627","p:kidney":"\u0635\u062d\u0629 \u0627\u0644\u0643\u0644\u0649 \u0648\u0645\u0631\u0636\u0649 \u0627\u0644\u0643\u0644\u0649","p:immune":"\u062a\u0642\u0648\u064a\u0629 \u0627\u0644\u0645\u0646\u0627\u0639\u0629","p:antibiotic":"\u0628\u0639\u062f \u0627\u0644\u0645\u0636\u0627\u062f\u0627\u062a \u0627\u0644\u062d\u064a\u0648\u064a\u0629","p:chemo":"\u062f\u0639\u0645 \u0645\u0631\u064a\u0636 \u0627\u0644\u0633\u0631\u0637\u0627\u0646 \u0623\u062b\u0646\u0627\u0621 \u0627\u0644\u0639\u0644\u0627\u062c","p:wloss":"\u0625\u0646\u0642\u0627\u0635 \u0627\u0644\u0648\u0632\u0646","p:wgain":"\u0632\u064a\u0627\u062f\u0629 \u0627\u0644\u0648\u0632\u0646","p:libido":"\u0627\u0644\u0631\u063a\u0628\u0629 \u0648\u0627\u0644\u0636\u0639\u0641 \u0627\u0644\u062c\u0646\u0633\u064a","p:heavy":"\u063a\u0632\u0627\u0631\u0629 \u0627\u0644\u062f\u0648\u0631\u0629","p:irregular":"\u0639\u062f\u0645 \u0627\u0646\u062a\u0638\u0627\u0645 \u0627\u0644\u062f\u0648\u0631\u0629","p:pms":"\u0623\u0639\u0631\u0627\u0636 \u0645\u0627 \u0642\u0628\u0644 \u0627\u0644\u062f\u0648\u0631\u0629","p:constip":"\u0627\u0644\u0625\u0645\u0633\u0627\u0643","p:headache":"\u0627\u0644\u0635\u062f\u0627\u0639","p:pain":"\u0622\u0644\u0627\u0645 \u0627\u0644\u0645\u0641\u0627\u0635\u0644 \u0648\u0627\u0644\u0639\u0636\u0644\u0627\u062a","p:bp":"\u0636\u063a\u0637 \u0645\u0631\u062a\u0641\u0639 \u0642\u0644\u064a\u0644\u064b\u0627","p:sugar":"\u062f\u0639\u0645 \u0633\u0643\u0631 \u0627\u0644\u062f\u0645","p:hair":"\u0641\u0631\u0648\u0629 \u0627\u0644\u0631\u0623\u0633 \u0648\u0627\u0644\u0634\u0639\u0631","p:period":"\u0622\u0644\u0627\u0645 \u0627\u0644\u062f\u0648\u0631\u0629 \u0627\u0644\u0634\u0647\u0631\u064a\u0629","p:meno":"\u0627\u0644\u0647\u0628\u0651\u0627\u062a \u0627\u0644\u0633\u0627\u062e\u0646\u0629","p:prostate":"\u0627\u0644\u0628\u0631\u0648\u0633\u062a\u0627\u062a\u0627","g:f":"\u0623\u0646\u062b\u0649","g:m":"\u0630\u0643\u0631","b:0":"\u0623\u0642\u0644 \u0645\u0646 \u0633\u0646\u0629","b:1":"1\u20133 \u0633\u0646\u0648\u0627\u062a","b:4":"4\u20135 \u0633\u0646\u0648\u0627\u062a","b:6":"6\u201311 \u0633\u0646\u0629","b:12":"12\u201317 \u0633\u0646\u0629","b:18":"18\u201339 \u0633\u0646\u0629","b:40":"40\u201359 \u0633\u0646\u0629","b:60":"60 \u0633\u0646\u0629 \u0641\u0623\u0643\u062b\u0631","x:visitor":"\u0632\u0627\u0626\u0631","x:prob":"\u0645\u0631\u0636","x:detail":"\u062a\u0641\u0635\u064a\u0644","x:lang":"\u0644\u063a\u0629 \u0627\u0644\u0635\u0641\u062d\u0629"};
 /* anonymous events: sections and herbs opened, and sharing (once per visit) */
-const GC_V={"wizard": "\u0627\u0644\u0628\u062d\u062b \u0628\u0627\u0644\u0645\u0631\u0636", "herbs": "\u0627\u0644\u0623\u0639\u0634\u0627\u0628", "recipes": "\u0627\u0644\u0648\u0635\u0641\u0627\u062a", "mom": "\u0648\u0635\u0641\u0627\u062a \u0623\u0645\u064a", "women": "\u0635\u062d\u0629 \u0627\u0644\u0645\u0631\u0623\u0629", "kit": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u0628\u064a\u062a", "organic": "\u0627\u0644\u0632\u0631\u0627\u0639\u0629 \u0627\u0644\u0639\u0636\u0648\u064a\u0629", "aid": "\u0627\u0644\u0625\u0633\u0639\u0627\u0641\u0627\u062a", "nutri": "\u0627\u0644\u063a\u0630\u0627\u0621 \u0648\u0627\u0644\u0641\u064a\u062a\u0627\u0645\u064a\u0646\u0627\u062a", "folk": "\u0639\u0627\u062f\u0627\u062a \u0634\u0639\u0628\u064a\u0629", "mind": "\u0627\u0644\u0646\u0641\u0633 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "eye": "\u0627\u0644\u0639\u064a\u0646 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "safety": "\u0627\u0644\u0633\u0644\u0627\u0645\u0629", "gloss": "\u0627\u0644\u0645\u0635\u0637\u0644\u062d\u0627\u062a", "about": "\u0639\u0646 \u0627\u0644\u0645\u0648\u0642\u0639", "sch": "\u0623\u0639\u0644\u0627\u0645 \u0627\u0644\u0637\u0628 \u0648\u0627\u0644\u0623\u0639\u0634\u0627\u0628"}, GC_X={"sec": "\u0642\u0633\u0645", "herb": "\u0639\u0634\u0628\u0629", "share": "\u0645\u0634\u0627\u0631\u0643\u0629", "site": "\u0627\u0644\u0645\u0648\u0642\u0639", "recipe": "\u0648\u0635\u0641\u0629", "copy": "\u0646\u0633\u062e"};
+const GC_V={"wizard": "\u0627\u0644\u0628\u062d\u062b \u0628\u0627\u0644\u0645\u0631\u0636", "herbs": "\u0627\u0644\u0623\u0639\u0634\u0627\u0628", "recipes": "\u0627\u0644\u0648\u0635\u0641\u0627\u062a", "mom": "\u0648\u0635\u0641\u0627\u062a \u0623\u0645\u064a", "women": "\u0635\u062d\u0629 \u0627\u0644\u0645\u0631\u0623\u0629", "kit": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u0628\u064a\u062a", "organic": "\u0627\u0644\u0632\u0631\u0627\u0639\u0629 \u0627\u0644\u0639\u0636\u0648\u064a\u0629", "aid": "\u0627\u0644\u0625\u0633\u0639\u0627\u0641\u0627\u062a", "nutri": "\u0627\u0644\u063a\u0630\u0627\u0621 \u0648\u0627\u0644\u0641\u064a\u062a\u0627\u0645\u064a\u0646\u0627\u062a", "folk": "\u0639\u0627\u062f\u0627\u062a \u0634\u0639\u0628\u064a\u0629", "mind": "\u0627\u0644\u0646\u0641\u0633 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "eye": "\u0627\u0644\u0639\u064a\u0646 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "safety": "\u0627\u0644\u0633\u0644\u0627\u0645\u0629", "gloss": "\u0627\u0644\u0645\u0635\u0637\u0644\u062d\u0627\u062a", "about": "\u0639\u0646 \u0627\u0644\u0645\u0648\u0642\u0639", "sch": "\u0623\u0639\u0644\u0627\u0645 \u0627\u0644\u0637\u0628 \u0648\u0627\u0644\u0623\u0639\u0634\u0627\u0628", "skin": "\u0627\u0644\u062c\u0644\u062f \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b"}, GC_X={"sec": "\u0642\u0633\u0645", "herb": "\u0639\u0634\u0628\u0629", "share": "\u0645\u0634\u0627\u0631\u0643\u0629", "site": "\u0627\u0644\u0645\u0648\u0642\u0639", "recipe": "\u0648\u0635\u0641\u0629", "copy": "\u0646\u0633\u062e"};
 const gcSeen=new Set();
 function gcEv(path,title){ try{ const gc=window.goatcounter; if(!gc||typeof gc.count!=="function"||gcSeen.has(path)) return; gcSeen.add(path); gc.count({path:path.slice(0,250),title:(title||path).slice(0,250),event:true}); }catch(e){} }
 let wSentProf="";
@@ -4875,6 +4877,59 @@ const ECOMMON=[
  ["Squint and lazy eye in children","Treatment works best before age seven; older children can still improve, but less. An eye test before school is essential."]
 ];
 const EEMERG=["Sudden loss of sight, even in one eye.","Severe eye pain and redness with blurred vision.","Strong sensitivity to light with a red eye.","Double vision with a drooping eyelid.","Flashes of light or a «curtain» covering part of the vision.","An eye injury or a foreign body that will not come out.","A chemical in the eye: rinse with running water for 15 minutes first, then go to emergency."];
+/* ---------- Skin in Tradition ---------- */
+const kst={v:null};
+const SKHIST=[
+ ["Ancient Egypt: the Ebers Papyrus","around 1550 BCE","Among its roughly 700 recipes are remedies for skin diseases, using honey and many plants, mixed with incantations."],
+ ["Abu Bakr al-Razi: «Smallpox and Measles»","9th–10th century CE","He described both diseases from the signs he saw in his patients and told them apart; both are fevers that bring a rash on the skin. The book was translated into Latin and shaped the treatment of smallpox in Europe until the seventeenth century. It also gave recipes to remove smallpox marks, which historians believe did not work, given how many people kept the scars on their faces."],
+ ["The end of smallpox","In 1980","The World Health Organization declared smallpox eradicated after vaccination campaigns, the first disease ever wiped out among humans. What centuries of recipes could not do, vaccination did."]
+];
+const SKPRAC=[
+ ["Cooling a burn under running water","The first thing to do for a burn.","Running water for at least 20 minutes, then cover with cling film. Do not pop blisters.","ok"],
+ ["Emollients instead of soap for eczema","Rubbing dry skin with oils is an old practice.","Emollients at least twice a day, and used to wash instead of soap. They make clothing catch fire more easily, so keep away from flames.","ok"],
+ ["Shade and loose clothing","Turbans and covering clothes in the heat.","They protect against heat rash, sunburn and melasma: loose cotton clothes, a wide-brimmed hat, and staying somewhere cool.","ok"],
+ ["Honey on minor burns","Honey is one of the oldest things put on wounds.","Cochrane review (2008): it may speed healing of mild to moderate superficial burns, but all its trials came from one centre. Apply after cooling; a large burn needs a doctor.","care"],
+ ["Aloe vera gel on burns","Common in folk medicine.","Review (2007) of four trials: it may speed healing of first- and second-degree burns, but the evidence is not conclusive.","care"],
+ ["Fig sap on warts and eczema","One of the best-known folk skin remedies.","It contains substances (furocoumarins) that cause burns and blisters if the skin is exposed to sun. Apply with a glove to a small spot, keep the area out of the sun, and never use on children.","care"],
+ ["Massaging newborns with olive oil","A widespread habit to soften a baby's skin.","A trial (2015) of 115 babies: olive and sunflower oil delayed the maturing of the skin barrier, and the researchers advised against using them on healthy baby skin.","care"],
+ ["Ice, butter or toothpaste on a burn","«To cool the burn».","Never put ice, cream or oil on a burn. Running water is the first treatment.","harm"],
+ ["Toothpaste on pimples","«Dries the pimple».","Dermatologists advise against it: it irritates the skin and can cause a chemical burn.","harm"],
+ ["Squeezing pimples and blackheads","«Cleans the face».","It worsens acne and leaves scars.","harm"],
+ ["Lemon on the skin, then sun","To lighten skin and freckles.","It causes a blistering rash and dark patches that last weeks or months. Wash your hands after squeezing lemons before going into the sun.","harm"],
+ ["Fig leaves or their decoction for tanning","For a quick tan.","Severe burns have been recorded after fig-leaf decoctions and tanning lotions made from them.","harm"],
+ ["Black henna","A quick, long-lasting black design.","It contains a chemical dye (PPD) that causes blisters, allergy and scars; a case in Kuwait had blisters in the exact shape of the design. Natural henna is reddish-brown.","harm"],
+ ["Unknown lightening creams","«Instant whitening».","Some contain mercury, which harms the kidneys and causes rash, patches and scars. Steroid creams used without a doctor cause acne, thin skin and stretch marks; in a study in Iraq, 65.7% of patients used them for lightening.","harm"],
+ ["Kerosene or petrol for lice","An old home remedy.","It causes burns and eye injuries, and can catch fire. A fine-tooth comb first, and a pharmacist can advise on treatment.","harm"]
+];
+const SKCOMMON=[
+ ["Eczema","Dryness, itching and inflammation that come and go. Basic care: emollients at least twice a day and instead of soap, and avoiding triggers. Do not change diet except under a doctor's supervision."],
+ ["Acne","Caused by hormones and genes, not poor hygiene, and there is no evidence that food causes it. Wash the face no more than twice a day with a gentle cleanser and lukewarm water, and do not squeeze spots. See a doctor if nodules or cysts appear, to avoid scarring. Treatment can take up to three months."],
+ ["Athlete's foot","Common in heat and humidity. Prevention: dry feet well, including between the toes, do not share towels or shoes, and wear flip-flops in public showers. A pharmacist can advise on treatment, which continues two weeks after the rash clears."],
+ ["Heat rash","Small itchy spots in heat and humidity. Eased by cooling down, loose cotton clothes, drinking fluids, a cold compress for up to 20 minutes, patting rather than scratching, and avoiding perfumed products. See a doctor if it does not improve within a few days."],
+ ["Melasma","Brown patches on the face, harmless, not contagious and never turning into cancer. Triggered by sun, pregnancy and the contraceptive pill. The key treatment is sun protection: a wide hat and high-protection sunscreen. Nothing cures it for good and it may return, so beware of creams promising quick whitening."],
+ ["Vitiligo","White patches, not contagious, caused by the body's immune system attacking the skin's pigment cells. The patches burn easily in the sun, so protect them with high-protection sunscreen (50) and clothing. A dermatologist has treatments for it."],
+ ["Psoriasis","A chronic, non-contagious disease. Triggered by stress, smoking, obesity, some medicines, infections and skin injury. Regular emollients ease the scales, and moderate sun may help without excess. Anyone with joint pain or swelling should tell a doctor soon."],
+ ["Moles and skin cancer","Watch for a mole that is asymmetrical, has an irregular border, mixed colours, a diameter over 6 mm, or changes over time. Any one of these needs a dermatologist right away."]
+];
+const SKEMERG=["A rash that does not fade when pressed with a glass, especially with fever: go to emergency immediately, and do not wait for a rash if the person is very ill. On dark skin, check the palms and soles.","A burn larger than the person's hand, or with blisters on the face, hands or genitals, or a deep or electrical burn.","Eczema that weeps, has pus or crusts, becomes hot and painful, spreads fast, or comes with fever.","A new mole, or one changing in shape, colour or size: see a dermatologist without delay."];
+function renderSkin(){
+  const el=$("#skin"), hl=id=>byId[id]?`<button type="button" class="chip herb-link" data-h="${id}">${byId[id].ar.split(" (")[0]}</button>`:"";
+  el.innerHTML=`<h2 class="page-h">Skin in Tradition</h2>
+   <p class="sub">Tradition holds many skin remedies; some help, and some leave lifelong scars. Here is some of their history, which folk practices help or harm, common skin conditions in the Gulf heat, and signs that need a doctor.</p>
+   <div class="aidcard sev-e"><div class="aidhead"><h3>See a doctor or go to emergency immediately if</h3></div><ul style="margin:0">${SKEMERG.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+   <h3 class="oh4">From the history of skin diseases</h3>
+   <div class="aggrid">${SKHIST.map(([n,w,t])=>`<article class="agcard"><h5>${n}</h5><p class="agmeta">${w}</p><p>${t}</p></article>`).join("")}</div>
+   <h3 class="oh4">Folk habits: what is right and what harms</h3>
+   <div class="sgroups"><div class="opts">${[[null,"All"],["ok","Sound"],["care","With care"],["harm","Harmful"]].map(([k,t])=>`<button type="button" class="chip" data-kv="${k||""}" aria-pressed="${kst.v===k}">${k?`<span class="dot ${FV[k][1]}"></span>`:""}${t}</button>`).join("")}</div></div>
+   <div class="owrap"><table class="otable"><thead><tr><th>Habit</th><th>In heritage</th><th>Today</th></tr></thead><tbody>${SKPRAC.filter(r=>!kst.v||r[3]===kst.v).map(([a,b,c,v])=>`<tr><td>${a}<br><span class="sevtag ${FV[v][1]}" style="font-size:.7rem">${FV[v][0]}</span></td><td>${b}</td><td>${c}</td></tr>`).join("")}</tbody></table></div>
+   <p class="hint">More details and warnings on these herb pages:</p>
+   <div class="opts">${["honey","aloe","henna","fig","olive"].map(hl).join("")}</div>
+   <h3 class="oh4">Common skin conditions here</h3>
+   <div class="aggrid">${SKCOMMON.map(([n,t])=>`<article class="agcard"><h5>${n}</h5><p>${t}</p></article>`).join("")}</div>
+   <p class="hint">Chronic skin conditions such as eczema, psoriasis and vitiligo are controlled over time and do not vanish with one mixture. Beware of anyone promising a full cure; a dermatologist is the reference.</p>`;
+  el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
+  el.querySelectorAll("[data-kv]").forEach(b=>b.onclick=()=>{ kst.v=b.dataset.kv||null; const y=scrollY; renderSkin(); scrollTo({top:y}); });
+}
 /* ---------- Masters of medicine and herbs ---------- */
 const sst={e:null};
 const SERA={anc:"World civilisations",isl:"Arabs and Muslims",and:"Al-Andalus",nab:"Prophetic medicine"};
@@ -5807,7 +5862,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- What's new: shown once to returning visitors after each update ---------- */
-const NEWS={v:"2026-11-08f",date:"8 November 2026",go:"sch",items:[
+const NEWS={v:"2026-11-08g",date:"8 November 2026",go:"skin",items:[
+ "<b>New page: Skin in Tradition.</b> The history of skin diseases from the Ebers Papyrus to al-Razi's book on smallpox and measles, 15 folk practices sorted into what helps and what harms, common skin conditions in the Gulf heat, and signs that need a doctor right away.",
  "<b>Copy and share the shopping list:</b> in «How much should I buy?» there are two buttons to copy or share the list, and copying or sharing a recipe now includes the amounts needed for the length you chose.",
  "<b>How much should I buy?</b> under every recipe there is now a button that calculates how much of each herb to buy for the treatment length you choose: 3 days, a week, 2 weeks or a month.",
  "<b>Masters of medicine and herbs: world civilisations.</b> We added Imhotep and the Kahun Papyrus, Babylon and Assyria, Chinese books from the «Yellow Emperor» to Li Shizhen, Gondishapur and the physicians of Persia, and the Native Americans, Inca and Aztecs. We also checked the al-Andalus cards against sources and corrected some details.",
@@ -5855,6 +5911,7 @@ $("#tabFolk").onclick=()=>{ fst.v=null; setView("folk"); };
 $("#tabMind").onclick=()=>{ mst.v=null; setView("mind"); };
 $("#tabEye").onclick=()=>{ est.v=null; setView("eye"); };
 $("#tabSch").onclick=()=>{ sst.e=null; setView("sch"); };
+$("#tabSkin").onclick=()=>{ kst.v=null; setView("skin"); };
 function openFromHash(){ const m=location.hash.match(/^#r=(.+)$/); if(m){ try{ goRecipe(decodeURIComponent(m[1])); }catch(_){} } const mh=location.hash.match(/^#h=([a-z0-9]+)$/); if(mh&&byId[mh[1]]){ setView("herbs"); openPanel(byId[mh[1]]); } }
 window.addEventListener("load",openFromHash); window.addEventListener("hashchange",openFromHash);
 $("#tabWomen").onclick=()=>{ wst.id=null; setView("women"); window.scrollTo({top:0}); };
