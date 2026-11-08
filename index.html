@@ -242,6 +242,7 @@ h1{font-family:var(--f-display);font-weight:700;font-size:clamp(2.2rem,6vw,3.2re
 .foods{list-style:none;padding:0!important;display:flex;flex-direction:column;gap:5px}
 .foods li{display:flex;gap:8px;align-items:baseline}
 .fg{flex:none;font-size:.72rem;font-weight:600;padding:1px 8px;border-radius:999px;background:var(--leaf-soft);color:var(--leaf);white-space:nowrap}
+.shop{font-size:.86rem;border:1px solid var(--line,#dfe4d3);border-radius:6px;padding:6px 10px;margin-top:6px}.shop summary{cursor:pointer;font-weight:600}.shop ul{margin:4px 0;padding-inline-start:18px}
 .dose{font-size:.88rem;background:var(--leaf-soft);color:var(--ink);border-radius:4px;padding:8px 12px}
 .dose b{color:var(--leaf);margin-inline-end:6px}
 .conv{background:var(--sheet);border:1px solid var(--line);border-radius:6px;padding:10px 14px}
@@ -2978,7 +2979,7 @@ RECIPES.push(
   ["ضعي البابونج في وعاء واسع واسكبي عليه الماء المغلي.","انتظري دقيقتين حتى يخفّ البخار قليلًا.","اقتربي بوجهك على بعد 30 سم وغطّي رأسك بمنشفة 5–8 دقائق.","اغسلي الوجه بماء فاتر وضعي مرطّبًا."],"لا تقتربي كثيرًا من الماء الساخن. لا يناسب البشرة الحساسة جدًا أو الوردية أو حساسية الأقحوان. مرة في الأسبوع تكفي.",{o:"europe"}),
  X("كمادات الشاي الأخضر للعينين","تخفّف انتفاخ العينين الصباحي مؤقتًا.",["women","adults"],["skin"],
   [["greentea","كيسا شاي أخضر"]],
-  ["انقعي الكيسين في ماء ساخن 3 دقائق.","أخرجيهما واتركيهما في الثلاجة 15 دقيقة.","ضعيهما على العينين المغمضتين 10 دقائق."],"البرودة هي أهم ما يخفّف الانتفاخ. لا تضغطي على العين، وأوقفيها إذا ظهر تهيّج.",{o:"home"}),
+  ["انقعي الكيسين في ماء ساخن 3 دقائق.","أخرجيهما واتركيهما في الثلاجة 15 دقيقة.","ضعيهما على العينين المغمضتين 10 دقائق."],"البرودة هي أهم ما يخفّف الانتفاخ. لا تضغطي على العين، وأوقفيها إذا ظهر تهيّج.",{o:"home",dose:"مرة واحدة صباحًا عند الحاجة، 10 دقائق على العينين المغمضتين، ولا تُشرب."}),
  X("الحلاوة لإزالة الشعر","الطريقة التقليدية في الخليج ومصر والشام، بالسكر والليمون والماء فقط.",["women"],["skin"],
   [[null,"كوب سكر أبيض"],[null,"ربع كوب عصير ليمون"],[null,"ربع كوب ماء"]],
   ["ضعي المكوّنات في قدر على نار متوسطة دون تحريك كثير.","اتركيها تغلي حتى يصبح لونها عسليًا ذهبيًا (نحو 10–15 دقيقة).","ارفعيها عن النار واتركيها حتى تصبح دافئة لا ساخنة، وجرّبي حرارتها على باطن المعصم.","افردي قطعة على الجلد عكس اتجاه نمو الشعر، ثم اسحبيها بسرعة باتجاه النمو مع شدّ الجلد.","ضعي جل الصبار أو كمادة باردة بعدها."],"الحلاوة الساخنة تسبّب حروقًا شديدة؛ جرّبي حرارتها دائمًا. لا تُستعمل على جلد مجروح أو ملتهب أو مع كريمات الريتينويد. اغسلي الليمون عن الجلد قبل الخروج للشمس.",{o:"arab"})
@@ -3474,7 +3475,72 @@ function doseOf(r){
   if(p0==="period") return "كوب مرتين يوميًا في أيام الألم.";
   return "كوب مرة إلى مرتين يوميًا؛ يمكن الاستمرار 4–6 أسابيع ثم استراحة أسبوع.";
 }
-const doseBox = r => `<div class="dose"><b>كم ومتى؟</b> ${doseOf(r)}</div>`;
+/* ---------- كمية الشراء حسب مدة العلاج ---------- */
+const SHOP_PRE={};
+const SEEDS=["fennel","cumin","fenugreek","anise","nigella","coriander","caraway","flax","chia","celery","dill","cardamom","sesame","blackseed"];
+const SU={tsp:"ملعقة صغيرة",tbsp:"ملعقة كبيرة",cup:"كوب",l:"لتر",pinch:"رشّة",piece:"حبّة",slice:"شريحة",leaf:"ورقة",stick:"عود",sprig:"غصن",clove:"فصّ أو زرّ",handful:"حفنة",g:"غرام",strand:"شعيرة",drop:"قطرة",pack:"علبة",bag:"كيس"};
+function shopParse(t,id){ /*HGRX*/
+  const W={"نصف":.5,"ربع":.25,"ثلث":1/3}; /*HGRX*/
+  if(/^(كوب|كوبان|\d+ أكواب|لتر|ماء|نصف كوب ماء)/.test(t)&&/ماء/.test(t)&&!/ورد|زهر/.test(t)) return null; /*HGRX*/
+  if(/^(قليل|حسب|بضع)/.test(t)) return null; /*HGRX*/
+  let q=null, m; /*HGRX*/
+  if(m=t.match(/^(\d+(?:\.\d+)?)(?:\s*[–-]\s*(\d+(?:\.\d+)?))?/)) q=+(m[2]||m[1]); /*HGRX*/
+  else if(m=t.match(/^(نصف|ربع|ثلث)\b/)) q=W[m[1]]; /*HGRX*/
+  else if(/^(ملعقتان|كوبان|حبّتا|حبتا|شريحتا|زرّا|ورقتا|عودا|فصّا|لترا|كيسا|قطعتا)/.test(t)) q=2; /*HGRX*/
+  else q=1; /*HGRX*/
+  if(/ونصف/.test(t)) q+=.5; /*HGRX*/
+  const U=[[/ملعق\S* صغير/,"tsp"],[/ملعق\S* كبير/,"tbsp"],[/ملعق|ملاعق/,"tbsp"],[/كوب|أكواب/,"cup"],[/لتر/,"l"],[/رشّة|رشة/,"pinch"],[/شريح|شرائح/,"slice"],[/ورق|أوراق/,"leaf"],[/عود|أعواد/,"stick"],[/غصن|أغصان/,"sprig"],[/فصّ|فص|زرّ|زر |أزرار/,"clove"],[/حفنة/,"handful"],[/غرام|\bغ\b/,"g"],[/شعير/,"strand"],[/قطر/,"drop"],[/علبة/,"pack"],[/كيس|أكياس/,"bag"],[/قطعة|قطع/,"piece"],[/حبّ|حب|تمرات|تمرة|رطب|ليمون|موز|بصل|جزر|بيض/,"piece"]]; /*HGRX*/
+  let u=null; for(const [re,k] of U){ if(re.test(t)){ u=k; break; } } /*HGRX*/
+  if(!u) return null; /*HGRX*/
+  let g=null; /*HGRX*/
+  if(u==="tsp"||u==="tbsp"){ /*HGRX*/
+    const per= /عسل|دبس/.test(t)?7 : /زيت|سمن/.test(t)?4.5 : /مسحوق|مطحون|مبشور|بودرة|قرفة|كركم|زنجبيل مجفف/.test(t)?2.5 : (SEEDS.includes(id)||/بذور|حبوب|حبة البركة/.test(t))?3 : id?1.2 : null; /*HGRX*/
+    if(per) g=per*(u==="tbsp"?3:1); /*HGRX*/
+  } else if(u==="slice"&&id==="ginger") g=2.5; /*HGRX*/
+  else if(u==="handful") g=12; /*HGRX*/
+  else if(u==="g") g=1; /*HGRX*/
+  return [q,u,g]; /*HGRX*/
+} /*HGRX*/
+function shopOf(r){ /*HGRX*/
+  if(r.name in SHOP_PRE) return SHOP_PRE[r.name]; /*HGRX*/
+  const d=doseOf(r), y=r.yield||""; /*HGRX*/
+  if(/حسب النشرة|حسب العبوة/.test(d)) return null; /*HGRX*/
+  let per=1; /*HGRX*/
+  if(/2–3 مرات يوميًا|3 مرات يوميًا|ثلاث مرات/.test(d)) per=3; /*HGRX*/
+  else if(/مرة إلى مرتين يوميًا|مرتين يوميًا|كوب إلى كوبين|كوبين يوميًا|يمكن تكرارها/.test(d)) per=2; /*HGRX*/
+  else if(/مرة إلى مرتين أسبوعيًا/.test(d)) per=2/7; /*HGRX*/
+  else if(/عدة مرات أسبوعيًا|أسبوعيًا/.test(d)) per=3/7; /*HGRX*/
+  let days=14, max=null; /*HGRX*/
+  if(/يومين/.test(d)) days=max=2; /*HGRX*/
+  else if(/3–5 أيام/.test(d)) days=max=5; /*HGRX*/
+  else if(/أسبوع(?! كل)|7 أيام/.test(d)&&/أقصى|حتى تزول/.test(d)) days=7; /*HGRX*/
+  else if(/أيام قليلة|لأيام/.test(d)) days=5; /*HGRX*/
+  if(!max&&/أقصى أسبوع|أكثر من أسبوع/.test(d)) max=7; /*HGRX*/
+  else if(/أيام الألم/.test(d)) days=3; /*HGRX*/
+  else if(/أسابيع|كل شهر/.test(d)) days=30; /*HGRX*/
+  const batch=/زجاجة|برطمان|لعدة|حبّة|كرة|جرعات/.test(y); /*HGRX*/
+  const sv={"لكوبين":2,"لكوبين صغيرين":2,"لثلاثة أكواب":3,"للتر":4,"للترين":8,"لإبريق صغير":3,"لدلّة صغيرة":3}[y]||1; /*HGRX*/
+  const items=r.ing.map(([id,t],i)=>{ const x=shopParse(t,id); return x?[i,...x]:null; }).filter(Boolean); /*HGRX*/
+  if(!items.length) return null; /*HGRX*/
+  return {per,days,sv,batch:batch?1:0,items,max}; /*HGRX*/
+} /*HGRX*/
+const shopSel={};
+function shopBox(r){
+  const o=shopOf(r); if(!o) return "";
+  const days=shopSel[r.name]||o.days, n=o.batch?1:Math.max(1,Math.ceil(o.per*days/o.sv));
+  const fmt=x=>{ const v=Math.round(x*10)/10; return (v%1?v.toFixed(1):String(v)); };
+  const pack=g=>[25,50,100,250,500,1000].find(p=>p>=g*1.1)||Math.ceil(g/500)*500;
+  const rows=o.items.map(([i,q,u,g])=>{ const [id,t]=r.ing[i], nm=id&&byId[id]?byId[id].ar.split(" (")[0]:t;
+    const tot=q*n, w=g?Math.ceil(g*tot):null;
+    return `<li><b>${nm}</b>: ${fmt(tot)} × ${SU[u]}${w?` ≈ ${w} غ${(u==="tsp"||u==="tbsp")&&id&&byId[id]&&!byId[id].animal?` <small>(تكفي عبوة ${pack(w)} غ)</small>`:""}`:""}</li>`; }).join("");
+  return `<details class="shop"><summary>كم أشتري؟</summary>
+   <div class="opts" role="group">${[...new Set([3,7,14,30,o.days])].filter(dv=>!o.max||dv<=o.max).sort((a,b)=>a-b).map(dv=>`<button type="button" class="chip" data-sd="${dv}" data-sr="${encodeURIComponent(r.name)}" aria-pressed="${dv===days}">${dv===30?"شهر":dv===14?"أسبوعان":dv===7?"أسبوع":dv===2?"يومان":dv+" أيام"}</button>`).join("")}</div>
+   <p class="hint" style="margin:6px 0">${o.batch?"هذه الوصفة تُحضّر دفعة واحدة تكفي عدة أيام، فهذه كمية دفعة واحدة.":`لمدة ${days} ${days<=10?"أيام":"يومًا"} تحتاج ${n===1?"تحضيرًا واحدًا":n===2?"تحضيرين":n<=10?n+" تحضيرات":n+" تحضيرًا"} تقريبًا، حسب الجرعة المذكورة.`}${o.max?` <b>لا تتجاوز ${o.max===2?"يومين":o.max+" أيام"}.</b>`:""}</p>
+   <ul>${rows}</ul>
+   <p class="hint" style="margin:4px 0 0">الأوزان تقريبية. اشترِ من عطّار أو صيدلية موثوقة، وخزّن الأعشاب المجففة في وعاء محكم بعيدًا عن الضوء والرطوبة، فأغلبها يحتفظ بقوته نحو سنة.</p></details>`;
+}
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-sd]"); if(!b) return; const nm=decodeURIComponent(b.dataset.sr); shopSel[nm]=+b.dataset.sd; const box=b.closest("details.shop"); const r=RECIPES.find(x=>x.name===nm); if(box&&r){ const t=document.createElement("div"); t.innerHTML=shopBox(r); const nb=t.firstElementChild; nb.open=true; box.replaceWith(nb); } });
+const doseBox = r => `<div class="dose"><b>كم ومتى؟</b> ${doseOf(r)}</div>${shopBox(r)}`;
 const convBox = () => `<details class="conv"><summary>جدول تحويل المقادير المنزلية</summary>
   <div class="conv-wrap"><table><thead><tr><th>المقدار</th><th>يعادل تقريبًا</th></tr></thead><tbody>
   <tr><td>ملعقة صغيرة</td><td>5 مل</td></tr>
@@ -4783,11 +4849,11 @@ const ECOMMON=[
  ["الماء الأبيض (الساد)","عتامة في العدسة تأتي مع العمر والشمس والسكري. علاجه جراحة سريعة آمنة، ولا تزيله القطرات الشعبية."],
  ["الماء الأزرق (الزرق)","يتلف عصب العين بصمت. وتنصح الأكاديمية الأمريكية لطب العيون بفحص شامل للعين في سن الأربعين على الأكثر، ومن في عائلته المرض أكثر عرضة له بأربعة إلى تسعة أضعاف."],
  ["اللحمية (الظفرة)","لحمية تنمو على بياض العين، أهم أسبابها الأشعة فوق البنفسجية، ثم الغبار والرمل والريح. الوقاية بنظارة شمسية تحجب الأشعة فوق البنفسجية، وقبعة ذات حافة."],
- ["جفاف العين","من المكيّفات والشاشات والغبار. يخففه شرب الماء، وأخذ راحة من الشاشة، وتقليل هواء المكيّف المباشر على الوجه."],
+ ["جفاف العين","من المكيّفات والشاشات والريح، لأن العين ترمش أقل أمام الشاشة. يخففه الرمش الكامل، وقاعدة 20-20-20 (كل 20 دقيقة انظر إلى شيء بعيد 20 ثانية)، وإبعاد هواء المكيّف عن الوجه. وإذا استمر 3–4 أسابيع فراجع طبيب العيون."],
  ["الرمد (التهاب الملتحمة)","احمرار وإفرازات، وأغلبه معدٍ. غسل اليدين، ولا تُشارك المناشف، ويُراجع الطبيب إذا ضعف البصر أو اشتد الألم."],
  ["الحَوَل وكسل العين عند الأطفال","علاجه أنجح قبل سن السابعة، وقد يتحسن الأكبر سنًا لكن بدرجة أقل. فحص النظر قبل المدرسة ضروري."]
 ];
-const EEMERG=["فقدان مفاجئ للبصر، ولو في عين واحدة.","ألم شديد في العين أو صداع مع غثيان وعين حمراء.","احمرار مع ضعف الرؤية أو حساسية شديدة للضوء.","ومضات ضوء أو «ستارة» تغطي جزءًا من الرؤية.","إصابة في العين أو جسم غريب لا يخرج.","مادة كيميائية في العين: تُغسل بماء جارٍ 15 دقيقة أولًا، ثم إلى الطوارئ."];
+const EEMERG=["فقدان مفاجئ للبصر، ولو في عين واحدة.","ألم شديد واحمرار في العين مع ضعف الرؤية.","حساسية شديدة للضوء مع احمرار العين.","رؤية مزدوجة مع تدلّي الجفن.","ومضات ضوء أو «ستارة» تغطي جزءًا من الرؤية.","إصابة في العين أو جسم غريب لا يخرج.","مادة كيميائية في العين: تُغسل بماء جارٍ 15 دقيقة أولًا، ثم إلى الطوارئ."];
 /* ---------- أعلام الطب والأعشاب ---------- */
 const sst={e:null};
 const SERA={anc:"حضارات العالم",isl:"العرب والمسلمون",and:"الأندلس",nab:"الطب النبوي"};
@@ -5720,7 +5786,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
-const NEWS={v:"2026-11-08d",date:"8 نوفمبر 2026",go:"sch",items:[
+const NEWS={v:"2026-11-08e",date:"8 نوفمبر 2026",go:"sch",items:[
+ "<b>كم أشتري؟</b> تحت كل وصفة صار زر يحسب كمية كل عشبة تحتاج شراءها حسب مدة العلاج التي تختارها: 3 أيام أو أسبوع أو أسبوعان أو شهر.",
  "<b>أعلام الطب والأعشاب: حضارات العالم.</b> أضفنا إمحوتب وبردية كاهون، وبابل وآشور، وكتب الصين من «الإمبراطور الأصفر» إلى لي شي تشن، وجنديسابور وأطباء فارس، والهنود الحمر والإنكا والأزتيك. وراجعنا بطاقات الأندلس على المصادر وصحّحنا بعض التفاصيل.",
  "<b>أعلام الطب والأعشاب: قسم الأندلس.</b> 24 بطاقة من ترجمة ديسقوريدس في قرطبة إلى مارستان غرناطة: ابن جلجل وعريب بن سعد والزهراوي وابن زهر وطبيبات آل زهر وابن العوّام والنباتي وابن البيطار وابن الخطيب وابن خاتمة وغيرهم.",
  "<b>باب جديد: أعلام الطب والأعشاب.</b> 35 عَلَمًا من سومر ومصر واليونان والصين والهند إلى الرازي وابن سينا والزهراوي وابن البيطار، وكتب الطب النبوي، مع أسماء مؤلفاتهم وما أضافوه.",
