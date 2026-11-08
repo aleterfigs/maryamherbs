@@ -5616,7 +5616,7 @@ function ttsSay(btn,text){
   const parts=ttsChunks(text); if(!parts.length) return;
   TTS.on=btn; const sp=btn.querySelector("span"); TTS.lbl=sp?sp.textContent:""; if(sp) sp.textContent="Arrêter la lecture"; btn.classList.add("speaking");
   let started=false;
-  parts.forEach((p,i)=>{ const u=new SpeechSynthesisUtterance(p); u.lang=v?v.lang:({ar:"ar-SA",en:"en-GB",fr:"fr-FR"}[ttsLang()]||"ar-SA"); if(v) u.voice=v; u.rate=.95;
+  parts.forEach((p,i)=>{ const u=new SpeechSynthesisUtterance(p); const andr=/Android/i.test(navigator.userAgent); u.lang=v?v.lang:({ar:"ar-SA",en:"en-GB",fr:"fr-FR"}[ttsLang()]||"ar-SA"); if(v&&!andr) u.voice=v; u.rate=.95;
     u.onstart=()=>{ started=true; };
     if(i===parts.length-1){ u.onend=()=>{ if(TTS.on===btn) ttsStop(); }; }
     u.onerror=ev=>{ if(TTS.on!==btn) return; const er=ev&&ev.error; if(er==="interrupted"||er==="canceled") return; ttsFail(btn,(er==="language-unavailable"||er==="voice-unavailable")?"lang":"x"); };
