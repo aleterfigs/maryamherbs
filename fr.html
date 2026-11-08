@@ -6516,6 +6516,11 @@ initShared();
  function snooze(){ try{ sessionStorage.setItem(KEY,"1"); localStorage.setItem(KEY,String(Date.now())); }catch(e){} hide(); }
  function done(){ try{ localStorage.setItem("maryam-installed","1"); localStorage.setItem(KEY,String(Date.now())); }catch(e){} hide(); }
  function hide(){ el.classList.remove("on"); setTimeout(function(){el.hidden=true;},400); }
+ function gcE(p,t){ var n=0; (function f(){ var g=window.goatcounter; if(g&&typeof g.count==="function"){ try{ g.count({path:p,title:t,event:true}); }catch(e){} } else if(n++<30) setTimeout(f,500); })(); }
+ if(standalone){ try{ var os=/iPhone|iPad|iPod/.test(navigator.userAgent)?"ios":/Android/.test(navigator.userAgent)?"android":"other";
+   if(localStorage.getItem("maryam-gc-dev")!=="1"){ localStorage.setItem("maryam-gc-dev","1"); gcE("app-device-"+os,"تطبيق مثبّت: جهاز ("+os+")"); }
+   if(sessionStorage.getItem("maryam-gc-open")!=="1"){ sessionStorage.setItem("maryam-gc-open","1"); gcE("app-open","فتح التطبيق المثبّت"); } }catch(e){} }
+ window.addEventListener("appinstalled",function(){ gcE("app-installed","تثبيت التطبيق الآن (أندرويد)"); });
  if(standalone||!phone) return;
  var ua=navigator.userAgent, ios=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
  var inapp=/FBAN|FBAV|Instagram|Line[/]|Snapchat|TikTok|musical_ly|BytedanceWebview/.test(ua)||(ios&&!/Safari/.test(ua));
