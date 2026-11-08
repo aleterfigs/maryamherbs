@@ -5897,6 +5897,7 @@ function renderAbout(){ setTimeout(renderFeedback,0);
   <section><h2>ما في هذا الدليل</h2><div class="stats"><div><b>${n(HERBS.length)}</b><span>عشبة</span></div><div><b>${n(RECIPES.length)}</b><span>خلطة</span></div><div><b>${n(Object.keys(ORIG).length)}</b><span>تقليدًا</span></div><div><b>${n(PROBS.length)}</b><span>مشكلة صحية</span></div></div></section>
   <section><h2>كيف أُعدّ</h2><ul>
    <li>اختيرت الأعشاب لشيوعها في البيوت والأسواق العربية، ثم أُضيفت أشهر أعشاب التقاليد الأخرى.</li>
+   <li>أُعدّ المحتوى بمساعدة الذكاء الصناعي (Claude من شركة Anthropic)، ثم رُوجعت المعلومات على مصادر علمية ورسمية تجدها تحت كل عشبة، منها هيئة الدواء المصرية والوكالة الأوروبية للأدوية والمعاهد الوطنية للصحة في أمريكا. وإذا وجدت خطأ فأبلغنا من الزر الموجود تحت كل عشبة وخلطة، ونصحّحه.</li>
    <li>لكل عشبة: استعمالاتها، ومستوى الدليل العلمي عليها، وطريقة تحضيرها، ومحاذيرها، وتداخلاتها مع الأدوية.</li>
    <li>الخلطات وصفات تقليدية ومنزلية؛ الأدلة العلمية غالبًا عن كل عشبة منفردة، أما الخلطة نفسها فلم تُختبر كتركيبة.</li>
    <li>أحاديث الطب النبوي مذكورة بمصادرها ودرجتها، ونُبّه على ما لا يصح منها.</li>
@@ -5937,6 +5938,8 @@ function renderAbout(){ setTimeout(renderFeedback,0);
   </div>`;
 }
 let lastFocus=null;
+const SRCX={"nigella":[["doh","https://medicinalplants.doh.gov.ae/Public-education-plants-leaflets/Nigella-sativa"],["eda","https://www.edaegypt.gov.eg/media/cuobaarg/nigella-sativa-l-_1.pdf"]],"anise":[["eda","https://edaegypt.gov.eg/media/dsygbsva/pimpinella-anisum-l-%D9%8A%D9%86%D8%B3%D9%88%D9%86_anise-up.pdf"]],"fennel":[["eda","https://www.edaegypt.gov.eg/media/44flsuol/foeniculum-vulgare-mill-_1.pdf"]],"thyme":[["eda","https://www.edaegypt.gov.eg/media/tashqnts/thymus-vulgaris-l-%D8%B2%D8%B9%D8%AA%D8%B1.pdf"]],"rosemary":[["eda","https://www.edaegypt.gov.eg/media/q2kblr3n/salvia-rosmarinus-spenn.pdf"]],"hibiscus":[["eda","https://edaegypt.gov.eg/media/hzynjgnk/hibiscus-sabdariffa-l-%D9%83%D8%B1%D9%83%D8%AF%D9%8A%D9%87.pdf"]],"dill":[["eda","https://www.edaegypt.gov.eg/media/a4kf0fmp/anethum-graveolens_1.pdf"]],"marshmallow":[["eda","https://www.edaegypt.gov.eg/media/43rnnr5j/althaea-officinalis_1.pdf"]],"olive":[["eda","https://www.edaegypt.gov.eg/media/movh3lt1/olea-europaea-l.pdf"]],"psyllium":[["eda","https://www.edaegypt.gov.eg/media/225d2qmm/plantago-ovata-forssk-%D9%84%D9%82%D9%85%D8%A9-%D8%A7%D9%84%D9%86%D8%B9%D8%AC%D8%A9-%D8%AC%D9%86%D9%8A%D9%85%D8%A9.pdf"]],"senna":[["eda","https://www.edaegypt.gov.eg/media/x1bjkut5/senna-alexandrina_1.pdf"]],"nettle":[["eda","https://www.edaegypt.gov.eg/media/ufqj240y/urtica-dioica-l-_1.pdf"]],"caraway":[["eda","https://www.edaegypt.gov.eg/media/2cxdykm3/carum-carvi.pdf"]],"artichoke":[["eda","https://www.edaegypt.gov.eg/media/a0vdmm40/cynara-cardunculus-l.pdf"]],"eucalyptus":[["eda","https://www.edaegypt.gov.eg/media/yweoewbx/eucalyptus-globulus-labill-%D9%83%D8%A7%D9%81%D9%88%D8%B1.pdf"]],"ivy":[["eda","https://www.edaegypt.gov.eg/media/4wjbhucs/hedera-helix-l-_1.pdf"]],"calendula":[["ema","https://ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-calendula-officinalis-l-flos-revision-1_en.pdf"]]};
+const SRCL={eda:"الدراسة الرسمية من هيئة الدواء المصرية (الكتاب المصري لدراسات الأعشاب)",doh:"نشرة توعوية عن النبات من دائرة الصحة في أبوظبي",ema:"الدراسة الرسمية من الوكالة الأوروبية للأدوية (EMA)"};
 function openPanel(h){
   lastFocus=document.activeElement; gcEv(GC_X.herb+": "+h.id, GC_X.herb+": "+h.id+" \u00b7 "+h.ar.split(" (")[0]);
   const fav=state.favs.has(h.id), p=$("#panel");
@@ -5956,6 +5959,7 @@ function openPanel(h){
     ${growBox(h)}
     <section><h3>المصادر</h3><ul>
       ${NCCIH[h.id]?`<li><a href="https://www.nccih.nih.gov/health/${NCCIH[h.id]}" target="_blank" rel="noopener">صفحة ${h.ar} في المركز الوطني الأمريكي للصحة التكميلية (NCCIH)</a> — بالإنجليزية</li>`:""}
+      ${(SRCX[h.id]||[]).map(([k,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${SRCL[k]}</a> — بالإنجليزية</li>`).join("")}
       <li><a href="${EMA_URL}" target="_blank" rel="noopener">قائمة الدراسات الرسمية للوكالة الأوروبية للأدوية (EMA)</a> — ابحث فيها بالاسم اللاتيني: <span dir="ltr">${h.lat.split(" / ")[0]}</span></li>
     </ul></section>
     <p style="margin:0;color:var(--muted);font-size:.85rem">إذا استمرت الأعراض أكثر من أسبوع أو اشتدّت، راجع الطبيب. أخبر طبيبك أو الصيدلي دائمًا بأي أعشاب تتناولها.</p>

@@ -5899,6 +5899,7 @@ function renderAbout(){ setTimeout(renderFeedback,0);
   <section><h2>What is in this guide</h2><div class="stats"><div><b>${n(HERBS.length)}</b><span>herbs</span></div><div><b>${n(RECIPES.length)}</b><span>blend</span></div><div><b>${n(Object.keys(ORIG).length)}</b><span>traditions</span></div><div><b>${n(PROBS.length)}</b><span>health problems</span></div></div></section>
   <section><h2>How it was made</h2><ul>
    <li>The herbs were chosen because they are common in Arab homes and markets, and then the best-known herbs of other traditions were added.</li>
+   <li>The content was prepared with the help of artificial intelligence (Claude, by Anthropic), then checked against scientific and official sources listed under each herb, including the Egyptian Drug Authority, the European Medicines Agency and the US National Institutes of Health. If you find a mistake, tell us with the button under each herb and blend, and we will correct it.</li>
    <li>For each herb: its uses, the level of scientific evidence, how to prepare it, its cautions and its drug interactions.</li>
    <li>The blends are traditional and home recipes; scientific evidence is usually about each herb on its own, and the blend itself has not been tested as a combination.</li>
    <li>Prophetic-medicine hadiths are cited with their sources and grading, and those that are not authentic are flagged.</li>
@@ -5939,6 +5940,8 @@ function renderAbout(){ setTimeout(renderFeedback,0);
   </div>`;
 }
 let lastFocus=null;
+const SRCX={"nigella":[["doh","https://medicinalplants.doh.gov.ae/Public-education-plants-leaflets/Nigella-sativa"],["eda","https://www.edaegypt.gov.eg/media/cuobaarg/nigella-sativa-l-_1.pdf"]],"anise":[["eda","https://edaegypt.gov.eg/media/dsygbsva/pimpinella-anisum-l-%D9%8A%D9%86%D8%B3%D9%88%D9%86_anise-up.pdf"]],"fennel":[["eda","https://www.edaegypt.gov.eg/media/44flsuol/foeniculum-vulgare-mill-_1.pdf"]],"thyme":[["eda","https://www.edaegypt.gov.eg/media/tashqnts/thymus-vulgaris-l-%D8%B2%D8%B9%D8%AA%D8%B1.pdf"]],"rosemary":[["eda","https://www.edaegypt.gov.eg/media/q2kblr3n/salvia-rosmarinus-spenn.pdf"]],"hibiscus":[["eda","https://edaegypt.gov.eg/media/hzynjgnk/hibiscus-sabdariffa-l-%D9%83%D8%B1%D9%83%D8%AF%D9%8A%D9%87.pdf"]],"dill":[["eda","https://www.edaegypt.gov.eg/media/a4kf0fmp/anethum-graveolens_1.pdf"]],"marshmallow":[["eda","https://www.edaegypt.gov.eg/media/43rnnr5j/althaea-officinalis_1.pdf"]],"olive":[["eda","https://www.edaegypt.gov.eg/media/movh3lt1/olea-europaea-l.pdf"]],"psyllium":[["eda","https://www.edaegypt.gov.eg/media/225d2qmm/plantago-ovata-forssk-%D9%84%D9%82%D9%85%D8%A9-%D8%A7%D9%84%D9%86%D8%B9%D8%AC%D8%A9-%D8%AC%D9%86%D9%8A%D9%85%D8%A9.pdf"]],"senna":[["eda","https://www.edaegypt.gov.eg/media/x1bjkut5/senna-alexandrina_1.pdf"]],"nettle":[["eda","https://www.edaegypt.gov.eg/media/ufqj240y/urtica-dioica-l-_1.pdf"]],"caraway":[["eda","https://www.edaegypt.gov.eg/media/2cxdykm3/carum-carvi.pdf"]],"artichoke":[["eda","https://www.edaegypt.gov.eg/media/a0vdmm40/cynara-cardunculus-l.pdf"]],"eucalyptus":[["eda","https://www.edaegypt.gov.eg/media/yweoewbx/eucalyptus-globulus-labill-%D9%83%D8%A7%D9%81%D9%88%D8%B1.pdf"]],"ivy":[["eda","https://www.edaegypt.gov.eg/media/4wjbhucs/hedera-helix-l-_1.pdf"]],"calendula":[["ema","https://ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-calendula-officinalis-l-flos-revision-1_en.pdf"]]};
+const SRCL={eda:"Official monograph from the Egyptian Drug Authority (Egyptian Herbal Monograph)",doh:"Public information leaflet on the plant from the Abu Dhabi Department of Health",ema:"Official monograph from the European Medicines Agency (EMA)"};
 function openPanel(h){
   lastFocus=document.activeElement; gcEv(GC_X.herb+": "+h.id, GC_X.herb+": "+h.id+" \u00b7 "+h.ar.split(" (")[0]);
   const fav=state.favs.has(h.id), p=$("#panel");
@@ -5958,6 +5961,7 @@ function openPanel(h){
     ${growBox(h)}
     <section><h3>Sources</h3><ul>
       ${NCCIH[h.id]?`<li><a href="https://www.nccih.nih.gov/health/${NCCIH[h.id]}" target="_blank" rel="noopener">page on ${h.ar} at the US National Center for Complementary and Integrative Health (NCCIH)</a> — In English</li>`:""}
+      ${(SRCX[h.id]||[]).map(([k,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${SRCL[k]}</a> — In English</li>`).join("")}
       <li><a href="${EMA_URL}" target="_blank" rel="noopener">List of official monographs of the European Medicines Agency (EMA)</a> — search it by the Latin name: <span dir="ltr">${h.lat.split(" / ")[0]}</span></li>
     </ul></section>
     <p style="margin:0;color:var(--muted);font-size:.85rem">If symptoms last more than a week or get worse, see a doctor. Always tell your doctor or pharmacist about any herbs you take.</p>
