@@ -361,6 +361,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .hsearch{display:flex;gap:8px}
 .hsearch input{flex:1 1 0;min-width:0;font:inherit;padding:12px 16px;border-radius:8px;border:0;background:var(--sheet);color:var(--ink)}
 .hsearch button{font:inherit;font-weight:600;padding:12px 22px;border-radius:8px;border:0;background:var(--clay);color:var(--sheet);cursor:pointer}
+.sitesh{display:flex;width:max-content;max-width:100%;align-items:center;gap:8px;margin:12px auto 8px;padding:10px 18px;border-radius:999px;border:0;background:#25d366;color:#fff;font:inherit;font-weight:600;cursor:pointer}.sitesh:hover{filter:brightness(.95)}
 .hstats{margin:0;font-size:.85rem;opacity:.85;font-variant-numeric:tabular-nums}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
 @media (min-width:860px){.tiles{grid-template-columns:repeat(3,1fr)}}
@@ -3628,6 +3629,7 @@ function setView(v){
   ["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","safety","gloss","about"].forEach(p=>$("#"+p).hidden=v!==p);
   const pageView=["home","mom","women","wizard","kit","organic","folk","mind","eye","aid","nutri","safety","gloss","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
+  if(GC_V[v]) gcEv(GC_X.sec+": "+GC_V[v]);
   render();
 }
 function render(){
@@ -4067,6 +4069,10 @@ function renderWRes(){
 }
 /* إحصاءات مجهولة الهوية في GoatCounter: الجنس والعمر والمشكلة فقط (النصوص بترميز \u لتبقى عربية في كل اللغات) */
 const GC_AR={"p:digest":"\u0627\u0644\u0647\u0636\u0645 \u0648\u0627\u0644\u0627\u0646\u062a\u0641\u0627\u062e","p:sleep":"\u0627\u0644\u0646\u0648\u0645 \u0648\u0627\u0644\u062a\u0648\u062a\u0631","p:cold":"\u0627\u0644\u0633\u0639\u0627\u0644 \u0648\u0627\u0644\u0632\u0643\u0627\u0645","p:throat":"\u0627\u0644\u062a\u0647\u0627\u0628 \u0627\u0644\u062d\u0644\u0642","p:nausea":"\u0627\u0644\u063a\u062b\u064a\u0627\u0646 \u0648\u062f\u0648\u0627\u0631 \u0627\u0644\u0633\u0641\u0631","p:skin":"\u0627\u0644\u062c\u0644\u062f \u0648\u0627\u0644\u062d\u0631\u0648\u0642","p:mouth":"\u0631\u0627\u0626\u062d\u0629 \u0627\u0644\u0641\u0645 \u0648\u0627\u0644\u0644\u062b\u0629","p:fatigue":"\u0627\u0644\u062a\u0639\u0628 \u0648\u0627\u0644\u0646\u0642\u0627\u0647\u0629","p:diarrhea":"\u0627\u0644\u0625\u0633\u0647\u0627\u0644","p:allergy":"\u0627\u0644\u062d\u0633\u0627\u0633\u064a\u0629 \u0627\u0644\u0645\u0648\u0633\u0645\u064a\u0629","p:urinary":"\u0627\u0644\u0645\u0633\u0627\u0644\u0643 \u0627\u0644\u0628\u0648\u0644\u064a\u0629","p:chol":"\u0627\u0644\u0643\u0648\u0644\u064a\u0633\u062a\u0631\u0648\u0644","p:hemo":"\u0627\u0644\u0628\u0648\u0627\u0633\u064a\u0631","p:focus":"\u0627\u0644\u062a\u0631\u0643\u064a\u0632 \u0648\u0627\u0644\u0630\u0627\u0643\u0631\u0629","p:lactation":"\u0627\u0644\u0625\u0631\u0636\u0627\u0639","p:labor":"\u0627\u0644\u0623\u0633\u0627\u0628\u064a\u0639 \u0627\u0644\u0623\u062e\u064a\u0631\u0629 \u0645\u0646 \u0627\u0644\u062d\u0645\u0644","p:postpartum":"\u0627\u0644\u0646\u0641\u0627\u0633 \u0648\u0627\u0644\u062a\u0639\u0627\u0641\u064a \u0628\u0639\u062f \u0627\u0644\u0648\u0644\u0627\u062f\u0629","p:heart":"\u0635\u062d\u0629 \u0627\u0644\u0642\u0644\u0628","p:liver":"\u0627\u0644\u0643\u0628\u062f \u0627\u0644\u062f\u0647\u0646\u064a","p:gout":"\u0627\u0644\u0646\u0642\u0631\u0633","p:resp":"\u0627\u0644\u0631\u0628\u0648 \u0648\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062a\u0646\u0641\u0651\u0633","p:thyroid":"\u0627\u0644\u063a\u062f\u0629 \u0627\u0644\u062f\u0631\u0642\u064a\u0629","p:stones":"\u062d\u0635\u0649 \u0627\u0644\u0643\u0644\u0649 \u0648\u0627\u0644\u0648\u0642\u0627\u064a\u0629 \u0645\u0646\u0647\u0627","p:kidney":"\u0635\u062d\u0629 \u0627\u0644\u0643\u0644\u0649 \u0648\u0645\u0631\u0636\u0649 \u0627\u0644\u0643\u0644\u0649","p:immune":"\u062a\u0642\u0648\u064a\u0629 \u0627\u0644\u0645\u0646\u0627\u0639\u0629","p:antibiotic":"\u0628\u0639\u062f \u0627\u0644\u0645\u0636\u0627\u062f\u0627\u062a \u0627\u0644\u062d\u064a\u0648\u064a\u0629","p:chemo":"\u062f\u0639\u0645 \u0645\u0631\u064a\u0636 \u0627\u0644\u0633\u0631\u0637\u0627\u0646 \u0623\u062b\u0646\u0627\u0621 \u0627\u0644\u0639\u0644\u0627\u062c","p:wloss":"\u0625\u0646\u0642\u0627\u0635 \u0627\u0644\u0648\u0632\u0646","p:wgain":"\u0632\u064a\u0627\u062f\u0629 \u0627\u0644\u0648\u0632\u0646","p:libido":"\u0627\u0644\u0631\u063a\u0628\u0629 \u0648\u0627\u0644\u0636\u0639\u0641 \u0627\u0644\u062c\u0646\u0633\u064a","p:heavy":"\u063a\u0632\u0627\u0631\u0629 \u0627\u0644\u062f\u0648\u0631\u0629","p:irregular":"\u0639\u062f\u0645 \u0627\u0646\u062a\u0638\u0627\u0645 \u0627\u0644\u062f\u0648\u0631\u0629","p:pms":"\u0623\u0639\u0631\u0627\u0636 \u0645\u0627 \u0642\u0628\u0644 \u0627\u0644\u062f\u0648\u0631\u0629","p:constip":"\u0627\u0644\u0625\u0645\u0633\u0627\u0643","p:headache":"\u0627\u0644\u0635\u062f\u0627\u0639","p:pain":"\u0622\u0644\u0627\u0645 \u0627\u0644\u0645\u0641\u0627\u0635\u0644 \u0648\u0627\u0644\u0639\u0636\u0644\u0627\u062a","p:bp":"\u0636\u063a\u0637 \u0645\u0631\u062a\u0641\u0639 \u0642\u0644\u064a\u0644\u064b\u0627","p:sugar":"\u062f\u0639\u0645 \u0633\u0643\u0631 \u0627\u0644\u062f\u0645","p:hair":"\u0641\u0631\u0648\u0629 \u0627\u0644\u0631\u0623\u0633 \u0648\u0627\u0644\u0634\u0639\u0631","p:period":"\u0622\u0644\u0627\u0645 \u0627\u0644\u062f\u0648\u0631\u0629 \u0627\u0644\u0634\u0647\u0631\u064a\u0629","p:meno":"\u0627\u0644\u0647\u0628\u0651\u0627\u062a \u0627\u0644\u0633\u0627\u062e\u0646\u0629","p:prostate":"\u0627\u0644\u0628\u0631\u0648\u0633\u062a\u0627\u062a\u0627","g:f":"\u0623\u0646\u062b\u0649","g:m":"\u0630\u0643\u0631","b:0":"\u0623\u0642\u0644 \u0645\u0646 \u0633\u0646\u0629","b:1":"1\u20133 \u0633\u0646\u0648\u0627\u062a","b:4":"4\u20135 \u0633\u0646\u0648\u0627\u062a","b:6":"6\u201311 \u0633\u0646\u0629","b:12":"12\u201317 \u0633\u0646\u0629","b:18":"18\u201339 \u0633\u0646\u0629","b:40":"40\u201359 \u0633\u0646\u0629","b:60":"60 \u0633\u0646\u0629 \u0641\u0623\u0643\u062b\u0631","x:visitor":"\u0632\u0627\u0626\u0631","x:prob":"\u0645\u0631\u0636","x:detail":"\u062a\u0641\u0635\u064a\u0644","x:lang":"\u0644\u063a\u0629 \u0627\u0644\u0635\u0641\u062d\u0629"};
+/* أحداث مجهولة الهوية: الأقسام والأعشاب المفتوحة والمشاركة (مرة واحدة لكل زيارة) */
+const GC_V={"wizard": "\u0627\u0644\u0628\u062d\u062b \u0628\u0627\u0644\u0645\u0631\u0636", "herbs": "\u0627\u0644\u0623\u0639\u0634\u0627\u0628", "recipes": "\u0627\u0644\u0648\u0635\u0641\u0627\u062a", "mom": "\u0648\u0635\u0641\u0627\u062a \u0623\u0645\u064a", "women": "\u0635\u062d\u0629 \u0627\u0644\u0645\u0631\u0623\u0629", "kit": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u0628\u064a\u062a", "organic": "\u0627\u0644\u0632\u0631\u0627\u0639\u0629 \u0627\u0644\u0639\u0636\u0648\u064a\u0629", "aid": "\u0627\u0644\u0625\u0633\u0639\u0627\u0641\u0627\u062a", "nutri": "\u0627\u0644\u063a\u0630\u0627\u0621 \u0648\u0627\u0644\u0641\u064a\u062a\u0627\u0645\u064a\u0646\u0627\u062a", "folk": "\u0639\u0627\u062f\u0627\u062a \u0634\u0639\u0628\u064a\u0629", "mind": "\u0627\u0644\u0646\u0641\u0633 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "eye": "\u0627\u0644\u0639\u064a\u0646 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "safety": "\u0627\u0644\u0633\u0644\u0627\u0645\u0629", "gloss": "\u0627\u0644\u0645\u0635\u0637\u0644\u062d\u0627\u062a", "about": "\u0639\u0646 \u0627\u0644\u0645\u0648\u0642\u0639"}, GC_X={"sec": "\u0642\u0633\u0645", "herb": "\u0639\u0634\u0628\u0629", "share": "\u0645\u0634\u0627\u0631\u0643\u0629", "site": "\u0627\u0644\u0645\u0648\u0642\u0639", "recipe": "\u0648\u0635\u0641\u0629", "copy": "\u0646\u0633\u062e"};
+const gcSeen=new Set();
+function gcEv(path,title){ try{ const gc=window.goatcounter; if(!gc||typeof gc.count!=="function"||gcSeen.has(path)) return; gcSeen.add(path); gc.count({path:path.slice(0,250),title:(title||path).slice(0,250),event:true}); }catch(e){} }
 let wSentProf="";
 function wTrack(){ try{
   const gc=window.goatcounter; if(!gc||typeof gc.count!=="function"||!w.prob||!wReady()) return;
@@ -4296,6 +4302,7 @@ function renderHome(){
    <section class="hero">
      <h2>بماذا نساعدك اليوم؟</h2>
      <form class="hsearch" id="hsearch" role="search"><input id="hq" type="search" placeholder="ابحث عن عشبة أو عَرَض… مثل: زنجبيل، أرق، سعال" aria-label="بحث"><button type="submit">ابحث</button></form>
+     <button type="button" class="sitesh" id="siteShare"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.8-1.1-4.6-4-4.8-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.1.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 2 1.1 1 2 1.3 2.3 1.4.3.2.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.7-.1 1.3z"/></svg><span>شارك «مريم» مع أهلك وأصدقائك</span></button>
      <p class="hstats">${n(HERBS.length)} عشبة · ${n(RECIPES.length)} خلطة · ${n(Object.keys(ORIG).length)} تقليدًا · ${n(PROBS.length)} مشكلة صحية</p>
    </section>
    <div class="tiles">${TILES.map(([k,t,d],i)=>`<button type="button" class="tile${i===0?" tile-main":""}" data-go="${k}"><span class="ticon">${tileIcon(k)}</span><span class="ttext"><b>${t}</b><small>${d}</small></span></button>`).join("")}</div>
@@ -4310,6 +4317,9 @@ function renderHome(){
   $("#home").querySelectorAll("[data-land]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="land"; setView("herbs"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-sea]").forEach(b=>b.onclick=()=>{ state.q=""; $("#q").value=""; state.aud="all"; state.cond="sea"; setView("herbs"); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-aidgo]").forEach(b=>b.onclick=()=>{ ast.id=b.dataset.aidgo; setView("aid"); window.scrollTo({top:0}); });
+  $("#siteShare").onclick=async()=>{ const t="«مريم»: دليل عربي مجاني للأعشاب والتداوي الطبيعي، مع ما يقوله العلم وما يجب الحذر منه. صدقة جارية عن روح الوالدة مريم رحمها الله."; gcEv(GC_X.share+": "+GC_X.site);
+    if(navigator.share){ try{ await navigator.share({title:"مريم", text:t, url:SITE_URL+"?utm_source=share"}); }catch(_){} return; }
+    const u="https://wa.me/?text="+encodeURIComponent(t+"\n"+SITE_URL+"?utm_source=whatsapp"); const wn=window.open(u,"_blank","noopener"); if(!wn) location.href=u; };
   $("#hsearch").onsubmit=e=>{ e.preventDefault(); const q=$("#hq").value.trim(); if(!q) return;
     const nq=norm(q), herbHit=HERBS.some(h=>norm(h.ar).includes(nq)||(ALIAS[h.id]&&[ALIAS[h.id].en,...ALIAS[h.id].alt].some(a=>a&&norm(a).includes(nq))));
     const pr=probsFromQuery(q);
@@ -5276,13 +5286,13 @@ const IC_COPY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="c
 const IC_SHARE='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>';
 const TRAD_NOTE="من الطب التقليدي، وأغلب وصفاته لم تُختبر بدراسات كبيرة. اختر مكوّنات عضوية أو بلدية نظيفة من مصدر موثوق ما استطعت، وإن لم تتحسّن فراجع الطبيب.";
 const ractBox=r=>`<p class="tradnote">🌿 ${TRAD_NOTE} <button type="button" class="wlink" data-goorg="1">ازرع أعشابك عضويًا</button></p><div class="ract"><button type="button" class="rbtn" data-rcopy="${esc(r.name)}">${IC_COPY}<span>نسخ الوصفة</span></button><button type="button" class="rbtn" data-rshare="${esc(r.name)}">${IC_SHARE}<span>مشاركة</span></button></div>`;
-const recipeLink=r=>SITE_URL+"#r="+encodeURIComponent(r.name);
+const recipeLink=r=>SITE_URL+"?utm_source=share#r="+encodeURIComponent(r.name);
 function recipeText(r){
   const ing=r.ing.map(([id,t])=>"• "+(id?byId[id].ar.split(" (")[0]+": ":"")+t).join("\n");
   const st=r.steps.map((x,i)=>(i+1)+". "+x).join("\n");
   return ["*"+r.name+"*", r.for, "", "*المكوّنات* ("+(r.yield||"لكوب واحد")+"):", ing, "", "*الطريقة:*", st, "", "*الكمية والمدة:* "+doseOf(r), "*تنبيه:* "+r.note, "", "🌿 "+TRAD_NOTE, "", "من دليل «مريم» للأعشاب:", recipeLink(r)].join("\n");
 }
-const herbLink=h=>SITE_URL+"#h="+h.id;
+const herbLink=h=>SITE_URL+"?utm_source=share#h="+h.id;
 function herbText(h){
   const L=(a)=>a.map(x=>"• "+x).join("\n");
   return ["*"+h.ar+"* ("+h.lat+")", h.use, "", "*"+"الاستخدامات الشائعة"+":*", L(h.uses), "", "*"+"طريقة التحضير المعتادة"+":*", h.prep, "", "*"+"محاذير"+":*", L(h.warn), "", "*"+"تداخلات دوائية محتملة"+":*", L(h.inter), "", "من دليل «مريم» للأعشاب:", herbLink(h)].join("\n");
@@ -5296,6 +5306,7 @@ document.addEventListener("click",async e=>{
   let t, r;
   if(hid){ const h=byId[hid]; if(!h) return; t=herbText(h); r={name:h.ar}; }
   else { r=RECIPES.find(x=>x.name===(el.dataset.rcopy||el.dataset.rshare)); if(!r) return; t=recipeText(r); }
+  gcEv((c?GC_X.copy:GC_X.share)+": "+(hid?GC_X.herb:GC_X.recipe)+" \u00b7 "+(hid||r.name), null);
   if(c){ flashBtn(c, (await copyText(t))?"تم النسخ ✓":"تعذّر النسخ"); return; }
   if(navigator.share){ try{ await navigator.share({title:r.name, text:t}); }catch(_){} return; }
   window.open("https://wa.me/?text="+encodeURIComponent(t),"_blank","noopener");
@@ -5579,7 +5590,7 @@ function renderAbout(){ setTimeout(renderFeedback,0);
 }
 let lastFocus=null;
 function openPanel(h){
-  lastFocus=document.activeElement;
+  lastFocus=document.activeElement; gcEv(GC_X.herb+": "+h.id, GC_X.herb+": "+h.id+" \u00b7 "+h.ar.split(" (")[0]);
   const fav=state.favs.has(h.id), p=$("#panel");
   p.innerHTML=`<div class="panel-top"><div style="display:flex;gap:14px;align-items:center">${herbIcon(h,"hicon big")}<div><h2 id="pTitle">${h.ar}</h2><div class="lat">${h.lat}</div></div></div>
     <div style="display:flex;gap:6px"><button class="icon-btn" id="favIt">${fav?"★ إزالة":"☆ حفظ"}</button><button class="icon-btn" id="closeIt">إغلاق</button></div></div>
@@ -5627,7 +5638,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
-const NEWS={v:"2026-11-07q",date:"7 نوفمبر 2026",go:"eye",items:[
+const NEWS={v:"2026-11-08a",date:"8 نوفمبر 2026",go:"eye",items:[
+ "<b>زر «شارك مريم»</b> في الصفحة الرئيسية لترسل الموقع لأهلك وأصدقائك بلمسة.",
  "<b>باب جديد: العين في التراث.</b> رحلة من حمورابي ومصر إلى حنين بن إسحاق وابن الهيثم والكحّالين العرب، وما يصح وما يضر من العادات الشعبية للعين، وأمراض العين الشائعة عندنا، وعلامات الطوارئ.",
  "<b>باب جديد: النفس في التراث.</b> ما سبق إليه البلخي وابن سينا والرازي والبيمارستانات، وأعشاب المزاج والقلق وما يقوله العلم، والتلبينة النبوية، وما يصح وما يضر من الممارسات، وصفحة عن التوحد وما ينفع وما يجب الحذر منه.",
  "<b>باب جديد: عادات شعبية، ما يصح وما يضر.</b> تمليح المولود، والكحل، والتبخير، والتحنيك، والكيّ، والمجبّر، وعادات الأربعين، والماء والأعشاب للرضيع، وغيرها، مع البديل الآمن لكل عادة.",
