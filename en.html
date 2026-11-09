@@ -498,6 +498,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 #askBox .asks{border:0;border-radius:12px;background:var(--leaf);color:var(--sheet);font:inherit;font-weight:700;padding:0 16px;cursor:pointer}
 #askBox .asks:disabled{opacity:.5}
 #askBox .askmic{border:1px solid rgba(127,127,127,.45);background:transparent;color:inherit;border-radius:12px;width:46px;flex:0 0 46px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#askBox .askmic:disabled{opacity:.5}
 #askBox .askmic.rec{background:#b3261e;color:#fff;border-color:#b3261e;animation:micp 1.2s infinite}
 @keyframes micp{0%,100%{box-shadow:0 0 0 0 rgba(179,38,30,.5)}50%{box-shadow:0 0 0 8px rgba(179,38,30,0)}}
 #askBox .asksay{display:inline-flex;align-items:center;gap:4px;background:none;border:1px solid rgba(127,127,127,.4);border-radius:999px;padding:2px 10px;cursor:pointer;color:inherit;font:inherit;font-size:.8rem;margin-top:8px}
@@ -6513,8 +6514,38 @@ const ASK_URL="https://maryam-ask.aleterfigs.workers.dev/";
 const ASK_ON=!!ASK_URL&&(/(^|\.)maryamherbs\.com$/.test(location.hostname)||(()=>{ try{ return localStorage.getItem("maryam-ask-test")==="1"; }catch(e){ return false; } })());
 const askHist=[];
 const ASK_SR=window.SpeechRecognition||window.webkitSpeechRecognition||null;
-let askVoice=false, askRec=null;
+let askVoice=false, askRec=null, askMR=null;
+const ASK_MR=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);
+const srBad=()=>{ try{ return localStorage.getItem("maryam-sr-bad")==="1"; }catch(e){ return false; } };
+const askNote=t=>{ const l=$("#askBox .asklog"); l.insertAdjacentHTML("beforeend",`<div class="ab" style="opacity:.85">${t}</div>`); l.lastElementChild.scrollIntoView({block:"end"}); };
+function askRecord(btn){
+  const ta=$("#askBox textarea"), ph=ta.placeholder;
+  if(askMR){ try{ askMR.stop(); }catch(e){} return; }
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    const mime=["audio/webm;codecs=opus","audio/webm","audio/mp4","audio/ogg;codecs=opus","audio/ogg"].find(m=>{ try{ return MediaRecorder.isTypeSupported(m); }catch(e){ return false; } });
+    let mr; try{ mr=new MediaRecorder(stream,mime?{mimeType:mime}:undefined); }catch(e){ stream.getTracks().forEach(t=>t.stop()); askNote("Could not record audio in this browser. Please type your question instead."); return; }
+    const chunks=[]; askMR=mr;
+    const auto=setTimeout(()=>{ if(askMR===mr) mr.stop(); },20000);
+    mr.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
+    mr.onstop=async()=>{
+      clearTimeout(auto); stream.getTracks().forEach(t=>t.stop()); btn.classList.remove("rec"); askMR=null;
+      const blob=new Blob(chunks,{type:mr.mimeType||mime||"audio/webm"});
+      if(blob.size<800){ ta.placeholder=ph; askNote("I did not hear anything. Tap the microphone and speak clearly."); return; }
+      ta.placeholder="Turning your voice into text…"; btn.disabled=true;
+      try{
+        const r=await fetch(ASK_URL+"stt?lang="+((document.documentElement.lang||"ar").slice(0,2)),{method:"POST",headers:{"Content-Type":blob.type||"audio/webm"},body:blob});
+        const d=await r.json(); ta.placeholder=ph; btn.disabled=false;
+        if(d.text&&d.text.length>=3){ askVoice=true; askSend(d.text); }
+        else askNote(d.error==="limit"?"You have reached today's limit for voice questions. Please type your question instead.":d.error==="noai"?"Voice is being set up. Type your question now and try voice later.":"I could not understand the recording. Try again somewhere quiet, or type your question.");
+      }catch(e){ ta.placeholder=ph; btn.disabled=false; askNote("Could not connect. Check your internet and try again."); }
+    };
+    try{ if(ttsOK()) ttsStop(); }catch(e){}
+    mr.start(); btn.classList.add("rec"); ta.value=""; ta.placeholder="Recording… tap the microphone when you finish";
+    try{ gcEv("ask-rec","سؤال بالتسجيل"); }catch(e){}
+  }).catch(()=>askNote("Allow the site to use the microphone in your browser settings, then try again."));
+}
 function askMic(btn){
+  if(askMR||!ASK_SR||srBad()){ if(ASK_MR) askRecord(btn); else askNote("Voice recognition does not work in this browser or phone. Use the microphone button on your keyboard to dictate your question, then tap Send."); return; }
   if(askRec){ try{ askRec.stop(); }catch(e){} return; }
   const ta=$("#askBox textarea"); let finalT=""; const ph=ta.placeholder;
   try{ askRec=new ASK_SR(); }catch(e){ askRec=null; return; }
@@ -6528,7 +6559,7 @@ function askMic(btn){
   btn.classList.add("rec"); ta.value=""; ta.placeholder="Listening…";
   try{ if(ttsOK()) ttsStop(); }catch(e){}
   try{ askRec.start(); gcEv("ask-voice","سؤال بالصوت"); }catch(e){ btn.classList.remove("rec"); askRec=null; note(kbHint); return; }
-  wd=setTimeout(()=>{ if(!heard&&askRec){ const r=askRec; try{ r.abort(); }catch(e){} btn.classList.remove("rec"); askRec=null; ta.placeholder=ph; note(kbHint); try{ gcEv("ask-voice-fail","الصوت لا يعمل"); }catch(_){} } },8000);
+  wd=setTimeout(()=>{ if(!heard&&askRec){ const r=askRec; try{ r.abort(); }catch(e){} btn.classList.remove("rec"); askRec=null; ta.placeholder=ph; try{ localStorage.setItem("maryam-sr-bad","1"); }catch(_){} note(ASK_MR?"I will record your voice another way: tap the microphone again and speak, then tap it when you finish.":kbHint); try{ gcEv("ask-voice-fail","الصوت لا يعمل"); }catch(_){} } },8000);
 }
 const ASK_EMERG=/(الم|وجع) (في )?(ال)?صدر|ضيق (في )?(ال)?(نفس|تنفس)|نزيف|دم (في|مع) (ال)?(براز|قيء|قيئ|بول)|(قيء|استفراغ|يتقيا|تقيا) دم|اغماء|اغمي|فقد الوعي|تشنج|لدغ|عقرب|ثعبان|افعي|تسمم|ابتلع|بلع (دواء|حبوب|منظف)|انتحار|اؤذي نفسي|chest pain|can.?t breathe|bleeding|blood in|faint|seizure|snake|scorpion|poison|swallowed|suicid|douleur (à la|thoracique)|saignement|convulsion|serpent|scorpion|intoxication|suicid/; /*HGRX*/
 function askIds(q){
@@ -6588,7 +6619,7 @@ function askOpen(){
     box.innerHTML=`<div class="askp"><div class="askh"><h3>Ask Maryam<b class="aib">AI</b><span class="tag">Beta</span></h3><button type="button" class="askx" aria-label="Close">×</button></div>
      <p class="asknote">Answers only from the guide's content and does not replace a doctor. Do not write your name or number; the site does not store your questions.</p>
      <div class="asklog" aria-live="polite"><div class="sugg">${["I get bloated after eating. What should I drink?","Is ginger safe in pregnancy?","Which herbs interact with blood thinners?","How do I grow mint in the Gulf?"].map(x=>`<button type="button" class="chip" data-asks="${esc(x)}">${x}</button>`).join("")}</div></div>
-     <form class="askf">${ASK_SR?`<button type="button" class="askmic" aria-label="Ask by voice" title="Ask by voice"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>`:""}<textarea rows="1" maxlength="500" placeholder="Ask about a herb or a health problem…" aria-label="Your question"></textarea><button type="submit" class="asks">Send</button></form></div>`;
+     <form class="askf">${(ASK_SR||ASK_MR)?`<button type="button" class="askmic" aria-label="Ask by voice" title="Ask by voice"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>`:""}<textarea rows="1" maxlength="500" placeholder="Ask about a herb or a health problem…" aria-label="Your question"></textarea><button type="submit" class="asks">Send</button></form></div>`;
     document.body.appendChild(box);
     box.addEventListener("click",e=>{ if(e.target===box||e.target.closest(".askx")){ box.hidden=true; try{ ttsStop(); }catch(_){} }
       const s=e.target.closest("[data-asks]"); if(s) askSend(s.dataset.asks);
