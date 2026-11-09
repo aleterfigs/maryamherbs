@@ -5954,7 +5954,7 @@ const nst={sym:null};
 const SITE_URL="https://maryamherbs.com/";
 const IC_SAY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
 /* natural cloud voice */
-const CLOUD={audio:null,btn:null,cache:new Map(),bad:false,unlocked:null};
+const CLOUD={audio:null,btn:null,cache:new Map(),bad:true,unlocked:null};
 const SIL_WAV="data:audio/wav;base64,UklGRrQBAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YZABAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA";
 function cloudUnlock(){ try{ const a=new Audio(SIL_WAV); a.play().catch(()=>{}); CLOUD.unlocked=a; }catch(e){} }
 function cloudStop(){ try{ if(CLOUD.audio) CLOUD.audio.pause(); }catch(e){} const b=CLOUD.btn; CLOUD.btn=null; CLOUD.audio=null; if(b&&b.isConnected){ b.classList.remove("speaking"); const sp=b.querySelector("span"); if(sp&&b.dataset.lbl) sp.textContent=b.dataset.lbl; } }
@@ -6642,9 +6642,9 @@ async function askSend(q){
     const d=await r.json(); const a=d.a||"تعذّر الرد الآن. حاول بعد قليل.";
     const sayTxt=a.replace(/^(المصادر|Sources)\s*:.*$/gmi,"").replace(/\[\d+\]/g,"").replace(/\*\*/g,"").replace(/^[-•]\s+/gm,"")
       .replace(/[(（]([^()（）]*\/[^()（）]*)[)）]/g,(m,x)=>": "+x.split("/").map(t=>t.trim()).filter(Boolean).join(({ar:"، أو ",en:", or ",fr:", ou "})[(document.documentElement.lang||"ar").slice(0,2)]||"، أو ")+".").trim(); /*HGRX*/
-    ab.innerHTML=askFmt(a,d.used||[])+((ttsOK()||ASK_ON)?`<button type="button" class="asksay"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>استمع</span></button>`:"")+(d.used&&d.used.length?`<div class="fb">هل أفادك الجواب؟ <button type="button" data-fb="good">نعم</button><button type="button" data-fb="bad">لا</button></div>`:"");
+    ab.innerHTML=askFmt(a,d.used||[])+(false?`<button type="button" class="asksay"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>استمع</span></button>`:"")+(d.used&&d.used.length?`<div class="fb">هل أفادك الجواب؟ <button type="button" data-fb="good">نعم</button><button type="button" data-fb="bad">لا</button></div>`:"");
     if(d.a&&!d.limited&&(d.used&&d.used.length||/[(（][^)）]*\/[^)）]*[)）]/.test(a))){ askHist.push({q,a}); if(askHist.length>2) askHist.shift(); }
-    const sb=ab.querySelector(".asksay"); if(sb){ const say=()=>cloudSay(sb,sayTxt,()=>ttsSay(sb,sayTxt)); sb.onclick=()=>{ cloudUnlock(); say(); }; if(askVoice) setTimeout(say,200); }
+    
     const mic=$("#askBox .askmic"); const isQ=!!ab.querySelector(".askq");
     if(mic){ mic.classList.toggle("nudge",isQ); }
     if(isQ&&mic) ab.insertAdjacentHTML("beforeend",`<p class="askhint" style="margin:8px 0 0;font-size:.85rem;opacity:.85">اختر الإجابات، أو اضغط الميكروفون 🎤 وأجب بصوتك.</p>`);
