@@ -6495,7 +6495,7 @@ document.addEventListener("click",e=>{ const k=e.target.closest&&e.target.closes
 document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-gogut]"); if(b){ gst.v=null; setView("gut"); scrollTo({top:0}); } });
 $("#tabUae").onclick=()=>{ ust.v=null; setView("uae"); };
 /* ---------- ask assistant ---------- */
-const ASK_URL="";
+const ASK_URL="https://maryam-ask.aleterfigs.workers.dev/";
 const ASK_ON=!!ASK_URL&&(/(^|\.)maryamherbs\.com$/.test(location.hostname)||(()=>{ try{ return localStorage.getItem("maryam-ask-test")==="1"; }catch(e){ return false; } })());
 const askHist=[];
 const ASK_EMERG=/(الم|وجع) (في )?(ال)?صدر|ضيق (في )?(ال)?(نفس|تنفس)|نزيف|دم (في|مع) (ال)?(براز|قيء|قيئ|بول)|(قيء|استفراغ|يتقيا|تقيا) دم|اغماء|اغمي|فقد الوعي|تشنج|لدغ|عقرب|ثعبان|افعي|تسمم|ابتلع|بلع (دواء|حبوب|منظف)|انتحار|اؤذي نفسي|chest pain|can.?t breathe|bleeding|blood in|faint|seizure|snake|scorpion|poison|swallowed|suicid|douleur (à la|thoracique)|saignement|convulsion|serpent|scorpion|intoxication|suicid/; /*HGRX*/
