@@ -6518,12 +6518,15 @@ function askMic(btn){
   try{ askRec=new ASK_SR(); }catch(e){ askRec=null; return; }
   askRec.lang=({ar:"ar-AE",en:"en-GB",fr:"fr-FR"})[(document.documentElement.lang||"ar").slice(0,2)]||"ar-AE";
   askRec.interimResults=true; askRec.continuous=false; askRec.maxAlternatives=1;
-  askRec.onresult=ev=>{ let interim=""; for(let i=ev.resultIndex;i<ev.results.length;i++){ const t=ev.results[i][0].transcript; if(ev.results[i].isFinal) finalT+=t; else interim+=t; } ta.value=(finalT+interim).trim(); };
-  askRec.onerror=ev=>{ const er=ev&&ev.error; const log=$("#askBox .asklog"); const msg=er==="not-allowed"||er==="service-not-allowed"?"اسمح للموقع باستعمال الميكروفون من إعدادات المتصفح، ثم حاول مرة أخرى.":er==="no-speech"?"لم أسمع شيئًا. اضغط الميكروفون وتحدّث بوضوح.":"تعذّر التعرّف على الصوت. اكتب سؤالك بدلًا من ذلك."; log.insertAdjacentHTML("beforeend",`<div class="ab" style="opacity:.85">${msg}</div>`); };
-  askRec.onend=()=>{ btn.classList.remove("rec"); askRec=null; ta.placeholder=ph; const q=(finalT||ta.value).trim(); if(q.length>=3){ askVoice=true; askSend(q); } };
+  let heard=false, wd=null; const kbHint="ميزة التعرّف على الصوت لا تعمل في هذا المتصفح أو الجوال. استعمل زر الميكروفون في لوحة المفاتيح نفسها لتكتب سؤالك بصوتك، ثم اضغط أرسل.";
+  const note=t=>$("#askBox .asklog").insertAdjacentHTML("beforeend",`<div class="ab" style="opacity:.85">${t}</div>`);
+  askRec.onresult=ev=>{ heard=true; let interim=""; for(let i=ev.resultIndex;i<ev.results.length;i++){ const t=ev.results[i][0].transcript; if(ev.results[i].isFinal) finalT+=t; else interim+=t; } ta.value=(finalT+interim).trim(); };
+  askRec.onerror=ev=>{ heard=true; const er=ev&&ev.error; if(er==="aborted") return; note(er==="not-allowed"?"اسمح للموقع باستعمال الميكروفون من إعدادات المتصفح، ثم حاول مرة أخرى.":er==="no-speech"?"لم أسمع شيئًا. اضغط الميكروفون وتحدّث بوضوح.":kbHint); };
+  askRec.onend=()=>{ clearTimeout(wd); btn.classList.remove("rec"); askRec=null; ta.placeholder=ph; const q=(finalT||ta.value).trim(); if(q.length>=3){ askVoice=true; askSend(q); } };
   btn.classList.add("rec"); ta.value=""; ta.placeholder="أستمع إليك…";
   try{ if(ttsOK()) ttsStop(); }catch(e){}
-  try{ askRec.start(); gcEv("ask-voice","سؤال بالصوت"); }catch(e){ btn.classList.remove("rec"); askRec=null; }
+  try{ askRec.start(); gcEv("ask-voice","سؤال بالصوت"); }catch(e){ btn.classList.remove("rec"); askRec=null; note(kbHint); return; }
+  wd=setTimeout(()=>{ if(!heard&&askRec){ const r=askRec; try{ r.abort(); }catch(e){} btn.classList.remove("rec"); askRec=null; ta.placeholder=ph; note(kbHint); try{ gcEv("ask-voice-fail","الصوت لا يعمل"); }catch(_){} } },8000);
 }
 const ASK_EMERG=/(الم|وجع) (في )?(ال)?صدر|ضيق (في )?(ال)?(نفس|تنفس)|نزيف|دم (في|مع) (ال)?(براز|قيء|قيئ|بول)|(قيء|استفراغ|يتقيا|تقيا) دم|اغماء|اغمي|فقد الوعي|تشنج|لدغ|عقرب|ثعبان|افعي|تسمم|ابتلع|بلع (دواء|حبوب|منظف)|انتحار|اؤذي نفسي|chest pain|can.?t breathe|bleeding|blood in|faint|seizure|snake|scorpion|poison|swallowed|suicid|douleur (à la|thoracique)|saignement|convulsion|serpent|scorpion|intoxication|suicid/; /*HGRX*/
 function askIds(q){
