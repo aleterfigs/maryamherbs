@@ -6432,7 +6432,7 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
-const NEWS={v:"2026-11-09a",date:"9 نوفمبر 2026",go:"ask",items:[
+const NEWS={v:"2026-11-09a",date:"9 نوفمبر 2026",go:"ask",fresh:3,items:[
  "<b>اسأل مريم (تجريبي):</b> زر جديد في أسفل الشاشة، تكتب فيه سؤالك عن عشبة أو مشكلة صحية فيجيبك من محتوى الدليل فقط، مع روابط الصفحات، وينبّهك للحمل والأدوية وعلامات الخطر. لا يغني عن الطبيب، ولا نحفظ أسئلتك.",
  "<b>باب جديد: القولون والانتفاخ.</b> الفرق بين القولون العصبي وغيره، وما ينفع فعلًا بحسب الأدلة، وأطعمة في مائدتنا تثير الانتفاخ وبدائلها، ومتى تذهب إلى الطبيب.",
  "<b>طب كيرلا وطب أفريقيا:</b> بابان جديدان فيهما تاريخ الطب التقليدي هناك، وما يصح وما يضر من أشهر علاجاته، ووصفات تصلح لبيوتنا.",
@@ -6468,10 +6468,13 @@ const NEWS={v:"2026-11-09a",date:"9 نوفمبر 2026",go:"ask",items:[
   try{ seen=localStorage.getItem(K); returning=!!(localStorage.getItem("herb-favs")||localStorage.getItem("home-kit-v1")||localStorage.getItem("maryam-install-later")); }catch(e){ return; }
   if(seen===NEWS.v) return;
   returning=returning||!!seen||!!(navigator.serviceWorker&&navigator.serviceWorker.controller);
-  const mark=()=>{ try{ localStorage.setItem(K,NEWS.v); }catch(e){} };
+  const mark=()=>{ try{ localStorage.setItem(K,NEWS.v); localStorage.setItem("maryam-news-n",String(NEWS.items.length)); }catch(e){} };
+  let prevN=NaN; try{ prevN=parseInt(localStorage.getItem("maryam-news-n"),10); }catch(e){}
+  const showN=Math.min(6,isNaN(prevN)?(NEWS.fresh||3):NEWS.items.length-prevN);
+  if(showN<=0){ mark(); return; }
   if(!returning || /^#[rh]=/.test(location.hash)){ mark(); return; }
   const box=document.createElement("div"); box.id="newsbox"; box.hidden=true; box.setAttribute("role","dialog"); box.setAttribute("aria-modal","true"); box.setAttribute("aria-labelledby","newsT");
-  box.innerHTML=`<div class="nb"><h3 id="newsT">جديد في الموقع</h3><p class="nd">تحديث ${NEWS.date}</p><ul>${NEWS.items.map(x=>`<li>${x}</li>`).join("")}</ul><div class="nbtns">${NEWS.go?`<button type="button" class="ngo">جرّبه الآن</button>`:""}<button type="button" class="nok">حسنًا</button></div></div>`;
+  box.innerHTML=`<div class="nb"><h3 id="newsT">جديد في الموقع</h3><p class="nd">تحديث ${NEWS.date}</p><ul>${NEWS.items.slice(0,showN).map(x=>`<li>${x}</li>`).join("")}</ul><div class="nbtns">${NEWS.go?`<button type="button" class="ngo">جرّبه الآن</button>`:""}<button type="button" class="nok">حسنًا</button></div></div>`;
   document.body.appendChild(box);
   const close=()=>{ mark(); box.hidden=true; window.maryamNewsOpen=false; };
   box.querySelector(".nok").onclick=close;

@@ -6434,7 +6434,7 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-09a",date:"9 novembre 2026",go:"ask",items:[
+const NEWS={v:"2026-11-09a",date:"9 novembre 2026",go:"ask",fresh:3,items:[
  "<b>Demandez à Maryam (bêta) :</b> Un nouveau bouton en bas de l'écran : posez votre question sur une plante ou un problème de santé, il répond uniquement à partir du guide, avec des liens vers les pages, et vous alerte sur la grossesse, les médicaments et les signes de danger. Il ne remplace pas un médecin, et nous ne conservons pas vos questions.",
  "<b>Nouvelle section : Côlon et ballonnements.</b> La différence entre le côlon irritable et d'autres maladies, ce qui aide vraiment selon les preuves, les aliments de notre table qui font gonfler et leurs alternatives, et quand consulter.",
  "<b>Médecine du Kerala et médecine africaine :</b> Deux nouvelles sections sur l'histoire de la médecine traditionnelle là-bas, ce qui aide et ce qui nuit parmi ses remèdes les plus connus, et des recettes adaptées à nos foyers.",
@@ -6470,10 +6470,13 @@ const NEWS={v:"2026-11-09a",date:"9 novembre 2026",go:"ask",items:[
   try{ seen=localStorage.getItem(K); returning=!!(localStorage.getItem("herb-favs")||localStorage.getItem("home-kit-v1")||localStorage.getItem("maryam-install-later")); }catch(e){ return; }
   if(seen===NEWS.v) return;
   returning=returning||!!seen||!!(navigator.serviceWorker&&navigator.serviceWorker.controller);
-  const mark=()=>{ try{ localStorage.setItem(K,NEWS.v); }catch(e){} };
+  const mark=()=>{ try{ localStorage.setItem(K,NEWS.v); localStorage.setItem("maryam-news-n",String(NEWS.items.length)); }catch(e){} };
+  let prevN=NaN; try{ prevN=parseInt(localStorage.getItem("maryam-news-n"),10); }catch(e){}
+  const showN=Math.min(6,isNaN(prevN)?(NEWS.fresh||3):NEWS.items.length-prevN);
+  if(showN<=0){ mark(); return; }
   if(!returning || /^#[rh]=/.test(location.hash)){ mark(); return; }
   const box=document.createElement("div"); box.id="newsbox"; box.hidden=true; box.setAttribute("role","dialog"); box.setAttribute("aria-modal","true"); box.setAttribute("aria-labelledby","newsT");
-  box.innerHTML=`<div class="nb"><h3 id="newsT">Nouveau sur le site</h3><p class="nd">Mise à jour du ${NEWS.date}</p><ul>${NEWS.items.map(x=>`<li>${x}</li>`).join("")}</ul><div class="nbtns">${NEWS.go?`<button type="button" class="ngo">Essayer maintenant</button>`:""}<button type="button" class="nok">D'accord</button></div></div>`;
+  box.innerHTML=`<div class="nb"><h3 id="newsT">Nouveau sur le site</h3><p class="nd">Mise à jour du ${NEWS.date}</p><ul>${NEWS.items.slice(0,showN).map(x=>`<li>${x}</li>`).join("")}</ul><div class="nbtns">${NEWS.go?`<button type="button" class="ngo">Essayer maintenant</button>`:""}<button type="button" class="nok">D'accord</button></div></div>`;
   document.body.appendChild(box);
   const close=()=>{ mark(); box.hidden=true; window.maryamNewsOpen=false; };
   box.querySelector(".nok").onclick=close;
