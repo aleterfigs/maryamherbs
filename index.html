@@ -6614,7 +6614,7 @@ function askFmt(a,used){
   const cited=new Set(); txt=txt.replace(/^(المصادر|Sources|Sources ?)\s*:.*$/gmi,m=>{ (m.match(/\d+/g)||[]).forEach(n=>cited.add(+n)); return ""; }).replace(/\s*\[(\d+)\]/g,(m,n)=>{ cited.add(+n); return ""; });
   const lines=txt.split("\n"); let out="",inl=false;
   for(const l of lines){ const t=l.trim();
-    const qm=t.match(/^(\d+)[.)\-]\s*(.+?)\s*[(（]([^()（）]*\/[^()（）]*)[)）]\s*[.؟?]?$/);
+    const qm=t.match(/^(\d+)[.)\-]\s*(.+?)\s*[(（]([^()（）]*\/[^()（）]*)[)）]\s*[.؟?]?$/); /*HGRX*/
     if(qm){ if(inl){ out+="</ul>"; inl=false; } const opts=qm[3].split("/").map(x=>x.trim()).filter(Boolean).slice(0,6);
       out+=`<div class="askq"><p style="margin:6px 0 4px"><b>${qm[1]}.</b> ${qm[2]}</p><div class="askopts">${opts.map(o=>`<button type="button" class="chip" data-askopt="${o}" data-askqn="${qm[1]}">${o}</button>`).join("")}</div></div>`; continue; }
     if(/^[-•]\s+/.test(t)){ if(!inl){ out+="<ul>"; inl=true; } out+="<li>"+t.replace(/^[-•]\s+/,"")+"</li>"; } else { if(inl){ out+="</ul>"; inl=false; } if(t) out+="<p style=\"margin:4px 0\">"+t+"</p>"; } }
