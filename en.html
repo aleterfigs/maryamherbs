@@ -5951,6 +5951,28 @@ const NSYM = [["Tiredness and exhaustion",["iron","b12","vitd","folate","mg","pr
 const nst={sym:null};
 const SITE_URL="https://maryamherbs.com/en.html";
 const IC_SAY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+/* natural cloud voice */
+const CLOUD={audio:null,btn:null,cache:new Map(),bad:false,unlocked:null};
+const SIL_WAV="data:audio/wav;base64,UklGRrQBAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YZABAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA";
+function cloudUnlock(){ try{ const a=new Audio(SIL_WAV); a.play().catch(()=>{}); CLOUD.unlocked=a; }catch(e){} }
+function cloudStop(){ try{ if(CLOUD.audio) CLOUD.audio.pause(); }catch(e){} const b=CLOUD.btn; CLOUD.btn=null; CLOUD.audio=null; if(b&&b.isConnected){ b.classList.remove("speaking"); const sp=b.querySelector("span"); if(sp&&b.dataset.lbl) sp.textContent=b.dataset.lbl; } }
+async function cloudSay(btn,text,fallback){
+  if(CLOUD.btn===btn){ cloudStop(); return; }
+  cloudStop(); try{ ttsStop(); }catch(e){}
+  if(typeof ASK_ON==="undefined"||!ASK_ON||CLOUD.bad){ fallback(); return; }
+  const a=CLOUD.unlocked||new Audio(); CLOUD.unlocked=null; if(!a.src){ a.src=SIL_WAV; a.play().catch(()=>{}); }
+  const sp=btn.querySelector("span"); btn.dataset.lbl=sp?sp.textContent:""; if(sp) sp.textContent="Loading…"; btn.classList.add("speaking"); CLOUD.btn=btn; CLOUD.audio=a;
+  const lang=(document.documentElement.lang||"ar").slice(0,2), k=lang+"|"+text;
+  try{
+    let url=CLOUD.cache.get(k);
+    if(!url){ const r=await fetch(ASK_URL+"tts",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text,lang})}); const ct=r.headers.get("content-type")||"";
+      if(!r.ok||!ct.includes("audio")){ const d=ct.includes("json")?await r.json():{}; if(d.error==="notts"||d.error==="quota") CLOUD.bad=true; throw new Error(d.error||"x"); }
+      url=URL.createObjectURL(await r.blob()); CLOUD.cache.set(k,url); }
+    if(CLOUD.btn!==btn) return;
+    a.onended=()=>{ if(CLOUD.btn===btn) cloudStop(); }; a.src=url; if(sp) sp.textContent="Stop reading"; await a.play();
+    try{ gcEv("tts-cloud","قراءة بصوت طبيعي"); }catch(e){}
+  }catch(e){ if(CLOUD.btn===btn) cloudStop(); fallback(); }
+}
 /* ---------- Read aloud ---------- */
 const TTS={on:null,lbl:""};
 const ttsOK=()=>{ try{ return "speechSynthesis" in window && "SpeechSynthesisUtterance" in window; }catch(e){ return false; } };
@@ -5958,12 +5980,15 @@ const ttsLang=()=>{ const L=(document.documentElement.lang||"ar").slice(0,2); re
 function ttsVoice(){ const L=ttsLang(), vs=speechSynthesis.getVoices()||[]; const m=vs.filter(v=>(v.lang||"").toLowerCase().startsWith(L)); return m.find(v=>/SA|AE|EG/i.test(v.lang))||m.find(v=>v.localService)||m[0]||null; }
 function ttsStop(){ const b=TTS.on; TTS.on=null; try{ if(ttsOK()&&(speechSynthesis.speaking||speechSynthesis.pending)) speechSynthesis.cancel(); }catch(e){} if(b&&b.isConnected){ b.classList.remove("speaking"); const sp=b.querySelector("span"); if(sp) sp.textContent=TTS.lbl; } }
 function ttsChunks(t){ const out=[]; t.replace(/[*•🌿]/g," ").split(/\n+/).forEach(line=>{ let x=line.trim(); while(x.length>180){ let i=x.lastIndexOf(",",180); if(i<60) i=x.lastIndexOf(" ",180); if(i<60) i=180; out.push(x.slice(0,i+1)); x=x.slice(i+1).trim(); } if(x) out.push(x); }); return out; }
-function ttsFail(btn,why){ if(TTS.on===btn) ttsStop(); flashBtn(btn,why==="lang"?"No voice for this language on your device":"Reading aloud is not available in this browser"); }
+function ttsFail(btn,why){ if(TTS.on===btn) ttsStop(); const msg=()=>flashBtn(btn,why==="lang"?"No voice for this language on your device":"Reading aloud is not available in this browser"); if(TTS.txt&&!btn.dataset.cloudtried&&typeof ASK_ON!=="undefined"&&ASK_ON&&!CLOUD.bad){ btn.dataset.cloudtried="1"; cloudSay(btn,TTS.txt,()=>{ delete btn.dataset.cloudtried; msg(); }); setTimeout(()=>{ delete btn.dataset.cloudtried; },30000); } else msg(); }
 function ttsSay(btn,text){
+  if(CLOUD.btn===btn){ cloudStop(); return; }
   if(TTS.on===btn){ ttsStop(); return; } if(TTS.on) ttsStop();
+  TTS.txt=text;
+  if(!ttsOK()){ ttsFail(btn,"x"); return; }
   try{ speechSynthesis.resume(); }catch(e){}
   const vs=speechSynthesis.getVoices()||[], v=ttsVoice();
-  if(vs.length&&!v){ flashBtn(btn,"No voice for this language on your device"); return; }
+  if(vs.length&&!v){ ttsFail(btn,"lang"); return; }
   const parts=ttsChunks(text); if(!parts.length) return;
   TTS.on=btn; const sp=btn.querySelector("span"); TTS.lbl=sp?sp.textContent:""; if(sp) sp.textContent="Stop reading"; btn.classList.add("speaking");
   let started=false;
@@ -5978,7 +6003,7 @@ function ttsSay(btn,text){
 function sayHerb(h){ return [h.ar.split(" (")[0]+".", h.use, "Common uses: "+h.uses.join(", ")+".", "Usual preparation: "+h.prep, "Cautions: "+h.warn.join(", ")+".", "Possible drug interactions: "+h.inter.join(", ")+"."].join("\n"); }
 function sayRecipe(r){ return [r.name+".", r.for, "Ingredients:", ...r.ing.map(([id,t])=>(id?byId[id].ar.split(" (")[0]+": ":"")+t+"."), "Method:", ...r.steps.map(x=>x), "How much and when? "+doseOf(r), "Warning: "+r.note].join("\n"); }
 if(ttsOK()){ try{ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>{}; }catch(e){} }
-document.addEventListener("click",e=>{ const b=e.target.closest("[data-hsay],[data-rsay]"); if(!b) return; if(b.dataset.hsay){ const h=byId[b.dataset.hsay]; if(h) ttsSay(b,sayHerb(h)); } else { const r=RECIPES.find(x=>x.name===b.dataset.rsay); if(r) ttsSay(b,sayRecipe(r)); } });
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-hsay],[data-rsay]"); if(!b) return; cloudUnlock(); if(b.dataset.hsay){ const h=byId[b.dataset.hsay]; if(h) ttsSay(b,sayHerb(h)); } else { const r=RECIPES.find(x=>x.name===b.dataset.rsay); if(r) ttsSay(b,sayRecipe(r)); } });
 const IC_COPY='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>';
 const IC_SHARE='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg>';
 const TRAD_NOTE="From traditional medicine; most of its recipes have not been tested in large studies. Choose organic or clean local ingredients from a trusted source where you can, and if you do not improve, see a doctor.";
@@ -6545,6 +6570,7 @@ function askRecord(btn){
   }).catch(()=>askNote("Allow the site to use the microphone in your browser settings, then try again."));
 }
 function askMic(btn){
+  cloudUnlock();
   if(askMR||!ASK_SR||srBad()){ if(ASK_MR) askRecord(btn); else askNote("Voice recognition does not work in this browser or phone. Use the microphone button on your keyboard to dictate your question, then tap Send."); return; }
   if(askRec){ try{ askRec.stop(); }catch(e){} return; }
   const ta=$("#askBox textarea"); let finalT=""; const ph=ta.placeholder;
@@ -6605,9 +6631,9 @@ async function askSend(q){
     const r=await fetch(ASK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q,lang:document.documentElement.lang||"ar",ids:askIds(q),h:askHist.slice(-2)})});
     const d=await r.json(); const a=d.a||"Could not answer right now. Please try again shortly.";
     const sayTxt=a.replace(/^(Sources|Sources)\s*:.*$/gmi,"").replace(/\[\d+\]/g,"").replace(/\*\*/g,"").replace(/^[-•]\s+/gm,"").trim();
-    ab.innerHTML=askFmt(a,d.used||[])+(ttsOK()?`<button type="button" class="asksay"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Listen</span></button>`:"")+(d.used&&d.used.length?`<div class="fb">Was this answer helpful? <button type="button" data-fb="good">Yes</button><button type="button" data-fb="bad">No</button></div>`:"");
+    ab.innerHTML=askFmt(a,d.used||[])+((ttsOK()||ASK_ON)?`<button type="button" class="asksay"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Listen</span></button>`:"")+(d.used&&d.used.length?`<div class="fb">Was this answer helpful? <button type="button" data-fb="good">Yes</button><button type="button" data-fb="bad">No</button></div>`:"");
     if(d.used&&d.used.length){ askHist.push({q,a}); if(askHist.length>2) askHist.shift(); }
-    const sb=ab.querySelector(".asksay"); if(sb){ sb.onclick=()=>ttsSay(sb,sayTxt); if(askVoice) setTimeout(()=>ttsSay(sb,sayTxt),300); }
+    const sb=ab.querySelector(".asksay"); if(sb){ const say=()=>cloudSay(sb,sayTxt,()=>ttsSay(sb,sayTxt)); sb.onclick=()=>{ cloudUnlock(); say(); }; if(askVoice) setTimeout(say,200); }
     askVoice=false;
   }catch(e){ ab.textContent="Could not connect. Check your internet and try again."; }
   btn.disabled=false; ab.scrollIntoView({block:"start",behavior:"smooth"});
