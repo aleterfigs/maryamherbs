@@ -6433,7 +6433,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
-const NEWS={v:"2026-11-08m",date:"8 novembre 2026",go:"faq",items:[
+const NEWS={v:"2026-11-09a",date:"9 novembre 2026",go:"ask",items:[
+ "<b>Demandez à Maryam (bêta) :</b> Un nouveau bouton en bas de l'écran : posez votre question sur une plante ou un problème de santé, il répond uniquement à partir du guide, avec des liens vers les pages, et vous alerte sur la grossesse, les médicaments et les signes de danger. Il ne remplace pas un médecin, et nous ne conservons pas vos questions.",
+ "<b>Nouvelle section : Côlon et ballonnements.</b> La différence entre le côlon irritable et d'autres maladies, ce qui aide vraiment selon les preuves, les aliments de notre table qui font gonfler et leurs alternatives, et quand consulter.",
+ "<b>Médecine du Kerala et médecine africaine :</b> Deux nouvelles sections sur l'histoire de la médecine traditionnelle là-bas, ce qui aide et ce qui nuit parmi ses remèdes les plus connus, et des recettes adaptées à nos foyers.",
  "<b>Questions fréquentes :</b> une nouvelle page de réponses courtes aux questions les plus fréquentes, comme la sécurité des plantes avec les médicaments, la grossesse et les enfants, et la durée d’utilisation d’un mélange. Vous n’avez pas trouvé votre question ? Envoyez-la-nous sur WhatsApp.",
  "<b>Lecture à voix haute :</b> un nouveau bouton sur chaque plante et chaque mélange lit les informations à voix haute, pour ceux qui ont du mal à lire ou qui cuisinent les mains occupées. Touchez-le à nouveau pour arrêter.",
  "<b>Plantes des Émirats et du Golfe :</b> une nouvelle page sur douze plantes de notre environnement, dont le ghaf, le sidr, le samr, le shua, l’arak, le qurm et le markh, avec l’avis du Département de la santé d’Abou Dhabi sur leur sécurité. Et dans le «Vérificateur de sécurité», une section sur les plantes sosies et toxiques.",
@@ -6473,7 +6476,7 @@ const NEWS={v:"2026-11-08m",date:"8 novembre 2026",go:"faq",items:[
   document.body.appendChild(box);
   const close=()=>{ mark(); box.hidden=true; window.maryamNewsOpen=false; };
   box.querySelector(".nok").onclick=close;
-  const g=box.querySelector(".ngo"); if(g) g.onclick=()=>{ close(); setView(NEWS.go); scrollTo({top:0}); };
+  const g=box.querySelector(".ngo"); if(g) g.onclick=()=>{ close(); if(NEWS.go==="ask"&&typeof askOpen==="function"&&ASK_ON){ askOpen(); return; } setView(NEWS.go==="ask"?"gut":NEWS.go); scrollTo({top:0}); };
   box.addEventListener("click",e=>{ if(e.target===box) close(); });
   document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!box.hidden) close(); });
   window.maryamNewsOpen=true;

@@ -6431,7 +6431,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
-const NEWS={v:"2026-11-08m",date:"8 نوفمبر 2026",go:"faq",items:[
+const NEWS={v:"2026-11-09a",date:"9 نوفمبر 2026",go:"ask",items:[
+ "<b>اسأل مريم (تجريبي):</b> زر جديد في أسفل الشاشة، تكتب فيه سؤالك عن عشبة أو مشكلة صحية فيجيبك من محتوى الدليل فقط، مع روابط الصفحات، وينبّهك للحمل والأدوية وعلامات الخطر. لا يغني عن الطبيب، ولا نحفظ أسئلتك.",
+ "<b>باب جديد: القولون والانتفاخ.</b> الفرق بين القولون العصبي وغيره، وما ينفع فعلًا بحسب الأدلة، وأطعمة في مائدتنا تثير الانتفاخ وبدائلها، ومتى تذهب إلى الطبيب.",
+ "<b>طب كيرلا وطب أفريقيا:</b> بابان جديدان فيهما تاريخ الطب التقليدي هناك، وما يصح وما يضر من أشهر علاجاته، ووصفات تصلح لبيوتنا.",
  "<b>أسئلة شائعة:</b> صفحة جديدة تجيب باختصار عن أكثر ما يسأل عنه الزوار، كسلامة الأعشاب مع الأدوية والحمل والأطفال، ومدة استعمال الخلطات. ولم تجد سؤالك؟ أرسله لنا على واتساب.",
  "<b>اقرأ لي:</b> زر جديد في كل عشبة وكل خلطة يقرأ لك المعلومات بصوت عالٍ، لمن يصعب عليه القراءة أو يطبخ ويداه مشغولتان. اضغطه مرة ثانية للإيقاف.",
  "<b>نباتات الإمارات والخليج:</b> صفحة جديدة لاثني عشر نباتًا من بيئتنا، منها الغاف والسدر والسمر والشوع والأراك والقرم والمرخ، مع ما تقوله دائرة الصحة في أبوظبي عن سلامتها. وفي «فاحص السلامة» قسم للنباتات التي تتشابه أو تسمّم.",
@@ -6471,7 +6474,7 @@ const NEWS={v:"2026-11-08m",date:"8 نوفمبر 2026",go:"faq",items:[
   document.body.appendChild(box);
   const close=()=>{ mark(); box.hidden=true; window.maryamNewsOpen=false; };
   box.querySelector(".nok").onclick=close;
-  const g=box.querySelector(".ngo"); if(g) g.onclick=()=>{ close(); setView(NEWS.go); scrollTo({top:0}); };
+  const g=box.querySelector(".ngo"); if(g) g.onclick=()=>{ close(); if(NEWS.go==="ask"&&typeof askOpen==="function"&&ASK_ON){ askOpen(); return; } setView(NEWS.go==="ask"?"gut":NEWS.go); scrollTo({top:0}); };
   box.addEventListener("click",e=>{ if(e.target===box) close(); });
   document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!box.hidden) close(); });
   window.maryamNewsOpen=true;

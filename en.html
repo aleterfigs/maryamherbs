@@ -6433,7 +6433,10 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- What's new: shown once to returning visitors after each update ---------- */
-const NEWS={v:"2026-11-08m",date:"8 November 2026",go:"faq",items:[
+const NEWS={v:"2026-11-09a",date:"9 November 2026",go:"ask",items:[
+ "<b>Ask Maryam (beta):</b> A new button at the bottom of the screen: type your question about a herb or a health problem and it answers only from the guide, with links to the pages, and alerts you to pregnancy, medicines and danger signs. It does not replace a doctor, and we do not store your questions.",
+ "<b>New section: Colon and bloating.</b> The difference between IBS and other conditions, what actually helps according to the evidence, foods on our table that trigger bloating and their alternatives, and when to see a doctor.",
+ "<b>Kerala medicine and African medicine:</b> Two new sections on the history of traditional medicine there, what helps and what harms among its best-known remedies, and recipes that suit our homes.",
  "<b>FAQ:</b> a new page with short answers to what visitors ask most, such as herb safety with medicines, pregnancy and children, and how long to use a blend. Didn't find your question? Send it to us on WhatsApp.",
  "<b>Read aloud:</b> a new button on every herb and blend reads the information out loud, for anyone who finds reading hard or is cooking with busy hands. Tap it again to stop.",
  "<b>UAE & Gulf plants:</b> a new page on twelve plants of our environment, including ghaf, sidr, samr, shua, arak, qurm and markh, with what the Abu Dhabi Department of Health says about their safety. And in the «Safety checker», a section on look-alike and poisonous plants.",
@@ -6473,7 +6476,7 @@ const NEWS={v:"2026-11-08m",date:"8 November 2026",go:"faq",items:[
   document.body.appendChild(box);
   const close=()=>{ mark(); box.hidden=true; window.maryamNewsOpen=false; };
   box.querySelector(".nok").onclick=close;
-  const g=box.querySelector(".ngo"); if(g) g.onclick=()=>{ close(); setView(NEWS.go); scrollTo({top:0}); };
+  const g=box.querySelector(".ngo"); if(g) g.onclick=()=>{ close(); if(NEWS.go==="ask"&&typeof askOpen==="function"&&ASK_ON){ askOpen(); return; } setView(NEWS.go==="ask"?"gut":NEWS.go); scrollTo({top:0}); };
   box.addEventListener("click",e=>{ if(e.target===box) close(); });
   document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!box.hidden) close(); });
   window.maryamNewsOpen=true;
