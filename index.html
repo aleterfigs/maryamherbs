@@ -500,6 +500,8 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 #askBox .askopts .chip[aria-pressed="true"]{background:var(--leaf);color:var(--sheet)}
 #askBox .askmic{border:1px solid rgba(127,127,127,.45);background:transparent;color:inherit;border-radius:12px;width:46px;flex:0 0 46px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 #askBox .askmic:disabled{opacity:.5}
+#askBox .askmic.nudge:not(.rec){border-color:var(--clay);color:var(--clay);animation:micn 1.6s 3}
+@keyframes micn{0%,100%{transform:none}50%{transform:scale(1.12)}}
 #askBox .askmic.rec{background:#b3261e;color:#fff;border-color:#b3261e;animation:micp 1.2s infinite}
 @keyframes micp{0%,100%{box-shadow:0 0 0 0 rgba(179,38,30,.5)}50%{box-shadow:0 0 0 8px rgba(179,38,30,0)}}
 #askBox .asksay{display:inline-flex;align-items:center;gap:4px;background:none;border:1px solid rgba(127,127,127,.4);border-radius:999px;padding:2px 10px;cursor:pointer;color:inherit;font:inherit;font-size:.8rem;margin-top:8px}
@@ -6574,7 +6576,7 @@ function askRecord(btn){
   }).catch(()=>askNote("اسمح للموقع باستعمال الميكروفون من إعدادات المتصفح، ثم حاول مرة أخرى."));
 }
 function askMic(btn){
-  cloudUnlock();
+  cloudUnlock(); btn.classList.remove("nudge");
   if(askMR||!ASK_SR||srBad()){ if(ASK_MR) askRecord(btn); else askNote("ميزة التعرّف على الصوت لا تعمل في هذا المتصفح أو الجوال. استعمل زر الميكروفون في لوحة المفاتيح نفسها لتكتب سؤالك بصوتك، ثم اضغط أرسل."); return; }
   if(askRec){ try{ askRec.stop(); }catch(e){} return; }
   const ta=$("#askBox textarea"); let finalT=""; const ph=ta.placeholder;
@@ -6638,10 +6640,14 @@ async function askSend(q){
   try{
     const r=await fetch(ASK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q,lang:document.documentElement.lang||"ar",ids:askIds(askHist.length&&q.length<120?askHist[askHist.length-1].q+" "+q:q),h:askHist.slice(-2)})});
     const d=await r.json(); const a=d.a||"تعذّر الرد الآن. حاول بعد قليل.";
-    const sayTxt=a.replace(/^(المصادر|Sources)\s*:.*$/gmi,"").replace(/\[\d+\]/g,"").replace(/\*\*/g,"").replace(/^[-•]\s+/gm,"").trim();
+    const sayTxt=a.replace(/^(المصادر|Sources)\s*:.*$/gmi,"").replace(/\[\d+\]/g,"").replace(/\*\*/g,"").replace(/^[-•]\s+/gm,"")
+      .replace(/[(（]([^()（）]*\/[^()（）]*)[)）]/g,(m,x)=>": "+x.split("/").map(t=>t.trim()).filter(Boolean).join(({ar:"، أو ",en:", or ",fr:", ou "})[(document.documentElement.lang||"ar").slice(0,2)]||"، أو ")+".").trim(); /*HGRX*/
     ab.innerHTML=askFmt(a,d.used||[])+((ttsOK()||ASK_ON)?`<button type="button" class="asksay"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>استمع</span></button>`:"")+(d.used&&d.used.length?`<div class="fb">هل أفادك الجواب؟ <button type="button" data-fb="good">نعم</button><button type="button" data-fb="bad">لا</button></div>`:"");
     if(d.a&&!d.limited&&(d.used&&d.used.length||/[(（][^)）]*\/[^)）]*[)）]/.test(a))){ askHist.push({q,a}); if(askHist.length>2) askHist.shift(); }
     const sb=ab.querySelector(".asksay"); if(sb){ const say=()=>cloudSay(sb,sayTxt,()=>ttsSay(sb,sayTxt)); sb.onclick=()=>{ cloudUnlock(); say(); }; if(askVoice) setTimeout(say,200); }
+    const mic=$("#askBox .askmic"); const isQ=!!ab.querySelector(".askq");
+    if(mic){ mic.classList.toggle("nudge",isQ); }
+    if(isQ&&mic) ab.insertAdjacentHTML("beforeend",`<p class="askhint" style="margin:8px 0 0;font-size:.85rem;opacity:.85">اختر الإجابات، أو اضغط الميكروفون 🎤 وأجب بصوتك.</p>`);
     askVoice=false;
   }catch(e){ ab.textContent="تعذّر الاتصال. تأكد من الإنترنت وحاول مرة أخرى."; }
   btn.disabled=false; ab.scrollIntoView({block:"start",behavior:"smooth"});
