@@ -6472,7 +6472,7 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
 const NEWS={v:"2026-11-09a",date:"9 نوفمبر 2026",go:"ask",fresh:3,items:[
- "<b>اسأل مريم (تجريبي):</b> زر جديد في أسفل الشاشة، تكتب فيه سؤالك عن عشبة أو مشكلة صحية فيجيبك من محتوى الدليل فقط، مع روابط الصفحات، وينبّهك للحمل والأدوية وعلامات الخطر. لا يغني عن الطبيب، ولا نحفظ أسئلتك.",
+ "<b>اسأل مريم (تجريبي):</b> زر جديد في أسفل الشاشة، تكتب فيه سؤالك عن عشبة أو مشكلة صحية فيجيبك من محتوى الدليل فقط، مع روابط الصفحات، وينبّهك للحمل والأدوية وعلامات الخطر. لا يغني عن الطبيب، ولا نحفظ إلا نص الأسئلة التي لا يجد لها جوابًا، دون أي معلومة عنك، للتطوير.",
  "<b>باب جديد: القولون والانتفاخ.</b> الفرق بين القولون العصبي وغيره، وما ينفع فعلًا بحسب الأدلة، وأطعمة في مائدتنا تثير الانتفاخ وبدائلها، ومتى تذهب إلى الطبيب.",
  "<b>طب كيرلا وطب أفريقيا:</b> بابان جديدان فيهما تاريخ الطب التقليدي هناك، وما يصح وما يضر من أشهر علاجاته، ووصفات تصلح لبيوتنا.",
  "<b>أسئلة شائعة:</b> صفحة جديدة تجيب باختصار عن أكثر ما يسأل عنه الزوار، كسلامة الأعشاب مع الأدوية والحمل والأطفال، ومدة استعمال الخلطات. ولم تجد سؤالك؟ أرسله لنا على واتساب.",
@@ -6645,6 +6645,9 @@ async function askSend(q){
     ab.innerHTML=askFmt(a,d.used||[])+(false?`<button type="button" class="asksay"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>استمع</span></button>`:"")+(d.used&&d.used.length?`<div class="fb">هل أفادك الجواب؟ <button type="button" data-fb="good">نعم</button><button type="button" data-fb="bad">لا</button></div>`:"");
     if(d.a&&!d.limited&&(d.used&&d.used.length||/[(（][^)）]*\/[^)）]*[)）]/.test(a))){ askHist.push({q,a}); if(askHist.length>2) askHist.shift(); }
     
+    const miss=!(d.used&&d.used.length)||/الدليل لا يذكر|لا يذكر الدليل|لا يذكره الدليل|لم أجد في الدليل|guide does not cover|guide doesn.t cover|could not find anything in the guide|le guide n.en parle pas|n.ai rien trouvé dans le guide/i.test(a); /*HGRX*/
+    if(miss&&!d.limited){ const clean=q.replace(/[\w.+-]+@[\w-]+\.[\w.]+/g,"[بريد]").replace(/\+?\d[\d\s-]{5,}\d/g,"[رقم]").replace(/\s+/g," ").trim().slice(0,140); /*HGRX*/
+      try{ gcEv("ask-miss/"+clean,"سؤال بلا جواب: "+clean); }catch(e){} }
     const mic=$("#askBox .askmic"); const isQ=!!ab.querySelector(".askq");
     if(mic){ mic.classList.toggle("nudge",isQ); }
     if(isQ&&mic) ab.insertAdjacentHTML("beforeend",`<p class="askhint" style="margin:8px 0 0;font-size:.85rem;opacity:.85">اختر الإجابات، أو اضغط الميكروفون 🎤 وأجب بصوتك.</p>`);
@@ -6657,7 +6660,7 @@ function askOpen(){
   if(!box){
     box=document.createElement("div"); box.id="askBox"; box.setAttribute("role","dialog"); box.setAttribute("aria-modal","true"); box.setAttribute("aria-label","اسأل مريم");
     box.innerHTML=`<div class="askp"><div class="askh"><h3>اسأل مريم<b class="aib">AI</b><span class="tag">تجريبي</span></h3><button type="button" class="askx" aria-label="إغلاق">×</button></div>
-     <p class="asknote">يجيب من محتوى الدليل فقط، ولا يغني عن الطبيب. لا تكتب اسمك أو رقمك، ولا يحفظ الموقع أسئلتك.</p>
+     <p class="asknote">يجيب من محتوى الدليل فقط، ولا يغني عن الطبيب. لا تكتب اسمك أو رقمك. نحفظ نص الأسئلة التي لا يجد لها الدليل جوابًا فقط، دون أي معلومة عنك، للتطوير والبحث عن حلول تُضاف إلى الدليل.</p>
      <div class="asklog" aria-live="polite"><div class="sugg">${["عندي انتفاخ بعد الأكل، ماذا أشرب؟","هل الزنجبيل آمن للحامل؟","ما الأعشاب التي تتعارض مع مميّعات الدم؟","كيف أزرع النعناع في الخليج؟"].map(x=>`<button type="button" class="chip" data-asks="${esc(x)}">${x}</button>`).join("")}</div></div>
      <form class="askf">${(ASK_SR||ASK_MR)?`<button type="button" class="askmic" aria-label="تحدّث بسؤالك" title="تحدّث بسؤالك"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>`:""}<textarea rows="1" maxlength="500" placeholder="اكتب سؤالك عن عشبة أو مشكلة صحية…" aria-label="سؤالك"></textarea><button type="submit" class="asks">أرسل</button></form></div>`;
     document.body.appendChild(box);

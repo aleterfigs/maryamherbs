@@ -6474,7 +6474,7 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
 })();
 /* ---------- Nouveautés : affiché une fois aux visiteurs qui reviennent après chaque mise à jour ---------- */
 const NEWS={v:"2026-11-09a",date:"9 novembre 2026",go:"ask",fresh:3,items:[
- "<b>Demandez à Maryam (bêta) :</b> Un nouveau bouton en bas de l'écran : posez votre question sur une plante ou un problème de santé, il répond uniquement à partir du guide, avec des liens vers les pages, et vous alerte sur la grossesse, les médicaments et les signes de danger. Il ne remplace pas un médecin, et nous ne conservons pas vos questions.",
+ "<b>Demandez à Maryam (bêta) :</b> Un nouveau bouton en bas de l'écran : posez votre question sur une plante ou un problème de santé, il répond uniquement à partir du guide, avec des liens vers les pages, et vous alerte sur la grossesse, les médicaments et les signes de danger. Il ne remplace pas un médecin. Nous ne conservons que le texte des questions sans réponse, sans rien sur vous, pour le développement.",
  "<b>Nouvelle section : Côlon et ballonnements.</b> La différence entre le côlon irritable et d'autres maladies, ce qui aide vraiment selon les preuves, les aliments de notre table qui font gonfler et leurs alternatives, et quand consulter.",
  "<b>Médecine du Kerala et médecine africaine :</b> Deux nouvelles sections sur l'histoire de la médecine traditionnelle là-bas, ce qui aide et ce qui nuit parmi ses remèdes les plus connus, et des recettes adaptées à nos foyers.",
  "<b>Questions fréquentes :</b> une nouvelle page de réponses courtes aux questions les plus fréquentes, comme la sécurité des plantes avec les médicaments, la grossesse et les enfants, et la durée d’utilisation d’un mélange. Vous n’avez pas trouvé votre question ? Envoyez-la-nous sur WhatsApp.",
@@ -6647,6 +6647,9 @@ async function askSend(q){
     ab.innerHTML=askFmt(a,d.used||[])+(false?`<button type="button" class="asksay"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Écouter</span></button>`:"")+(d.used&&d.used.length?`<div class="fb">Cette réponse vous a-t-elle aidé ? <button type="button" data-fb="good">Oui</button><button type="button" data-fb="bad">Non</button></div>`:"");
     if(d.a&&!d.limited&&(d.used&&d.used.length||/[(（][^)）]*\/[^)）]*[)）]/.test(a))){ askHist.push({q,a}); if(askHist.length>2) askHist.shift(); }
     
+    const miss=!(d.used&&d.used.length)||/الدليل لا يذكر|لا يذكر الدليل|لا يذكره الدليل|لم أجد في الدليل|guide does not cover|guide doesn.t cover|could not find anything in the guide|le guide n.en parle pas|n.ai rien trouvé dans le guide/i.test(a); /*HGRX*/
+    if(miss&&!d.limited){ const clean=q.replace(/[\w.+-]+@[\w-]+\.[\w.]+/g,"[بريد]").replace(/\+?\d[\d\s-]{5,}\d/g,"[رقم]").replace(/\s+/g," ").trim().slice(0,140); /*HGRX*/
+      try{ gcEv("ask-miss/"+clean,"سؤال بلا جواب: "+clean); }catch(e){} }
     const mic=$("#askBox .askmic"); const isQ=!!ab.querySelector(".askq");
     if(mic){ mic.classList.toggle("nudge",isQ); }
     if(isQ&&mic) ab.insertAdjacentHTML("beforeend",`<p class="askhint" style="margin:8px 0 0;font-size:.85rem;opacity:.85">Choisissez vos réponses, ou touchez le micro 🎤 et répondez à voix haute.</p>`);
@@ -6659,7 +6662,7 @@ function askOpen(){
   if(!box){
     box=document.createElement("div"); box.id="askBox"; box.setAttribute("role","dialog"); box.setAttribute("aria-modal","true"); box.setAttribute("aria-label","Demandez à Maryam");
     box.innerHTML=`<div class="askp"><div class="askh"><h3>Demandez à Maryam<b class="aib">AI</b><span class="tag">Bêta</span></h3><button type="button" class="askx" aria-label="Fermer">×</button></div>
-     <p class="asknote">Répond uniquement à partir du contenu du guide et ne remplace pas un médecin. N'écrivez ni votre nom ni votre numéro ; le site ne conserve pas vos questions.</p>
+     <p class="asknote">Répond uniquement à partir du guide et ne remplace pas un médecin. N'écrivez ni votre nom ni votre numéro. Nous conservons seulement le texte des questions auxquelles le guide ne sait pas répondre, sans rien sur vous, pour le développement et pour trouver des réponses à ajouter au guide.</p>
      <div class="asklog" aria-live="polite"><div class="sugg">${["J'ai des ballonnements après les repas. Que boire ?","Le gingembre est-il sans danger pendant la grossesse ?","Quelles plantes interagissent avec les anticoagulants ?","Comment cultiver la menthe dans le Golfe ?"].map(x=>`<button type="button" class="chip" data-asks="${esc(x)}">${x}</button>`).join("")}</div></div>
      <form class="askf">${(ASK_SR||ASK_MR)?`<button type="button" class="askmic" aria-label="Posez votre question à voix haute" title="Posez votre question à voix haute"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>`:""}<textarea rows="1" maxlength="500" placeholder="Posez une question sur une plante ou un problème de santé…" aria-label="Votre question"></textarea><button type="submit" class="asks">Envoyer</button></form></div>`;
     document.body.appendChild(box);
