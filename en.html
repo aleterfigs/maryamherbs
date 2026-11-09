@@ -497,6 +497,8 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 #askBox textarea{flex:1;resize:none;min-height:44px;max-height:120px;border-radius:12px;border:1px solid rgba(127,127,127,.45);padding:10px;font:inherit;background:var(--bg,transparent);color:inherit}
 #askBox .asks{border:0;border-radius:12px;background:var(--leaf);color:var(--sheet);font:inherit;font-weight:700;padding:0 16px;cursor:pointer}
 #askBox .asks:disabled{opacity:.5}
+#askBox .askopts{display:flex;flex-wrap:wrap;gap:6px}
+#askBox .askopts .chip[aria-pressed="true"]{background:var(--leaf);color:var(--sheet)}
 #askBox .askmic{border:1px solid rgba(127,127,127,.45);background:transparent;color:inherit;border-radius:12px;width:46px;flex:0 0 46px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 #askBox .askmic:disabled{opacity:.5}
 #askBox .askmic.rec{background:#b3261e;color:#fff;border-color:#b3261e;animation:micp 1.2s infinite}
@@ -6613,7 +6615,11 @@ function askFmt(a,used){
   let txt=esc(a).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>");
   const cited=new Set(); txt=txt.replace(/^(Sources|Sources|Sources ?)\s*:.*$/gmi,m=>{ (m.match(/\d+/g)||[]).forEach(n=>cited.add(+n)); return ""; }).replace(/\s*\[(\d+)\]/g,(m,n)=>{ cited.add(+n); return ""; });
   const lines=txt.split("\n"); let out="",inl=false;
-  for(const l of lines){ const t=l.trim(); if(/^[-•]\s+/.test(t)){ if(!inl){ out+="<ul>"; inl=true; } out+="<li>"+t.replace(/^[-•]\s+/,"")+"</li>"; } else { if(inl){ out+="</ul>"; inl=false; } if(t) out+="<p style=\"margin:4px 0\">"+t+"</p>"; } }
+  for(const l of lines){ const t=l.trim();
+    const qm=t.match(/^(\d+)[.)\-]\s*(.+?)\s*[(（]([^()（）]*\/[^()（）]*)[)）]\s*[.؟?]?$/);
+    if(qm){ if(inl){ out+="</ul>"; inl=false; } const opts=qm[3].split("/").map(x=>x.trim()).filter(Boolean).slice(0,6);
+      out+=`<div class="askq"><p style="margin:6px 0 4px"><b>${qm[1]}.</b> ${qm[2]}</p><div class="askopts">${opts.map(o=>`<button type="button" class="chip" data-askopt="${o}" data-askqn="${qm[1]}">${o}</button>`).join("")}</div></div>`; continue; }
+    if(/^[-•]\s+/.test(t)){ if(!inl){ out+="<ul>"; inl=true; } out+="<li>"+t.replace(/^[-•]\s+/,"")+"</li>"; } else { if(inl){ out+="</ul>"; inl=false; } if(t) out+="<p style=\"margin:4px 0\">"+t+"</p>"; } }
   if(inl) out+="</ul>";
   const ids=(cited.size?[...cited].map(n=>used[n-1]).filter(Boolean):used.slice(0,3));
   const lab=id=>{ const [k,a]=id.split(":"); if(k==="h"&&byId[a]) return byId[a].ar.split(" (")[0]; if(k==="r"&&RECIPES[+a]) return RECIPES[+a].name; if(k==="p"){ const pk=PAGEKW_T.find(x=>x[0]===a); return pk?pk[1]:""; } return ""; };
@@ -6632,11 +6638,11 @@ async function askSend(q){
   btn.disabled=true; ta.value="";
   try{ gcEv("ask","سؤال للمساعد"); }catch(e){}
   try{
-    const r=await fetch(ASK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q,lang:document.documentElement.lang||"ar",ids:askIds(q),h:askHist.slice(-2)})});
+    const r=await fetch(ASK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q,lang:document.documentElement.lang||"ar",ids:askIds(askHist.length&&q.length<120?askHist[askHist.length-1].q+" "+q:q),h:askHist.slice(-2)})});
     const d=await r.json(); const a=d.a||"Could not answer right now. Please try again shortly.";
     const sayTxt=a.replace(/^(Sources|Sources)\s*:.*$/gmi,"").replace(/\[\d+\]/g,"").replace(/\*\*/g,"").replace(/^[-•]\s+/gm,"").trim();
     ab.innerHTML=askFmt(a,d.used||[])+((ttsOK()||ASK_ON)?`<button type="button" class="asksay"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Listen</span></button>`:"")+(d.used&&d.used.length?`<div class="fb">Was this answer helpful? <button type="button" data-fb="good">Yes</button><button type="button" data-fb="bad">No</button></div>`:"");
-    if(d.used&&d.used.length){ askHist.push({q,a}); if(askHist.length>2) askHist.shift(); }
+    if(d.a&&!d.limited&&(d.used&&d.used.length||/[(（][^)）]*\/[^)）]*[)）]/.test(a))){ askHist.push({q,a}); if(askHist.length>2) askHist.shift(); }
     const sb=ab.querySelector(".asksay"); if(sb){ const say=()=>cloudSay(sb,sayTxt,()=>ttsSay(sb,sayTxt)); sb.onclick=()=>{ cloudUnlock(); say(); }; if(askVoice) setTimeout(say,200); }
     askVoice=false;
   }catch(e){ ab.textContent="Could not connect. Check your internet and try again."; }
@@ -6654,6 +6660,9 @@ function askOpen(){
     box.addEventListener("click",e=>{ if(e.target===box||e.target.closest(".askx")){ box.hidden=true; try{ ttsStop(); }catch(_){} }
       const s=e.target.closest("[data-asks]"); if(s) askSend(s.dataset.asks);
       const g=e.target.closest("[data-askgo]"); if(g) askGo(g.dataset.askgo);
+      const o=e.target.closest("[data-askopt]"); if(o){ const grp=o.parentNode; grp.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c===o?"true":"false"));
+        const ab=o.closest(".ab"); const picks=[...ab.querySelectorAll('.askopts .chip[aria-pressed="true"]')].map(c=>c.dataset.askopt);
+        const ta=box.querySelector("textarea"); ta.value=picks.join(", "); ta.focus(); }
       const f=e.target.closest("[data-fb]"); if(f){ try{ gcEv("ask-"+f.dataset.fb,f.dataset.fb==="good"?"المساعد: أفادني":"المساعد: لم يفدني"); }catch(_){} f.parentNode.textContent="Thank you."; } });
     const ta=box.querySelector("textarea");
     const mic=box.querySelector(".askmic"); if(mic) mic.onclick=()=>askMic(mic);

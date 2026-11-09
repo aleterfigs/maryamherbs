@@ -466,6 +466,8 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 #askBox textarea{flex:1;resize:none;min-height:44px;max-height:120px;border-radius:12px;border:1px solid rgba(127,127,127,.45);padding:10px;font:inherit;background:var(--bg,transparent);color:inherit}
 #askBox .asks{border:0;border-radius:12px;background:var(--leaf);color:var(--sheet);font:inherit;font-weight:700;padding:0 16px;cursor:pointer}
 #askBox .asks:disabled{opacity:.5}
+#askBox .askopts{display:flex;flex-wrap:wrap;gap:6px}
+#askBox .askopts .chip[aria-pressed="true"]{background:var(--leaf);color:var(--sheet)}
 #askBox .askmic{border:1px solid rgba(127,127,127,.45);background:transparent;color:inherit;border-radius:12px;width:46px;flex:0 0 46px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 #askBox .askmic:disabled{opacity:.5}
 #askBox .askmic.rec{background:#b3261e;color:#fff;border-color:#b3261e;animation:micp 1.2s infinite}
