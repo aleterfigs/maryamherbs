@@ -497,6 +497,11 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 #askBox textarea{flex:1;resize:none;min-height:44px;max-height:120px;border-radius:12px;border:1px solid rgba(127,127,127,.45);padding:10px;font:inherit;background:var(--bg,transparent);color:inherit}
 #askBox .asks{border:0;border-radius:12px;background:var(--leaf);color:var(--sheet);font:inherit;font-weight:700;padding:0 16px;cursor:pointer}
 #askBox .asks:disabled{opacity:.5}
+#askBox .askmic{border:1px solid rgba(127,127,127,.45);background:transparent;color:inherit;border-radius:12px;width:46px;flex:0 0 46px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+#askBox .askmic.rec{background:#b3261e;color:#fff;border-color:#b3261e;animation:micp 1.2s infinite}
+@keyframes micp{0%,100%{box-shadow:0 0 0 0 rgba(179,38,30,.5)}50%{box-shadow:0 0 0 8px rgba(179,38,30,0)}}
+#askBox .asksay{display:inline-flex;align-items:center;gap:4px;background:none;border:1px solid rgba(127,127,127,.4);border-radius:999px;padding:2px 10px;cursor:pointer;color:inherit;font:inherit;font-size:.8rem;margin-top:8px}
+#askBox .asksay.speaking{background:var(--leaf);color:var(--sheet)}
 #askBox .sugg{display:flex;flex-wrap:wrap;gap:6px}
 .dots3 span{display:inline-block;width:6px;height:6px;margin:0 2px;border-radius:50%;background:currentColor;animation:d3 1s infinite}
 .dots3 span:nth-child(2){animation-delay:.15s}.dots3 span:nth-child(3){animation-delay:.3s}
@@ -6507,6 +6512,21 @@ $("#tabUae").onclick=()=>{ ust.v=null; setView("uae"); };
 const ASK_URL="https://maryam-ask.aleterfigs.workers.dev/";
 const ASK_ON=!!ASK_URL&&(/(^|\.)maryamherbs\.com$/.test(location.hostname)||(()=>{ try{ return localStorage.getItem("maryam-ask-test")==="1"; }catch(e){ return false; } })());
 const askHist=[];
+const ASK_SR=window.SpeechRecognition||window.webkitSpeechRecognition||null;
+let askVoice=false, askRec=null;
+function askMic(btn){
+  if(askRec){ try{ askRec.stop(); }catch(e){} return; }
+  const ta=$("#askBox textarea"); let finalT=""; const ph=ta.placeholder;
+  try{ askRec=new ASK_SR(); }catch(e){ askRec=null; return; }
+  askRec.lang=({ar:"ar-AE",en:"en-GB",fr:"fr-FR"})[(document.documentElement.lang||"ar").slice(0,2)]||"ar-AE";
+  askRec.interimResults=true; askRec.continuous=false; askRec.maxAlternatives=1;
+  askRec.onresult=ev=>{ let interim=""; for(let i=ev.resultIndex;i<ev.results.length;i++){ const t=ev.results[i][0].transcript; if(ev.results[i].isFinal) finalT+=t; else interim+=t; } ta.value=(finalT+interim).trim(); };
+  askRec.onerror=ev=>{ const er=ev&&ev.error; const log=$("#askBox .asklog"); const msg=er==="not-allowed"||er==="service-not-allowed"?"Allow the site to use the microphone in your browser settings, then try again.":er==="no-speech"?"I did not hear anything. Tap the microphone and speak clearly.":"Could not recognise your voice. Please type your question instead."; log.insertAdjacentHTML("beforeend",`<div class="ab" style="opacity:.85">${msg}</div>`); };
+  askRec.onend=()=>{ btn.classList.remove("rec"); askRec=null; ta.placeholder=ph; const q=(finalT||ta.value).trim(); if(q.length>=3){ askVoice=true; askSend(q); } };
+  btn.classList.add("rec"); ta.value=""; ta.placeholder="Listening…";
+  try{ if(ttsOK()) ttsStop(); }catch(e){}
+  try{ askRec.start(); gcEv("ask-voice","سؤال بالصوت"); }catch(e){ btn.classList.remove("rec"); askRec=null; }
+}
 const ASK_EMERG=/(الم|وجع) (في )?(ال)?صدر|ضيق (في )?(ال)?(نفس|تنفس)|نزيف|دم (في|مع) (ال)?(براز|قيء|قيئ|بول)|(قيء|استفراغ|يتقيا|تقيا) دم|اغماء|اغمي|فقد الوعي|تشنج|لدغ|عقرب|ثعبان|افعي|تسمم|ابتلع|بلع (دواء|حبوب|منظف)|انتحار|اؤذي نفسي|chest pain|can.?t breathe|bleeding|blood in|faint|seizure|snake|scorpion|poison|swallowed|suicid|douleur (à la|thoracique)|saignement|convulsion|serpent|scorpion|intoxication|suicid/; /*HGRX*/
 function askIds(q){
   const nq=norm(q), ts=qTokens(nq), cats=synCats(nq), named=[];
@@ -6550,8 +6570,11 @@ async function askSend(q){
   try{
     const r=await fetch(ASK_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q,lang:document.documentElement.lang||"ar",ids:askIds(q),h:askHist.slice(-2)})});
     const d=await r.json(); const a=d.a||"Could not answer right now. Please try again shortly.";
-    ab.innerHTML=askFmt(a,d.used||[])+(d.used&&d.used.length?`<div class="fb">Was this answer helpful? <button type="button" data-fb="good">Yes</button><button type="button" data-fb="bad">No</button></div>`:"");
+    const sayTxt=a.replace(/^(Sources|Sources)\s*:.*$/gmi,"").replace(/\[\d+\]/g,"").replace(/\*\*/g,"").replace(/^[-•]\s+/gm,"").trim();
+    ab.innerHTML=askFmt(a,d.used||[])+(ttsOK()?`<button type="button" class="asksay"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Listen</span></button>`:"")+(d.used&&d.used.length?`<div class="fb">Was this answer helpful? <button type="button" data-fb="good">Yes</button><button type="button" data-fb="bad">No</button></div>`:"");
     if(d.used&&d.used.length){ askHist.push({q,a}); if(askHist.length>2) askHist.shift(); }
+    const sb=ab.querySelector(".asksay"); if(sb){ sb.onclick=()=>ttsSay(sb,sayTxt); if(askVoice) setTimeout(()=>ttsSay(sb,sayTxt),300); }
+    askVoice=false;
   }catch(e){ ab.textContent="Could not connect. Check your internet and try again."; }
   btn.disabled=false; ab.scrollIntoView({block:"start",behavior:"smooth"});
 }
@@ -6562,14 +6585,15 @@ function askOpen(){
     box.innerHTML=`<div class="askp"><div class="askh"><h3>Ask Maryam<b class="aib">AI</b><span class="tag">Beta</span></h3><button type="button" class="askx" aria-label="Close">×</button></div>
      <p class="asknote">Answers only from the guide's content and does not replace a doctor. Do not write your name or number; the site does not store your questions.</p>
      <div class="asklog" aria-live="polite"><div class="sugg">${["I get bloated after eating. What should I drink?","Is ginger safe in pregnancy?","Which herbs interact with blood thinners?","How do I grow mint in the Gulf?"].map(x=>`<button type="button" class="chip" data-asks="${esc(x)}">${x}</button>`).join("")}</div></div>
-     <form class="askf"><textarea rows="1" maxlength="500" placeholder="Ask about a herb or a health problem…" aria-label="Your question"></textarea><button type="submit" class="asks">Send</button></form></div>`;
+     <form class="askf">${ASK_SR?`<button type="button" class="askmic" aria-label="Ask by voice" title="Ask by voice"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>`:""}<textarea rows="1" maxlength="500" placeholder="Ask about a herb or a health problem…" aria-label="Your question"></textarea><button type="submit" class="asks">Send</button></form></div>`;
     document.body.appendChild(box);
-    box.addEventListener("click",e=>{ if(e.target===box||e.target.closest(".askx")) box.hidden=true;
+    box.addEventListener("click",e=>{ if(e.target===box||e.target.closest(".askx")){ box.hidden=true; try{ ttsStop(); }catch(_){} }
       const s=e.target.closest("[data-asks]"); if(s) askSend(s.dataset.asks);
       const g=e.target.closest("[data-askgo]"); if(g) askGo(g.dataset.askgo);
       const f=e.target.closest("[data-fb]"); if(f){ try{ gcEv("ask-"+f.dataset.fb,f.dataset.fb==="good"?"المساعد: أفادني":"المساعد: لم يفدني"); }catch(_){} f.parentNode.textContent="Thank you."; } });
     const ta=box.querySelector("textarea");
-    box.querySelector("form").onsubmit=e=>{ e.preventDefault(); askSend(ta.value); };
+    const mic=box.querySelector(".askmic"); if(mic) mic.onclick=()=>askMic(mic);
+    box.querySelector("form").onsubmit=e=>{ e.preventDefault(); askVoice=false; askSend(ta.value); };
     ta.addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); askSend(ta.value); } });
     document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&!box.hidden) box.hidden=true; });
   }
