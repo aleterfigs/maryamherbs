@@ -340,6 +340,8 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .hnum b{font-family:var(--f-display);font-size:1.4rem;line-height:1.1}
 .hnum span{font-size:.72rem;opacity:.9;text-align:center;line-height:1.3}
 .hnum:hover{background:rgba(255,255,255,.2)}
+.hnum.wide{grid-column:1/-1;flex-direction:row;justify-content:center;gap:8px}
+.hnum.wide span{font-size:.82rem}
 .hold{font:inherit;font-size:.88rem;color:var(--sheet);background:transparent;border:0;border-top:1px solid rgba(255,255,255,.25);padding:10px 4px 0;cursor:pointer;text-align:center;line-height:1.6}
 .hold b{color:#ffe08a}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}

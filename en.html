@@ -371,6 +371,8 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .hnum b{font-family:var(--f-display);font-size:1.4rem;line-height:1.1}
 .hnum span{font-size:.72rem;opacity:.9;text-align:center;line-height:1.3}
 .hnum:hover{background:rgba(255,255,255,.2)}
+.hnum.wide{grid-column:1/-1;flex-direction:row;justify-content:center;gap:8px}
+.hnum.wide span{font-size:.82rem}
 .hold{font:inherit;font-size:.88rem;color:var(--sheet);background:transparent;border:0;border-top:1px solid rgba(255,255,255,.25);padding:10px 4px 0;cursor:pointer;text-align:center;line-height:1.6}
 .hold b{color:#ffe08a}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
@@ -4666,7 +4668,7 @@ function renderHome(){
      <a class="instb chanb" href="${WA_CH}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Follow the channel</span></a>
      <button type="button" class="instb" id="instBtn" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M12 7v7m-3-3 3 3 3-3"/></svg>Install Maryam on your phone</button>
      </div>
-     <div class="hnums">${[["herbs",HERBS.length,"herbs"],["recipes",RECIPES.length,"remedies and blends"],["wizard",PROBS.length,"health problems"],["feat",PAGEKW_T.length,"in-depth sections"],["safety",HERBS.reduce((a,h)=>a+(h.warn||[]).length,0),"safety warnings"],["safety",HERBS.reduce((a,h)=>a+(h.inter||[]).length,0),"drug interactions"]].map(([k,v,t])=>`<button type="button" class="hnum" data-hn="${k}"><b>${n(v)}</b><span>${t}</span></button>`).join("")}</div>
+     <div class="hnums">${[["herbs",HERBS.length,"herbs"],["recipes",RECIPES.length,"remedies and blends"],["wizard",PROBS.length,"health problems"],["feat",PAGEKW_T.length,"in-depth sections"],["safety",HERBS.reduce((a,h)=>a+(h.warn||[]).length,0),"safety warnings"],["safety",HERBS.reduce((a,h)=>a+(h.inter||[]).length,0),"drug interactions"]].map(([k,v,t])=>`<button type="button" class="hnum" data-hn="${k}"><b>${n(v)}</b><span>${t}</span></button>`).join("")}<button type="button" class="hnum wide" data-hn="about"><b>${n(srcCount())}</b><span>scientific and official sources behind the guide</span></button></div>
      <button type="button" class="hold" id="hOld">From the herbs of <b>Neanderthals 49,000 years ago</b> to today's research: the journey of herbal healing in one guide, in three languages ←</button>
      <p class="hidx"><a href="${GUIDE}herb/">Herbs A–Z</a> · <a href="${GUIDE}recipe/">Blend guide</a></p>
    </section>
@@ -5477,6 +5479,13 @@ const SUN=[
  ["weak","«There is no pomegranate without a seed from Paradise in it»","Not authentically attributed to the Prophet ﷺ",-1,""],
  ["weak","«Watermelon before food washes the stomach and uproots disease»","Fabricated",-1,""]
 ];
+function srcCount(){
+  if(srcCount.n) return srcCount.n;
+  const t=[...document.scripts].map(x=>x.textContent).join(" ");
+  const u=new Set((t.match(/https?:\/\/[^"'`\s<>)\]]+/g)||[]).map(x=>x.replace(/[.,;]+$/,"")).filter(x=>!/maryamherbs|goatcounter|gc\.zgo|workers\.dev|whatsapp|wa\.me|instagram|fonts\.|w3\.org|ask\.test|wikimedia|\$\{/.test(x)));
+  Object.values(NCCIH).forEach(v=>u.add("nccih:"+v));
+  return srcCount.n=u.size;
+}
 function renderSunna(){
   const el=$("#sunna");
   const grp={all:null,good:[4,3,2],mid:[1],weak:[0,-1]};
@@ -6663,7 +6672,7 @@ function renderAbout(){ setTimeout(renderFeedback,0);
   <section class="dedic-box"><h2>Dedication</h2><p>This guide is an ongoing charity for the soul of my mother <b>Maryam</b> , may God have mercy on her; I have named it after her.</p>
    <p class="dua">O God, forgive her and have mercy on her, grant her well-being and pardon her, make her resting place honourable and her entrance wide, wash her with water, snow and hail, cleanse her of sins as a white garment is cleansed of dirt, make her grave one of the gardens of Paradise, and place this work in the scale of her good deeds.</p>
    <p class="hint">The Prophet ﷺ said: “When a person dies, their deeds come to an end except for three: an ongoing charity, knowledge that benefits others, or a righteous child who prays for them” (Muslim).</p></section>
-  <section><h2>What is in this guide</h2><div class="stats"><div><b>${n(HERBS.length)}</b><span>herbs</span></div><div><b>${n(RECIPES.length)}</b><span>blend</span></div><div><b>${n(Object.keys(ORIG).length)}</b><span>traditions</span></div><div><b>${n(PROBS.length)}</b><span>health problems</span></div><div><b>${n(PAGEKW_T.length)}</b><span>in-depth sections</span></div><div><b>${n(HERBS.reduce((a,h)=>a+(h.warn||[]).length,0))}</b><span>safety warnings</span></div><div><b>${n(HERBS.reduce((a,h)=>a+(h.inter||[]).length,0))}</b><span>drug interactions</span></div><div><b>3</b><span>languages</span></div></div><p class="hint">The oldest information in the guide is about 49,000 years old: herbs in the teeth of a Neanderthal.</p></section>
+  <section><h2>What is in this guide</h2><div class="stats"><div><b>${n(HERBS.length)}</b><span>herbs</span></div><div><b>${n(RECIPES.length)}</b><span>blend</span></div><div><b>${n(Object.keys(ORIG).length)}</b><span>traditions</span></div><div><b>${n(PROBS.length)}</b><span>health problems</span></div><div><b>${n(PAGEKW_T.length)}</b><span>in-depth sections</span></div><div><b>${n(HERBS.reduce((a,h)=>a+(h.warn||[]).length,0))}</b><span>safety warnings</span></div><div><b>${n(HERBS.reduce((a,h)=>a+(h.inter||[]).length,0))}</b><span>drug interactions</span></div><div><b>${n(srcCount())}</b><span>scientific and official sources</span></div><div><b>3</b><span>languages</span></div></div><p class="hint">The oldest information in the guide is about 49,000 years old: herbs in the teeth of a Neanderthal.</p></section>
   <section><h2>How it was made</h2><ul>
    <li>The herbs were chosen because they are common in Arab homes and markets, and then the best-known herbs of other traditions were added.</li>
    <li>The content was prepared with the help of artificial intelligence (Claude, by Anthropic), then checked against scientific and official sources listed under each herb, including the Egyptian Drug Authority, the European Medicines Agency and the US National Institutes of Health. If you find a mistake, tell us with the button under each herb and blend, and we will correct it.</li>
