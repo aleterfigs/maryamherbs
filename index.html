@@ -560,6 +560,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
       <button class="tab" id="tabSch" aria-selected="false">أعلام الطب والأعشاب</button>
       <button class="tab" id="tabGut" aria-selected="false">القولون والانتفاخ</button>
       <button class="tab" id="tabDent" aria-selected="false">الفم والأسنان</button>
+      <button class="tab" id="tabSunna" aria-selected="false">الغذاء في السنّة</button>
       <button class="tab" id="tabKer" aria-selected="false">طب كيرلا</button>
       <button class="tab" id="tabAfr" aria-selected="false">طب أفريقيا</button>
       <button class="tab" id="tabSkin" aria-selected="false">الجلد في التراث</button>
@@ -601,6 +602,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
   <div class="page" id="sch" hidden></div>
   <div class="page" id="gut" hidden></div>
   <div class="page" id="dent" hidden></div>
+  <div class="page" id="sunna" hidden></div>
   <div class="page" id="ker" hidden></div>
   <div class="page" id="afr" hidden></div>
   <div class="page" id="skin" hidden></div>
@@ -3825,7 +3827,7 @@ function renderRecipes(){
   }
   el.append(oc);
   if(state.origin==="nabawi"){ const n=document.createElement("div"); n.className="refq"; n.style.gridColumn="1/-1";
-    n.innerHTML="الأحاديث المذكورة ثابتة بمصادرها، واختلف العلماء في فهم بعضها: هل هو توجيه طبي عام أم لحال معيّنة. والتداوي بها لا يعني ترك الطبيب، فقد قال ﷺ: «تداووا عباد الله، فإن الله لم يضع داءً إلا وضع له دواء» (رواه أبو داود والترمذي وصحّحه)."; el.append(n); }
+    n.innerHTML="الأحاديث المذكورة ثابتة بمصادرها، واختلف العلماء في فهم بعضها: هل هو توجيه طبي عام أم لحال معيّنة. والتداوي بها لا يعني ترك الطبيب، فقد قال ﷺ: «تداووا عباد الله، فإن الله لم يضع داءً إلا وضع له دواء» (رواه أبو داود والترمذي وصحّحه). <button type=\"button\" class=\"wlink\" data-gosunna=\"1\">افتح صفحة «الغذاء في السنّة النبوية» ←</button>"; el.append(n); }
   if(state.origin==="andalus"){ const n=document.createElement("div"); n.className="refq"; n.style.gridColumn="1/-1";
     n.innerHTML="ازدهر الطب في الأندلس بين القرنين العاشر والخامس عشر الميلاديين: الزهراوي في قرطبة صاحب «التصريف لمن عجز عن التأليف»، وابن زهر في إشبيلية صاحب «التيسير في المداواة والتدبير» و«كتاب الأغذية»، وابن البيطار من مالقة صاحب «الجامع لمفردات الأدوية والأغذية» الذي جمع أكثر من 1400 مفردة، وابن رشد صاحب «الكليات»، وابن ميمون القرطبي صاحب «مقالة في الربو». الوصفات هنا مستوحاة من الأشربة والأغذية التي تذكرها كتبهم وكتب الطبخ الأندلسية مثل «فضالة الخوان» لابن رزين التجيبي، ومقاديرها مكيّفة للمطبخ الحديث."; el.append(n); }
   if(state.origin==="india"){ const n=document.createElement("div"); n.className="refq"; n.style.gridColumn="1/-1";
@@ -3859,16 +3861,17 @@ function renderRecipes(){
 function setView(v){
   ttsStop();
   state.view=v;
-  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabEye","eye"],["tabSch","sch"],["tabGut","gut"],["tabDent","dent"],["tabKer","ker"],["tabAfr","afr"],["tabSkin","skin"],["tabUae","uae"],["tabSafety","safety"],["tabGloss","gloss"],["tabFaq","faq"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
+  [["tabHome","home"],["tabWiz","wizard"],["tabHerbs","herbs"],["tabRecipes","recipes"],["tabMom","mom"],["tabWomen","women"],["tabKit","kit"],["tabOrganic","organic"],["tabAid","aid"],["tabNutri","nutri"],["tabFolk","folk"],["tabMind","mind"],["tabEye","eye"],["tabSch","sch"],["tabGut","gut"],["tabDent","dent"],["tabSunna","sunna"],["tabKer","ker"],["tabAfr","afr"],["tabSkin","skin"],["tabUae","uae"],["tabSafety","safety"],["tabGloss","gloss"],["tabFaq","faq"],["tabAbout","about"]].forEach(([id,val])=>$("#"+id).setAttribute("aria-selected",String(v===val)));
   $("#grid").hidden=v!=="herbs"; $("#chips").hidden=v!=="herbs"; $("#favBtn").hidden=v!=="herbs";
   $("#recipes").hidden=v!=="recipes"; $("#wizard").hidden=v!=="wizard";
-  ["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","gut","dent","ker","afr","skin","uae","safety","gloss","faq","about"].forEach(p=>$("#"+p).hidden=v!==p);
-  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","eye","sch","gut","dent","ker","afr","skin","uae","aid","nutri","safety","gloss","faq","about"].includes(v);
+  ["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","gut","dent","sunna","ker","afr","skin","uae","safety","gloss","faq","about"].forEach(p=>$("#"+p).hidden=v!==p);
+  const pageView=["home","mom","women","wizard","kit","organic","folk","mind","eye","sch","gut","dent","sunna","ker","afr","skin","uae","aid","nutri","safety","gloss","faq","about"].includes(v);
   document.querySelector(".controls").hidden=pageView; $("#aud").hidden=pageView;
   if(GC_V[v]) gcEv(GC_X.sec+": "+GC_V[v]);
   render();
 }
 const PAGEKW_K={
+ sunna:["الطب النبوي","طب نبوي","نبوي","النبويه","النبوية","السنه","السنة","سنة نبوية","سنه نبويه","طعام النبي","طعام الرسول","اكل النبي","اكل الرسول","اكل الرسول","هدي النبي","هدي الرسول","حديث صحيح","حديث ضعيف","احاديث","حديث موضوع","الدباء","الثريد","التلبينه","التلبينة"], /*HGRX*/
  dent:["اسنان","أسنان","الاسنان","الأسنان","ضرس","الضرس","اضراس","أضراس","لثه","لثة","اللثه","اللثة","تسوس","سواك","مسواك","الفم","تقرح","تقرحات","قرحه","قلاع","رائحه الفم","رائحة الفم","تسنين","خراج","طبيب اسنان"], /*HGRX*/
  gut:["قولون","انتفاخ","نفخة","نفخه","غازات","امساك","هضم","بطن","مغص","فودماب","سيلياك","لاكتوز","عسر هضم"], /*HGRX*/
  afr:["افريقيا","افريقي","افريقية","ملاريا","ايبوغا","اومكالوابو","مخلب الشيطان","بيجيوم","شيا"], /*HGRX*/
@@ -3890,6 +3893,7 @@ const PAGEKW_T=[
  ["ker","طب كيرلا (الأيورفيدا)"],
  ["afr","طب أفريقيا التقليدي"],
  ["dent","الفم والأسنان"],
+ ["sunna","الغذاء في السنّة النبوية"],
  ["skin","الجلد في التراث"],
  ["uae","نباتات الإمارات والخليج"],
  ["women","صحة المرأة"],
@@ -3904,6 +3908,7 @@ const PAGEKW_T=[
 ];
 const latn=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").normalize("NFC");
 const PAGEKW_X={
+ sunna:["prophet","prophetic","prophetic medicine","sunnah","sunna","hadith","prophet muhammad","prophet's food","talbina","tharid","prophete","prophetique","medecine prophetique","hadiths"],
  dent:["teeth","tooth","toothache","dental","dentist","gum","gums","bleeding gums","gingivitis","mouth ulcer","canker sore","bad breath","halitosis","miswak","siwak","cavity","caries","teething","mouthwash","dents","dent","dentaire","dentiste","gencive","gencives","carie","aphte","aphtes","mauvaise haleine","poussee dentaire","bain de bouche"],
  gut:["colon","ibs","irritable bowel","bloat","bloating","gas","flatulence","constipation","digestion","indigestion","stomach","belly","cramp","fodmap","coeliac","celiac","lactose","côlon","ballonnement","ballonnements","constipation","digestion","ventre","intestin","lactose","maladie coeliaque"],
  afr:["africa","african","malaria","iboga","pelargonium","umckaloabo","devil's claw","devils claw","pygeum","shea","afrique","africain","africaine","paludisme","griffe du diable","karite"],
@@ -3932,11 +3937,11 @@ function updRel(){
   const hits=pageHits(q);
   el.hidden=!hits.length; if(!hits.length){ el.innerHTML=""; return; }
   el.innerHTML=`<span>صفحات قد تفيدك:</span> ${hits.map(([v,t])=>`<button type="button" class="chip" data-relgo="${v}">${t} ←</button>`).join(" ")}`;
-  el.querySelectorAll("[data-relgo]").forEach(b=>b.onclick=()=>{ const v=b.dataset.relgo; if(v==="gut") gst.v=null; if(v==="dent") dst.v=null; if(v==="ker") kerst.v=null; if(v==="afr") afst.v=null; if(v==="skin") kst.v=null; setView(v); scrollTo({top:0}); });
+  el.querySelectorAll("[data-relgo]").forEach(b=>b.onclick=()=>{ const v=b.dataset.relgo; if(v==="gut") gst.v=null; if(v==="dent") dst.v=null; if(v==="sunna") sunst.v=null; if(v==="ker") kerst.v=null; if(v==="afr") afst.v=null; if(v==="skin") kst.v=null; setView(v); scrollTo({top:0}); });
 }
 function render(){
   renderAud(); updRel();
-  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","gut","dent","ker","afr","skin","uae","safety","gloss","faq","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,eye:renderEye,sch:renderSch,gut:renderGut,dent:renderDent,ker:renderKer,afr:renderAfr,skin:renderSkin,uae:renderUae,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,faq:renderFaq,about:renderAbout})[state.view](); return; }
+  if(["home","mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","gut","dent","sunna","ker","afr","skin","uae","safety","gloss","faq","about"].includes(state.view)){ $("#kidsNotice").hidden=true; ({home:renderHome,mom:renderMom,women:renderWomen,kit:renderKit,organic:renderOrganic,folk:renderFolk,mind:renderMind,eye:renderEye,sch:renderSch,gut:renderGut,dent:renderDent,sunna:renderSunna,ker:renderKer,afr:renderAfr,skin:renderSkin,uae:renderUae,aid:renderAid,nutri:renderNutri,safety:renderSafety,gloss:renderGloss,faq:renderFaq,about:renderAbout})[state.view](); return; }
   if(state.view==="wizard"){ $("#kidsNotice").hidden=true; renderWizard(); return; }
   if(state.view==="recipes"){ renderRecipes(); return; }
   renderChips();
@@ -4389,7 +4394,7 @@ function renderWRes(){
 /* إحصاءات مجهولة الهوية في GoatCounter: الجنس والعمر والمشكلة فقط (النصوص بترميز \u لتبقى عربية في كل اللغات) */
 const GC_AR={"p:ibs":"\u0627\u0644\u0642\u0648\u0644\u0648\u0646 \u0627\u0644\u0639\u0635\u0628\u064a","p:digest":"\u0627\u0644\u0647\u0636\u0645 \u0648\u0627\u0644\u0627\u0646\u062a\u0641\u0627\u062e","p:sleep":"\u0627\u0644\u0646\u0648\u0645 \u0648\u0627\u0644\u062a\u0648\u062a\u0631","p:cold":"\u0627\u0644\u0633\u0639\u0627\u0644 \u0648\u0627\u0644\u0632\u0643\u0627\u0645","p:throat":"\u0627\u0644\u062a\u0647\u0627\u0628 \u0627\u0644\u062d\u0644\u0642","p:nausea":"\u0627\u0644\u063a\u062b\u064a\u0627\u0646 \u0648\u062f\u0648\u0627\u0631 \u0627\u0644\u0633\u0641\u0631","p:skin":"\u0627\u0644\u062c\u0644\u062f \u0648\u0627\u0644\u062d\u0631\u0648\u0642","p:mouth":"\u0631\u0627\u0626\u062d\u0629 \u0627\u0644\u0641\u0645 \u0648\u0627\u0644\u0644\u062b\u0629","p:fatigue":"\u0627\u0644\u062a\u0639\u0628 \u0648\u0627\u0644\u0646\u0642\u0627\u0647\u0629","p:diarrhea":"\u0627\u0644\u0625\u0633\u0647\u0627\u0644","p:allergy":"\u0627\u0644\u062d\u0633\u0627\u0633\u064a\u0629 \u0627\u0644\u0645\u0648\u0633\u0645\u064a\u0629","p:urinary":"\u0627\u0644\u0645\u0633\u0627\u0644\u0643 \u0627\u0644\u0628\u0648\u0644\u064a\u0629","p:chol":"\u0627\u0644\u0643\u0648\u0644\u064a\u0633\u062a\u0631\u0648\u0644","p:hemo":"\u0627\u0644\u0628\u0648\u0627\u0633\u064a\u0631","p:focus":"\u0627\u0644\u062a\u0631\u0643\u064a\u0632 \u0648\u0627\u0644\u0630\u0627\u0643\u0631\u0629","p:lactation":"\u0627\u0644\u0625\u0631\u0636\u0627\u0639","p:labor":"\u0627\u0644\u0623\u0633\u0627\u0628\u064a\u0639 \u0627\u0644\u0623\u062e\u064a\u0631\u0629 \u0645\u0646 \u0627\u0644\u062d\u0645\u0644","p:postpartum":"\u0627\u0644\u0646\u0641\u0627\u0633 \u0648\u0627\u0644\u062a\u0639\u0627\u0641\u064a \u0628\u0639\u062f \u0627\u0644\u0648\u0644\u0627\u062f\u0629","p:heart":"\u0635\u062d\u0629 \u0627\u0644\u0642\u0644\u0628","p:liver":"\u0627\u0644\u0643\u0628\u062f \u0627\u0644\u062f\u0647\u0646\u064a","p:gout":"\u0627\u0644\u0646\u0642\u0631\u0633","p:resp":"\u0627\u0644\u0631\u0628\u0648 \u0648\u0623\u0645\u0631\u0627\u0636 \u0627\u0644\u062a\u0646\u0641\u0651\u0633","p:thyroid":"\u0627\u0644\u063a\u062f\u0629 \u0627\u0644\u062f\u0631\u0642\u064a\u0629","p:stones":"\u062d\u0635\u0649 \u0627\u0644\u0643\u0644\u0649 \u0648\u0627\u0644\u0648\u0642\u0627\u064a\u0629 \u0645\u0646\u0647\u0627","p:kidney":"\u0635\u062d\u0629 \u0627\u0644\u0643\u0644\u0649 \u0648\u0645\u0631\u0636\u0649 \u0627\u0644\u0643\u0644\u0649","p:immune":"\u062a\u0642\u0648\u064a\u0629 \u0627\u0644\u0645\u0646\u0627\u0639\u0629","p:antibiotic":"\u0628\u0639\u062f \u0627\u0644\u0645\u0636\u0627\u062f\u0627\u062a \u0627\u0644\u062d\u064a\u0648\u064a\u0629","p:chemo":"\u062f\u0639\u0645 \u0645\u0631\u064a\u0636 \u0627\u0644\u0633\u0631\u0637\u0627\u0646 \u0623\u062b\u0646\u0627\u0621 \u0627\u0644\u0639\u0644\u0627\u062c","p:wloss":"\u0625\u0646\u0642\u0627\u0635 \u0627\u0644\u0648\u0632\u0646","p:wgain":"\u0632\u064a\u0627\u062f\u0629 \u0627\u0644\u0648\u0632\u0646","p:libido":"\u0627\u0644\u0631\u063a\u0628\u0629 \u0648\u0627\u0644\u0636\u0639\u0641 \u0627\u0644\u062c\u0646\u0633\u064a","p:heavy":"\u063a\u0632\u0627\u0631\u0629 \u0627\u0644\u062f\u0648\u0631\u0629","p:irregular":"\u0639\u062f\u0645 \u0627\u0646\u062a\u0638\u0627\u0645 \u0627\u0644\u062f\u0648\u0631\u0629","p:pms":"\u0623\u0639\u0631\u0627\u0636 \u0645\u0627 \u0642\u0628\u0644 \u0627\u0644\u062f\u0648\u0631\u0629","p:constip":"\u0627\u0644\u0625\u0645\u0633\u0627\u0643","p:headache":"\u0627\u0644\u0635\u062f\u0627\u0639","p:pain":"\u0622\u0644\u0627\u0645 \u0627\u0644\u0645\u0641\u0627\u0635\u0644 \u0648\u0627\u0644\u0639\u0636\u0644\u0627\u062a","p:bp":"\u0636\u063a\u0637 \u0645\u0631\u062a\u0641\u0639 \u0642\u0644\u064a\u0644\u064b\u0627","p:sugar":"\u062f\u0639\u0645 \u0633\u0643\u0631 \u0627\u0644\u062f\u0645","p:hair":"\u0641\u0631\u0648\u0629 \u0627\u0644\u0631\u0623\u0633 \u0648\u0627\u0644\u0634\u0639\u0631","p:period":"\u0622\u0644\u0627\u0645 \u0627\u0644\u062f\u0648\u0631\u0629 \u0627\u0644\u0634\u0647\u0631\u064a\u0629","p:meno":"\u0627\u0644\u0647\u0628\u0651\u0627\u062a \u0627\u0644\u0633\u0627\u062e\u0646\u0629","p:prostate":"\u0627\u0644\u0628\u0631\u0648\u0633\u062a\u0627\u062a\u0627","g:f":"\u0623\u0646\u062b\u0649","g:m":"\u0630\u0643\u0631","b:0":"\u0623\u0642\u0644 \u0645\u0646 \u0633\u0646\u0629","b:1":"1\u20133 \u0633\u0646\u0648\u0627\u062a","b:4":"4\u20135 \u0633\u0646\u0648\u0627\u062a","b:6":"6\u201311 \u0633\u0646\u0629","b:12":"12\u201317 \u0633\u0646\u0629","b:18":"18\u201339 \u0633\u0646\u0629","b:40":"40\u201359 \u0633\u0646\u0629","b:60":"60 \u0633\u0646\u0629 \u0641\u0623\u0643\u062b\u0631","x:visitor":"\u0632\u0627\u0626\u0631","x:prob":"\u0645\u0631\u0636","x:detail":"\u062a\u0641\u0635\u064a\u0644","x:lang":"\u0644\u063a\u0629 \u0627\u0644\u0635\u0641\u062d\u0629"};
 /* أحداث مجهولة الهوية: الأقسام والأعشاب المفتوحة والمشاركة (مرة واحدة لكل زيارة) */
-const GC_V={"wizard": "\u0627\u0644\u0628\u062d\u062b \u0628\u0627\u0644\u0645\u0631\u0636", "herbs": "\u0627\u0644\u0623\u0639\u0634\u0627\u0628", "recipes": "\u0627\u0644\u0648\u0635\u0641\u0627\u062a", "mom": "\u0648\u0635\u0641\u0627\u062a \u0623\u0645\u064a", "women": "\u0635\u062d\u0629 \u0627\u0644\u0645\u0631\u0623\u0629", "kit": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u0628\u064a\u062a", "organic": "\u0627\u0644\u0632\u0631\u0627\u0639\u0629 \u0627\u0644\u0639\u0636\u0648\u064a\u0629", "aid": "\u0627\u0644\u0625\u0633\u0639\u0627\u0641\u0627\u062a", "nutri": "\u0627\u0644\u063a\u0630\u0627\u0621 \u0648\u0627\u0644\u0641\u064a\u062a\u0627\u0645\u064a\u0646\u0627\u062a", "folk": "\u0639\u0627\u062f\u0627\u062a \u0634\u0639\u0628\u064a\u0629", "mind": "\u0627\u0644\u0646\u0641\u0633 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "eye": "\u0627\u0644\u0639\u064a\u0646 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "safety": "\u0627\u0644\u0633\u0644\u0627\u0645\u0629", "gloss": "\u0627\u0644\u0645\u0635\u0637\u0644\u062d\u0627\u062a", "about": "\u0639\u0646 \u0627\u0644\u0645\u0648\u0642\u0639", "sch": "\u0623\u0639\u0644\u0627\u0645 \u0627\u0644\u0637\u0628 \u0648\u0627\u0644\u0623\u0639\u0634\u0627\u0628", "afr": "\u0637\u0628 \u0623\u0641\u0631\u064a\u0642\u064a\u0627", "ker": "\u0637\u0628 \u0643\u064a\u0631\u0644\u0627", "gut": "\u0627\u0644\u0642\u0648\u0644\u0648\u0646 \u0648\u0627\u0644\u0627\u0646\u062a\u0641\u0627\u062e", "dent": "\u0627\u0644\u0641\u0645 \u0648\u0627\u0644\u0623\u0633\u0646\u0627\u0646", "skin": "\u0627\u0644\u062c\u0644\u062f \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "uae": "\u0646\u0628\u0627\u062a\u0627\u062a \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062a \u0648\u0627\u0644\u062e\u0644\u064a\u062c", "faq": "\u0623\u0633\u0626\u0644\u0629 \u0634\u0627\u0626\u0639\u0629"}, GC_X={"sec": "\u0642\u0633\u0645", "herb": "\u0639\u0634\u0628\u0629", "share": "\u0645\u0634\u0627\u0631\u0643\u0629", "site": "\u0627\u0644\u0645\u0648\u0642\u0639", "recipe": "\u0648\u0635\u0641\u0629", "copy": "\u0646\u0633\u062e"};
+const GC_V={"wizard": "\u0627\u0644\u0628\u062d\u062b \u0628\u0627\u0644\u0645\u0631\u0636", "herbs": "\u0627\u0644\u0623\u0639\u0634\u0627\u0628", "recipes": "\u0627\u0644\u0648\u0635\u0641\u0627\u062a", "mom": "\u0648\u0635\u0641\u0627\u062a \u0623\u0645\u064a", "women": "\u0635\u062d\u0629 \u0627\u0644\u0645\u0631\u0623\u0629", "kit": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u0628\u064a\u062a", "organic": "\u0627\u0644\u0632\u0631\u0627\u0639\u0629 \u0627\u0644\u0639\u0636\u0648\u064a\u0629", "aid": "\u0627\u0644\u0625\u0633\u0639\u0627\u0641\u0627\u062a", "nutri": "\u0627\u0644\u063a\u0630\u0627\u0621 \u0648\u0627\u0644\u0641\u064a\u062a\u0627\u0645\u064a\u0646\u0627\u062a", "folk": "\u0639\u0627\u062f\u0627\u062a \u0634\u0639\u0628\u064a\u0629", "mind": "\u0627\u0644\u0646\u0641\u0633 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "eye": "\u0627\u0644\u0639\u064a\u0646 \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "safety": "\u0627\u0644\u0633\u0644\u0627\u0645\u0629", "gloss": "\u0627\u0644\u0645\u0635\u0637\u0644\u062d\u0627\u062a", "about": "\u0639\u0646 \u0627\u0644\u0645\u0648\u0642\u0639", "sch": "\u0623\u0639\u0644\u0627\u0645 \u0627\u0644\u0637\u0628 \u0648\u0627\u0644\u0623\u0639\u0634\u0627\u0628", "afr": "\u0637\u0628 \u0623\u0641\u0631\u064a\u0642\u064a\u0627", "ker": "\u0637\u0628 \u0643\u064a\u0631\u0644\u0627", "gut": "\u0627\u0644\u0642\u0648\u0644\u0648\u0646 \u0648\u0627\u0644\u0627\u0646\u062a\u0641\u0627\u062e", "dent": "\u0627\u0644\u0641\u0645 \u0648\u0627\u0644\u0623\u0633\u0646\u0627\u0646", "sunna": "\u0627\u0644\u063a\u0630\u0627\u0621 \u0641\u064a \u0627\u0644\u0633\u0646\u0651\u0629", "skin": "\u0627\u0644\u062c\u0644\u062f \u0641\u064a \u0627\u0644\u062a\u0631\u0627\u062b", "uae": "\u0646\u0628\u0627\u062a\u0627\u062a \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062a \u0648\u0627\u0644\u062e\u0644\u064a\u062c", "faq": "\u0623\u0633\u0626\u0644\u0629 \u0634\u0627\u0626\u0639\u0629"}, GC_X={"sec": "\u0642\u0633\u0645", "herb": "\u0639\u0634\u0628\u0629", "share": "\u0645\u0634\u0627\u0631\u0643\u0629", "site": "\u0627\u0644\u0645\u0648\u0642\u0639", "recipe": "\u0648\u0635\u0641\u0629", "copy": "\u0646\u0633\u062e"};
 const gcSeen=new Set();
 function gcEv(path,title){ try{ const gc=window.goatcounter; if(!gc||typeof gc.count!=="function"||gcSeen.has(path)) return; gcSeen.add(path); gc.count({path:path.slice(0,250),title:(title||path).slice(0,250),event:true}); }catch(e){} }
 let wSentProf="";
@@ -4632,7 +4637,7 @@ function renderHome(){
      <p class="hidx"><a href="${GUIDE}herb/">دليل الأعشاب من أ إلى ي</a> · <a href="${GUIDE}recipe/">دليل الخلطات</a></p>
    </section>
    <div class="tiles">${TILES.map(([k,t,d],i)=>`<button type="button" class="tile${i===0?" tile-main":""}" data-go="${k}"><span class="ticon">${tileIcon(k)}</span><span class="ttext"><b>${t}</b><small>${d}</small></span></button>`).join("")}</div>
-   <section class="feat"><h3>أبواب موسّعة</h3><div class="featrow"><button type="button" class="featcard" data-godent="1">${herbIcon(byId.miswak)}<span><b>الفم والأسنان</b><small>ألم الضرس واللثة والتقرحات ورائحة الفم، والسواك، وأسنان الأطفال، وخرافات تضر</small></span></button><button type="button" class="featcard" data-goafr="1">${herbIcon(byId.baobab)}<span><b>طب أفريقيا التقليدي</b><small>ما يصح وما يضر من أشهر علاجاته، وأعشاب أفريقية في بيوتنا</small></span></button><button type="button" class="featcard" data-goker="1">${herbIcon(byId.turmeric)}<span><b>طب كيرلا (الأيورفيدا)</b><small>تاريخه، وما يصح وما يضر من علاجاته، ووصفات من بيوت كيرلا</small></span></button><button type="button" class="featcard" data-gogut="1">${herbIcon(byId.mint)}<span><b>القولون والانتفاخ</b><small>ما ينفع وما يضر، وأطعمة تثير الانتفاخ وبدائلها، ومتى تذهب إلى الطبيب</small></span></button>${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>دليل كامل: الأنواع والسنّة والعلم والسلامة</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>باب المرأة</b><small>الدورة والحمل والنفاس، والبشرة والشعر، وتحذيرات التجميل</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>من البحر</b><small>زيت السمك والماء المالح والطحالب والعنبر: ما ينفع وما يُحذر</small></span></button><button type="button" class="featcard" data-organic="1">${herbIcon(byId.moringa)}<span><b>الزراعة العضوية</b><small>تحسين التربة، والكمبوست، ومكافحة طبيعية للآفات، وتقويم زراعي للبلاد العربية</small></span></button><button type="button" class="featcard" data-land="1">${herbIcon(byId.egg)}<span><b>من الحيوان</b><small>البيض والدواجن واللحوم والكبدة والسمن وحليب البقر والإبل: ما ينفع وما يُحذر</small></span></button><button type="button" class="featcard" data-folk="1">${herbIcon(byId.harmal)}<span><b>عادات شعبية: ما يصح وما يضر</b><small>تمليح المولود، والكحل، والتبخير، والتحنيك، والكيّ، والمجبّر، وعادات الأربعين</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>ازرع صيدليتك</b><small>أعشاب سهلة الزراعة في الخليج، ومتى وكيف تُزرع</small></span></button></div></section>
+   <section class="feat"><h3>أبواب موسّعة</h3><div class="featrow"><button type="button" class="featcard" data-gosunna="1">${herbIcon(byId.dates)}<span><b>الغذاء في السنّة النبوية</b><small>آداب الأكل والشرب، وما كان يحبه ﷺ من الطعام، مع درجة كل حديث، وأحاديث مشهورة لا تصح</small></span></button><button type="button" class="featcard" data-godent="1">${herbIcon(byId.miswak)}<span><b>الفم والأسنان</b><small>ألم الضرس واللثة والتقرحات ورائحة الفم، والسواك، وأسنان الأطفال، وخرافات تضر</small></span></button><button type="button" class="featcard" data-goafr="1">${herbIcon(byId.baobab)}<span><b>طب أفريقيا التقليدي</b><small>ما يصح وما يضر من أشهر علاجاته، وأعشاب أفريقية في بيوتنا</small></span></button><button type="button" class="featcard" data-goker="1">${herbIcon(byId.turmeric)}<span><b>طب كيرلا (الأيورفيدا)</b><small>تاريخه، وما يصح وما يضر من علاجاته، ووصفات من بيوت كيرلا</small></span></button><button type="button" class="featcard" data-gogut="1">${herbIcon(byId.mint)}<span><b>القولون والانتفاخ</b><small>ما ينفع وما يضر، وأطعمة تثير الانتفاخ وبدائلها، ومتى تذهب إلى الطبيب</small></span></button>${feat.map(h=>`<button type="button" class="featcard" data-h="${h.id}">${herbIcon(h)}<span><b>${h.ar.split(" (")[0]}</b><small>دليل كامل: الأنواع والسنّة والعلم والسلامة</small></span></button>`).join("")}<button type="button" class="featcard" data-women="1">${herbIcon(byId.rose)}<span><b>باب المرأة</b><small>الدورة والحمل والنفاس، والبشرة والشعر، وتحذيرات التجميل</small></span></button><button type="button" class="featcard" data-sea="1">${herbIcon(byId.seasalt)}<span><b>من البحر</b><small>زيت السمك والماء المالح والطحالب والعنبر: ما ينفع وما يُحذر</small></span></button><button type="button" class="featcard" data-organic="1">${herbIcon(byId.moringa)}<span><b>الزراعة العضوية</b><small>تحسين التربة، والكمبوست، ومكافحة طبيعية للآفات، وتقويم زراعي للبلاد العربية</small></span></button><button type="button" class="featcard" data-land="1">${herbIcon(byId.egg)}<span><b>من الحيوان</b><small>البيض والدواجن واللحوم والكبدة والسمن وحليب البقر والإبل: ما ينفع وما يُحذر</small></span></button><button type="button" class="featcard" data-folk="1">${herbIcon(byId.harmal)}<span><b>عادات شعبية: ما يصح وما يضر</b><small>تمليح المولود، والكحل، والتبخير، والتحنيك، والكيّ، والمجبّر، وعادات الأربعين</small></span></button><button type="button" class="featcard" data-grow="1">${herbIcon(byId.mint)}<span><b>ازرع صيدليتك</b><small>أعشاب سهلة الزراعة في الخليج، ومتى وكيف تُزرع</small></span></button></div></section>
    <section class="quick"><h3>في الحالات الطارئة</h3><div class="opts">${["snake","scorpion","dog","burn","heat","poison"].map(id=>{const a=AID.find(x=>x.id===id);return `<button type="button" class="chip urgent" data-aidgo="${id}"><span class="dot ${SEV[a.sev][1]}"></span>${a.n}</button>`;}).join("")}</div></section>`;
   $("#home").querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{ if(b.dataset.go==="wizard") Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:null,step:1}); setView(b.dataset.go); window.scrollTo({top:0}); });
   $("#home").querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
@@ -5362,6 +5367,115 @@ function renderGut(){
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
   el.querySelectorAll("[data-gv]").forEach(b=>b.onclick=()=>{ gst.v=b.dataset.gv||null; const y=scrollY; renderGut(); scrollTo({top:y}); });
   $("#gutWiz").onclick=()=>{ Object.assign(w,{pre:["ibs"],preQ:"",gFixed:false,prob:null,step:1}); setView("wizard"); scrollTo({top:0}); };
+}
+/* ---------- الغذاء في السنّة ---------- */
+const sunst={v:null};
+const SGR={4:["آية من القرآن","ok"],3:["صحيح","ok"],2:["حسن","ok"],1:["مختلف فيه","care"],0:["ضعيف","harm"],"-1":["لا يصح","harm"]};
+const SSEC=[["adab","آداب الأكل"],["drink","آداب الشرب"],["love","طعام كان يحبه ﷺ"],["life","بساطة معيشته"],["cure","أطعمة للتداوي في السنّة"],["fast","في الصيام والإفطار"],["weak","مشهورة ولا تصح"]];
+const SUN=[
+ ["adab","«يا غلام، سمِّ الله، وكُل بيمينك، وكُل مما يليك»","متفق عليه",3,"قاله لعمر بن أبي سلمة وهو صغير."],
+ ["adab","«إذا أكل أحدكم فليذكر اسم الله، فإن نسي أن يذكر اسم الله في أوله فليقل: بسم الله أوله وآخره»","رواه أبو داود والترمذي، وصححه الألباني",3,""],
+ ["adab","«ما عاب النبي ﷺ طعامًا قط، إن اشتهاه أكله، وإن كرهه تركه»","متفق عليه",3,""],
+ ["adab","«لا آكل متكئًا»","رواه البخاري",3,"وكان يجلس للطعام جلسة المتواضع."],
+ ["adab","كان ﷺ يأكل بثلاث أصابع، ويلعق يده قبل أن يمسحها","رواه مسلم",3,""],
+ ["adab","«إذا سقطت لقمة أحدكم فليُمِط عنها الأذى وليأكلها، ولا يدعها للشيطان»","رواه مسلم",3,"أصل في عدم إهدار الطعام."],
+ ["adab","«طعام الاثنين كافي الثلاثة، وطعام الثلاثة كافي الأربعة»","متفق عليه",3,""],
+ ["adab","«اجتمعوا على طعامكم، واذكروا اسم الله عليه، يُبارك لكم فيه»","رواه أبو داود وابن ماجه",1,"حسّنه بعض المحدّثين وضعّفه آخرون."],
+ ["adab","«ما ملأ آدمي وعاءً شرًا من بطن، بحسب ابن آدم أكلات يُقمن صلبه، فإن كان لا محالة فثلث لطعامه، وثلث لشرابه، وثلث لنفَسه»","رواه الترمذي وابن ماجه، وصححه الألباني",3,"أصل الاعتدال في الأكل."],
+ ["adab","«المؤمن يأكل في مِعًى واحد، والكافر يأكل في سبعة أمعاء»","متفق عليه",3,"فهمه العلماء حثًّا على القناعة وقلة الأكل."],
+ ["adab","«إن الله ليرضى عن العبد أن يأكل الأكلة فيحمده عليها، أو يشرب الشربة فيحمده عليها»","رواه مسلم",3,""],
+ ["adab","«من أكل طعامًا ثم قال: الحمد لله الذي أطعمني هذا ورزقنيه من غير حول مني ولا قوة، غُفر له ما تقدّم من ذنبه»","رواه أبو داود والترمذي وابن ماجه، وحسّنه الترمذي والألباني",2,""],
+ ["adab","«من بات وفي يده غَمَرٌ ولم يغسله فأصابه شيء فلا يلومنّ إلا نفسه»","رواه أبو داود والترمذي، وصححه الألباني",3,"الغَمَر: دسم اللحم ورائحته. وهو أصل في غسل اليد بعد الطعام."],
+ ["adab","«من أكل ثومًا أو بصلًا فليعتزلنا، أو ليعتزل مسجدنا»","متفق عليه",3,"ليس تحريمًا لهما، وقال عمر رضي الله عنه: فمن أكلهما فليُمِتهما طبخًا (رواه مسلم)."],
+ ["drink","«إذا شرب أحدكم فلا يتنفّس في الإناء»","رواه البخاري",3,""],
+ ["drink","نهى ﷺ أن يُتنفّس في الإناء أو يُنفخ فيه","رواه أبو داود والترمذي، وصححه الترمذي",3,""],
+ ["drink","كان ﷺ يتنفّس في الشراب ثلاثًا ويقول: «إنه أروى وأبرأ وأمرأ»","رواه مسلم",3,"أي يشرب على ثلاث دفعات، ويُبعد الإناء عن فمه بينها."],
+ ["drink","«لا يشربنّ أحد منكم قائمًا»","رواه مسلم",3,"وثبت أنه ﷺ شرب من زمزم قائمًا (متفق عليه)، فحمل أكثر العلماء النهي على الكراهة لا التحريم."],
+ ["drink","«غطّوا الإناء، وأوكوا السقاء»","رواه مسلم",3,"أي غطّوا آنية الطعام واربطوا قِرَب الماء، وفيه وقاية من الحشرات والتلوث."],
+ ["drink","«لا تشربوا في آنية الذهب والفضة، ولا تأكلوا في صحافها»","متفق عليه",3,""],
+ ["drink","«كان أحبّ الشراب إلى رسول الله ﷺ الحلو البارد»","رواه الترمذي، وصححه الألباني",3,""],
+ ["drink","كان يُنقع له الزبيب أو التمر في الماء فيشربه يومه والغد وبعد الغد، ثم يأمر به فيُصبّ قبل أن يتغيّر","رواه مسلم",3,"هذا هو «النبيذ» المباح: منقوع حلو غير مسكر. أما ما تخمّر وأسكر فحرام."],
+ ["love","كان ﷺ يتتبّع الدُّبّاء (القرع) من حوالي القصعة","متفق عليه",3,"قال أنس رضي الله عنه: فلم أزل أحب الدباء من يومئذ."],
+ ["love","«كان رسول الله ﷺ يحب الحلواء والعسل»","رواه البخاري",3,""],
+ ["love","كان يعجبه الذراع (لحم الكتف)","متفق عليه",3,""],
+ ["love","«فضل عائشة على النساء كفضل الثريد على سائر الطعام»","متفق عليه",3,"الثريد: خبز مفتوت في مرق اللحم، وكان من أحب طعام العرب."],
+ ["love","«نِعم الإدام الخل»","رواه مسلم",3,"قاله حين لم يجد في بيته إلا خبزًا وخلًا، ففيه الرضا بالقليل."],
+ ["love","كان ﷺ يأكل القثّاء (الخيار) بالرطب","متفق عليه",3,""],
+ ["love","كان يأكل البطيخ بالرطب ويقول: «نكسر حرّ هذا ببرد هذا، وبرد هذا بحرّ هذا»","رواه أبو داود والترمذي، وصححه الألباني",3,""],
+ ["love","قُدّم له زبد وتمر، وكان يحب الزبد والتمر","رواه أبو داود وابن ماجه، وصححه الألباني",3,""],
+ ["love","«كلوا الزيت وادّهنوا به، فإنه من شجرة مباركة»","رواه الترمذي وابن ماجه",2,"حسّنه بعض المحدّثين وصححه الألباني."],
+ ["love","كان إذا شرب لبنًا قال: «اللهم بارك لنا فيه وزدنا منه»","رواه أبو داود والترمذي، وحسّنه الترمذي",2,""],
+ ["love","رأيت رسول الله ﷺ يأكل دجاجًا","متفق عليه، عن أبي موسى رضي الله عنه",3,""],
+ ["love","قال ﷺ عن البحر: «هو الطهور ماؤه، الحِلّ ميتته»","رواه أبو داود والترمذي والنسائي، وصححه الترمذي",3,"وأكل ﷺ من حوت عظيم قذفه البحر للصحابة (متفق عليه)."],
+ ["life","قالت عائشة رضي الله عنها: كان يمرّ الهلال ثم الهلال ثم الهلال، ثلاثة أهلّة في شهرين، وما أوقدت في أبيات رسول الله ﷺ نار، وكان طعامهم الأسودين: التمر والماء","متفق عليه",3,""],
+ ["life","«ما شبع آل محمد ﷺ من خبز الشعير يومين متتابعين حتى قُبض»","رواه مسلم",3,""],
+ ["life","«ما أكل النبي ﷺ على خِوان، ولا في سُكُرُّجة، ولا خُبز له مرقّق»","رواه البخاري",3,"الخِوان: مائدة مرتفعة، والسُّكُرُّجة: صحون صغيرة للمقبلات، والمرقّق: الخبز الأبيض الرقيق."],
+ ["life","يوم الخندق كان ﷺ معصوب البطن بحجر من الجوع","رواه البخاري",3,""],
+ ["life","أُتي بضبّ مشوي فلم يأكله وقال: «لم يكن بأرض قومي فأجدني أعافه»، فأكله خالد بن الوليد وهو ينظر","متفق عليه",3,"دليل على أن ما تركه لذوقه ليس حرامًا."],
+ ["cure","﴿يَخْرُجُ مِن بُطُونِهَا شَرَابٌ مُّخْتَلِفٌ أَلْوَانُهُ فِيهِ شِفَاءٌ لِّلنَّاسِ﴾ [النحل: 69]","القرآن الكريم",4,""],
+ ["cure","جاء رجل فقال: أخي استطلق بطنه، فقال ﷺ: «اسقه عسلًا»، فسقاه حتى برئ","متفق عليه",3,""],
+ ["cure","«في الحبة السوداء شفاء من كل داء إلا السام»","متفق عليه",3,"والسام: الموت. وفهم أكثر العلماء أن فيها نفعًا لكثير من الأمراض، لا أنها تغني عن كل علاج."],
+ ["cure","«التلبينة مُجِمّة لفؤاد المريض، تذهب ببعض الحزن»","رواه البخاري",3,"التلبينة: حساء من دقيق الشعير بالحليب، والمُجِمّة: المريحة المنشّطة."],
+ ["cure","«من تصبّح كل يوم سبع تمرات عجوة لم يضرّه في ذلك اليوم سمّ ولا سحر»","متفق عليه",3,""],
+ ["cure","«الكمأة من المنّ، وماؤها شفاء للعين»","متفق عليه",3,"لا تقطّر في العين شيئًا غير معقّم، فقد يسبب التهابًا خطيرًا."],
+ ["cure","قال ﷺ عن زمزم: «إنها مباركة، إنها طعام طُعم»","رواه مسلم",3,""],
+ ["cure","«ماء زمزم لما شُرب له»","رواه أحمد وابن ماجه",1,"صححه بعض المحدّثين وضعّفه آخرون."],
+ ["cure","«شفاء عرق النسا ألية شاة أعرابية، تُذاب ثم تُجزّأ ثلاثة أجزاء، ثم يُشرب على الريق كل يوم جزء»","رواه ابن ماجه، وصححه الألباني",3,"الألية دهن خالص، فلا تناسب مرضى القلب والكوليسترول دون استشارة الطبيب."],
+ ["cure","«تداووا عباد الله، فإن الله لم يضع داءً إلا وضع له دواء، غير داء واحد: الهرم»","رواه أبو داود والترمذي وابن ماجه، وصححه الترمذي",3,"أصل في الأخذ بالطب وزيارة الطبيب."],
+ ["fast","«تسحّروا فإن في السحور بركة»","متفق عليه",3,""],
+ ["fast","كان ﷺ يفطر على رطبات قبل أن يصلي، فإن لم تكن فتمرات، فإن لم تكن حسا حسوات من ماء","رواه أبو داود والترمذي، وحسّنه الترمذي",2,""],
+ ["fast","«لا يزال الناس بخير ما عجّلوا الفطر»","متفق عليه",3,""],
+ ["fast","كان ﷺ يتحرّى صيام الاثنين والخميس","رواه الترمذي والنسائي، وصححه الألباني",3,""],
+ ["weak","«نحن قوم لا نأكل حتى نجوع، وإذا أكلنا لا نشبع»","لا أصل له في كتب الحديث",-1,"معناه قريب من حديث الثلث الصحيح، لكن هذا اللفظ ليس حديثًا."],
+ ["weak","«المعدة بيت الداء، والحمية رأس الدواء»","ليس حديثًا، ويُنسب إلى الحارث بن كلدة طبيب العرب",-1,""],
+ ["weak","«صوموا تصحّوا»","رواه الطبراني، وضعّفه العراقي والألباني",0,""],
+ ["weak","«بركة الطعام الوضوء قبله والوضوء بعده»","رواه أبو داود والترمذي، وضعّفه أبو داود",0,"وغسل اليدين قبل الأكل وبعده نظافة نافعة وإن ضعف الحديث."],
+ ["weak","«سيد إدامكم الملح»","رواه ابن ماجه، وضعّفه الألباني",0,""],
+ ["weak","«سيد طعام أهل الدنيا والآخرة اللحم»","رواه ابن ماجه، وضعّفه الألباني",0,""],
+ ["weak","«أكرموا الخبز»","ضعيف عند المحدّثين",0,""],
+ ["weak","«دونكها يا طلحة فإنها تُجِمّ الفؤاد» في السفرجل","رواه ابن ماجه، وضعّفه الألباني",0,""],
+ ["weak","«لو تعلم أمتي ما في الحلبة لاشترتها بوزنها ذهبًا»","لا أصل له",-1,""],
+ ["weak","«الباذنجان لما أُكل له»","موضوع",-1,""],
+ ["weak","«عليكم بالعدس فإنه قُدّس على لسان سبعين نبيًا»","موضوع",-1,""],
+ ["weak","«عليكم بالهندباء فإنه ما من يوم إلا ويقطر عليه قطرات من الجنة»","موضوع",-1,""],
+ ["weak","«ما من رمانة إلا وفيها حبة من الجنة»","لا يصح مرفوعًا إلى النبي ﷺ",-1,""],
+ ["weak","«البطيخ قبل الطعام يغسل البطن غسلًا، ويذهب بالداء أصلًا»","موضوع",-1,""]
+];
+function renderSunna(){
+  const el=$("#sunna");
+  const grp={all:null,good:[4,3,2],mid:[1],weak:[0,-1]};
+  const ok=g=>!sunst.v||grp[sunst.v].includes(g);
+  const cnt=k=>SUN.filter(r=>!grp[k]||grp[k].includes(r[3])).length;
+  el.innerHTML=`<h2 class="page-h">الغذاء في السنّة النبوية</h2>
+   <p class="sub">كيف كان ﷺ يأكل ويشرب، وما كان يحبه من الطعام، وما ورد في التداوي ببعض الأطعمة. وبجانب كل حديث مصدره ودرجته عند المحدّثين، وفي آخر الصفحة أحاديث مشهورة على الألسنة لا تصح.</p>
+   <div class="sgroups"><div class="opts">${[["all","الكل"],["good","صحيح وحسن"],["mid","مختلف فيه"],["weak","ضعيف ولا يصح"]].map(([k,t])=>`<button type="button" class="chip" data-sunv="${k==="all"?"":k}" aria-pressed="${(sunst.v||"all")===k}">${t} (${cnt(k)})</button>`).join("")}</div></div>
+   ${SSEC.map(([k,t])=>{ const rows=SUN.filter(r=>r[0]===k&&ok(r[3])); return rows.length?`<h3 class="oh4">${t}</h3><div class="aggrid">${rows.map(([,txt,src,g,note])=>`<article class="agcard"><p style="margin:0 0 6px;font-weight:600">${txt}</p><p class="agmeta" style="margin:0 0 4px">${src} <span class="sevtag ${FV[SGR[g][1]][1]}" style="font-size:.7rem">${SGR[g][0]}</span></p>${note?`<p style="margin:0">${note}</p>`:""}</article>`).join("")}</div>`:""; }).join("")}
+   <h3 class="oh4">العادة والتشريع</h3>
+   <div class="agcard"><p>يفرّق العلماء بين ما فعله ﷺ تشريعًا، وما فعله بحكم عادة قومه وبيئته. فحبّه للدباء والثريد، وتركه الضبّ لأنه لم يألفه، ذوقٌ لا يلزمنا. وقال ﷺ في تأبير النخل: «أنتم أعلم بأمر دنياكم» (رواه مسلم).</p><p style="margin:0">ورأى ابن خلدون في «المقدمة» أن الطب المنقول في الأحاديث كان من طب العرب في زمانهم، وأن الأخذ به على وجه التبرّك وصدق الإيمان نافع. وخالفه آخرون كابن القيم فرأوا فيه طبًا نبويًا. والمتفق عليه أن السنّة أمرت بالتداوي، وأن الصحيح من هذه الأطعمة نافع، وأنها لا تغني عن الطبيب.</p></div>
+   <h3 class="oh4">ماذا يقول العلم اليوم عن هذه العادات؟</h3>
+   <ul class="gutlist">
+    <li><b>الأكل ببطء والتوقف قبل الشبع:</b> يوافق ما نعرفه عن إشارات الشبع التي تصل إلى الدماغ متأخرة، ويقلّل زيادة الوزن.</li>
+    <li><b>التنفس خارج الإناء وترك النفخ فيه وتغطية الطعام:</b> قواعد نظافة تقلّل انتقال الجراثيم.</li>
+    <li><b>الإفطار على التمر والماء:</b> سكر سريع وسوائل بعد الصيام، ثم الصلاة، ثم الوجبة.</li>
+    <li><b>غسل اليد من الدسم قبل النوم:</b> نظافة، ويُبعد الحشرات.</li>
+    <li><b>بساطة الطعام:</b> خبز الشعير والتمر والخل والزيت والقرع والخيار طعام قليل المعالجة، قريب مما توصي به الإرشادات الغذائية الحديثة.</li>
+    <li><b>مع ذلك:</b> صحة الحديث في فضل طعام لا تعني أنه علاج لمرض بعينه، ومريض السكري والكلى يحسب التمر والعسل ضمن حصته.</li>
+   </ul>
+   <h3 class="oh4">كيف نعرف درجة الحديث؟</h3>
+   <div class="aggrid">
+    <article class="agcard"><h5>صحيح</h5><p>نقله رواة ثقات بسند متصل بلا علّة. و«متفق عليه» أعلاه: ما رواه البخاري ومسلم معًا.</p></article>
+    <article class="agcard"><h5>حسن</h5><p>كالصحيح، لكن في حفظ بعض رواته خفّة، ويُحتجّ به.</p></article>
+    <article class="agcard"><h5>مختلف فيه</h5><p>صححه بعض المحدّثين وضعّفه آخرون.</p></article>
+    <article class="agcard"><h5>ضعيف</h5><p>في سنده انقطاع أو راوٍ ضعيف، فلا يُنسب إلى النبي ﷺ جزمًا.</p></article>
+    <article class="agcard"><h5>موضوع أو لا أصل له</h5><p>مكذوب على النبي ﷺ، أو لا يوجد بسند في كتب الحديث، ولا يجوز نشره منسوبًا إليه.</p></article>
+   </div>
+   <p class="hint">اعتمدنا أحكام كبار المحدّثين، ومنهم الألباني من المتأخرين. وتستطيع التحقق من أي حديث يصلك في «الموسوعة الحديثية» على موقع الدرر السنية.</p>
+   <div class="opts" style="margin-top:10px"><button type="button" class="rbtn" id="sunRec"><span>وصفات الطب النبوي ←</span></button></div>
+   <h3 class="oh4">المصادر</h3>
+   <ul class="gutsrc"><li><a href="https://dorar.net/hadith" target="_blank" rel="noopener">الدرر السنية: الموسوعة الحديثية</a></li><li><a href="https://sunnah.com/" target="_blank" rel="noopener">Sunnah.com: كتب الحديث بالعربية والإنجليزية</a></li><li>ابن قيّم الجوزية: «زاد المعاد في هدي خير العباد»، باب الطب النبوي.</li><li>ابن خلدون: «المقدمة»، فصل الطب.</li></ul>
+   <p class="hint">هذه الصفحة للتثقيف. والتداوي بالأطعمة الواردة في السنّة لا يعني ترك الطبيب، فقد أمر ﷺ بالتداوي.</p>`;
+  el.querySelectorAll("[data-sunv]").forEach(b=>b.onclick=()=>{ sunst.v=b.dataset.sunv||null; const y=scrollY; renderSunna(); scrollTo({top:y}); });
+  $("#sunRec").onclick=()=>{ state.origin="nabawi"; state.q=""; $("#q").value=""; setView("recipes"); scrollTo({top:0}); };
 }
 /* ---------- الفم والأسنان ---------- */
 const dst={v:null};
@@ -6609,7 +6723,8 @@ $("#tabWiz").onclick=()=>{ Object.assign(w,{pre:null,preQ:"",gFixed:false,prob:n
   addEventListener("scroll",()=>{ if(!t) t=requestAnimationFrame(upd); },{passive:true}); upd();
 })();
 /* ---------- ما الجديد: يظهر مرة واحدة للزائر العائد بعد كل تحديث ---------- */
-const NEWS={v:"2026-11-11c",date:"11 نوفمبر 2026",go:"h:frankincense",fresh:3,items:[
+const NEWS={v:"2026-11-11d",date:"11 نوفمبر 2026",go:"sunna",fresh:3,items:[
+ "<b>باب جديد: الغذاء في السنّة النبوية.</b> آداب الأكل والشرب، وما كان يحبه ﷺ من الطعام، وبساطة معيشته، والأطعمة الواردة في التداوي، مع مصدر كل حديث ودرجته، وأحاديث مشهورة لا تصح.",
  "<b>اللبان بتوسّع:</b> أنواعه من الحوجري الظفاري إلى الصومالي والهندي، وطريق البخور وأرض اللبان، وعادات الخليج، وما يقوله العلم عن المفاصل، وأثر البخور على رئة الأطفال، وخرافات منتشرة.",
  "<b>الصمغ العربي بتوسّع:</b> أنواعه من الهشاب إلى الطلح، وتاريخه من مصر القديمة إلى السودان، وأين تجده في طعامك باسم E414، وما يقوله العلم عن الأمعاء والكلى وفقر الدم المنجلي، ومقداره وسلامته، ووصفتان سودانيتان.",
  "<b>باب جديد: الفم والأسنان.</b> ألم الضرس ونزف اللثة والتقرحات ورائحة الفم، والسواك والقرنفل وحدودهما، وأسنان الأطفال والتسنين، وخرافات تضر كالأسبرين والثوم على الضرس.",
@@ -6676,6 +6791,8 @@ $("#tabSch").onclick=()=>{ sst.e=null; setView("sch"); };
 $("#tabSkin").onclick=()=>{ kst.v=null; setView("skin"); };
 $("#tabGut").onclick=()=>{ gst.v=null; setView("gut"); };
 $("#tabDent").onclick=()=>{ dst.v=null; setView("dent"); };
+$("#tabSunna").onclick=()=>{ sunst.v=null; setView("sunna"); };
+document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-gosunna]"); if(b){ sunst.v=null; setView("sunna"); scrollTo({top:0}); } });
 document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-godent]"); if(b){ dst.v=null; setView("dent"); scrollTo({top:0}); } });
 $("#tabKer").onclick=()=>{ kerst.v=null; setView("ker"); };
 $("#tabAfr").onclick=()=>{ afst.v=null; setView("afr"); };
@@ -6770,7 +6887,7 @@ function askFmt(a,used){
   return out+(chips?`<div class="src"><span style="font-size:.8rem;opacity:.8">من الدليل:</span>${chips}</div>`:"");
 }
 function askGo(id){ const [k,a]=id.split(":"); $("#askBox").hidden=true;
-  if(k==="h"&&byId[a]) openPanel(byId[a]); else if(k==="r"&&RECIPES[+a]) goRecipe(RECIPES[+a].name); else if(k==="p"){ if(a==="gut") gst.v=null; if(a==="dent") dst.v=null; if(a==="ker") kerst.v=null; if(a==="afr") afst.v=null; setView(a); scrollTo({top:0}); } }
+  if(k==="h"&&byId[a]) openPanel(byId[a]); else if(k==="r"&&RECIPES[+a]) goRecipe(RECIPES[+a].name); else if(k==="p"){ if(a==="gut") gst.v=null; if(a==="dent") dst.v=null; if(a==="sunna") sunst.v=null; if(a==="ker") kerst.v=null; if(a==="afr") afst.v=null; setView(a); scrollTo({top:0}); } }
 async function askSend(q){
   q=q.trim(); if(q.length<3) return;
   const log=$("#askBox .asklog"), btn=$("#askBox .asks"), ta=$("#askBox textarea");
