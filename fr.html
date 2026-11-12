@@ -6977,10 +6977,12 @@ async function askSend(q){
     const sayTxt=a.replace(/^(Sources|Sources)\s*:.*$/gmi,"").replace(/\[\d+\]/g,"").replace(/\*\*/g,"").replace(/^[-•]\s+/gm,"")
       .replace(/[(（]([^()（）]*\/[^()（）]*)[)）]/g,(m,x)=>": "+x.split("/").map(t=>t.trim()).filter(Boolean).join(({ar:"، أو ",en:", or ",fr:", ou "})[(document.documentElement.lang||"ar").slice(0,2)]||"، أو ")+".").trim(); /*HGRX*/
     ab.innerHTML=askFmt(a,d.used||[])+(false?`<button type="button" class="asksay"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Écouter</span></button>`:"")+(d.used&&d.used.length?`<div class="fb">Cette réponse vous a-t-elle aidé ? <button type="button" data-fb="good">Oui</button><button type="button" data-fb="bad">Non</button></div>`:"");
+    const prevQ=askHist.length&&q.length<120?askHist[askHist.length-1].q:"";
     if(d.a&&!d.limited&&(d.used&&d.used.length||/[(（][^)）]*\/[^)）]*[)）]/.test(a))){ askHist.push({q,a}); if(askHist.length>2) askHist.shift(); }
     
     const miss=!(d.used&&d.used.length)||/الدليل لا يذكر|لا يذكر الدليل|لا يذكره الدليل|لم أجد في الدليل|guide does not cover|guide doesn.t cover|could not find anything in the guide|le guide n.en parle pas|n.ai rien trouvé dans le guide/i.test(a); /*HGRX*/
-    if(miss&&!d.limited){ const clean=q.replace(/[\w.+-]+@[\w-]+\.[\w.]+/g,"[بريد]").replace(/\+?\d[\d\s-]{5,}\d/g,"[رقم]").replace(/\s+/g," ").trim().slice(0,140); /*HGRX*/
+    const isQ0=!!ab.querySelector(".askq");
+    if(miss&&!d.limited&&!isQ0){ const clean=(prevQ?prevQ+" ← "+q:q).replace(/[\w.+-]+@[\w-]+\.[\w.]+/g,"[بريد]").replace(/\+?\d[\d\s-]{5,}\d/g,"[رقم]").replace(/\s+/g," ").trim().slice(0,140); /*HGRX*/
       try{ gcEv("ask-miss/"+clean,"سؤال بلا جواب: "+clean); }catch(e){} }
     const mic=$("#askBox .askmic"); const isQ=!!ab.querySelector(".askq");
     if(mic){ mic.classList.toggle("nudge",isQ); }
