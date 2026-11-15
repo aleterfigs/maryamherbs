@@ -384,6 +384,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .ract{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
 .tradnote{margin:8px 0 0;font-size:.8rem;line-height:1.7;color:var(--muted)}
 .tradnote .wlink{font-size:.8rem}
+.rate{margin:16px 0 4px;padding:10px 12px;border:1px dashed var(--line);border-radius:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.9rem}.rate>span{font-weight:600;margin-inline-end:4px}.rate .rok{color:var(--leaf);font-weight:600}
 .rbtn{font:inherit;font-size:.85rem;font-weight:600;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid var(--leaf);background:var(--sheet);color:var(--leaf);cursor:pointer}
 .rbtn svg{width:16px;height:16px}
 .panel .ract{margin-top:-4px}
