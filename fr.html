@@ -415,6 +415,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .ract{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
 .tradnote{margin:8px 0 0;font-size:.8rem;line-height:1.7;color:var(--muted)}
 .tradnote .wlink{font-size:.8rem}
+.where ul{margin:0 0 4px}
 .rate{margin:16px 0 4px;padding:10px 12px;border:1px dashed var(--line);border-radius:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.9rem}.rate>span{font-weight:600;margin-inline-end:4px}.rate .rok{color:var(--leaf);font-weight:600}
 .rbtn{font:inherit;font-size:.85rem;font-weight:600;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid var(--leaf);background:var(--sheet);color:var(--leaf);cursor:pointer}
 .rbtn svg{width:16px;height:16px}
@@ -5814,6 +5815,24 @@ function renderDent(){
   el.querySelectorAll("[data-dv]").forEach(b=>b.onclick=()=>{ dst.v=b.dataset.dv||null; const y=scrollY; renderDent(); scrollTo({top:y}); });
   el.querySelectorAll("[data-dent-r]").forEach(b=>b.onclick=()=>goRecipe(b.dataset.dentR));
 }
+/* ---------- Où la trouver (types de lieux seulement, sans noms de magasins) ---------- */
+const WHERE=Object.fromEntries(`chamomile SAN|mint SN|ginger SN|turmeric SA|nigella SAN|sage ASN|anise SA|fennel SA|thyme SAN|cinnamon SA|rosemary SN|fenugreek SA|hibiscus AS|lemonbalm AN|licorice A|aloe NP|garlic SN|cumin SA|clove SA|marjoram AN|cardamom S|frankincense A|lavender ANP|linden A|valerian PA|senna AP|pumpkin S|sawpalmetto P|honey HS|dates S|barley S|olive S|miswak SA|rose AS|costus A|greentea S|jujube AS|chrysanthemum A|goji SA|elderberry P|nettle AP|calendula APN|echinacea P|tulsi NA|ashwagandha PA|amla AS|triphala AP|neem AN|ajwain SA|coriander SN|moringa ANP|saffron SA|loomi S|myrrh A|sidr AN|tamarind S|zahr S|verbena AN|argan SPA|quince A|khakshir A|wormwood X|pennyroyal X|harmal X|flaxseed S|psyllium PS|caraway SA|parsley SN|sumac S|pomegranate SN|guava SNA|carob SA|cranberry SP|cornsilk SA|dandelion AP|milkthistle PA|hawthorn PA|passionflower PA|lemongrass SN|bay S|basil SN|marshmallow AP|mallow SN|ivy P|nutmeg S|henna SA|eucalyptus AP|teatree P|oats S|ginseng PA|shih A|colocynth X|oleander X|jaadah X|rooibos S|baobab AS|doum A|coffeehusk AS|rosehip AS|yerbamate S|dill SN|witchhazel P|horsechestnut P|blackcohosh P|eveningprimrose P|chasteberry P|feverfew P|ginkgo P|bacopa PA|maca SP|artichoke S|hyssop A|gardencress ASN|stjohns P|propolis HP|vinegar S|cherrystem A|bitteralmond X|violet A|myrtle AN|qaraz A|baitheran A|tribulus AP|mugat A|garcinia X|bitterorange X|yohimbe X|starfruit S|indigo A|gumarabic A|truffle S|ithmid X|milk S|tailfat L|yogurt S|aqit SA|goatmilk S|royaljelly HP|beevenom X|dhub X|ostrichoil AP|egg S|chicken SL|mutton L|camel L|camelmilk S|liver LS|ghee S|pigeon L|bonebroth L|fig SN|palmpollen A|liqahwater SA|fishoil PS|codliver P|seasalt SP|deadsea PS|seaweed S|agar S|oyster L|cuttlebone A|pearlcoral X|sharkcart X|chitosan P`.split("|").map(x=>x.split(" ")));
+const WHERE_L={S:"Supermarchés et épiceries",A:"Herboristes (attar) et marchés traditionnels",P:"Pharmacies : préparation standardisée ou complément autorisé",N:"Pépinières (graines ou plants), pour la cultiver chez soi",H:"Magasins de miel et de produits de la ruche de confiance",L:"La boucherie ou le marché aux poissons"};
+function whereBox(h){
+  const c=WHERE[h.id]; if(!c) return "";
+  if(c==="X") return `<section class="caution"><h3>Où la trouver</h3><p style="margin:0"><b>Nous ne recommandons ni de l'acheter ni de l'utiliser.</b> Elle peut être vendue par certains herboristes ou en ligne, mais elle est toxique ou dangereuse, comme indiqué dans les mises en garde ci-dessus.</p></section>`;
+  const al=((ALIAS[h.id]||{}).alt||[]).filter(x=>x&&x!==h.ar).slice(0,5);
+  const tips=[];
+  if(/[SA]/.test(c)&&!/^[LH]+$/.test(c)) tips.push("Choisissez un emballage fermé portant une date de conditionnement, et la plante entière plutôt que moulue si possible, car la poudre perd son arôme et se falsifie facilement. Une couleur vive et une odeur forte sont des signes de qualité. Conservez-la dans un récipient hermétique, à l'abri de la lumière et de l'humidité.");
+  if(c.includes("P")) tips.push("En pharmacie : choisissez un produit autorisé dans votre pays, portant le nom scientifique, la composition et la dose, et demandez au pharmacien s'il interagit avec vos médicaments.");
+  if(c.includes("N")) tips.push("Pour cultiver : choisissez des graines fraîchement emballées, ou un plant vert et vigoureux sans taches ni insectes. La méthode de culture se trouve dans la rubrique culture ci-dessus.");
+  if(c.includes("H")) tips.push("Des produits de la ruche d'une source connue, bien étiquetés. La page du miel explique comment repérer le miel frelaté.");
+  if(c.includes("L")) tips.push("D'une source propre et fiable, frais, et bien cuit.");
+  return `<section class="where"><h3>Où la trouver</h3><ul>${[...c].filter(k=>WHERE_L[k]).map(k=>`<li>${WHERE_L[k]}</li>`).join("")}</ul>
+    ${al.length?`<p style="margin:6px 0"><b>Demandez-la sous ses noms :</b> ${al.join(", ")}. <span class="hint">Son nom scientifique <span dir="ltr">${h.lat.split(" / ")[0]}</span> aide avec le pharmacien et les magasins étrangers.</span></p>`:""}
+    ${tips.map(t=>`<p style="margin:6px 0">${t}</p>`).join("")}
+    <p class="hint" style="margin:6px 0">Méfiez-vous des «mélanges garantis», des produits sans étiquette ni composition, et des produits inconnus vendus en ligne ; on a trouvé dans certains de la cortisone ou des médicaments cachés. Nous ne citons pas de magasins pour que le guide reste neutre.</p></section>`;
+}
 /* ---------- Évaluation anonyme : cette page vous a-t-elle été utile ? ---------- */
 const RATE_PAGES=["mom","women","kit","organic","aid","nutri","folk","mind","eye","sch","gut","dent","fert","sunna","ker","afr","skin","uae","safety","gloss","faq"];
 const RATE_WHY=[["miss","Information incomplète"],["unclear","Pas clair"],["notfound","Je n'ai pas trouvé ce que je cherchais"],["wrong","Je pense qu'il y a une erreur"]];
@@ -7070,6 +7089,7 @@ function openPanel(h){
     <section class="caution"><h3>Précautions</h3><ul>${h.warn.map(u=>`<li>${u}</li>`).join("")}</ul></section>
     <section class="caution"><h3>Interactions médicamenteuses possibles</h3><ul>${h.inter.map(u=>`<li>${u}</li>`).join("")}</ul></section>
     ${growBox(h)}
+    ${whereBox(h)}
     <section><h3>Sources</h3><ul>
       ${NCCIH[h.id]?`<li><a href="https://www.nccih.nih.gov/health/${NCCIH[h.id]}" target="_blank" rel="noopener">page sur ${h.ar} au Centre national américain pour la santé complémentaire et intégrative (NCCIH)</a> — En anglais</li>`:""}
       ${(SRCX[h.id]||[]).map(([k,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${SRCL[k]}</a> — ${SRCAR.has(k)?"en arabe et en anglais":"En anglais"}</li>`).join("")}
