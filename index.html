@@ -642,7 +642,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 const EMN=(()=>{ let z=""; try{ z=Intl.DateTimeFormat().resolvedOptions().timeZone||""; }catch(e){}
   const M={"Asia/Dubai":["998","في الإمارات"],"Asia/Riyadh":["997","في السعودية"],"Asia/Kuwait":["112","في الكويت"],"Asia/Qatar":["999","في قطر"],"Asia/Bahrain":["999","في البحرين"],"Asia/Muscat":["9999","في عُمان"],"Africa/Cairo":["123","في مصر"],"Asia/Amman":["911","في الأردن"],"Asia/Beirut":["140","في لبنان"],"Europe/London":["999","في بريطانيا"],"America/New_York":["911","في أمريكا"],"America/Chicago":["911","في أمريكا"],"America/Denver":["911","في أمريكا"],"America/Los_Angeles":["911","في أمريكا"],"America/Toronto":["911","في كندا"]};
   if(M[z]) return M[z][0]+" "+M[z][1]; if(/^Europe\//.test(z)) return "112 في أوروبا"; return ""; })();
-const EMX=EMN?" ("+EMN+")":" في بلدك";
+const EMX=EMN?" ("+EMN+"، أو رقم الإسعاف في بلدك إن كنت في غيرها)":" في بلدك";
 const CONDS = {
   digest:"الهضم والانتفاخ", sleep:"النوم والقلق", cold:"البرد والسعال", nausea:"الغثيان",
   pain:"الألم والالتهاب", skin:"الجلد والجروح", meta:"السكر والدهون", bp:"ضغط الدم", women:"صحة المرأة", men:"البروستاتا", mouth:"الفم والحلق", fatigue:"التعب والنقاهة", constip:"الإمساك", headache:"الصداع", hair:"الشعر وفروة الرأس", urinary:"المسالك البولية", diarrhea:"الإسهال", chol:"الكوليسترول", allergy:"الحساسية الموسمية", hemo:"البواسير", lactation:"الإرضاع", focus:"التركيز والذاكرة", weight:"الوزن", libido:"الصحة الجنسية", postpartum:"النفاس", kidney:"الكلى", sea:"من البحر", land:"من الحيوان", grow:"سهلة الزراعة في البيت"

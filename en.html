@@ -643,7 +643,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 const EMN=(()=>{ let z=""; try{ z=Intl.DateTimeFormat().resolvedOptions().timeZone||""; }catch(e){}
   const M={"Asia/Dubai":["998","in the UAE"],"Asia/Riyadh":["997","in Saudi Arabia"],"Asia/Kuwait":["112","in Kuwait"],"Asia/Qatar":["999","in Qatar"],"Asia/Bahrain":["999","in Bahrain"],"Asia/Muscat":["9999","in Oman"],"Africa/Cairo":["123","in Egypt"],"Asia/Amman":["911","in Jordan"],"Asia/Beirut":["140","in Lebanon"],"Europe/London":["999","in the UK"],"America/New_York":["911","in the US"],"America/Chicago":["911","in the US"],"America/Denver":["911","in the US"],"America/Los_Angeles":["911","in the US"],"America/Toronto":["911","in Canada"]};
   if(M[z]) return M[z][0]+" "+M[z][1]; if(/^Europe\//.test(z)) return "112 in Europe"; return ""; })();
-const EMX=EMN?" ("+EMN+")":" in your country";
+const EMX=EMN?" ("+EMN+", or your local ambulance number if you are elsewhere)":" in your country";
 const CONDS = {
   digest:"Digestion & bloating", sleep:"Sleep & anxiety", cold:"Colds & cough", nausea:"Nausea",
   pain:"Pain & inflammation", skin:"Skin & wounds", meta:"Blood sugar & lipids", bp:"Blood pressure", women:"Women's health", men:"Prostate", mouth:"Mouth & throat", fatigue:"Fatigue & recovery", constip:"Constipation", headache:"Headache", hair:"Hair & scalp", urinary:"Urinary tract", diarrhea:"Diarrhoea", chol:"Cholesterol", allergy:"Seasonal allergies", hemo:"Haemorrhoids", lactation:"Breastfeeding", focus:"Focus & memory", weight:"Weight", libido:"Sexual health", postpartum:"Postpartum", kidney:"Kidneys", sea:"From the sea", land:"From animals", grow:"Easy to grow at home"
