@@ -5864,6 +5864,7 @@ function renderContact(){
    </div>
    <section class="fbsec" id="fbBox"></section>
    <p class="hint">Nous répondons avec les informations vérifiées du guide ; nous ne posons pas de diagnostic et ne prescrivons pas de médicaments, et les messages ne remplacent pas le médecin. <b>En cas d'urgence, appelez les urgences${EMX}.</b></p>
+   <p class="hint">Nous ne publions pas de publicités et ne recevons aucune rémunération d'aucun magasin ni d'aucune entreprise.</p>
    <p class="hint">Que celui qui profite du guide invoque pour Maryam la miséricorde et le pardon.</p>`;
   $("#ctAsk").onclick=()=>{ gcEv("contact-ask","contact-ask"); if(typeof askOpen==="function"&&typeof ASK_ON!=="undefined"&&ASK_ON) askOpen(); else waSend("Une question pour le guide Maryam : "); };
   $("#ctWa").onclick=()=>{ gcEv("contact-wa","contact-wa"); waSend("Assalamou alaykoum, je vous contacte depuis le site «Maryam» :\n"); };
@@ -7067,6 +7068,7 @@ function renderAbout(){
   <section><h2>Relecture</h2><ul>
    <li>Dernière mise à jour du contenu : novembre 2026.</li>
    <li>Relecture médicale : <b>pas encore faite</b>. Il est conseillé de faire relire le guide par un pharmacien ou un médecin avant de le diffuser largement.</li></ul></section>
+  <section><h2>Indépendance</h2><p style="margin:0"><b>Nous ne publions pas de publicités et ne recevons aucune rémunération d'aucun magasin ni d'aucune entreprise,</b> et nous ne citons ni magasins ni produits commerciaux, afin que l'information reste au seul service des gens. Quiconque souhaite participer aux frais du guide à titre d'aumône, sans publicité, peut nous contacter.</p></section>
   <section><h2>Nous contacter</h2><p style="margin:0">Pour une remarque, une question ou une suggestion, ou pour aider à relire le guide. <button type="button" class="wlink" data-gocontact="1">La page «Nous contacter» ←</button></p></section>
   <section class="caution"><h3>Remarque</h3><p style="margin:0">Ce guide est éducatif et ne remplace pas un médecin ou un pharmacien, et aucun médicament prescrit ne doit être arrêté à cause de lui. Les plantes peuvent interagir avec les médicaments, et les femmes enceintes et allaitantes, les enfants, les personnes âgées et les malades chroniques sont ceux qui ont le plus besoin de conseils. Au moindre signe de danger, allez immédiatement chez le médecin ou aux urgences.</p></section>
   </div>`;
