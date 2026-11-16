@@ -418,6 +418,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .tradnote{margin:8px 0 0;font-size:.8rem;line-height:1.7;color:var(--muted)}
 .tradnote .wlink{font-size:.8rem}
 .where ul{margin:0 0 4px}
+.momform label.ck{display:flex!important;flex-direction:row;align-items:flex-start;justify-content:flex-start;gap:8px;font-weight:400;width:auto;text-align:start;margin:4px 0}.momform label.ck input{width:auto!important;flex:none;margin:3px 0 0;min-height:0;padding:0}
 .rate{margin:16px 0 4px;padding:10px 12px;border:1px dashed var(--line);border-radius:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.9rem}.rate>span{font-weight:600;margin-inline-end:4px}.rate .rok{color:var(--leaf);font-weight:600}
 .rbtn{font:inherit;font-size:.85rem;font-weight:600;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid var(--leaf);background:var(--sheet);color:var(--leaf);cursor:pointer}
 .rbtn svg{width:16px;height:16px}
@@ -5963,6 +5964,41 @@ function renderScent(){
    <p class="hint">لا نذكر أسماء محلات أو ماركات عطور، التزامًا بحياد الدليل.</p>`;
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
 }
+/* ---------- نموذج المساهمة للجهات والمختصين ---------- */
+document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-gorev]"); if(b){ setView("contact"); setTimeout(()=>{ const f=document.getElementById("revBox"); if(f) f.scrollIntoView({block:"start"}); },60); } });
+const REV_FIELDS=["علم العقاقير","النباتات الطبية والعطرية","الصيدلة","الطب","التغذية","الزراعة","الطب التقليدي والتراث","الحديث والعلوم الشرعية","أخرى"];
+const REV_HOW=["مراجعة صفحات أو أعشاب","تزويدنا بأبحاث منشورة","إضافة أعشاب أو معلومات","تصحيح أخطاء"];
+function renderRevForm(){
+  const box=document.getElementById("revBox"); if(!box) return;
+  box.innerHTML=`<h2>المساهمة في الدليل</h2><p class="hint" style="margin:0 0 8px">للجهات البحثية والجامعات والمختصين. املأ النموذج فيصل إلى صاحب الدليل على واتساب، ونتواصل معك قبل ذكر اسمك في صفحة «الشركاء والمراجعون».</p>
+   <form id="revForm" class="momform fb">
+    <label for="rv-type">أنت</label><select id="rv-type"><option>مختص (فرد)</option><option>جهة: مركز أبحاث أو جامعة أو جمعية</option></select>
+    <label for="rv-name">الاسم الكامل أو اسم الجهة</label><input id="rv-name" type="text" maxlength="120" required autocomplete="name">
+    <label for="rv-field">التخصص أو المجال</label><select id="rv-field">${REV_FIELDS.map(x=>`<option>${x}</option>`).join("")}</select>
+    <label for="rv-org">جهة العمل والمنصب أو الدرجة العلمية</label><input id="rv-org" type="text" maxlength="160" autocomplete="organization">
+    <label for="rv-country">البلد</label><input id="rv-country" type="text" maxlength="60" autocomplete="country-name">
+    <fieldset class="rvhow" style="border:0;padding:0;margin:6px 0"><legend style="font-weight:600;margin-bottom:4px">كيف تودّ المساهمة؟</legend>${REV_HOW.map((x,i)=>`<label class="ck"><input type="checkbox" name="rv-how" value="${x}"${i===0?" checked":""}> ${x}</label>`).join("")}</fieldset>
+    <label for="rv-topics">الأبواب أو الأعشاب التي تهمّك (اختياري)</label><textarea id="rv-topics" rows="2" maxlength="600"></textarea>
+    <label for="rv-link">رابط تعريفي: صفحتك في الجامعة أو موقع الجهة (اختياري)</label><input id="rv-link" type="url" maxlength="200" dir="ltr" inputmode="url">
+    <label class="ck" style="margin-top:8px"><input type="checkbox" id="rv-show" checked> أوافق على ذكر اسمي أو اسم الجهة في صفحة «الشركاء والمراجعون» بعد التواصل معي</label>
+    <div class="momactions"><button type="submit" class="mombtn wabtn">أرسل على واتساب</button><span class="hint" id="rvMsg"></span></div>
+   </form>`;
+  const f=document.getElementById("revForm");
+  f.onsubmit=e=>{ e.preventDefault();
+    const v=id=>document.getElementById(id).value.trim(), name=v("rv-name");
+    if(!name){ document.getElementById("rv-name").focus(); return; }
+    const how=[...f.querySelectorAll('input[name="rv-how"]:checked')].map(x=>x.value);
+    const lines=["السلام عليكم، أرغب في المساهمة في دليل «مريم».","",
+      "النوع: "+v("rv-type"),"الاسم: "+name,"التخصص: "+v("rv-field"),
+      v("rv-org")?"جهة العمل والمنصب: "+v("rv-org"):"", v("rv-country")?"البلد: "+v("rv-country"):"",
+      how.length?"المساهمة: "+how.join("، "):"", v("rv-topics")?"الأبواب أو الأعشاب: "+v("rv-topics"):"",
+      v("rv-link")?"رابط تعريفي: "+v("rv-link"):"",
+      "ذكر الاسم في صفحة الشركاء: "+(document.getElementById("rv-show").checked?"موافق":"غير موافق")].filter(Boolean);
+    gcEv("contact-review-form","نموذج المساهمة");
+    waSend(lines.join("\n"));
+    document.getElementById("rvMsg").textContent="فُتح واتساب برسالتك، اضغط إرسال هناك. جزاك الله خيرًا.";
+  };
+}
 /* ---------- تواصل معنا ---------- */
 function renderContact(){
   const el=$("#contact");
@@ -5975,16 +6011,18 @@ function renderContact(){
     <article class="agcard"><h5>أنت طبيب أو صيدلي أو مختص؟</h5><p>نرحّب بمراجعتك لأي باب أو عشبة أو وصفة، وبتصحيحك لأي خطأ. المراجعة العلمية تزيد الدليل نفعًا وأمانًا.</p><button type="button" class="rbtn" id="ctRev"><span>أرغب في المساهمة</span></button></article>
     <article class="agcard"><h5>شارك «مريم»</h5><p>أرسل الدليل لأهلك وأصدقائك، فمن دلّ على خير فله مثل أجر فاعله.</p><button type="button" class="rbtn" id="ctShare"><span>شارك الرابط</span></button></article>
    </div>
+   <section class="fbsec" id="revBox"></section>
    <section class="fbsec" id="fbBox"></section>
    <p class="hint">نجيب عن الأسئلة بما في الدليل من معلومات مراجَعة، ولا نشخّص الأمراض ولا نصف الأدوية، ولا تغني الرسائل عن الطبيب. <b>للحالات الطارئة اتصل بالإسعاف${EMX}.</b></p>
    <p class="hint">لا ننشر إعلانات، ولا نتلقى مقابلًا من أي محل أو شركة. <button type="button" class="wlink" data-goprivacy="1">الخصوصية ←</button></p>
    <p class="hint">ومن انتفع بالدليل فليدعُ لمريم بالرحمة والمغفرة.</p>`;
   $("#ctAsk").onclick=()=>{ gcEv("contact-ask","contact-ask"); if(typeof askOpen==="function"&&typeof ASK_ON!=="undefined"&&ASK_ON) askOpen(); else waSend("سؤال لدليل «مريم»: "); };
   $("#ctWa").onclick=()=>{ gcEv("contact-wa","contact-wa"); waSend("السلام عليكم، أتواصل معكم من موقع «مريم»:\n"); };
-  $("#ctRev").onclick=()=>{ gcEv("contact-review","contact-review"); waSend("السلام عليكم، أرغب في المساهمة بمراجعة دليل «مريم».\nتخصّصي: \nالباب أو العشبة التي أودّ مراجعتها: "); };
+  $("#ctRev").onclick=()=>{ gcEv("contact-review","contact-review"); const f=document.getElementById("revBox"); if(f){ f.scrollIntoView({behavior:"smooth",block:"start"}); setTimeout(()=>{ const i=document.getElementById("rv-name"); if(i) i.focus({preventScroll:true}); },400); } };
   $("#ctShare").onclick=async()=>{ gcEv("contact-share","contact-share"); const t="«مريم»: دليل عربي مجاني للأعشاب والتداوي الطبيعي، مع درجة الدليل العلمي وتحذيرات الحمل والأدوية."; const u=SITE_URL+"?utm_source=contact";
     if(navigator.share){ try{ await navigator.share({title:"مريم",text:t,url:u}); }catch(_){} return; }
     const wu="https://wa.me/?text="+encodeURIComponent(t+"\n"+u); const w=window.open(wu,"_blank","noopener"); if(!w) location.href=wu; };
+  renderRevForm();
   renderFeedback();
 }
 /* ---------- تأخّر الحمل والخصوبة ---------- */

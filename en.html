@@ -419,6 +419,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .tradnote{margin:8px 0 0;font-size:.8rem;line-height:1.7;color:var(--muted)}
 .tradnote .wlink{font-size:.8rem}
 .where ul{margin:0 0 4px}
+.momform label.ck{display:flex!important;flex-direction:row;align-items:flex-start;justify-content:flex-start;gap:8px;font-weight:400;width:auto;text-align:start;margin:4px 0}.momform label.ck input{width:auto!important;flex:none;margin:3px 0 0;min-height:0;padding:0}
 .rate{margin:16px 0 4px;padding:10px 12px;border:1px dashed var(--line);border-radius:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.9rem}.rate>span{font-weight:600;margin-inline-end:4px}.rate .rok{color:var(--leaf);font-weight:600}
 .rbtn{font:inherit;font-size:.85rem;font-weight:600;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid var(--leaf);background:var(--sheet);color:var(--leaf);cursor:pointer}
 .rbtn svg{width:16px;height:16px}
@@ -5965,6 +5966,41 @@ function renderScent(){
    <p class="hint">We do not name shops or perfume brands, to keep the guide neutral.</p>`;
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
 }
+/* ---------- Contribution form for institutions and specialists ---------- */
+document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-gorev]"); if(b){ setView("contact"); setTimeout(()=>{ const f=document.getElementById("revBox"); if(f) f.scrollIntoView({block:"start"}); },60); } });
+const REV_FIELDS=["Pharmacognosy","Medicinal and aromatic plants","Pharmacy","Medicine","Nutrition","Agriculture","Traditional medicine and heritage","Hadith and Islamic sciences","Other"];
+const REV_HOW=["Reviewing pages or herbs","Providing published research","Adding herbs or information","Correcting mistakes"];
+function renderRevForm(){
+  const box=document.getElementById("revBox"); if(!box) return;
+  box.innerHTML=`<h2>Contribute to the guide</h2><p class="hint" style="margin:0 0 8px">For research institutions, universities and specialists. Fill in the form and it reaches the guide's owner on WhatsApp; we will contact you before listing your name on the «Partners and reviewers» page.</p>
+   <form id="revForm" class="momform fb">
+    <label for="rv-type">You are</label><select id="rv-type"><option>A specialist (individual)</option><option>An institution: research centre, university or association</option></select>
+    <label for="rv-name">Full name or institution name</label><input id="rv-name" type="text" maxlength="120" required autocomplete="name">
+    <label for="rv-field">Specialty or field</label><select id="rv-field">${REV_FIELDS.map(x=>`<option>${x}</option>`).join("")}</select>
+    <label for="rv-org">Workplace and position or academic degree</label><input id="rv-org" type="text" maxlength="160" autocomplete="organization">
+    <label for="rv-country">Country</label><input id="rv-country" type="text" maxlength="60" autocomplete="country-name">
+    <fieldset class="rvhow" style="border:0;padding:0;margin:6px 0"><legend style="font-weight:600;margin-bottom:4px">How would you like to contribute?</legend>${REV_HOW.map((x,i)=>`<label class="ck"><input type="checkbox" name="rv-how" value="${x}"${i===0?" checked":""}> ${x}</label>`).join("")}</fieldset>
+    <label for="rv-topics">Sections or herbs of interest (optional)</label><textarea id="rv-topics" rows="2" maxlength="600"></textarea>
+    <label for="rv-link">Profile link: your university page or the institution's website (optional)</label><input id="rv-link" type="url" maxlength="200" dir="ltr" inputmode="url">
+    <label class="ck" style="margin-top:8px"><input type="checkbox" id="rv-show" checked> I agree to my name or my institution's name being listed on the «Partners and reviewers» page after you contact me</label>
+    <div class="momactions"><button type="submit" class="mombtn wabtn">Send on WhatsApp</button><span class="hint" id="rvMsg"></span></div>
+   </form>`;
+  const f=document.getElementById("revForm");
+  f.onsubmit=e=>{ e.preventDefault();
+    const v=id=>document.getElementById(id).value.trim(), name=v("rv-name");
+    if(!name){ document.getElementById("rv-name").focus(); return; }
+    const how=[...f.querySelectorAll('input[name="rv-how"]:checked')].map(x=>x.value);
+    const lines=["Peace be upon you, I would like to contribute to the «Maryam» guide.","",
+      "Type: "+v("rv-type"),"Name: "+name,"Specialty: "+v("rv-field"),
+      v("rv-org")?"Workplace and position: "+v("rv-org"):"", v("rv-country")?"Country: "+v("rv-country"):"",
+      how.length?"Contribution: "+how.join(", "):"", v("rv-topics")?"Sections or herbs: "+v("rv-topics"):"",
+      v("rv-link")?"Profile link: "+v("rv-link"):"",
+      "Listing name on the partners page: "+(document.getElementById("rv-show").checked?"Agreed":"Not agreed")].filter(Boolean);
+    gcEv("contact-review-form","Contribution form");
+    waSend(lines.join("\n"));
+    document.getElementById("rvMsg").textContent="WhatsApp has opened with your message; press send there. Thank you.";
+  };
+}
 /* ---------- Contact us ---------- */
 function renderContact(){
   const el=$("#contact");
@@ -5977,16 +6013,18 @@ function renderContact(){
     <article class="agcard"><h5>Are you a doctor, pharmacist or specialist?</h5><p>We welcome your review of any section, herb or recipe, and your correction of any mistake. Scientific review makes the guide more useful and safer.</p><button type="button" class="rbtn" id="ctRev"><span>I would like to contribute</span></button></article>
     <article class="agcard"><h5>Share «Maryam»</h5><p>Send the guide to your family and friends; whoever guides others to good has a reward like the one who does it.</p><button type="button" class="rbtn" id="ctShare"><span>Share the link</span></button></article>
    </div>
+   <section class="fbsec" id="revBox"></section>
    <section class="fbsec" id="fbBox"></section>
    <p class="hint">We answer questions with the reviewed information in the guide; we do not diagnose illnesses or prescribe medicines, and messages do not replace a doctor. <b>In an emergency, call an ambulance${EMX}.</b></p>
    <p class="hint">We do not publish adverts, and we receive no payment from any shop or company. <button type="button" class="wlink" data-goprivacy="1">Privacy ←</button></p>
    <p class="hint">Whoever benefits from the guide, please pray for mercy and forgiveness for Maryam.</p>`;
   $("#ctAsk").onclick=()=>{ gcEv("contact-ask","contact-ask"); if(typeof askOpen==="function"&&typeof ASK_ON!=="undefined"&&ASK_ON) askOpen(); else waSend("A question for the Maryam guide: "); };
   $("#ctWa").onclick=()=>{ gcEv("contact-wa","contact-wa"); waSend("Peace be upon you, I am contacting you from the «Maryam» website:\n"); };
-  $("#ctRev").onclick=()=>{ gcEv("contact-review","contact-review"); waSend("Peace be upon you, I would like to contribute to reviewing the «Maryam» guide.\nMy specialty: \nThe section or herb I would like to review: "); };
+  $("#ctRev").onclick=()=>{ gcEv("contact-review","contact-review"); const f=document.getElementById("revBox"); if(f){ f.scrollIntoView({behavior:"smooth",block:"start"}); setTimeout(()=>{ const i=document.getElementById("rv-name"); if(i) i.focus({preventScroll:true}); },400); } };
   $("#ctShare").onclick=async()=>{ gcEv("contact-share","contact-share"); const t="«Maryam»: a free Arabic guide to herbs and natural remedies, with the level of scientific evidence and pregnancy and medicine warnings."; const u=SITE_URL+"?utm_source=contact";
     if(navigator.share){ try{ await navigator.share({title:"Maryam",text:t,url:u}); }catch(_){} return; }
     const wu="https://wa.me/?text="+encodeURIComponent(t+"\n"+u); const w=window.open(wu,"_blank","noopener"); if(!w) location.href=wu; };
+  renderRevForm();
   renderFeedback();
 }
 /* ---------- Delayed pregnancy and fertility ---------- */

@@ -419,6 +419,7 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .tradnote{margin:8px 0 0;font-size:.8rem;line-height:1.7;color:var(--muted)}
 .tradnote .wlink{font-size:.8rem}
 .where ul{margin:0 0 4px}
+.momform label.ck{display:flex!important;flex-direction:row;align-items:flex-start;justify-content:flex-start;gap:8px;font-weight:400;width:auto;text-align:start;margin:4px 0}.momform label.ck input{width:auto!important;flex:none;margin:3px 0 0;min-height:0;padding:0}
 .rate{margin:16px 0 4px;padding:10px 12px;border:1px dashed var(--line);border-radius:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.9rem}.rate>span{font-weight:600;margin-inline-end:4px}.rate .rok{color:var(--leaf);font-weight:600}
 .rbtn{font:inherit;font-size:.85rem;font-weight:600;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid var(--leaf);background:var(--sheet);color:var(--leaf);cursor:pointer}
 .rbtn svg{width:16px;height:16px}
@@ -5965,6 +5966,41 @@ function renderScent(){
    <p class="hint">Nous ne citons ni magasins ni marques de parfum, pour que le guide reste neutre.</p>`;
   el.querySelectorAll(".herb-link").forEach(b=>b.onclick=()=>openPanel(byId[b.dataset.h]));
 }
+/* ---------- Formulaire de contribution pour les institutions et les spécialistes ---------- */
+document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest("[data-gorev]"); if(b){ setView("contact"); setTimeout(()=>{ const f=document.getElementById("revBox"); if(f) f.scrollIntoView({block:"start"}); },60); } });
+const REV_FIELDS=["Pharmacognosie","Plantes médicinales et aromatiques","Pharmacie","Médecine","Nutrition","Agronomie","Médecine traditionnelle et patrimoine","Hadith et sciences islamiques","Autre"];
+const REV_HOW=["Relire des pages ou des plantes","Nous fournir des recherches publiées","Ajouter des plantes ou des informations","Corriger des erreurs"];
+function renderRevForm(){
+  const box=document.getElementById("revBox"); if(!box) return;
+  box.innerHTML=`<h2>Contribuer au guide</h2><p class="hint" style="margin:0 0 8px">Pour les institutions de recherche, les universités et les spécialistes. Remplissez le formulaire : il parvient au responsable du guide sur WhatsApp, et nous vous contacterons avant de citer votre nom sur la page «Partenaires et relecteurs».</p>
+   <form id="revForm" class="momform fb">
+    <label for="rv-type">Vous êtes</label><select id="rv-type"><option>Un spécialiste (personne)</option><option>Une institution : centre de recherche, université ou association</option></select>
+    <label for="rv-name">Nom complet ou nom de l'institution</label><input id="rv-name" type="text" maxlength="120" required autocomplete="name">
+    <label for="rv-field">Spécialité ou domaine</label><select id="rv-field">${REV_FIELDS.map(x=>`<option>${x}</option>`).join("")}</select>
+    <label for="rv-org">Lieu de travail et fonction ou diplôme</label><input id="rv-org" type="text" maxlength="160" autocomplete="organization">
+    <label for="rv-country">Pays</label><input id="rv-country" type="text" maxlength="60" autocomplete="country-name">
+    <fieldset class="rvhow" style="border:0;padding:0;margin:6px 0"><legend style="font-weight:600;margin-bottom:4px">Comment souhaitez-vous contribuer ?</legend>${REV_HOW.map((x,i)=>`<label class="ck"><input type="checkbox" name="rv-how" value="${x}"${i===0?" checked":""}> ${x}</label>`).join("")}</fieldset>
+    <label for="rv-topics">Rubriques ou plantes qui vous intéressent (facultatif)</label><textarea id="rv-topics" rows="2" maxlength="600"></textarea>
+    <label for="rv-link">Lien de présentation : votre page universitaire ou le site de l'institution (facultatif)</label><input id="rv-link" type="url" maxlength="200" dir="ltr" inputmode="url">
+    <label class="ck" style="margin-top:8px"><input type="checkbox" id="rv-show" checked> J'accepte que mon nom ou celui de l'institution figure sur la page «Partenaires et relecteurs» après avoir été contacté</label>
+    <div class="momactions"><button type="submit" class="mombtn wabtn">Envoyer sur WhatsApp</button><span class="hint" id="rvMsg"></span></div>
+   </form>`;
+  const f=document.getElementById("revForm");
+  f.onsubmit=e=>{ e.preventDefault();
+    const v=id=>document.getElementById(id).value.trim(), name=v("rv-name");
+    if(!name){ document.getElementById("rv-name").focus(); return; }
+    const how=[...f.querySelectorAll('input[name="rv-how"]:checked')].map(x=>x.value);
+    const lines=["Assalamou alaykoum, je souhaite contribuer au guide «Maryam».","",
+      "Type : "+v("rv-type"),"Nom : "+name,"Spécialité : "+v("rv-field"),
+      v("rv-org")?"Lieu de travail et fonction : "+v("rv-org"):"", v("rv-country")?"Pays : "+v("rv-country"):"",
+      how.length?"Contribution : "+how.join(", "):"", v("rv-topics")?"Rubriques ou plantes : "+v("rv-topics"):"",
+      v("rv-link")?"Lien de présentation : "+v("rv-link"):"",
+      "Nom sur la page des partenaires : "+(document.getElementById("rv-show").checked?"D'accord":"Pas d'accord")].filter(Boolean);
+    gcEv("contact-review-form","Formulaire de contribution");
+    waSend(lines.join("\n"));
+    document.getElementById("rvMsg").textContent="WhatsApp s'est ouvert avec votre message ; appuyez sur envoyer. Merci.";
+  };
+}
 /* ---------- Nous contacter ---------- */
 function renderContact(){
   const el=$("#contact");
@@ -5977,16 +6013,18 @@ function renderContact(){
     <article class="agcard"><h5>Vous êtes médecin, pharmacien ou spécialiste ?</h5><p>Nous accueillons votre relecture de toute rubrique, plante ou recette, et la correction de toute erreur. La relecture scientifique rend le guide plus utile et plus sûr.</p><button type="button" class="rbtn" id="ctRev"><span>Je souhaite contribuer</span></button></article>
     <article class="agcard"><h5>Partager «Maryam»</h5><p>Envoyez le guide à votre famille et à vos amis ; celui qui indique un bien a la même récompense que celui qui le fait.</p><button type="button" class="rbtn" id="ctShare"><span>Partager le lien</span></button></article>
    </div>
+   <section class="fbsec" id="revBox"></section>
    <section class="fbsec" id="fbBox"></section>
    <p class="hint">Nous répondons avec les informations vérifiées du guide ; nous ne posons pas de diagnostic et ne prescrivons pas de médicaments, et les messages ne remplacent pas le médecin. <b>En cas d'urgence, appelez les urgences${EMX}.</b></p>
    <p class="hint">Nous ne publions pas de publicités et ne recevons aucune rémunération d'aucun magasin ni d'aucune entreprise. <button type="button" class="wlink" data-goprivacy="1">Confidentialité ←</button></p>
    <p class="hint">Que celui qui profite du guide invoque pour Maryam la miséricorde et le pardon.</p>`;
   $("#ctAsk").onclick=()=>{ gcEv("contact-ask","contact-ask"); if(typeof askOpen==="function"&&typeof ASK_ON!=="undefined"&&ASK_ON) askOpen(); else waSend("Une question pour le guide Maryam : "); };
   $("#ctWa").onclick=()=>{ gcEv("contact-wa","contact-wa"); waSend("Assalamou alaykoum, je vous contacte depuis le site «Maryam» :\n"); };
-  $("#ctRev").onclick=()=>{ gcEv("contact-review","contact-review"); waSend("Assalamou alaykoum, je souhaite contribuer à la relecture du guide «Maryam».\nMa spécialité : \nLa rubrique ou la plante que je souhaite relire : "); };
+  $("#ctRev").onclick=()=>{ gcEv("contact-review","contact-review"); const f=document.getElementById("revBox"); if(f){ f.scrollIntoView({behavior:"smooth",block:"start"}); setTimeout(()=>{ const i=document.getElementById("rv-name"); if(i) i.focus({preventScroll:true}); },400); } };
   $("#ctShare").onclick=async()=>{ gcEv("contact-share","contact-share"); const t="«Maryam» : un guide arabe gratuit des plantes et remèdes naturels, avec le niveau de preuve scientifique et les mises en garde pour la grossesse et les médicaments."; const u=SITE_URL+"?utm_source=contact";
     if(navigator.share){ try{ await navigator.share({title:"Maryam",text:t,url:u}); }catch(_){} return; }
     const wu="https://wa.me/?text="+encodeURIComponent(t+"\n"+u); const w=window.open(wu,"_blank","noopener"); if(!w) location.href=wu; };
+  renderRevForm();
   renderFeedback();
 }
 /* ---------- Retard de grossesse et fertilité ---------- */
