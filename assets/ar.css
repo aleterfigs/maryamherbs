@@ -388,6 +388,8 @@ footer{color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padd
 .tradnote{margin:8px 0 0;font-size:.8rem;line-height:1.7;color:var(--muted)}
 .tradnote .wlink{font-size:.8rem}
 .where ul{margin:0 0 4px}
+.nav .ngroup{display:none}.nav{border-bottom:0;padding-bottom:0}.nav[hidden]{display:none}.nav .home-tab{border:1px solid var(--line);border-radius:999px;padding:7px 16px;background:var(--card,#fff);color:var(--leaf);font-weight:600}
+.morechips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .momform label.ck{display:flex!important;flex-direction:row;align-items:flex-start;justify-content:flex-start;gap:8px;font-weight:400;width:auto;text-align:start;margin:4px 0}.momform label.ck input{width:auto!important;flex:none;margin:3px 0 0;min-height:0;padding:0}
 .rate{margin:16px 0 4px;padding:10px 12px;border:1px dashed var(--line);border-radius:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.9rem}.rate>span{font-weight:600;margin-inline-end:4px}.rate .rok{color:var(--leaf);font-weight:600}
 .rbtn{font:inherit;font-size:.85rem;font-weight:600;display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid var(--leaf);background:var(--sheet);color:var(--leaf);cursor:pointer}
