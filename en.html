@@ -5647,8 +5647,28 @@ function renderRefs(){
    <h3 class="oh4">Heritage books of medicine and agriculture</h3>
    <p class="hint">Books mentioned in the «Scholars of medicine and herbs» section, with their authors and eras:</p>
    <ul class="gutsrc">${R.books.map(([b,a,d])=>`<li>«${b}» · ${a} <span class="agmeta">(${d})</span></li>`).join("")}</ul>
+   <h3 class="oh4">Also from the heritage</h3>
+   <ul class="gutsrc">${RBOOKS_OLD.map(([b,a])=>`<li>«${b}» · ${a}</li>`).join("")}</ul>
+   <h3 class="oh4">Well-known modern references for further reading</h3>
+   <p class="hint">The best-known international references on medicinal herbs, for those who want to go further. They are not counted in the guide's references above.</p>
+   <ul class="gutsrc">${RBOOKS_NEW.map(([b,a])=>`<li><b>${b}</b> · ${a}</li>`).join("")}</ul>
    <p class="hint">Found an error in a source or a broken link? Send it to us on WhatsApp and we will fix it.</p>`;
 }
+const RBOOKS_OLD=[
+ ["Minhaj al-Dukkan wa Dustur al-A'yan","Abu al-Muna Dawud ibn Abi Nasr al-Kuhin al-Attar, 7th century AH, the apothecaries' reference on compound remedies"],
+ ["Al-Mu'tamad fi al-Adwiya al-Mufrada","Al-Malik al-Muzaffar Yusuf ibn Umar al-Rasuli, Yemen, 7th century AH"]
+];
+const RBOOKS_NEW=[
+ ["WHO monographs on selected medicinal plants","World Health Organization, four volumes (1999–2009)"],
+ ["European Union herbal monographs","The Committee on Herbal Medicinal Products of the European Medicines Agency, freely available on its website"],
+ ["The Complete German Commission E Monographs","German Commission E, English edition by the American Botanical Council (1998)"],
+ ["ESCOP Monographs","European Scientific Cooperative on Phytotherapy"],
+ ["Herbal Drugs and Phytopharmaceuticals","Max Wichtl"],
+ ["Principles and Practice of Phytotherapy","Simon Mills and Kerry Bone"],
+ ["Fundamentals of Pharmacognosy and Phytotherapy","Michael Heinrich et al."],
+ ["Stockley's Herbal Medicines Interactions","Elizabeth Williamson et al., on herb–drug interactions"],
+ ["Handbook of Arabian Medicinal Plants","Shahina A. Ghazanfar, on the medicinal plants of the Arabian Peninsula"]
+];
 /* ---------- Food in the Sunnah ---------- */
 const sunst={v:null};
 const SGR={4:["Verse of the Quran","ok"],3:["Sahih","ok"],2:["Hasan","ok"],1:["Disputed","care"],0:["Weak","harm"],"-1":["Not authentic","harm"]};

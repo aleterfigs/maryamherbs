@@ -5645,8 +5645,28 @@ function renderRefs(){
    <h3 class="oh4">كتب التراث الطبي والفلاحي</h3>
    <p class="hint">كتب ذُكرت في باب «أعلام الطب والأعشاب» مع مؤلفيها وعصرهم:</p>
    <ul class="gutsrc">${R.books.map(([b,a,d])=>`<li>«${b}» · ${a} <span class="agmeta">(${d})</span></li>`).join("")}</ul>
+   <h3 class="oh4">من التراث أيضًا</h3>
+   <ul class="gutsrc">${RBOOKS_OLD.map(([b,a])=>`<li>«${b}» · ${a}</li>`).join("")}</ul>
+   <h3 class="oh4">مراجع حديثة مشهورة للاستزادة</h3>
+   <p class="hint">أشهر المراجع العالمية في الأعشاب الطبية، لمن أراد التوسّع. لا نحسبها في عدد مراجع الدليل أعلاه.</p>
+   <ul class="gutsrc">${RBOOKS_NEW.map(([b,a])=>`<li><b>${b}</b> · ${a}</li>`).join("")}</ul>
    <p class="hint">وجدت خطأً في مصدر أو رابطًا لا يعمل؟ أرسله لنا على واتساب ونصحّحه.</p>`;
 }
+const RBOOKS_OLD=[
+ ["منهاج الدكّان ودستور الأعيان","أبو المنى داود بن أبي نصر الكوهين العطار، القرن السابع الهجري، مرجع العطّارين في الأدوية المركّبة"],
+ ["المعتمد في الأدوية المفردة","الملك المظفّر يوسف بن عمر الرسولي، اليمن، القرن السابع الهجري"]
+];
+const RBOOKS_NEW=[
+ ["WHO monographs on selected medicinal plants","منظمة الصحة العالمية، أربعة مجلدات (1999–2009)"],
+ ["European Union herbal monographs","لجنة المنتجات الطبية العشبية في الوكالة الأوروبية للأدوية، متاحة مجانًا على موقعها"],
+ ["The Complete German Commission E Monographs","الهيئة الألمانية E، الطبعة الإنجليزية من المجلس الأمريكي للنباتات (1998)"],
+ ["ESCOP Monographs","الجمعية الأوروبية العلمية للعلاج بالنباتات"],
+ ["Herbal Drugs and Phytopharmaceuticals","Max Wichtl"],
+ ["Principles and Practice of Phytotherapy","Simon Mills و Kerry Bone"],
+ ["Fundamentals of Pharmacognosy and Phytotherapy","Michael Heinrich وآخرون"],
+ ["Stockley's Herbal Medicines Interactions","Elizabeth Williamson وآخرون، في تداخل الأعشاب مع الأدوية"],
+ ["Handbook of Arabian Medicinal Plants","Shahina A. Ghazanfar، عن النباتات الطبية في الجزيرة العربية"]
+];
 /* ---------- الغذاء في السنّة ---------- */
 const sunst={v:null};
 const SGR={4:["آية من القرآن","ok"],3:["صحيح","ok"],2:["حسن","ok"],1:["مختلف فيه","care"],0:["ضعيف","harm"],"-1":["لا يصح","harm"]};

@@ -5647,8 +5647,28 @@ function renderRefs(){
    <h3 class="oh4">Ouvrages patrimoniaux de médecine et d'agriculture</h3>
    <p class="hint">Ouvrages cités dans la rubrique «Grandes figures de la médecine et des plantes», avec leurs auteurs et leur époque :</p>
    <ul class="gutsrc">${R.books.map(([b,a,d])=>`<li>«${b}» · ${a} <span class="agmeta">(${d})</span></li>`).join("")}</ul>
+   <h3 class="oh4">Également du patrimoine</h3>
+   <ul class="gutsrc">${RBOOKS_OLD.map(([b,a])=>`<li>«${b}» · ${a}</li>`).join("")}</ul>
+   <h3 class="oh4">Références modernes connues pour aller plus loin</h3>
+   <p class="hint">Les références internationales les plus connues sur les plantes médicinales, pour approfondir. Elles ne sont pas comptées parmi les références du guide ci-dessus.</p>
+   <ul class="gutsrc">${RBOOKS_NEW.map(([b,a])=>`<li><b>${b}</b> · ${a}</li>`).join("")}</ul>
    <p class="hint">Une erreur dans une source ou un lien qui ne marche pas ? Envoyez-le-nous sur WhatsApp et nous le corrigerons.</p>`;
 }
+const RBOOKS_OLD=[
+ ["Minhaj al-Dukkan wa Dustur al-A'yan","Abou al-Mouna Dawoud ibn Abi Nasr al-Kouhin al-Attar, VIIe siècle de l'hégire, la référence des apothicaires pour les remèdes composés"],
+ ["Al-Mou'tamad fi al-Adwiya al-Moufrada","Al-Malik al-Mouzaffar Youssouf ibn Omar al-Rassouli, Yémen, VIIe siècle de l'hégire"]
+];
+const RBOOKS_NEW=[
+ ["WHO monographs on selected medicinal plants","Organisation mondiale de la santé, quatre volumes (1999–2009)"],
+ ["European Union herbal monographs","Le Comité des médicaments à base de plantes de l'Agence européenne des médicaments, en accès libre sur son site"],
+ ["The Complete German Commission E Monographs","Commission E allemande, édition anglaise de l'American Botanical Council (1998)"],
+ ["ESCOP Monographs","Coopérative scientifique européenne de phytothérapie"],
+ ["Herbal Drugs and Phytopharmaceuticals","Max Wichtl"],
+ ["Principles and Practice of Phytotherapy","Simon Mills et Kerry Bone"],
+ ["Fundamentals of Pharmacognosy and Phytotherapy","Michael Heinrich et al."],
+ ["Stockley's Herbal Medicines Interactions","Elizabeth Williamson et al., sur les interactions plantes–médicaments"],
+ ["Handbook of Arabian Medicinal Plants","Shahina A. Ghazanfar, sur les plantes médicinales de la péninsule Arabique"]
+];
 /* ---------- L'alimentation dans la Sunna ---------- */
 const sunst={v:null};
 const SGR={4:["Verset du Coran","ok"],3:["Authentique (sahih)","ok"],2:["Bon (hasan)","ok"],1:["Discuté","care"],0:["Faible","harm"],"-1":["Non authentique","harm"]};
