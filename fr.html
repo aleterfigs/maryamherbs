@@ -3858,6 +3858,44 @@ const latinQ = h => LATQ[h.id] ? encodeURIComponent(LATQ[h.id]) : encodeURICompo
 const $ = s => document.querySelector(s);
 document.addEventListener("click",e=>{ if(e.target.closest(".rel-more")){ setView("about"); setTimeout(()=>{const t=document.getElementById("relHow"); t&&t.scrollIntoView({behavior:"smooth"});},50);} });
 const state = {q:"", cond:null, favOnly:false, favs:new Set(), view:"herbs", aud:"all", origin:"all"};
+{ const FG=HERBS.find(h=>h.id==="fig");
+ FG.uses=["Constipation : figues sèches chaque jour, soutenues par des essais chez l'humain","Une source végétale de fibres, de calcium, de potassium et de fer","Aliment pour les personnes affaiblies, les convalescents et les enfants","Le latex du figuier est utilisé traditionnellement sur les verrues, avec un risque de brûlures"];
+ FG.guide=[
+  {t:"Valeur nutritionnelle",h:`<div class="conv-wrap"><table><thead><tr><th>Pour 100 g environ</th><th>Figues sèches</th><th>Figues fraîches</th></tr></thead><tbody>
+   <tr><td>Calories</td><td>Environ 250</td><td>Environ 75</td></tr>
+   <tr><td>Fibres</td><td>Environ 10 g</td><td>Environ 3 g</td></tr>
+   <tr><td>Sucre</td><td>Environ 48 g</td><td>Environ 16 g</td></tr>
+   <tr><td>Le calcium</td><td>Environ 160 mg</td><td>Environ 35 mg</td></tr>
+   <tr><td>Potassium</td><td>Environ 680 mg</td><td>Environ 230 mg</td></tr>
+   <tr><td>Fer</td><td>Environ 2 mg</td><td>Moins de 0,5 mg</td></tr>
+   </tbody></table></div><p class="hint">La figue sèche est l'un des fruits les plus riches en fibres et en calcium, mais son sucre est concentré : 3 figues sèches équivalent en sucre à un gros fruit.</p>`},
+  {t:"Ce que dit la science",h:`<ul>
+   <li><span class="ev m">Modéré</span> <b>Constipation et côlon irritable :</b> dans un essai à l'Université d'Ispahan sur 150 patients atteints de côlon irritable avec constipation, les participants ont mangé 45 g de figues sèches avant le petit-déjeuner et autant avant le déjeuner avec un verre d'eau, soit 90 g par jour, pendant environ 4 mois, comparés à ceux qui gardaient leur alimentation habituelle. Dans un essai coréen, une pâte de figues a accéléré le transit.</li>
+   <li><span class="ev s">Plutôt solide</span> <b>Les fibres en général</b> préviennent la constipation et profitent au cœur, à la glycémie et au poids. C'est établi pour les fibres de tous les aliments, et la figue en est l'une des sources les plus riches.</li>
+   <li><span class="ev l">Limité</span> <b>Verrues :</b> dans un petit essai sur 25 patients, 44 % des verrues ont guéri avec le latex de figuier contre 56 % avec la cryothérapie chez le médecin. Mais le latex brûle la peau au soleil.</li>
+   <li><span class="ev l">Limité</span> <b>Feuilles de figuier et glycémie :</b> de petits essais anciens suggèrent qu'elles pourraient baisser un peu la glycémie ; ne pas les associer aux médicaments du diabète sans avis médical.</li>
+   <li><span class="ev l">Limité</span> <b>Antioxydants :</b> les figues foncées en sont riches en laboratoire, mais leur effet thérapeutique chez l'humain est inconnu.</li></ul>`},
+  {t:"Dans le Coran et la Sunna",h:`<ul><li>Allah a juré par elle : ﴿Par le figuier et l'olivier﴾ [At-Tin : 1], et une sourate porte son nom.</li><li>Un hadith est rapporté : «Si je disais qu'un fruit est descendu du Paradis, je dirais que c'est celui-ci… il arrête les hémorroïdes et soulage la goutte» ; Ibn al-Qayyim a douté de son authenticité et les spécialistes du hadith l'ont jugé faible, on ne s'en sert donc pas comme preuve.</li></ul>`},
+  {t:"Comment la choisir et la conserver",h:`<ul>
+   <li><b>Fraîche :</b> un peu souple sous la pression, sans fissures qui coulent ni odeur de fermentation. Au réfrigérateur, à consommer en deux ou trois jours.</li>
+   <li><b>Sèche :</b> de couleur uniforme et d'odeur douce. Jetez toute figue moisie ou au goût amer, car des figues mal séchées ou mal stockées peuvent développer des champignons producteurs de toxines.</li>
+   <li><b>La poudre blanche</b> sur les figues sèches est généralement leur propre sucre cristallisé ; elle est lisse et sucrée. La moisissure est duveteuse, verte ou grise.</li>
+   <li>Conservez les figues sèches dans un récipient hermétique, au frais et au sec ou au réfrigérateur.</li></ul>`},
+  {t:"Idées reçues",h:`<ul>
+   <li><b>«Chaque figue contient une guêpe morte» :</b> c'est vrai pour certaines variétés qui ont besoin d'être pollinisées par la guêpe du figuier, et les enzymes du fruit la digèrent entièrement. La plupart des variétés de figuier de jardin fructifient sans pollinisation.</li>
+   <li><b>«Le latex de figuier est un remède sûr pour la peau» :</b> il contient des substances qui font brûler la peau au soleil, et des brûlures et taches foncées durant des mois ont été rapportées. Les témoignages individuels de guérison ne suffisent pas comme preuve.</li>
+   <li><b>«La figue sèche convient aux diabétiques sans limite» :</b> son sucre est concentré : une ou deux avec un repas suffisent.</li></ul>`},
+  {t:"Le cultiver aux Émirats",h:`<ul>
+   <li>Un arbre qui supporte la chaleur et les sols sableux, et réussit aux Émirats avec un arrosage régulier.</li>
+   <li><b>Le semis :</b> par boutures en hiver, de décembre à février, pendant le repos de l'arbre.</li>
+   <li><b>Arrosage :</b> profond et régulier, surtout en été et à la maturation des fruits, sans engorger le sol.</li>
+   <li><b>Taille :</b> en hiver, pour aérer l'arbre et stimuler les branches fruitières.</li>
+   <li><b>Fruits :</b> surtout au début de l'été, et certaines variétés donnent une seconde récolte plus tard.</li>
+   <li><b>Ravageurs :</b> les oiseaux, les acariens par chaleur sèche, la rouille des feuilles et les cochenilles.</li>
+   <li>Portez des gants et des manches longues pour tailler et cueillir, car le latex des branches brûle la peau au soleil.</li></ul>`},
+  {t:"Sources",h:`<ul class="gutsrc"><li><a href="https://clinicaltrials.gov/study/NCT02559245" target="_blank" rel="noopener">Essai d'Ispahan : figue et sisymbre pour le côlon irritable avec constipation</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/17472688/" target="_blank" rel="noopener">Latex de figuier contre cryothérapie pour les verrues (2007)</a></li><li><a href="https://fdc.nal.usda.gov/" target="_blank" rel="noopener">FoodData Central, Département de l'Agriculture des États-Unis</a></li><li><a href="https://quran.com/95/1" target="_blank" rel="noopener">Sourate At-Tin</a></li></ul>`}
+ ];
+}
 const byId = Object.fromEntries(HERBS.map(h=>[h.id,h]));
 {const T={postpartum:"dates fenugreek ginger cumin myrrh gardencress moringa nigella",lactation:"fenugreek fennel anise dill nigella",weight:"greentea psyllium vinegar",diarrhea:"carob guava pomegranate psyllium chamomile",allergy:"nigella nettle",chol:"garlic olive flaxseed psyllium oats barley greentea fenugreek nigella",headache:"mint lavender ginger",hair:"rosemary",focus:"sage greentea",urinary:"barley",kidney:"cornsilk barley parsley cherrystem",nausea:"mint",hemo:"psyllium flaxseed",libido:"ginseng maca saffron fenugreek"};
  for(const [c,ids] of Object.entries(T)) ids.split(" ").forEach(id=>{const h=byId[id]; if(h&&!h.c.includes(c)) h.c.push(c);});}

@@ -3858,6 +3858,44 @@ const latinQ = h => LATQ[h.id] ? encodeURIComponent(LATQ[h.id]) : encodeURICompo
 const $ = s => document.querySelector(s);
 document.addEventListener("click",e=>{ if(e.target.closest(".rel-more")){ setView("about"); setTimeout(()=>{const t=document.getElementById("relHow"); t&&t.scrollIntoView({behavior:"smooth"});},50);} });
 const state = {q:"", cond:null, favOnly:false, favs:new Set(), view:"herbs", aud:"all", origin:"all"};
+{ const FG=HERBS.find(h=>h.id==="fig");
+ FG.uses=["Constipation: dried figs daily, supported by human trials","A plant source of fibre, calcium, potassium and iron","Food for the weak, people recovering from illness and children","Fig latex is used traditionally on warts, with a risk of burns"];
+ FG.guide=[
+  {t:"Nutritional value",h:`<div class="conv-wrap"><table><thead><tr><th>Per 100 g, approximately</th><th>Dried figs</th><th>Fresh figs</th></tr></thead><tbody>
+   <tr><td>Calories</td><td>About 250</td><td>About 75</td></tr>
+   <tr><td>Fibre</td><td>About 10 g</td><td>About 3 g</td></tr>
+   <tr><td>Sugar</td><td>About 48 g</td><td>About 16 g</td></tr>
+   <tr><td>Calcium</td><td>About 160 mg</td><td>About 35 mg</td></tr>
+   <tr><td>Potassium</td><td>About 680 mg</td><td>About 230 mg</td></tr>
+   <tr><td>Iron</td><td>About 2 mg</td><td>Less than 0.5 mg</td></tr>
+   </tbody></table></div><p class="hint">Dried figs are among the richest fruits in fibre and calcium, but their sugar is concentrated: 3 dried figs equal a large piece of fruit in sugar.</p>`},
+  {t:"What science says",h:`<ul>
+   <li><span class="ev m">Moderate</span> <b>Constipation and IBS:</b> in a trial at Isfahan University with 150 patients with constipation-predominant IBS, participants ate 45 g of dried figs before breakfast and the same before lunch with a glass of water, 90 g a day, for about 4 months, compared with those who kept their usual diet. In a Korean trial, fig paste sped up bowel movement.</li>
+   <li><span class="ev s">Relatively strong</span> <b>Fibre in general</b> prevents constipation and benefits the heart, blood sugar and weight. This is established for fibre from all foods, and figs are among its richest sources.</li>
+   <li><span class="ev l">Limited</span> <b>Warts:</b> in a small trial of 25 patients, 44% of warts cleared with fig latex versus 56% with cryotherapy at the doctor's. But fig latex burns the skin in the sun.</li>
+   <li><span class="ev l">Limited</span> <b>Fig leaves and blood sugar:</b> small, older trials suggested they may lower blood sugar slightly, so they should not be combined with diabetes medicines without a doctor.</li>
+   <li><span class="ev l">Limited</span> <b>Antioxidants:</b> dark figs are rich in them in lab analyses, but their therapeutic effect in humans is unknown.</li></ul>`},
+  {t:"In the Quran and Sunnah",h:`<ul><li>God swore by it: ﴿By the fig and the olive﴾ [At-Tin: 1], and a chapter of the Quran bears its name.</li><li>A hadith is narrated: «If I were to say a fruit came down from Paradise, I would say it is this… it cuts off haemorrhoids and helps gout»; Ibn al-Qayyim was uncertain of its authenticity and hadith scholars graded it weak, so it is not used as evidence.</li></ul>`},
+  {t:"How to choose and store it",h:`<ul>
+   <li><b>Fresh:</b> slightly soft when pressed, with no leaking cracks or fermented smell. Keep in the fridge and eat within two or three days.</li>
+   <li><b>Dried:</b> even in colour with a sweet smell. Discard any fig that is mouldy or tastes bitter, as poorly dried or stored figs can grow fungi that produce toxins.</li>
+   <li><b>The white powder</b> on dried figs is usually the fig's own sugar crystallised on the surface; it is smooth and tastes sweet. Mould is fuzzy and may be green or grey.</li>
+   <li>Keep dried figs in an airtight container in a cool, dry place or in the fridge.</li></ul>`},
+  {t:"Myths",h:`<ul>
+   <li><b>«Every fig contains a dead wasp»:</b> this is true of some varieties that need pollination by the fig wasp, and the fruit's enzymes digest it so nothing remains. Most home fig varieties bear fruit without pollination at all.</li>
+   <li><b>«Fig latex is a safe skin remedy»:</b> it contains substances that make the skin burn in the sun, and burns and dark patches lasting months have been recorded. Individual stories of cure are not enough evidence.</li>
+   <li><b>«Dried figs are fine for diabetics without limit»:</b> their sugar is concentrated, so one or two with a meal is enough.</li></ul>`},
+  {t:"Growing it in the UAE",h:`<ul>
+   <li>A tree that tolerates heat and sandy soil, and succeeds in the UAE with regular watering.</li>
+   <li><b>Sowing:</b> from cuttings in winter, December to February, when the tree is dormant.</li>
+   <li><b>Watering:</b> deep and regular, especially in summer and when fruit is ripening, without waterlogging the soil.</li>
+   <li><b>Pruning:</b> in winter, to open up the tree and encourage fruiting branches.</li>
+   <li><b>Fruit:</b> mostly in early summer, and some varieties give a second crop later.</li>
+   <li><b>Pests:</b> birds, mites in dry heat, rust on the leaves, and scale insects.</li>
+   <li>Wear gloves and long sleeves when pruning and picking, as the branches' latex burns the skin in the sun.</li></ul>`},
+  {t:"Sources",h:`<ul class="gutsrc"><li><a href="https://clinicaltrials.gov/study/NCT02559245" target="_blank" rel="noopener">Isfahan trial: figs and flixweed for constipation-predominant IBS</a></li><li><a href="https://pubmed.ncbi.nlm.nih.gov/17472688/" target="_blank" rel="noopener">Fig latex versus cryotherapy for warts (2007)</a></li><li><a href="https://fdc.nal.usda.gov/" target="_blank" rel="noopener">FoodData Central, US Department of Agriculture</a></li><li><a href="https://quran.com/95/1" target="_blank" rel="noopener">Surah At-Tin</a></li></ul>`}
+ ];
+}
 const byId = Object.fromEntries(HERBS.map(h=>[h.id,h]));
 {const T={postpartum:"dates fenugreek ginger cumin myrrh gardencress moringa nigella",lactation:"fenugreek fennel anise dill nigella",weight:"greentea psyllium vinegar",diarrhea:"carob guava pomegranate psyllium chamomile",allergy:"nigella nettle",chol:"garlic olive flaxseed psyllium oats barley greentea fenugreek nigella",headache:"mint lavender ginger",hair:"rosemary",focus:"sage greentea",urinary:"barley",kidney:"cornsilk barley parsley cherrystem",nausea:"mint",hemo:"psyllium flaxseed",libido:"ginseng maca saffron fenugreek"};
  for(const [c,ids] of Object.entries(T)) ids.split(" ").forEach(id=>{const h=byId[id]; if(h&&!h.c.includes(c)) h.c.push(c);});}
