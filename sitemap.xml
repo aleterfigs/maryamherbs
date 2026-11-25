@@ -3550,27 +3550,6 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://maryamherbs.com/fr/herb/pearlcoral.html"/>
   </url>
   <url>
-    <loc>https://maryamherbs.com/herb/seacucumber.html</loc>
-    <lastmod>2026-11-15</lastmod>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://maryamherbs.com/herb/seacucumber.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://maryamherbs.com/en/herb/seacucumber.html"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://maryamherbs.com/fr/herb/seacucumber.html"/>
-  </url>
-  <url>
-    <loc>https://maryamherbs.com/en/herb/seacucumber.html</loc>
-    <lastmod>2026-11-15</lastmod>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://maryamherbs.com/herb/seacucumber.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://maryamherbs.com/en/herb/seacucumber.html"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://maryamherbs.com/fr/herb/seacucumber.html"/>
-  </url>
-  <url>
-    <loc>https://maryamherbs.com/fr/herb/seacucumber.html</loc>
-    <lastmod>2026-11-15</lastmod>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://maryamherbs.com/herb/seacucumber.html"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://maryamherbs.com/en/herb/seacucumber.html"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://maryamherbs.com/fr/herb/seacucumber.html"/>
-  </url>
-  <url>
     <loc>https://maryamherbs.com/herb/sharkcart.html</loc>
     <lastmod>2026-11-15</lastmod>
     <xhtml:link rel="alternate" hreflang="ar" href="https://maryamherbs.com/herb/sharkcart.html"/>
@@ -4997,6 +4976,27 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://maryamherbs.com/section/privacy.html"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://maryamherbs.com/en/section/privacy.html"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://maryamherbs.com/fr/section/privacy.html"/>
+  </url>
+  <url>
+    <loc>https://maryamherbs.com/section/about.html</loc>
+    <lastmod>2026-11-25</lastmod>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://maryamherbs.com/section/about.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://maryamherbs.com/en/section/about.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://maryamherbs.com/fr/section/about.html"/>
+  </url>
+  <url>
+    <loc>https://maryamherbs.com/en/section/about.html</loc>
+    <lastmod>2026-11-25</lastmod>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://maryamherbs.com/section/about.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://maryamherbs.com/en/section/about.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://maryamherbs.com/fr/section/about.html"/>
+  </url>
+  <url>
+    <loc>https://maryamherbs.com/fr/section/about.html</loc>
+    <lastmod>2026-11-25</lastmod>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://maryamherbs.com/section/about.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://maryamherbs.com/en/section/about.html"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://maryamherbs.com/fr/section/about.html"/>
   </url>
   <url>
     <loc>https://maryamherbs.com/section/sunna.html</loc>
